@@ -1,11 +1,12 @@
 'use client';
-import styled, * as styledComponents from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GlobalStyle } from "@/styles/globalStyles";
 import { theme } from '@/theme/theme';
-import './globals.css';
-
+import '../globals.css';
+// import { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { Inter, Roboto, Noto_Sans_KR } from "next/font/google";
 // import { Metadata } from "next";
 // export const metadata: Metadata = {
@@ -15,7 +16,7 @@ import { Inter, Roboto, Noto_Sans_KR } from "next/font/google";
 
 const inter = Roboto({ subsets: ['latin'] , weight: ['400', '700'] });
 
-export default function RootLayout({
+export default function LandingLayout({
 	children,
 }: {
 	children: React.ReactNode;
@@ -27,12 +28,13 @@ export default function RootLayout({
 		  <div id="portal" />
 		  <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools />
-        <styledComponents.ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
           <GlobalStyle />
           <Applayout>
+            {/* <Header /> */}
             {children}
           </Applayout>
-        </styledComponents.ThemeProvider>
+        </ThemeProvider>
       </QueryClientProvider>
 		</body>
 	  </html>
