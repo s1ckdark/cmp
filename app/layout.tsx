@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GlobalStyle } from "@/styles/globalStyles";
 import { theme } from '@/theme/theme';
-import './globals.css';
+import '@/styles/globals.scss';
 
 import { Inter, Roboto, Noto_Sans_KR } from "next/font/google";
 // import { Metadata } from "next";
