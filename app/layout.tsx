@@ -43,6 +43,5 @@ export default function RootLayout({
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	padding: 0 16px;
 	flex: 1;
   `;
