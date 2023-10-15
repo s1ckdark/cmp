@@ -25,3 +25,8 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+  a[class*="btn"] {
+    text-align: center;
+  }
