@@ -12,6 +12,7 @@ export const theme: DefaultTheme = {
     sidebar: '#202124',
     mint: '#43B69A',
     green: '#1A9A7B',
+    black: '#202124',
     charcoal: '#2B3035',
     blue: '#3D9CD9',
     navy: '#036B98',
@@ -21,6 +22,7 @@ export const theme: DefaultTheme = {
     orange: '#F88B26'
   },
   btn: {
+    submit: '#43B69A',
     active: '#43B69A',
     gray: '#7A7C82',
     navy: '#35404F'

@@ -13,6 +13,7 @@ declare module 'styled-components' {
       sidebar: string,
       mint: string,
       green: string,
+      black: string,
       charcoal: string,
       blue: string,
       navy: string,
@@ -22,9 +23,11 @@ declare module 'styled-components' {
       orange: string
     },
     btn: {
+      submit: string,
       active: string,
       gray: string,
-      navy: string
+      navy: string,
+      text: string
     },
     post:{
       view: {
