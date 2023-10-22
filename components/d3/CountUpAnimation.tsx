@@ -1,38 +1,35 @@
+'use client';
 import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
-const CountUpAnimation: React.FC<{ endValue: number }> = ({ endValue }) => {
+const CountUpAnimation: React.FC<{ endValue: number, duration: number }> = ({ endValue, duration }) => {
   const countUpRef = useRef(null);
-
   useEffect(() => {
     const svg = d3.select(countUpRef.current)
-      .append('svg')
-      .attr('width', 200)
-      .attr('height', 100);
+      .attr('width', 360)
+      .attr('height', 72);
 
     svg.append('text')
-      .attr('x', 100)
+      .attr('x', 180)
       .attr('y', 50)
       .style('text-anchor', 'middle')
-      .style('font-size', '36px')
-      .style('fill', 'black')
-      .text('0');
-
-    svg.transition()
-      .duration(2000) // Animation duration in milliseconds
+      // .style('font-size', '60px')
+      // .style('fill', 'black')
+      .text('0')
+      .transition()
+      .duration(duration) // Animation duration in milliseconds
       .tween('text', function () {
-        const startValue = parseFloat(this.textContent);
+        const startValue = parseFloat(this.textContent ?? '0');
         const endValueParsed = parseFloat(endValue.toString());
-
         const interpolator = d3.interpolateNumber(startValue, endValueParsed);
-
         return function (t: number) {
-          this.textContent = interpolator(t).toFixed(0);
+          this.textContent = Math.round(interpolator(t)).toFixed(0);
         };
       });
   }, [endValue]);
 
-  return <div ref={countUpRef}></div>;
+  return <svg ref={countUpRef}></svg>;
 };
 
 export default CountUpAnimation;
+

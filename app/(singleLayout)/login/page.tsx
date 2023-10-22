@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 
 export default function Login() {
-  const initialData = await getToken();
+  // const initialData = await getToken();
 
   return (
     <main className="flex items-center justify-center w-screen h-screen">

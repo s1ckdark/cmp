@@ -1,7 +1,7 @@
 // 'use client';
 import Image from 'next/image'
 import Link from 'next/link'
-import styles from "@/styles/home.module.scss"
+import styles from "@/styles/pages/home.module.scss"
 import { Metadata } from "next";
 export const metadata: Metadata = {
 	title: 'Welcome To Argos',

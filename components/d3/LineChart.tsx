@@ -1,125 +1,163 @@
-'use client';
-import React, { useState, useEffect, useRef } from "react";
-import * as d3 from "d3";
-import debounce from "lodash/debounce";
+import React, { useEffect, useRef, useState } from 'react';
+import * as d3 from 'd3';
+import { SalesDataPoint, SalesDataSeries, LineChartProps } from '@/types/data';
+import styles from '@/styles/components/d3/Linecharts.module.scss';
 
-// Line chart original example
-// https://bl.ocks.org/gordlea/27370d1eea8464b04538e6d8ced39e89
+const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }) => {
+  const svgRef = useRef();
+  const [hoveredValue, setHoveredValue] = useState(null);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState(null);
 
-const PADDING = 30;
+  const handleMouseOver = (event, d) => {
+    const [x, y] = d3.pointer(event);
+    setHoveredValue(d.sales);
+    setTooltipPosition({ x, y: y - 30 }); // Position the tooltip 30 pixels above the mouse pointer
+    setActiveTooltip(d); // Set the currently active tooltip
+    setIsHovering(true);
+  };
 
-function useResize(ref) {
-  const [state, setState] = useState();
+  const handleMouseOut = () => {
+    setHoveredValue(null);
+    setActiveTooltip(null); // Clear the active tooltip when mouse moves out
+    setIsHovering(false);
+  };
   useEffect(() => {
-    const getSize = debounce(() => {
-      if (!ref || !ref.current) {
-        return;
-      }
+    const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
 
-      const width = ref.current.offsetWidth;
-      const height = ref.current.offsetHeight;
-      setState({
-        width,
-        height
+    const svg = d3.select(svgRef.current)
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleLinear()
+      .domain([1, 12])
+      .range([0, innerWidth]);
+
+    const y = d3.scaleLinear()
+    .domain([0, d3.max(data.flatMap(series => series.data), d => d.sales)])
+      .nice()
+      .range([innerHeight, 0]);
+
+    const line = d3.line()
+    // .defined(d => !isNaN(d.sales))
+      .x(d => x(d.month))
+      .y(d => y(d.sales));
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+    
+    const xAxis = (g) => g
+    .attr('transform', `translate(0,${innerHeight})`)
+    .call(d3.axisBottom(x));
+
+    const yAxis = (g) => g
+      // .attr('transform', `translate(${margin.left},0)`)
+      .call(d3.axisLeft(y));
+    
+       // Create the grid line functions.
+    const xGrid = (g) => g
+      .attr('class', 'grid-lines')
+      .selectAll('line')
+      .data(x.ticks())
+      .join('line')
+      .attr('x1', d => x(d))
+      .attr('x2', d => x(d))
+      .attr('y1', margin.top)
+      .attr('y2', height - margin.bottom);
+
+    const yGrid = (g) => g
+      .attr('class', 'grid-lines')
+      .selectAll('line')
+      .data(y.ticks())
+      .join('line')
+      .attr("stroke", "gray")
+      .attr("opacity",0.2)
+      .attr("stroke-width", 2)
+      .attr('x1', 0)
+      .attr('x2', width - margin.right)
+      .attr('x2', width)
+      .attr('y1', d => y(d))
+      .attr('y2', d => y(d));
+
+      data.forEach((series, index) => {
+        // Draw the line
+        svg.append('path')
+          .datum(series.data)
+          .attr('fill', 'none')
+          .attr('stroke', color(index))
+          .attr('stroke-width', 2)
+          .attr('d', line);
+  
+        // Add point circles for this data series with hover effect
+        svg.selectAll(`.circle-${index}`)
+          .data(series.data)
+          .enter()
+          .append('circle')
+          .attr('cx', d => x(d.month))
+          .attr('cy', d => y(d.sales))
+          .attr('r', 4) // Adjust the radius of the circles
+          .attr('fill', color(index))
+          .attr('class', `circle-${index}`)
+          .on('mouseover', handleMouseOver)
+          .on('mouseout', handleMouseOut);
       });
-    }, 1000);
+  
 
-    window.addEventListener("resize", getSize);
-    getSize();
-    return () => window.removeEventListener("resize", getSize);
-  }, [ref]);
 
-  return state;
-}
+    // Add X and Y axes
+    svg.append('g').call(xAxis)
+    svg.append('g').call(yAxis)
 
-const LineChart = props => {
-  const [lineData, setLineData] = useState();
-  const [markers, setMakers] = useState();
+    // Add X and Y grid lines
+    // svg.append('g').call(xGrid);
+    svg.append('g').call(yGrid);
 
-  const rootRef = useRef(null);
-  const xAxisRef = useRef(null);
-  const yAxisRef = useRef(null);
-  const size = useResize(rootRef);
+      // Create a legend
+    const legend = svg.append('g')
+      .attr('transform', `translate(${innerWidth + 10},-40)`);
 
-  useEffect(() => {
-    if (!size || !props.data) {
-      return;
-    }
+    const legendSpacing = 120; // Adjust as needed
+    const legendOffset = -40; // Adjust as needed
 
-    const data = props.data;
-    const { width, height } = size;
+    data.forEach((series, index) => {
+      const legendItem = legend.append('g')
+        .attr('transform', `translate(-${index * legendSpacing},${0})`);
 
-    const xScale = d3
-      .scaleLinear()
-      .domain([0, data.length])
-      .range([PADDING, width - PADDING]);
-    const yScale = d3
-      .scaleLinear()
-      .domain(d3.extent(data, d => d.y))
-      .range([height - PADDING, PADDING]);
+      legendItem.append('rect')
+        .attr('width', 10)
+        .attr('height', 10)
+        .attr('fill', color(index));
 
-    const lineGenerator = d3
-      .line()
-      .x((d, i) => xScale(i))
-      .y(d => yScale(d.y))
-      .curve(d3.curveMonotoneX);
+      legendItem.append('text')
+        .attr('x', 15)
+        .attr('y', 6)
+        .attr('font-size', '11px')
+        .attr('dy', '0.32em')
+        .text(series.name);
+    });
 
-    const xAxis = d3
-      .axisBottom()
-      .scale(xScale)
-      .ticks(width / 100);
-    const yAxis = d3
-      .axisLeft()
-      .scale(yScale)
-      .ticks(height / 50);
+  // Remove the tooltip when hoveredValue is null
+  if (isHovering && hoveredValue !== null) {
+    svg.append('text')
+      .attr('x', tooltipPosition.x) // Position based on mouse coordinates
+      .attr('y', tooltipPosition.y) // Position based on mouse coordinates
+      .attr('class', 'hovered-value')
+      .text(`Hovered Value: ${hoveredValue}`);
+  } else {
+    svg.selectAll('.hovered-value').remove();
+  }
+}, [data, width, height, hoveredValue, isHovering, tooltipPosition]);
 
-    d3.select(xAxisRef.current).call(xAxis);
-    d3.select(yAxisRef.current).call(yAxis);
 
-    setLineData(lineGenerator(data));
-    setMakers(
-      data.map((d, i) => ({
-        x: xScale(i),
-        y: yScale(d.y)
-      }))
-    );
-  }, [size, props]);
+
 
   return (
-    <div className="chart-area" ref={rootRef}>
-      {size && (
-        <svg width={size.width} height={size.height}>
-          <g id="axes">
-            <g
-              id="x-axis"
-              ref={xAxisRef}
-              transform={`translate(0, ${size.height - PADDING})`}
-            />
-            <g
-              id="y-axis"
-              ref={yAxisRef}
-              transform={`translate(${PADDING}, 0)`}
-            />
-          </g>
-          <g id="chart">
-            {lineData && (
-              <path stroke="#48bb78" className="chart-line" d={lineData} />
-            )}
-            {markers &&
-              markers.map((marker, i) => (
-                <circle
-                  key={i}
-                  cx={marker.x}
-                  cy={marker.y}
-                  r={4}
-                  className="chart-marker"
-                />
-              ))}
-          </g>
-        </svg>
-      )}
-    </div>
+    <svg ref={svgRef}></svg>
   );
-};
+}
 
 export default LineChart;

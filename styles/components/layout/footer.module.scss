@@ -1,0 +1,36 @@
+.container {
+    color: #313131;
+    background: #F5F8FB;
+    border-top: 2px solid #DEE1E7;
+    margin: 20px 50px 50px;
+    height: 84px;
+    a {
+        width: 80px;
+        color: #313131;
+        position: relative;
+        font-size: 12px;
+        padding: 26px 0;
+        &:after {
+            content: "|";
+            position: absolute;
+            right: 0;
+        }
+        &:last-child {
+            &:after {
+                content: "";
+            }
+        }
+    }
+
+    .copyright {
+        padding: 20px 0;
+        font-size: 12px;
+        .goodus_logo {
+            display:flex;
+            justify-content: end;
+        }
+        p {
+            padding-top: 10px;
+        }
+    }
+}

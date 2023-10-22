@@ -57,4 +57,41 @@
             }
         }
     }
+    &.top10 {
+        table {
+            tr {
+                th {
+                    &:nth-child(1) {
+                        width: 60px;
+                    }
+                    &:nth-child(2) {
+                        width:140px;
+                    }
+                    &:nth-child(3) {
+                        width: 140px;
+                    }
+                    &:nth-child(4) {
+                        width: 98px;
+                    }
+                    &:nth-child(5) {
+                        width: 230px;
+                    }
+                }
+            }
+        }
+    }
+    &.per_month {
+        table {
+            tr {
+                th {
+                    &:nth-child(1) {
+                        width: 60px;
+                    }
+                    &:nth-child(2) {
+                        width:504px;
+                    }
+                }
+            }
+        }
+    }
 }
