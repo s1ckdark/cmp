@@ -2,12 +2,12 @@
 import React from "react";
 import Link from "next/link";
 import UserInfo from "./userInfo";
-import styles from "@/styles/components/sidebar.module.scss";
+import styles from "@/styles/components/layout/sidebar.module.scss";
 
 const Sidebar = ({ toggle }: { toggle: () => void }) => {
   return (
     <>
-      <div className={`${styles.sidebar}`}>
+      <div className={`${styles.sidebar} h-screen fixed`}>
           <UserInfo />
           <div className="container mx-auto px-4 py-6">
           <div className="flex flex-wrap justify-end text-right">

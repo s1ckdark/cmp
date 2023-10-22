@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GlobalStyle } from "@/styles/globalStyles";
 import { theme } from '@/theme/theme';
 import '@/styles/globals.scss';
+import CountUpAnimation from "@/components/d3/CountUpAnimation";
 
 export default function RootLayout({
     children,
@@ -20,21 +21,19 @@ export default function RootLayout({
             <ReactQueryDevtools />
             <styledComponents.ThemeProvider theme={theme}>
                 <GlobalStyle />
-                <Applayout>
-                    {children}
-                </Applayout>
+                {children}
             </styledComponents.ThemeProvider>
-          </QueryClientProvider>
+          </QueryClientProvider> 
         </body>
       </html>
     );
 }
   
   const Applayout = styled.div`
-	display: flex;
-	flex-direction: row;
-	min-height: 100vh;
-	flex: 1;
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    flex: 1;
     flex-wrap: wrap;
     align-items: flex-start;  
     `;
