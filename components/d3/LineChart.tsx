@@ -46,7 +46,9 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
     const line = d3.line()
     // .defined(d => !isNaN(d.sales))
       .x(d => x(d.month))
-      .y(d => y(d.sales));
+      .y(d => y(d.sales))
+      // .y(innerHeight) // Start the line at the bottom
+      // .curve(d3.curveMonotoneX); // Add a curve for smoother animation
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     
@@ -90,8 +92,13 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
           .attr('fill', 'none')
           .attr('stroke', color(index))
           .attr('stroke-width', 2)
+          // .attr('d', line)
+          .transition() // Add a transition for animation
+          .duration(1000) // Set the duration of the animation in milliseconds
           .attr('d', line);
   
+        
+
         // Add point circles for this data series with hover effect
         svg.selectAll(`.circle-${index}`)
           .data(series.data)
@@ -103,7 +110,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
           .attr('fill', color(index))
           .attr('class', `circle-${index}`)
           .on('mouseover', handleMouseOver)
-          .on('mouseout', handleMouseOut);
+          .on('mouseout', handleMouseOut);         
       });
   
 
@@ -140,7 +147,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
         .text(series.name);
     });
 
-  // Remove the tooltip when hoveredValue is null
+   // Remove the tooltip when hoveredValue is null
   if (isHovering && hoveredValue !== null) {
     svg.append('text')
       .attr('x', tooltipPosition.x) // Position based on mouse coordinates

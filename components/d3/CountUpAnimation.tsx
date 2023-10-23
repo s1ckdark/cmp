@@ -4,6 +4,11 @@ import * as d3 from 'd3';
 
 const CountUpAnimation: React.FC<{ endValue: number, duration: number }> = ({ endValue, duration }) => {
   const countUpRef = useRef(null);
+
+  const fomatter = (d)=>{
+    return (""+d).length > 4 ? d3.format(',')(d) : d3.format('d')(d);
+  }
+  
   useEffect(() => {
     const svg = d3.select(countUpRef.current)
       .attr('width', 360)
@@ -23,7 +28,7 @@ const CountUpAnimation: React.FC<{ endValue: number, duration: number }> = ({ en
         const endValueParsed = parseFloat(endValue.toString());
         const interpolator = d3.interpolateNumber(startValue, endValueParsed);
         return function (t: number) {
-          this.textContent = Math.round(interpolator(t)).toFixed(0);
+          this.textContent = fomatter(Math.round(interpolator(t)).toFixed(0));
         };
       });
   }, [endValue]);
