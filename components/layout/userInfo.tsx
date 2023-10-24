@@ -8,12 +8,6 @@ const UserInfo = () => {
     <>
         <div className={`${styles.userInfo}`}>
             <div className="container mx-auto p-6">
-            <div className="flex px-2 justify-end flex-wrpa w-100">
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.5 0.5H39.5V39.5H0.5V0.5Z" fill="#343A41" stroke="#505C6C"/>
-                    <path d="M25 12L15 20L25 28" stroke="#AFBDCA" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-            </div>
             <div className={`${styles.user_name} text-right px-2`}><p className="my-6">홍길동 님</p></div>
             <div className="link_area flex items-center justify-end px-2">
                 <span className="setting">

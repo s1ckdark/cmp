@@ -1,13 +1,27 @@
 'use client';
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import UserInfo from "./userInfo";
 import styles from "@/styles/components/layout/sidebar.module.scss";
 
 const Sidebar = ({ toggle }: { toggle: () => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <>
-      <div className={`${styles.sidebar} h-screen fixed`}>
+    <div className={`${styles.sidebar} h-screen fixed ${isOpen ? 'open' : ''}`}>
+      <div className="flex justify-end flex-wrpa w-100 px-6">
+        <button onClick={toggleSidebar}>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.5 0.5H39.5V39.5H0.5V0.5Z" fill="#343A41" stroke="#505C6C"/>
+            <path d="M25 12L15 20L25 28" stroke="#AFBDCA" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
           <UserInfo />
           <div className="container mx-auto px-4 py-6">
           <div className="flex flex-wrap justify-end text-right">
