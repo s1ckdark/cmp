@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'variable';
+@import 'levels';
+@import 'animations';
+@import 'transitions';
 
 :root {
   --background-rgb: 245, 248, 251;
@@ -29,11 +33,103 @@ body {
 }
 
 
-  a[class*="btn"] {
-    text-align: center;
-  }
+a[class*="btn"] {
+  text-align: center;
+}
 
-  .page {
-    padding-left: 256px;
-    background-color: rgb(var(--background-rgb));
-  }
+.page {
+  padding-left: 256px;
+  background-color: rgb(var(--background-rgb));
+}
+
+.gray {
+  color: var(--color-gray-4);
+}
+
+.grayBg {
+  color: var(--color-white);
+  background-color: var(--color-gray-4);
+}
+
+.red {
+  color: var(--color-red);
+}
+
+.redBg {
+  color: var(--color-white);
+  background-color: var(--color-red);
+}
+
+.orange {
+  color: var(--color-orange);
+}
+
+.orangeBg {
+  color: var(--color-white);
+  background-color: var(--color-orange);
+}
+
+.yellow {
+  color: var(--color-yellow);
+}
+
+.yellowBg {
+  color: var(--color-black);
+  background-color: var(--color-yellow);
+}
+
+.green {
+  color: var(--color-green);
+}
+
+.greenBg {
+  color: var(--color-white);
+  background-color: var(--color-green);
+}
+
+.blue {
+  color: var(--color-blue);
+}
+
+.blueBg {
+  color: var(--color-white);
+  background-color: var(--color-blue);
+}
+
+.purple {
+  color: var(--color-purple);
+}
+
+.purpleBg {
+  color: var(--color-white);
+  background-color: var(--color-purple);
+}
+
+.indigo {
+  color: var(--color-indigo);
+}
+
+.indigoBg {
+  color: var(--color-white);
+  background-color: var(--color-indigo);
+}
+
+.teal {
+  color: var(--color-teal);
+}
+
+.tealBg {
+  color: var(--color-white);
+  background-color: var(--color-teal);
+}
+
+.pink {
+  color: var(--color-pink);
+}
+
+.pinkBg {
+  color: var(--color-white);
+  background-color: var(--color-pink);
+}
+
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard-dynamic-subset.css");

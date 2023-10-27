@@ -1,0 +1,12 @@
+.container {
+    display: block;
+    background: #2B3035;
+    
+    .user_name {
+        font-size: 16px;
+        color: #fff;
+    }
+    &.open {
+        display: none;
+    }
+}
