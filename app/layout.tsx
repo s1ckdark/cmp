@@ -5,31 +5,38 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GlobalStyle } from "@/styles/globalStyles";
 import { theme } from '@/theme/theme';
 import '@/styles/globals.scss';
-import CountUpAnimation from "@/components/d3/CountUpAnimation";
+import CountUpAnimation from "@/components/D3/CountUpAnimation";
+import RecoilRootProvider from "@/utils/recoilRootProvider";
+import Alert from "@/components/Alert";
 
 export default function RootLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const queryClient = new QueryClient();
-    return (
-      <html lang="kr">
-        <body>
-          <div id="portal" />
+  const queryClient = new QueryClient();
+  return (
+    <html lang="kr">
+      <body>
+        <RecoilRootProvider>
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools />
             <styledComponents.ThemeProvider theme={theme}>
-                <GlobalStyle />
-                {children}
+              <GlobalStyle />
+              <div id="portal" />
+              <div id='alert' />
+              <div id='modal' />
+              <Alert />
+              {children}
             </styledComponents.ThemeProvider>
-          </QueryClientProvider> 
-        </body>
-      </html>
-    );
+          </QueryClientProvider>
+        </RecoilRootProvider>
+      </body>
+    </html>
+  );
 }
-  
-  const Applayout = styled.div`
+
+const Applayout = styled.div`
     display: flex;
     flex-direction: row;
     min-height: 100vh;

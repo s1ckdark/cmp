@@ -1,0 +1,45 @@
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideFromRight {
+    from {
+        transform: translateX(30px);
+    }
+}
+
+@keyframes slideToLeft {
+    to {
+        transform: translateX(-30px);
+    }
+}
+
+@keyframes slideToRight {
+    to {
+        transform: translateX(30px);
+    }
+}
+
+@keyframes slideFromLeft {
+    from {
+        transform: translateX(-30px);
+    }
+}
