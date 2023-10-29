@@ -40,6 +40,10 @@ a[class*="btn"] {
 .page {
   padding-left: 256px;
   background-color: rgb(var(--background-rgb));
+
+  &>.container {
+    padding: 50px;
+  }
 }
 
 .gray {

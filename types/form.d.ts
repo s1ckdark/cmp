@@ -26,9 +26,9 @@ interface useInputType {
     action: any;
 }
 
-interface loginData {
+interface loginForm {
     username: string;
     password: string;
 }
 
-export type { registrationData, ProductForm, useInputType, loginData }; 
+export type { registrationData, ProductForm, useInputType, loginForm }; 

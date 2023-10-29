@@ -12,7 +12,7 @@ interface Props {
     onClick?: () => void;
     type?: 'submit' | 'reset' | 'button';
     size?: 'tiny' | 'small';
-    skin?: 'primary' | 'inverse' | 'ghost';
+    skin?: 'primary' | 'inverse' | 'ghost' | 'green' | 'gray';
 }
 
 const Button = ({ link, children, className, disabled, onClick, type, size, skin }: Props) => {
