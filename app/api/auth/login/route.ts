@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-import { getMeApi } from '@/services/authService';
+import { login } from '@/services/authService';
 
 interface Cookie {
     name: string;
@@ -12,7 +12,7 @@ const cookiesToString = (rawCookies: Cookie[]) => {
     return rawCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
 };
 
-export const GET = async () => {
+export const POST = async () => {
     const cookieStore = cookies();
     const cookiesString = cookiesToString(cookieStore.getAll());
 

@@ -1,37 +1,38 @@
-import { useRecoilState } from 'recoil';
+import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { authState } from '@/states/auth';
+import authService from '@/services/authService';
 
 const useAuth = () => {
-    const [auth, setAuth] = useRecoilState(authState);
+    const [error, setError] = useState(null);
     const queryClient = useQueryClient();
 
     const loginMutation = useMutation(
-        async ({ username, password }) => {
-            const response = await axios.post('/api/login', { username, password });
-            return response.data.user;
-        },
+        ({ username, password }) => authService.login(username, password),
         {
-            onSuccess: (user) => {
-                setAuth({ user });
-                queryClient.invalidateQueries('userData');
+            onSuccess: (data) => {
+                // 로그인 성공 시 처리
+                queryClient.setQueryData('user', data.user);
+            },
+            onError: (error) => {
+                // 에러 처리
+                setError(error);
             },
         }
     );
 
-    const logout = () => {
-        setAuth({ user: null });
-        queryClient.invalidateQueries('userData');
+    const login = async (username, password) => {
+        try {
+            await loginMutation.mutateAsync({ username, password });
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
     };
 
     return {
-        user: auth.user,
-        login: loginMutation.mutate,
-        logout,
-        isLoggingIn: loginMutation.isLoading,
+        login,
+        error,
+        isLoading: loginMutation.isLoading,
     };
 };
+
 export default useAuth;
-
-

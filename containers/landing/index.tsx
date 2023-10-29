@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import List from "@/components/board/list";
+import List from "@/components/Board/BoardList";
 import CountUpAnimation from '@/components/D3/CountUpAnimation';
 import LineChart from '@/components/D3/LineChart';
 import BarChart from '@/components/D3/BarChart';

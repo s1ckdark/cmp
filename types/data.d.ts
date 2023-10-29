@@ -31,7 +31,23 @@ interface top10Props {
   sales: string;
 }
 
+interface fetchData {
+  // Define the shape of your data here
+  id: number;
+  name: string;
+  // ...
+}
+
+interface UseDataFetchReturnType {
+  data: fetchData | null;
+  fetchedData: fetchData | undefined;
+  isLoading: boolean;
+  isError: boolean;
+}
+
 export type {
+  fetchData,
+  UseDataFetchReturnType,
   DonutChartProps,
   SalesDataPoint,
   SalesDataSeries,

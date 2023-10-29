@@ -1,71 +1,132 @@
 'use client';
-import { useState, ChangeEvent, FormEvent } from 'react';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import styles from './RegistrationForm.module.scss';
+import Button from '@/components/Button';
+function RegistrationForm() {
+    const { control, handleSubmit } = useForm({
+        defaultValues: {
+            memberId: '',
+            memberName: '',
+            memberType: '',
+            permission: '',
+            password: '',
+            contact: '',
+            landline: '',
+            email: '',
+            address: '',
+            company: ''
+        }
+    });
 
-
-
-const RegistrationForm = () => {
-    const initialFormData: FormData = {
-        memberId: '',
-        memberType: '',
-        memberName: '',
-        permission: '',
-        password: '',
-        contact: '',
-        landline: '',
-        email: '',
-        address: '',
-        company: ''
-    };
-
-    const [formData, setFormData] = useState<FormData>(initialFormData);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log(formData);
+    const onSubmit = (data) => {
+        console.log(data);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <label htmlFor="memberId">회원ID:</label>
-            <input type="text" id="memberId" name="memberId" value={formData.memberId} onChange={handleChange} required /><br /><br />
+        <form className={`${styles.template}`} onSubmit={handleSubmit(onSubmit)}>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="memberId" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">회원ID:</label>
+                <Controller
+                    name="memberId"
+                    control={control}
+                    render={({ field }) => <input type="text" id="memberId" {...field} required />}
+                />
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="memberName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">회원명:</label>
+                <Controller
+                    name="memberName"
+                    control={control}
+                    render={({ field }) => <input type="text" id="memberName" {...field} required />}
+                />
+            </div>
+            <div className="grid gap-6 mb-6 md:grid-cols-2">
+                <div className={`${styles.inputGroup}`}>
+                    <label htmlFor="memberType" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">회원유형:</label>
+                    <Controller
+                        name="memberType"
+                        control={control}
+                        render={({ field }) => <input type="text" id="memberType" {...field} required />}
+                    />
+                </div>
+                <div className={`${styles.inputGroup}`}>
+                    <label htmlFor="permission" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">권한:</label>
+                    <Controller
+                        name="permission"
+                        control={control}
+                        render={({ field }) => <input type="text" id="permission" {...field} required />}
+                    />
+                </div>
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">비밀번호:</label>
+                <Controller
+                    name="password"
+                    control={control}
+                    render={({ field }) => <input type="password" id="password" {...field} required />}
+                />
+                <Button type='button'
+                    className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+                    skin='gray'>수정
+                </Button>
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="contact" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
+                <Controller
+                    name="contact"
+                    control={control}
+                    render={({ field }) => <input type="text" id="contact" {...field} required />}
+                />
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="landline" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">유선전화:</label>
+                <Controller
+                    name="landline"
+                    control={control}
+                    render={({ field }) => <input type="text" id="landline" {...field} />}
+                />
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">이메일:</label>
+                <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => <input type="email" id="email" {...field} required />}
+                />
+            </div>
 
-            <label htmlFor="memberId">회원명:</label>
-            <input type="text" id="memberName" name="memberId" value={formData.memberName} onChange={handleChange} required /><br /><br />
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">주소:</label>
+                <div className="grid gap-6 mb-6 md:grid-cols-2">
+                    <Controller
+                        name="address"
+                        control={control}
+                        render={({ field }) => <input type="text" id="address" {...field} required />}
+                    />
+                    <Controller
+                        name="address"
+                        control={control}
+                        render={({ field }) => <input type="text" id="address" {...field} required />}
+                    />
+                </div>
+            </div>
+            <div className={`${styles.inputGroup}`}>
+                <label htmlFor="company" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">회사:</label>
+                <Controller
+                    name="company"
+                    control={control}
+                    render={({ field }) => <input type="text" id="company" {...field} />}
+                />
+            </div>
+            <div className={`${styles.btnArea} mt-6`}>
+                <Button type='submit'
+                    className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+                    skin='green'>수정
+                </Button>
+            </div>
 
-            <label htmlFor="memberType">회원유형:</label>
-            <input type="text" id="memberType" name="memberType" value={formData.memberType} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="permission">권한:</label>
-            <input type="text" id="permission" name="permission" value={formData.permission} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="password">비밀번호:</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="contact">연락처:</label>
-            <input type="text" id="contact" name="contact" value={formData.contact} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="landline">유선전화:</label>
-            <input type="text" id="landline" name="landline" value={formData.landline} onChange={handleChange} /><br /><br />
-
-            <label htmlFor="email">이메일:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="address">주소:</label>
-            <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} required /><br /><br />
-
-            <label htmlFor="company">회사:</label>
-            <input type="text" id="company" name="company" value={formData.company} onChange={handleChange} /><br /><br />
-
-            <input type="submit" value="등록" />
-        </form>
+        </form >
     );
 }
 

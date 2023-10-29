@@ -3,11 +3,11 @@ import { ReactNode } from 'react';
 import { getMetaData } from '@/app/shareMetadata';
 
 export const metadata = getMetaData({
-  url: 'https://argos.goodusdata.com/landing',
-  title: "ARGOS SUPPORT",
-  description: '고객게시판',
-  imageUrl: '',
-  keywords: ['argos'],
+    url: 'https://argos.goodusdata.com/announcee',
+    title: "ARGOS ANNOUNCE",
+    description: '공지사항',
+    imageUrl: '',
+    keywords: ['argos'],
 });
 
 const Layout = ({ children }: { children: ReactNode }) => children;
