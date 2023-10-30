@@ -3,6 +3,17 @@ const id = Math.random().toString(32).slice(2);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  async rewrites() {
+    return [
+      {
+        source: "/backend/:path*",
+        destination: "http://10.20.19.96:30006/:path*",
+      },
+    ];
+  },
+  env: {
+    BASE_URL: process.env.BASE_URL,
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },

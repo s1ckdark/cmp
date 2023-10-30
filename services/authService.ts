@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { atom, useRecoilState, useResetRecoilState } from 'recoil';
+import { atom, useRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authState, resetLogInErrorAtom, resetSignUpErrorAtom, } from '@/states/auth';
-
-
+import { apiBe } from '@/services';
+import { loginForm } from '@/types/form';
 // Define your authentication service
 const authService = () => {
     const [auth, setAuth] = useRecoilState(authState);
@@ -12,14 +12,18 @@ const authService = () => {
     const resetSignUpError = useResetRecoilState(resetSignUpErrorAtom);
 
     const loginMutation = useMutation(
-        async ({ username, password }) => {
-            const response = await axios.post('http://localhost:8080/api/auth/login', { username, password });
-            return response.data.user;
+        async ({ email, password }: loginForm) => {
+            // const public_be_url:string = process.env.NEXT_PUBLIC_BE_URL || '';
+            const be_url:string = '/backend/api/auth/login';
+            const response = await axios.post(be_url, { email, password });
+            return response.data.data;
         },
         {
             onSuccess: (user) => {
+                console.log(user)
                 setAuth({ user });
                 queryClient.invalidateQueries('userData');
+                console.log("loginMutation.onSuccess");
             },
         }
     );

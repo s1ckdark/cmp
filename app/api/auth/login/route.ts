@@ -13,6 +13,7 @@ const cookiesToString = (rawCookies: Cookie[]) => {
 };
 
 export const POST = async () => {
+    console.log("POST");
     const cookieStore = cookies();
     const cookiesString = cookiesToString(cookieStore.getAll());
 

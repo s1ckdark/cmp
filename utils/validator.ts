@@ -17,14 +17,14 @@ export const passwordConfirmTest = string()
     .oneOf([ref('password')], '비밀번호가 서로 다릅니다.');
 
 export const logInValidator = object({
-    username: emailTest,
+    email: emailTest,
     password: passwordTest,
 }).required();
 
 export type LogInSchema = InferType<typeof logInValidator>;
 
 export const signUpValidator = object({
-    username: emailTest,
+    email: emailTest,
     password: passwordTest,
     passwordConfirm: passwordConfirmTest,
 }).required();

@@ -27,7 +27,7 @@ interface useInputType {
 }
 
 interface loginForm {
-    username: string;
+    email: string;
     password: string;
 }
 
