@@ -4,22 +4,20 @@ import { useForm } from 'react-hook-form';
 import { LogoSml } from '@/public/svgs';
 import styles from "./index.module.scss";
 import { yupResolver } from '@hookform/resolvers/yup';
-import Link from 'next/link';
 import { loginForm } from '@/types/form';
-import axios from 'axios';
 import Button from '@/components/Button';
 import { LogInSchema, logInValidator } from '@/utils/validator';
-import { showPasswordAtom } from '@/states/auth';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import authService from '@/services/authService';
-import { logInErrorAtom, logInLoadingAtom } from '@/states/auth';
+import { logInErrorAtom, logInLoadingAtom, showPasswordAtom } from '@/states/auth';
+import { useRouter } from "next/router";
 
 const Login = () => {
     const { login, resetLogInError } = authService();
     const logInError = useRecoilValue(logInErrorAtom);
     const isLoggingIn = useRecoilValue(logInLoadingAtom);
     const [state, setState] = useState({
-        username: "",
+        email: "",
         password: "",
     });
     const methods = useForm<LogInSchema>({ mode: 'onBlur', resolver: yupResolver(logInValidator) });
@@ -32,7 +30,8 @@ const Login = () => {
     const errorMessage = Object.values(errors).length > 0 ? Object.values(errors)[0].message : undefined;
 
     const submitLogIn = handleSubmit((formValues: LogInSchema) => {
-        login(formValues.username, formValues.password);
+        console.log(formValues)
+        login(formValues);
     });
 
     const onSignIn: FormEventHandler<HTMLFormElement> = (e) => {
@@ -41,9 +40,10 @@ const Login = () => {
     };
 
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data:loginForm) => {
         resetLogInError();
-        login({ username: data.username, password: data.password });
+        const res = await login({ email: data.email, password: data.password });
+        console.log(res);
     };
 
     return (
@@ -54,28 +54,28 @@ const Login = () => {
                     <LogoSml />
                 </div>
                 <form onSubmit={onSignIn}>
-                    <div className={`flex mb-3 ${styles.inputField}`}>
-                        <span className="inline-flex items-center justify-center px-3 text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                    <div className={`flex flex-wrap mb-3 ${styles.inputField}`}>
+                        <label className="inline-flex items-center justify-center px-3 text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                             ID
-                        </span>
-                        <input {...register("username", { required: true })}
+                        </label>
+                        <input {...register("email", { required: true })}
                             type='string'
                             placeholder='이메일'
                             // disabled={disabled}
                             className={`${styles.input_id} rounded-none rounded-r-lg bg-white border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} />
-                        {errors.username && <span>This field is required</span>}
+                        {errors.email && <span className="w-full">This field is required</span>}
                     </div>
-                    <div className={`flex mb-3 ${styles.inputField}`}>
-                        <span className="inline-flex items-center px-3  justify-center text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                    <div className={`flex flex-wrap mb-3 ${styles.inputField}`}>
+                        <label className="inline-flex items-center px-3  justify-center text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                             PW
-                        </span>
+                        </label>
                         <input {...register("password", { required: true })}
                             type={showPassword ? 'text' : 'password'} // fix here
                             placeholder='비밀번호 (6글자 이상)'
                             autoComplete='off'
                             // disabled={disabled}
                             className={`${styles.input_password} rounded-none rounded-r-lg bg-white border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} />
-                        {errors.password && <span>This field is required</span>}
+                        {errors.password && <span classname="w-full">This field is required</span>}
                     </div>
                     <div className="mb-10">
                         <Button type='submit'

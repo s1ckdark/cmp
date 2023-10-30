@@ -3,7 +3,7 @@ import { atom, selector } from 'recoil';
 // Define your auth state atom
 export const authState = atom({
     key: 'authState',
-    default: { user: null },
+    default: null,
 });
 
 // Define atoms for login state

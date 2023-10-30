@@ -1,6 +1,8 @@
 'use client';
 import LandingPage from '@/containers/landing';
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
+import { atom, useRecoilValue, useRecoilState } from 'recoil';
+import { authState } from '@/states/auth';
 
 const dData1: DonutChartProps[] = [
   { name: "Oracle Enterprise Edition", value: 65 },
@@ -200,6 +202,8 @@ interface LandingProps {
 }
 
 const Landing = () => {
+  const [user, setUser]  = useRecoilState(authState);
+  setUser("test");
   return (
     <LandingPage top10={top10} billing={billing} support={support} announce={announce} dData1={dData1} dData2={dData2} lineChartData={lineChartData} />
   )

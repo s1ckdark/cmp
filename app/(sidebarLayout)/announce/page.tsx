@@ -1,9 +1,12 @@
 'use client';
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { authState } from '@/states/auth';
+import { useRecoilValue } from 'recoil';
 
 export default function EditPage() {
-
+    const user = useRecoilValue(authState);
+    console.log(user);
     const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), {
         ssr: false
     });

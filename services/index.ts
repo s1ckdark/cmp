@@ -4,7 +4,12 @@ interface FetchProps {
     tags?: string[];
     revalidate?: number;
 }
-
+const headers = { 
+    'Content-Type': 'application/json',
+    // 'Authorization': `Bearer ${JSON.parse(token)}`,
+    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2NTM3MTkyNDU2OWQ2ZjZmYjk2YTFlNjMiLCJpc3MiOiJNeUFwcCIsImV4cCI6MTY5ODY0ODQ1NiwiaWF0IjoxNjk4NjQ0ODU2fQ.vOGgOL1BVqLCqRRHvXCbfVqZAlCBVcdHyxFUQceSs-oJZU8wlluQ_1GRCgM1vMZMOF9QPvGU3o6j7sghYJdXcg`,
+};
+    
 export const fetchClient = (url: string, options?: FetchProps) =>
     fetch(`${process.env.NEXT_PUBLIC_BE_URL}/api${url}`, {
         next: { revalidate: options?.revalidate ?? 60 * 60 * 10, tags: options?.tags }, // 1시간 캐시
@@ -16,8 +21,9 @@ export const fetchClient = (url: string, options?: FetchProps) =>
  */
 
 export const apiBe = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}/api`,
-    timeout: 30_000,
+    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
+    headers: headers,
+    timeout: 30000,
     withCredentials: true,
 });
 
@@ -28,7 +34,7 @@ export const apiBe = axios.create({
 
 export const apiBePure = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}/api`,
-    timeout: 30_000,
+    timeout: 30000,
     withCredentials: true,
 });
 
@@ -38,7 +44,7 @@ export const apiBePure = axios.create({
  */
 export const apiFe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_FE_URL}/api`,
-    timeout: 30_000,
+    timeout: 30000,
     withCredentials: true,
 });
 

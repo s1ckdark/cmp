@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import authService from '@/services/authService';
-
+import { loginForm } from '@/types/form';
 const useAuth = () => {
     const [error, setError] = useState(null);
     const queryClient = useQueryClient();
 
     const loginMutation = useMutation(
-        ({ username, password }) => authService.login(username, password),
+        ({ email, password }:loginForm) => authService.login(email, password),
         {
             onSuccess: (data) => {
                 // 로그인 성공 시 처리
@@ -20,9 +20,9 @@ const useAuth = () => {
         }
     );
 
-    const login = async (username, password) => {
+    const login = async (email, password) => {
         try {
-            await loginMutation.mutateAsync({ username, password });
+            await loginMutation.mutateAsync({ email, password });
         } catch (error) {
             console.error('Login failed:', error);
         }

@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { GlobalStyle } from "@/styles/globalStyles";
 import { theme } from '@/theme/theme';
 import '@/styles/globals.scss';
-import CountUpAnimation from "@/components/D3/CountUpAnimation";
 import RecoilRootProvider from "@/utils/recoilRootProvider";
 import Alert from "@/components/Alert";
 
