@@ -1,7 +1,7 @@
 type user = {
-    id: number;
-    name: string;
-    email: string;
-  };
+  userId: string;
+  accessToken: string;
+  refreshToken: string;
+};
 
 export type { user };

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-import { login } from '@/services/authService';
+import { login } from '@/services/auth';
 
 interface Cookie {
     name: string;

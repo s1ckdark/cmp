@@ -5,7 +5,7 @@ import { authState, resetLogInErrorAtom, resetSignUpErrorAtom, } from '@/states/
 import { apiBe } from '@/services';
 import { loginForm } from '@/types/form';
 // Define your authentication service
-const authService = () => {
+export const authService = () => {
     const [auth, setAuth] = useRecoilState(authState);
     const queryClient = useQueryClient();
     const resetLogInError = useResetRecoilState(resetLogInErrorAtom);
@@ -14,7 +14,7 @@ const authService = () => {
     const loginMutation = useMutation(
         async ({ email, password }: loginForm) => {
             // const public_be_url:string = process.env.NEXT_PUBLIC_BE_URL || '';
-            const be_url:string = '/backend/api/auth/login';
+            const be_url: string = '/backend/api/auth/login';
             const response = await axios.post(be_url, { email, password });
             return response.data.data;
         },
@@ -41,6 +41,7 @@ const authService = () => {
     };
 };
 
-export default authService;
+export const session = () => {
 
+}
 

@@ -8,9 +8,11 @@ import { loginForm } from '@/types/form';
 import Button from '@/components/Button';
 import { LogInSchema, logInValidator } from '@/utils/validator';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
-import authService from '@/services/authService';
+import authService from '@/services/auth';
 import { logInErrorAtom, logInLoadingAtom, showPasswordAtom } from '@/states/auth';
 import { useRouter } from "next/router";
+import { tokenState } from '@/states/recoilPersist';
+
 
 const Login = () => {
     const { login, resetLogInError } = authService();
@@ -28,6 +30,7 @@ const Login = () => {
     } = methods;
     const [showPassword, setShowPassword] = useRecoilState(showPasswordAtom);
     const errorMessage = Object.values(errors).length > 0 ? Object.values(errors)[0].message : undefined;
+    const [token, setToken] = useRecoilState(tokenState);
 
     const submitLogIn = handleSubmit((formValues: LogInSchema) => {
         console.log(formValues)
@@ -39,11 +42,11 @@ const Login = () => {
         submitLogIn();
     };
 
-
-    const onSubmit = async (data:loginForm) => {
+    const onSubmit = async (data: loginForm) => {
         resetLogInError();
         const res = await login({ email: data.email, password: data.password });
         console.log(res);
+        setToken("test");
     };
 
     return (

@@ -20,7 +20,6 @@ interface LandingProps {
 }
 
 const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
-    console.log(lineChartData)
     return (
         <div className={`${styles.container} min-h-screen`}>
             <div className="w-full flex items-center justify-center flex-wrap">
