@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-import { getMeApi } from '@/services/authService';
+import { getMeApi } from '@/services/auth';
 
 interface Cookie {
     name: string;

@@ -41,7 +41,6 @@ export interface WithAuthor {
     };
 }
 
-export type SupportedProviders = 'google' | 'facebook' | 'github';
 
 export type InputFields = Record<
     string,
@@ -54,3 +53,8 @@ export type InputFields = Record<
         example?: string;
     }
 >;
+
+export interface BreadcrumbProps {
+    title: string;
+    breadcrumbs: Array<{ href: string; label: string }>;
+}

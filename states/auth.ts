@@ -1,10 +1,22 @@
 import { atom, selector } from 'recoil';
+// import { user } from '@/types/user';
+
 
 // Define your auth state atom
 export const authState = atom({
     key: 'authState',
     default: null,
 });
+
+// export const userState = atom<user>({
+//     key: 'userInfo',
+//     default: {
+//         userId: '',
+//         accesstoken: '',
+//         refreshtoken: ''
+//     },
+//     effects_UNSTABLE: [persistAtom],
+// });
 
 // Define atoms for login state
 export const logInLoadingAtom = atom({

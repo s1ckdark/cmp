@@ -32,6 +32,7 @@ function RegistrationForm() {
                     control={control}
                     render={({ field }) => <input type="text" id="memberId" {...field} required />}
                 />
+                {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
             </div>
             <div className={`${styles.inputGroup}`}>
                 <label htmlFor="memberName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">회원명:</label>
@@ -40,6 +41,7 @@ function RegistrationForm() {
                     control={control}
                     render={({ field }) => <input type="text" id="memberName" {...field} required />}
                 />
+                {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
             </div>
             <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div className={`${styles.inputGroup}`}>
@@ -49,6 +51,7 @@ function RegistrationForm() {
                         control={control}
                         render={({ field }) => <input type="text" id="memberType" {...field} required />}
                     />
+                    {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                 </div>
                 <div className={`${styles.inputGroup}`}>
                     <label htmlFor="permission" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">권한:</label>
@@ -57,6 +60,7 @@ function RegistrationForm() {
                         control={control}
                         render={({ field }) => <input type="text" id="permission" {...field} required />}
                     />
+                    {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                 </div>
             </div>
             <div className={`${styles.inputGroup}`}>
@@ -66,6 +70,7 @@ function RegistrationForm() {
                     control={control}
                     render={({ field }) => <input type="password" id="password" {...field} required />}
                 />
+                {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                 <Button type='button'
                     className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
                     skin='gray'>수정
@@ -78,6 +83,7 @@ function RegistrationForm() {
                     control={control}
                     render={({ field }) => <input type="text" id="contact" {...field} required />}
                 />
+                {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
             </div>
             <div className={`${styles.inputGroup}`}>
                 <label htmlFor="landline" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">유선전화:</label>
@@ -94,6 +100,7 @@ function RegistrationForm() {
                     control={control}
                     render={({ field }) => <input type="email" id="email" {...field} required />}
                 />
+                {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
             </div>
 
             <div className={`${styles.inputGroup}`}>
@@ -104,11 +111,13 @@ function RegistrationForm() {
                         control={control}
                         render={({ field }) => <input type="text" id="address" {...field} required />}
                     />
+                    {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                     <Controller
                         name="address"
                         control={control}
                         render={({ field }) => <input type="text" id="address" {...field} required />}
                     />
+                    {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                 </div>
             </div>
             <div className={`${styles.inputGroup}`}>
