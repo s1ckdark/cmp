@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { atom, useRecoilState, useResetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { authState, resetLogInErrorAtom, resetSignUpErrorAtom, } from '@/states/auth';
-import { apiBe } from '@/services';
+import { apiBe, apiFe } from '@/services';
+import { UserWithRole } from '@/types/auth.d';
 import { loginForm } from '@/types/form';
+import { tokenState } from '@/states/sessionStorage';
+import { useRouter } from 'next/router';
+
 // Define your authentication service
-export const authService = () => {
-    const [auth, setAuth] = useRecoilState(authState);
+export const auth = () => {
+    const [token, setToken] = useRecoilState(tokenState);
     const queryClient = useQueryClient();
     const resetLogInError = useResetRecoilState(resetLogInErrorAtom);
     const resetSignUpError = useResetRecoilState(resetSignUpErrorAtom);
@@ -20,16 +24,18 @@ export const authService = () => {
         },
         {
             onSuccess: (user) => {
-                console.log(user)
-                setAuth({ user });
+                setToken(user);
                 queryClient.invalidateQueries('userData');
-                console.log("loginMutation.onSuccess");
+                console.log(user);
+            },
+            onError: (error) => {
+                console.error('Login failed:', error);
             },
         }
     );
 
     const logout = () => {
-        setAuth({ user: null });
+        setToken({ user: null });
         queryClient.invalidateQueries('userData');
     };
 
@@ -41,7 +47,19 @@ export const authService = () => {
     };
 };
 
-export const session = () => {
 
-}
 
+export const postIdTokenApi = (idToken: string) => apiBe.post('/auth/session', { idToken });
+
+export const getMeApiLocal = () => apiFe<UserWithRole>('/auth/session');
+
+export const getMeApi = (cookie: string) =>
+  apiBe<UserWithRole>({
+    url: '/auth/session',
+    method: 'get',
+    headers: {
+      Cookie: cookie,
+    },
+  });
+
+export const logoutApi = () => apiBe.delete('/auth/session');

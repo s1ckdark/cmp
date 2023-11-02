@@ -8,14 +8,13 @@ import { loginForm } from '@/types/form';
 import Button from '@/components/Button';
 import { LogInSchema, logInValidator } from '@/utils/validator';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
-import authService from '@/services/auth';
+import { auth } from '@/services/auth';
 import { logInErrorAtom, logInLoadingAtom, showPasswordAtom } from '@/states/auth';
-import { useRouter } from "next/router";
-import { tokenState } from '@/states/recoilPersist';
+
 
 
 const Login = () => {
-    const { login, resetLogInError } = authService();
+    const { login, resetLogInError } = auth();
     const logInError = useRecoilValue(logInErrorAtom);
     const isLoggingIn = useRecoilValue(logInLoadingAtom);
     const [state, setState] = useState({
@@ -30,23 +29,16 @@ const Login = () => {
     } = methods;
     const [showPassword, setShowPassword] = useRecoilState(showPasswordAtom);
     const errorMessage = Object.values(errors).length > 0 ? Object.values(errors)[0].message : undefined;
-    const [token, setToken] = useRecoilState(tokenState);
+
 
     const submitLogIn = handleSubmit((formValues: LogInSchema) => {
-        console.log(formValues)
         login(formValues);
+        router.push('/landing');
     });
 
     const onSignIn: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
         submitLogIn();
-    };
-
-    const onSubmit = async (data: loginForm) => {
-        resetLogInError();
-        const res = await login({ email: data.email, password: data.password });
-        console.log(res);
-        setToken("test");
     };
 
     return (
@@ -78,7 +70,7 @@ const Login = () => {
                             autoComplete='off'
                             // disabled={disabled}
                             className={`${styles.input_password} rounded-none rounded-r-lg bg-white border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} />
-                        {errors.password && <span classname="w-full">This field is required</span>}
+                        {errors.password && <span className="w-full">This field is required</span>}
                     </div>
                     <div className="mb-10">
                         <Button type='submit'

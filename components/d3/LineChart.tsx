@@ -10,7 +10,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
   const [isHovering, setIsHovering] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
 
-  const handleMouseOver = (event, d) => {
+  const handleMouseOver = (event:any, d:any) => {
     const [x, y] = d3.pointer(event);
     setHoveredValue(d.sales);
     setTooltipPosition({ x, y: y - 30 }); // Position the tooltip 30 pixels above the mouse pointer
@@ -51,7 +51,11 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       // .curve(d3.curveMonotoneX); // Add a curve for smoother animation
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
-    
+    const transitionPath = d3
+    .transition()
+    .ease(d3.easeSin)
+    .duration(2500);
+ 
     const xAxis = (g) => g
     .attr('transform', `translate(0,${innerHeight})`)
     .call(d3.axisBottom(x));
@@ -85,19 +89,26 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       .attr('y1', d => y(d))
       .attr('y2', d => y(d));
 
+    const transitionDuration = 2000; 
       data.forEach((series, index) => {
         // Draw the line
-        svg.append('path')
-          .datum(series.data)
-          .attr('fill', 'none')
-          .attr('stroke', color(index))
-          .attr('stroke-width', 2)
-          // .attr('d', line)
-          .transition() // Add a transition for animation
-          .duration(1000) // Set the duration of the animation in milliseconds
-          .attr('d', line);
-  
-        
+        const linePath = svg.append('path')
+        .datum(series.data)
+        .attr('d', line)
+        .attr('fill', 'none')
+        .attr('stroke', color(index))
+        .attr('stroke-width', 2)
+        .attr('stroke-dasharray', function() {
+          const length = this.getTotalLength();
+          return `${length} ${length}`;
+        })
+        .attr('stroke-dashoffset', function() {
+          return this.getTotalLength();
+        })
+        .transition()
+        .duration(transitionDuration)
+        .ease(d3.easeLinear)
+        .attr('stroke-dashoffset', 0);
 
         // Add point circles for this data series with hover effect
         svg.selectAll(`.circle-${index}`)

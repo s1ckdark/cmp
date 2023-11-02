@@ -1,12 +1,27 @@
 import Link from "next/link";
+import { useEffect } from "react";
 import { SidebarProps } from "@/types/common";
 import styles from "@/styles/components/layout/userInfo.module.scss";
+import { useRecoilValue, RecoilState } from 'recoil';
+import { tokenState, token } from '@/states/sessionStorage';
+import { useRouter } from "next/navigation";
 
 const UserInfo = () => {
   const isOpen = true;
+  const router = useRouter();
+  const token:token = useRecoilValue(tokenState);
+  useEffect(() => {
+    if (!token) {
+      if (!token) {
+        router.push('/login');
+      }
+    }
+  }, [token]);
+
   const user = {
-    name: "홍길동"
+    name:"홍길동"
   }
+
   return (
     <>
       <div className={`userinfo ${styles.container}`}>
