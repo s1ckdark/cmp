@@ -1,14 +1,16 @@
 import axios, { AxiosError } from 'axios';
-
+import { useRecoilValue } from 'recoil';
+import { tokenState } from '@/states/sessionStorage';
 interface FetchProps {
     tags?: string[];
     revalidate?: number;
 }
-const headers = { 
-    'Content-Type': 'application/json',
-    // 'Authorization': `Bearer ${JSON.parse(token)}`,
-    'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2NTM3MTkyNDU2OWQ2ZjZmYjk2YTFlNjMiLCJpc3MiOiJNeUFwcCIsImV4cCI6MTY5ODY0ODQ1NiwiaWF0IjoxNjk4NjQ0ODU2fQ.vOGgOL1BVqLCqRRHvXCbfVqZAlCBVcdHyxFUQceSs-oJZU8wlluQ_1GRCgM1vMZMOF9QPvGU3o6j7sghYJdXcg`,
-};
+// const accessToken = useRecoilValue(tokenState);
+// console.log(accessToken);
+// const headers = { 
+//     'Content-Type': 'application/json',
+//     // 'Authorization': `Bearer ${JSON.parse(accessToken)}`,
+// };
     
 export const fetchClient = (url: string, options?: FetchProps) =>
     fetch(`${process.env.NEXT_PUBLIC_BE_URL}/api${url}`, {
@@ -22,7 +24,7 @@ export const fetchClient = (url: string, options?: FetchProps) =>
 
 export const apiBe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    headers: headers,
+    // headers: headers,
     timeout: 30000,
     withCredentials: true,
 });
