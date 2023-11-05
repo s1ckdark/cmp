@@ -1,5 +1,5 @@
 'use client';
-import LandingPage from '@/containers/landing';
+import BillingPage from '@/containers/billing';
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
 import { atom, useRecoilValue, useRecoilState } from 'recoil';
 import { authState } from '@/states/auth';
@@ -192,7 +192,7 @@ const billing = [
 
 
 
-interface LandingProps {
+interface BillingProps {
   top10: top10Props[];
   billing: { day: number; sales: number; }[];
   support: { 번호: string; 제목: string; 고객사: string; 진행상태: string; 등록일자: string; }[];
@@ -202,13 +202,13 @@ interface LandingProps {
   lineChartData: SalesDataSeries[];
 }
 
-const Landing = () => {
+const Billing = () => {
   // const token = useRecoilValue(tokenState);
   return (
-    <LandingPage top10={top10} billing={billing} support={support} announce={announce} dData1={dData1} dData2={dData2} lineChartData={lineChartData} />
+    <BillingPage top10={top10} billing={billing} support={support} announce={announce} dData1={dData1} dData2={dData2} lineChartData={lineChartData} />
   )
 }
 
-export default Landing;
+export default Billing;
 
 

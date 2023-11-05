@@ -1,10 +1,14 @@
 import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 
-const ToastViewer = ({ content }: { content: any }) => {
+interface ViewProps {
+    content: string;
+}
+
+const ToastViewer: React.FC<ViewProps> = ({ content }) => {
     return (
         <Viewer
-            initialValue={content}
+            initialValue={content || ''}
         />
     );
 }

@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-import styles from "@/styles/components/layout/navgiation.module.scss";
+import styles from "@/styles/components/layout/Navgiation.module.scss";
 import { IconNaviBot } from "@/public/svgs";
 const Navigation = () => {
     return (

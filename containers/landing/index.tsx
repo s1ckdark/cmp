@@ -1,6 +1,6 @@
-'use client';
+// 'use client';
 import { useState } from 'react';
-import List from "@/components/Board/BoardList";
+import { Tables } from "@/components/Tables";
 import CountUpAnimation from '@/components/D3/CountUpAnimation';
 import LineChart from '@/components/D3/LineChart';
 import BarChart from '@/components/D3/BarChart';
@@ -57,10 +57,10 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
                 <LineChart data={lineChartData} width="950" height="300" />
                 <div className="flex justify-center items-center">
                     <div className="supervised w-1/2">
-                        <List type="per_month" data={lineChartData[0].data} />
+                        <Tables type="per_month" data={lineChartData[0].data} />
                     </div>
                     <div className="whole w-1/2"></div>
-                    <List type="per_month" data={lineChartData[1].data} />
+                    <Tables type="per_month" data={lineChartData[1].data} />
                 </div>
             </div>
             <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
@@ -68,11 +68,11 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
                 <div className="flex justify-center items-center">
                     <div className="whole w-1/2">
                         <div className="bg-gray-500 text-center">전체 고객사</div>
-                        <List type="top10" data={top10} />
+                        <Tables type="top10" data={top10} />
                     </div>
                     <div className="supervised w-1/2">
                         <div className="bg-gray-500 text-center">담당 고객사</div>
-                        <List type="top10" data={top10} />
+                        <Tables type="top10" data={top10} />
                     </div>
                 </div>
             </div>
@@ -107,11 +107,11 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
             </div>
             <div className={`${styles.box_section} w-full`}>
                 <h2>공지사항</h2>
-                <List type="announce" data={announce} />
+                <Tables type="announce" data={announce} />
             </div>
             <div className={`${styles.box_section} w-full`}>
                 <h2>고객지원 내역</h2>
-                <List type="support" data={support} />
+                <Tables type="support" data={support} />
             </div>
         </div>
     )

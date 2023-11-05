@@ -10,13 +10,14 @@ import { LogInSchema, logInValidator } from '@/utils/validator';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { auth } from '@/services/auth';
 import { logInErrorAtom, logInLoadingAtom, showPasswordAtom } from '@/states/auth';
-
+import { useRouter } from 'next/navigation';
 
 
 const Login = () => {
     const { login, resetLogInError } = auth();
     const logInError = useRecoilValue(logInErrorAtom);
     const isLoggingIn = useRecoilValue(logInLoadingAtom);
+    const router = useRouter();
     const [state, setState] = useState({
         email: "",
         password: "",
