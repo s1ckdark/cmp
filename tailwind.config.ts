@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding',
+      },
       fontFamily: {
         sans: ['Pretendard', ...defaultTheme.fontFamily.sans],
       },

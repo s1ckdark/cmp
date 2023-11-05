@@ -1,36 +1,71 @@
 'use client';
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import { useRef } from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 
-export default function FormEditor({ initialValue, onChange }: { initialValue: string, onChange: (value: string) => void }) {
-    const editorRef = useRef<Editor>(null);
+interface EditorProps {
+    content: string;
+    editorRef: React.MutableRefObject<any>;
+}
 
-    function handleChange() {
-        const md = editorRef?.current
-            ? editorRef?.current.getInstance().getMarkdown()
-            : "";
-        onChange(md);
-    }
+interface header {
+    header: string;
+}
+const ToastEditor: React.FC<EditorProps> = ({ content, editorRef }) => {
+    const toolbarItems = [
+        ['heading', 'bold', 'italic', 'strike'],
+        ['hr', 'quote'],
+        ['ul', 'ol', 'task', 'indent', 'outdent'],
+        ['table', 'image', 'link'],
+        ['code', 'codeblock'],
+        ['scrollSync']
+    ];
+
+    // useEffect(() => {
+    //     if (editorRef.current) {
+    //         editorRef.current.getInstance().removeHook("addImageBlobHook");
+    //         editorRef.current
+    //         .getInstance()
+    //         .addHook("addImageBlobHook", (blob:any, callback:any) => {
+    //             (async () => {
+    //             let formData = new FormData();
+    //             formData.append("file", blob);
+
+    //             axios.defaults.withCredentials = true;
+    //             const { data: url } = await axios.post(
+    //                 `${backUrl}image.do`,
+    //                 formData,
+    //                 {
+    //                 headers: { "content-type": "multipart/formdata" },
+    //                 }
+    //             );
+    //             callback(url, "alt text");
+    //             })();
+
+    //             return false;
+    //         });
+    //     }
+    //     return () => {};
+    // }, [editorRef]);
 
     return (
-        <Editor
-            height="600px"
-            initialEditType="wysiwyg"
-            initialValue={initialValue}
-            onChange={handleChange}
-            previewStyle="vertical"
-            ref={editorRef}
-            useCommandShortcut={true}
-            placeholder="내용을 입력해주세요."
-            toolbarItems={[
-                // 툴바 옵션 설정
-                ['heading', 'bold', 'italic', 'strike'],
-                ['hr', 'quote'],
-                ['ul', 'ol', 'task', 'indent', 'outdent'],
-                ['table', 'image', 'link'],
-                ['code', 'codeblock']
-            ]}
-        />
+        <>
+            {editorRef && (
+                <Editor
+                    height="600px"
+                    initialEditType="wysiwyg"
+                    initialValue={content || ' '}
+                    previewStyle={window.innerWidth > 1000 ? 'vertical' : 'tab'}
+                    ref={editorRef}
+                    theme={''}
+                    usageStatistics={false}
+                    toolbarItems={toolbarItems}
+                    useCommandShortcut={true}
+                    placeholder="내용을 입력해주세요."
+                />
+            )}
+        </>
     );
 }
+export default ToastEditor;

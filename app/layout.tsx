@@ -7,6 +7,8 @@ import { theme } from '@/theme/theme';
 import '@/styles/globals.scss';
 import RecoilRootProvider from "@/utils/recoilRootProvider";
 import Alert from "@/components/Alert";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function RootLayout({
   children,
@@ -25,13 +27,14 @@ export default function RootLayout({
               <div id="portal" />
               <div id='alert' />
               <div id='modal' />
+              <ToastContainer />
               <Alert />
               {children}
             </styledComponents.ThemeProvider>
           </QueryClientProvider>
         </RecoilRootProvider>
       </body>
-    </html>
+    </html >
   );
 }
 

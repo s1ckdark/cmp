@@ -1,6 +1,6 @@
-'use client';
+// 'use client';
 import { useState } from 'react';
-import List from "@/components/Board/BoardList";
+import { Tables } from "@/components/Tables";
 import CountUpAnimation from '@/components/D3/CountUpAnimation';
 import LineChart from '@/components/D3/LineChart';
 import BarChart from '@/components/D3/BarChart';
@@ -8,8 +8,9 @@ import PieChart from '@/components/D3/PieChart';
 import DonutChart from '@/components/D3/DonutChart';
 import styles from "./index.module.scss";
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
-
-interface LandingProps {
+import BillingNaver from './billingNaver';
+import BillingGd from './billingGd';
+interface BillingProps {
     top10: top10Props[];
     billing: { day: number; sales: number; }[];
     support: { 번호: string; 제목: string; 고객사: string; 진행상태: string; 등록일자: string; }[];
@@ -19,7 +20,7 @@ interface LandingProps {
     lineChartData: SalesDataSeries[];
 }
 
-const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
+const BillingPage: React.FC<BillingProps> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
     return (
         <div className={`${styles.container} min-h-screen`}>
             <div className="w-full flex items-center justify-center flex-wrap">
@@ -57,10 +58,10 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
                 <LineChart data={lineChartData} width="950" height="300" />
                 <div className="flex justify-center items-center">
                     <div className="supervised w-1/2">
-                        <List type="per_month" data={lineChartData[0].data} />
+                        <Tables type="per_month" data={lineChartData[0].data} />
                     </div>
                     <div className="whole w-1/2"></div>
-                    <List type="per_month" data={lineChartData[1].data} />
+                    <Tables type="per_month" data={lineChartData[1].data} />
                 </div>
             </div>
             <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
@@ -68,11 +69,11 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
                 <div className="flex justify-center items-center">
                     <div className="whole w-1/2">
                         <div className="bg-gray-500 text-center">전체 고객사</div>
-                        <List type="top10" data={top10} />
+                        <Tables type="top10" data={top10} />
                     </div>
                     <div className="supervised w-1/2">
                         <div className="bg-gray-500 text-center">담당 고객사</div>
-                        <List type="top10" data={top10} />
+                        <Tables type="top10" data={top10} />
                     </div>
                 </div>
             </div>
@@ -90,7 +91,10 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
                     </div>
                 </div>
             </div>
-
+            <div className="service_usage">
+                <BillingNaver />
+                <BillingGd />
+            </div>
 
             <div className="service_usage">
                 <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
@@ -109,4 +113,4 @@ const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce
     )
 }
 
-export default LandingPage;
+export default BillingPage;

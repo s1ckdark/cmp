@@ -5,10 +5,10 @@ import * as d3 from 'd3';
 const CountUpAnimation: React.FC<{ endValue: number, duration: number }> = ({ endValue, duration }) => {
   const countUpRef = useRef(null);
 
-  const fomatter = (d)=>{
-    return (""+d).length > 4 ? d3.format(',')(d) : d3.format('d')(d);
+  const fomatter = (d: any) => {
+    return ("" + d).length > 4 ? d3.format(',')(d) : d3.format('d')(d);
   }
-  
+
   useEffect(() => {
     const svg = d3.select(countUpRef.current)
       .attr('width', 360)

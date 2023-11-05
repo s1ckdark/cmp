@@ -1,3 +1,4 @@
+'use client';
 import type { ReactElement } from 'react'
 import { theme } from './theme'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'

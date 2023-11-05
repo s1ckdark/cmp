@@ -12,9 +12,11 @@ export default function SidebarLayout({
         <>
             <Sidebar />
             <div className="page">
-                <Header />
-                {children}
-                <Footer />
+                <div className="container">
+                    <Header />
+                    {children}
+                    <Footer />
+                </div>
             </div>
         </>
     );

@@ -1,5 +1,4 @@
-'use client';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Login from '@/containers/login';
 
 // import { getBlogCategoriesAPI, fetchBlogPostsAPI } from '@/services/blog';

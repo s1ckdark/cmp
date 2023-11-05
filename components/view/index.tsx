@@ -5,7 +5,7 @@ import NextImage from 'next/image'
 import { EPISODE_PREFIX } from '@/constants/episode'
 import type { Character, Episode } from '@/types/common'
 
-import Tooltip from '../tooltip'
+import Tooltip from '../Tooltip'
 
 import styled, { css } from 'styled-components'
 
@@ -74,9 +74,8 @@ function CharacterCard({
           >
             <CharacterCardEpisode>
               Played in{' '}
-              {`${characterEpisodes.length} episode${
-                characterEpisodes.length > 1 ? 's' : ''
-              }`}
+              {`${characterEpisodes.length} episode${characterEpisodes.length > 1 ? 's' : ''
+                }`}
             </CharacterCardEpisode>
           </Tooltip>
         </CharacterCardInfo>

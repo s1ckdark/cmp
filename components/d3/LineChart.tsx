@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { SalesDataPoint, SalesDataSeries, LineChartProps } from '@/types/data';
@@ -10,7 +11,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
   const [isHovering, setIsHovering] = useState(false);
   const [activeTooltip, setActiveTooltip] = useState(null);
 
-  const handleMouseOver = (event:any, d:any) => {
+  const handleMouseOver = (event: any, d: any) => {
     const [x, y] = d3.pointer(event);
     setHoveredValue(d.sales);
     setTooltipPosition({ x, y: y - 30 }); // Position the tooltip 30 pixels above the mouse pointer
@@ -39,32 +40,32 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       .range([0, innerWidth]);
 
     const y = d3.scaleLinear()
-    .domain([0, d3.max(data.flatMap(series => series.data), d => d.sales)])
+      .domain([0, d3.max(data.flatMap(series => series.data), d => d.sales)])
       .nice()
       .range([innerHeight, 0]);
 
     const line = d3.line()
-    // .defined(d => !isNaN(d.sales))
+      // .defined(d => !isNaN(d.sales))
       .x(d => x(d.month))
       .y(d => y(d.sales))
-      // .y(innerHeight) // Start the line at the bottom
-      // .curve(d3.curveMonotoneX); // Add a curve for smoother animation
+    // .y(innerHeight) // Start the line at the bottom
+    // .curve(d3.curveMonotoneX); // Add a curve for smoother animation
 
     const color = d3.scaleOrdinal(d3.schemeCategory10);
     const transitionPath = d3
-    .transition()
-    .ease(d3.easeSin)
-    .duration(2500);
- 
+      .transition()
+      .ease(d3.easeSin)
+      .duration(2500);
+
     const xAxis = (g) => g
-    .attr('transform', `translate(0,${innerHeight})`)
-    .call(d3.axisBottom(x));
+      .attr('transform', `translate(0,${innerHeight})`)
+      .call(d3.axisBottom(x));
 
     const yAxis = (g) => g
       // .attr('transform', `translate(${margin.left},0)`)
       .call(d3.axisLeft(y));
-    
-       // Create the grid line functions.
+
+    // Create the grid line functions.
     const xGrid = (g) => g
       .attr('class', 'grid-lines')
       .selectAll('line')
@@ -81,7 +82,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       .data(y.ticks())
       .join('line')
       .attr("stroke", "gray")
-      .attr("opacity",0.2)
+      .attr("opacity", 0.2)
       .attr("stroke-width", 2)
       .attr('x1', 0)
       .attr('x2', width - margin.right)
@@ -89,20 +90,20 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       .attr('y1', d => y(d))
       .attr('y2', d => y(d));
 
-    const transitionDuration = 2000; 
-      data.forEach((series, index) => {
-        // Draw the line
-        const linePath = svg.append('path')
+    const transitionDuration = 2000;
+    data.forEach((series, index) => {
+      // Draw the line
+      const linePath = svg.append('path')
         .datum(series.data)
         .attr('d', line)
         .attr('fill', 'none')
         .attr('stroke', color(index))
         .attr('stroke-width', 2)
-        .attr('stroke-dasharray', function() {
+        .attr('stroke-dasharray', function () {
           const length = this.getTotalLength();
           return `${length} ${length}`;
         })
-        .attr('stroke-dashoffset', function() {
+        .attr('stroke-dashoffset', function () {
           return this.getTotalLength();
         })
         .transition()
@@ -110,20 +111,20 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
         .ease(d3.easeLinear)
         .attr('stroke-dashoffset', 0);
 
-        // Add point circles for this data series with hover effect
-        svg.selectAll(`.circle-${index}`)
-          .data(series.data)
-          .enter()
-          .append('circle')
-          .attr('cx', d => x(d.month))
-          .attr('cy', d => y(d.sales))
-          .attr('r', 4) // Adjust the radius of the circles
-          .attr('fill', color(index))
-          .attr('class', `circle-${index}`)
-          .on('mouseover', handleMouseOver)
-          .on('mouseout', handleMouseOut);         
-      });
-  
+      // Add point circles for this data series with hover effect
+      svg.selectAll(`.circle-${index}`)
+        .data(series.data)
+        .enter()
+        .append('circle')
+        .attr('cx', d => x(d.month))
+        .attr('cy', d => y(d.sales))
+        .attr('r', 4) // Adjust the radius of the circles
+        .attr('fill', color(index))
+        .attr('class', `circle-${index}`)
+        .on('mouseover', handleMouseOver)
+        .on('mouseout', handleMouseOut);
+    });
+
 
 
     // Add X and Y axes
@@ -134,7 +135,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
     // svg.append('g').call(xGrid);
     svg.append('g').call(yGrid);
 
-      // Create a legend
+    // Create a legend
     const legend = svg.append('g')
       .attr('transform', `translate(${innerWidth + 10},-40)`);
 
@@ -158,17 +159,17 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
         .text(series.name);
     });
 
-   // Remove the tooltip when hoveredValue is null
-  if (isHovering && hoveredValue !== null) {
-    svg.append('text')
-      .attr('x', tooltipPosition.x) // Position based on mouse coordinates
-      .attr('y', tooltipPosition.y) // Position based on mouse coordinates
-      .attr('class', 'hovered-value')
-      .text(`Hovered Value: ${hoveredValue}`);
-  } else {
-    svg.selectAll('.hovered-value').remove();
-  }
-}, [data, width, height, hoveredValue, isHovering, tooltipPosition]);
+    // Remove the tooltip when hoveredValue is null
+    if (isHovering && hoveredValue !== null) {
+      svg.append('text')
+        .attr('x', tooltipPosition.x) // Position based on mouse coordinates
+        .attr('y', tooltipPosition.y) // Position based on mouse coordinates
+        .attr('class', 'hovered-value')
+        .text(`Hovered Value: ${hoveredValue}`);
+    } else {
+      svg.selectAll('.hovered-value').remove();
+    }
+  }, [data, width, height, hoveredValue, isHovering, tooltipPosition]);
 
 
 

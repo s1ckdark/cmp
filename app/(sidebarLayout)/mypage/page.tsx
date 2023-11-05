@@ -1,5 +1,5 @@
 'use client';
-import RegistrationForm from '@/components/form/RegistrationForm';
+import RegistrationForm from '@/components/Form/RegistrationForm';
 import { useRecoilValue } from 'recoil';
 import { authState } from '@/states/auth';
 
