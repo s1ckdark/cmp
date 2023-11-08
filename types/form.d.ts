@@ -1,4 +1,4 @@
-interface registrationData {
+export interface registrationData {
     memberId: string;
     memberType: string;
     permission: string;
@@ -10,7 +10,7 @@ interface registrationData {
     company: string;
 }
 
-interface ProductForm {
+export interface ProductForm {
     productName: string;
     productCategory: string;
     productSubCategory: string;
@@ -21,14 +21,12 @@ interface ProductForm {
     comment: string;
 }
 
-interface useInputType {
+export interface useInputType {
     state: any;
     action: any;
 }
 
-interface loginForm {
+export interface loginForm {
     email: string;
     password: string;
 }
-
-export type { registrationData, ProductForm, useInputType, loginForm }; 

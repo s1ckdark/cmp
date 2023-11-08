@@ -12,7 +12,7 @@ export default function Home() {
                     <LogoLrg />
                 </div>
                 <div className="mb-10">
-                    <a href="/login" className={`${styles.btnStart} px-3.5 py-2.5 font-bold text-white shadow-sm`}>Get started</a>
+                    <a href="/signin" className={`${styles.btnStart} px-3.5 py-2.5 font-bold text-white shadow-sm`}>Get started</a>
                 </div>
             </div>
         </main>

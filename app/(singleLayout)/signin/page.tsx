@@ -1,11 +1,11 @@
 // import { useRouter } from 'next/navigation';
-import Login from '@/containers/login';
+import Signin from '@/containers/signin';
 
 // import { getBlogCategoriesAPI, fetchBlogPostsAPI } from '@/services/blog';
 // import { cookiesToString } from '@/utils/cookie';
 
-const LoginPage = () => {
-  return <Login />;
+const SigninPage = () => {
+  return <Signin />;
 };
 
-export default LoginPage;
+export default SigninPage;

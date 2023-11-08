@@ -1,31 +1,11 @@
-import { atom, useRecoilValue, useResetRecoilState } from 'recoil';
+import { atom } from 'recoil';
 
-export const authModalAtom = atom<'login' | 'signup' | undefined>({
-  key: 'authModal',
-  default: undefined,
+export const authModalStateAtom = atom<'login' | 'signup' | undefined>({
+  key: 'authModalState', // unique ID (with respect to other atoms/selectors)
+  default: undefined, // default value (aka initial value)
 });
 
 export const showPasswordAtom = atom<boolean>({
-  key: 'showPassword',
-  default: true,
-});
-
-export const logInLoadingAtom = atom<boolean>({
-  key: 'logInLoading',
+  key: 'showPasswordState',
   default: false,
-});
-
-export const logInErrorAtom = atom<string>({
-  key: 'logInError',
-  default: '',
-});
-
-export const signUpLoadingAtom = atom<boolean>({
-  key: 'signUpLoading',
-  default: false,
-});
-
-export const signUpErrorAtom = atom<string>({
-  key: 'signUpError',
-  default: '',
 });

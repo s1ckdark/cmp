@@ -1,16 +1,8 @@
 import axios, { AxiosError } from 'axios';
-import { useRecoilValue } from 'recoil';
-import { tokenState } from '@/states/sessionStorage';
 interface FetchProps {
     tags?: string[];
     revalidate?: number;
 }
-// const accessToken = useRecoilValue(tokenState);
-// console.log(accessToken);
-// const headers = { 
-//     'Content-Type': 'application/json',
-//     // 'Authorization': `Bearer ${JSON.parse(accessToken)}`,
-// };
     
 export const fetchClient = (url: string, options?: FetchProps) =>
     fetch(`${process.env.NEXT_PUBLIC_BE_URL}/api${url}`, {
@@ -23,8 +15,7 @@ export const fetchClient = (url: string, options?: FetchProps) =>
  */
 
 export const apiBe = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    // headers: headers,
+    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}/apibe`,
     timeout: 30000,
     withCredentials: true,
 });
@@ -35,7 +26,7 @@ export const apiBe = axios.create({
  */
 
 export const apiBePure = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}/api`,
+    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
     timeout: 30000,
     withCredentials: true,
 });
@@ -45,11 +36,22 @@ export const apiBePure = axios.create({
  * revalidate나 digicam 등 /api 가 붙은 프론트엔드 서버의 API를 브라우저에서 호출하는 용도다.
  */
 export const apiFe = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_FE_URL}/api`,
+    baseURL: `${process.env.NEXT_PUBLIC_FE_URL}`,
     timeout: 30000,
     withCredentials: true,
 });
 
+apiBe.interceptors.request.use(
+    (config) => {
+        const accessToken = localStorage.getItem('token');
+        if (accessToken && config.headers) config.headers.Authorization = `Bearer ${accessToken}`;
+        return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  
 apiBe.interceptors.response.use(
     (response) => response, // 2xx 범위일 때
     (error) => {

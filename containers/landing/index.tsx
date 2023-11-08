@@ -1,13 +1,14 @@
 // 'use client';
 import { useState } from 'react';
 import { Tables } from "@/components/Tables";
-import CountUpAnimation from '@/components/D3/CountUpAnimation';
-import LineChart from '@/components/D3/LineChart';
-import BarChart from '@/components/D3/BarChart';
-import PieChart from '@/components/D3/PieChart';
-import DonutChart from '@/components/D3/DonutChart';
+import CountUpAnimation from '@/components/d3/CountUpAnimation';
+import LineChart from '@/components/d3/LineChart';
+import BarChart from '@/components/d3/BarChart';
+import PieChart from '@/components/d3/PieChart';
+import DonutChart from '@/components/d3/DonutChart';
 import styles from "./index.module.scss";
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
+import { getUserInfo } from "@/services/auth";
 
 interface LandingProps {
     top10: top10Props[];
@@ -20,6 +21,8 @@ interface LandingProps {
 }
 
 const LandingPage: React.FC<LandingProps> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
+    console.log("userinfo",getUserInfo());
+
     return (
         <div className={`${styles.container} min-h-screen`}>
             <div className="w-full flex items-center justify-center flex-wrap">
