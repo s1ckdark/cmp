@@ -30,7 +30,6 @@ export const TableBody: React.FC<TableBodyProps> = ({ data }) => {
 }
 export const Tables: React.FC<TablesProps> = ({ type, data, className }) => {
     const row: any[] = isEmptyObject(data) ? data : [];
-    console.log(type);
     return (
         <table className={cx(className, styles[type ?? 'primary'])}>
             <THeader type={type} />

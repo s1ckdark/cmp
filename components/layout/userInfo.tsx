@@ -1,32 +1,37 @@
+'use client';
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SidebarProps } from "@/types/common";
 import styles from "@/styles/components/layout/userInfo.module.scss";
-import { useRecoilValue, RecoilState } from 'recoil';
-import { tokenState, token } from '@/states/sessionStorage';
+import { useRecoilValue, useRecoilState } from 'recoil';
+// import { tokenState } from '@/states/localStorage';
 import { useRouter } from "next/navigation";
+import { Token }  from '@/types/auth';
+import { recoil } from '@/states/sessionStorage';
+import { User } from '@/types/user';
+// import { tokenState } from "@/states/localStorage";
 
 const UserInfo = () => {
   const isOpen = true;
   const router = useRouter();
-  const token: token = useRecoilValue(tokenState);
+  const [ name, setName ] = useState<string>('');
+  const accessToken = localStorage.getItem('token');
+  const userInfo = useRecoilValue(recoil);
+  
+  useEffect(() => {
+    if (!accessToken) {
+      router.push('/signin');
+    }
+    setName(userInfo.userFullName);
+  }, []);
 
-  // useEffect(() => {
-  //   if (!token.accesstoken) {
-  //     router.push('/login');
-  //   }
-  // }, [token]);
-
-  const user = {
-    name: "홍길동"
-  }
 
   return (
     <>
       <div className={`userinfo ${styles.container}`}>
         <div className="container mx-auto p-6">
           <div className={`${styles.user_name} text-right px-2`}>
-            <p className="mb-6">{user.name}</p>
+            <p className="mb-6">{name}</p>
           </div>
           <div className="link_area flex items-center justify-end px-2">
             <span className="setting">

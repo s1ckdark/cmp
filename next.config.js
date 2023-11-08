@@ -6,8 +6,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/backend/:path*",
-        destination: "http://10.20.19.96:30006/:path*",
+        source: "/apibe/:path*",
+        destination: "http://10.20.19.96:30006/api/:path*",
       },
     ];
   },

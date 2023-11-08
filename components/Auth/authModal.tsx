@@ -9,11 +9,10 @@ import { LogInSchema, logInValidator } from '@/utils/validator';
 import { showPasswordAtom } from './states';
 import useAuthModal from './useAuthModal';
 import Button from '@/components/Button';
-// import { Modal } from '@/components/Modal';
+import { Modal } from '@/components/Modal';
 import styles from './index.module.scss';
-import EmailBased from './EmailBased';
 
-const Auth = () => {
+const AuthModal = () => {
   const { authModal, onClose } = useAuthModal();
   const showPassword = useRecoilValue(showPasswordAtom);
   const { logInEmail, logInLoading, logInError } = useAuth();
@@ -38,10 +37,30 @@ const Auth = () => {
   const errorMessage = Object.values(errors).length > 0 ? Object.values(errors)[0].message : undefined;
   const disabled = logInLoading;
   return (
-      <>
-        <EmailBased />
-      </>
+    <Modal isShow={!!authModal} onClose={onClose} closeIcon>
+      <div className={styles.authModal}>
+        <form onSubmit={onSignIn}>
+        <div className={styles.inputWrapper}>
+            <input {...register('email')} type='string' placeholder='이메일' disabled={disabled} />
+        </div>
+        <div className={styles.inputWrapper}>
+            <input
+            {...register('password')}
+            type={showPassword ? 'string' : 'password'}
+            placeholder='비밀번호 (6글자 이상)'
+            autoComplete='off'
+            disabled={disabled}
+            />
+            {/* {!disabled && <FancyEyeBall showPassword={showPassword} setShowPassword={setShowPassword} />} */}
+        </div>
+        <Button type='submit' disabled={disabled} skin='primary'>
+            로그인
+        </Button>
+        {(logInError || errorMessage) && <div className={styles.commonError}>{logInError || errorMessage}</div>}
+        </form>
+      </div>
+    </Modal>
   );
 };
 
-export default Auth;
+export default AuthModal;
