@@ -1,40 +1,41 @@
-import React from 'react';
-import { THeader } from './TableHeader';
-import { TBody } from './TableBody';
+'use client';
+import React, {useEffect, useState} from 'react';
+import { TableHeader } from './TableHeader';
+import { TableBody } from './TableBody';
 import { isEmptyObject } from '@/utils/data';
 import cx from 'clsx';
 import styles from './index.module.scss';
+import { TablesProps, TableHeaderProps, TableBodyProps } from '@/types/data';
+import Pagination from '@/components/Pagination';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { currentPageAtom } from '@/states';
+import { dataListAtom } from '@/states/data';
 
-interface TableHeaderProps {
-    type: string;
-}
-interface TableBodyProps {
-    data: Array<any>;
-}
-export interface TablesProps {
-    type: string;
-    data: Array<any>;
-    className?: string;
-}
+export const Tables = ({rowType, className}:TablesProps) => {
+    const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
+    const [data, setData ] = useRecoilState(dataListAtom) || null;
+    
+    const onPageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+    };
 
+    return (
+        <>
+            <div className={styles.tableContainer}>
+                <table className={styles[rowType]}>
+                    <TableHeader rowType={rowType} />
+                    <TableBody rowType={rowType} data={data} />
+                </table>
+            </div>
+            {data?.totalPages && (
+                <Pagination
+                    count={data.totalPages}
+                    page={currentPage}
+                    onPageChange={onPageChange}
+                />
+            )}
+        </>
+    );
 
-export const TableHeader: React.FC<TableHeaderProps> = ({ type }) => {
-    return (
-        <THeader type={type} />
-    );
-}
-export const TableBody: React.FC<TableBodyProps> = ({ data }) => {
-    return (
-        <TBody data={data} />
-    );
-}
-export const Tables: React.FC<TablesProps> = ({ type, data, className }) => {
-    const row: any[] = isEmptyObject(data) ? data : [];
-    return (
-        <table className={cx(className, styles[type ?? 'primary'])}>
-            <THeader type={type} />
-            <TBody data={row} />
-        </table>
-    );
 };
 

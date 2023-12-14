@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+.memberName {
+    font-size: 40px;
+    text-align: center;
+    padding:  40px 0 30px 0;
+    color: #313131;
+
+}
+
+.boxSection {
+    width: 100%;
+    margin: 0 0 20px 0;
+    border: 1px solid #DEE1E7;
+    background-color: #FBFCFF;
+    .inner {
+        padding: 50px;
+        width: 100%;
+        .label {
+            font-size: 24px;
+            color: #313131;
+            width: 100%;
+            display: block;
+            margin-bottom: 20px;
+        }
+    }
+}
+.col2 {
+    &.half {
+        .left {
+            width: calc(50% - 12px); 
+            margin-right: 12px;
+        }
+        .right {
+            width: calc(50% - 12px); 
+            margin-left: 12px;
+        }
+    }
+    &.asymc {
+        .left {
+            width: calc(70% - 12px); 
+            margin-right: 12px;
+        }
+        .right {
+            width: calc(30% - 12px); 
+            margin-left: 12px;
+        }
+    }
+}
+.demandAmount {
+    width: 100%;
+    margin: 0 0 20px 0;
+    label {
+        font-size: 24px;
+    }
+    .countup {
+        position: relative;
+    }
+}
+.rank {
+    width: 100%;
+  
+}   
+.perMonth {
+    width: 100%;
+  
+}   
+.perWeek {
+    width: 100%;
+  
+}   
+.perDay {
+    width: 100%;
+}   
+
+}

@@ -6,7 +6,9 @@
 }
 
 .loading {
-    @include m.flexbox(start, center);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     flex-direction: column;
     width: 80px;
     height: 80px;
@@ -50,7 +52,7 @@
 }
 
 .loadingPage {
-    @include m.flexbox;
+    display: flex;
     width: 100%;
     min-height: 100vh;
     cursor: none;

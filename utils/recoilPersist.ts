@@ -17,7 +17,7 @@ const localStorageEffect = (key: string) => ({ setSelf, onSet }: LocalStorageEff
     });
 };
 
-interface LocalStorageAtomState {
+export interface LocalStorageAtomState {
     [key: string]: any;
 }
 

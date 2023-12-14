@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { DonutChart } from '@/types/data';
+import { DonutChartProps } from '@/types/data';
 
-const DonutChart: React.FC<{ data: Array<DonutChart>, title: string }> = ({ data, title }) => {
+const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({ data, title }) => {
   const svgRef = useRef();
   useEffect(() => {
     // Set up the dimensions and radius for the donut chart

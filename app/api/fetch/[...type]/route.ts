@@ -1,0 +1,35 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+
+interface Cookie {
+  name: string;
+  value: string;
+}
+
+const cookiesToString = (rawCookies: Cookie[]) => {
+  return rawCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
+};
+
+export const GET = async () => {
+  const cookieStore = cookies();
+  const cookiesString = cookiesToString(cookieStore.getAll());
+
+  let currentUser = null;
+  try {
+    // currentUser = await getMeApi(cookiesString).then((res) => res.data);
+  } catch (error) {
+    // do nothing
+  }
+  return NextResponse.json(currentUser);
+};
+
+export const POST = async(request: Request) => {
+
+  const body = await request.json();
+  console.log(body);
+  const { accessToken, refreshToken } = body;
+  // const bodystring = JSON.stringify({ accessToken });
+  cookies().set('accessToken', accessToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
+  cookies().set('refreshToken', refreshToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
+  return NextResponse.json({ res: body });
+}

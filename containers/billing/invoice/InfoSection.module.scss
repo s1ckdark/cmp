@@ -1,0 +1,29 @@
+.infoSection {
+    font-size: 14px;
+
+    hgroup {
+        h1 {
+            margin: 50px 0 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    }
+
+    label {
+        border: 1px solid #DEE1E7;
+        background: #F7F8FE;
+        width: 180px;
+        line-height: 20px;
+        padding: 10px 0 10px 20px;
+        display: inline-block;
+    }
+
+    span {
+        padding: 10px 20px;
+        width: calc(100% - 180px);
+        border: 1px solid #DEE1E7;
+        background: linear-gradient(0deg, #FFF 0%, #FFF 100%), #313131;
+        display: inline-block;
+    }
+
+}

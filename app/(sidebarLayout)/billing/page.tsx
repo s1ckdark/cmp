@@ -2,8 +2,6 @@
 import BillingPage from '@/containers/billing';
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
 import { atom, useRecoilValue, useRecoilState } from 'recoil';
-import { authState } from '@/states/auth';
-import { tokenState } from '@/states/sessionStorage';
 
 const dData1: DonutChartProps[] = [
   { name: "Oracle Enterprise Edition", value: 65 },

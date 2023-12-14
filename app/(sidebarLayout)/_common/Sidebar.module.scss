@@ -1,0 +1,27 @@
+.container {
+    background: #202124;
+    width: 256px;
+    &.open {
+        width: 90px;
+        a {
+            padding: 0;
+            justify-content: center;
+            p {
+                display: none;
+            }
+        }
+        [class~='userinfo'] {
+            display: none;
+        }
+    }
+    .toggle_btn {
+        background: #2B3035;
+        button {
+            height: 40px;
+            width: 40px;
+        }
+    }
+    .userinfo {
+        display: block;
+    }
+}

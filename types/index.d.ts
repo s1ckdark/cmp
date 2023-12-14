@@ -1,8 +1,6 @@
 import { MouseEvent } from 'react';
 import Isotope from 'isotope-layout';
 
-import type { Gtag } from '@types/gtag.js';
-
 interface ViewTransition {
     finished: Promise<void>;
     ready: Promise<void>;

@@ -4,7 +4,7 @@ import ListPage from './list';
 import EditPage from './edit';
 import { useRouter } from 'next/navigation';
 
-const SupportPage = ({ params }) => {
+const SupportPage = ({ params }:any) => {
   const { slug } = params;
   const router = useRouter();
   const type = slug[0];

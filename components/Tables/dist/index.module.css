@@ -1,0 +1,76 @@
+.support thead tr th:first-child {
+  width: 5%;
+}
+.support thead tr th:nth-child(2) {
+  width: 5%;
+}
+.support thead tr th:nth-child(3) {
+  width: 10%;
+}
+.support thead tr th:nth-child(4) {
+  width: 10%;
+}
+.support thead tr th:nth-child(5) {
+  width: 10%;
+}
+.support thead tr th:nth-child(6) {
+  width: 10%;
+}
+.support thead tr th:nth-child(7) {
+  width: 10%;
+}
+.support thead tr th:nth-child(8) {
+  width: 10%;
+}
+.support thead tr th:nth-child(9) {
+  width: 10%;
+}
+.support thead tr th:nth-child(10) {
+  width: 10%;
+}
+.support thead tr th:nth-child(11) {
+  width: 10%;
+}
+
+.usage .table thead th {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+}
+.usage .table thead th:first-child {
+  width: 5%;
+}
+.usage .table thead th:nth-child(2) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(3) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(4) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(5) {
+  width: 5%;
+}
+.usage .table thead th:nth-child(6) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(7) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(8) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(9) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(10) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(11) {
+  width: 10%;
+}
+.usage .table tbody td {
+  text-align: center;
+  padding: 0 10px;
+}

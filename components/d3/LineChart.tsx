@@ -1,10 +1,11 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { SalesDataPoint, SalesDataSeries, LineChartProps } from '@/types/data';
+import { SalesDataPoint, LineChartProps } from '@/types/data';
 import styles from '@/styles/components/d3/Linecharts.module.scss';
 
 const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }) => {
+  console.log(data);
   const svgRef = useRef();
   const [hoveredValue, setHoveredValue] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
@@ -40,7 +41,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }
       .range([0, innerWidth]);
 
     const y = d3.scaleLinear()
-      .domain([0, d3.max(data.flatMap(series => series.data), d => d.sales)])
+      .domain([0, d3.max(data.flatMap(series => series), d => d.sales)])
       .nice()
       .range([innerHeight, 0]);
 

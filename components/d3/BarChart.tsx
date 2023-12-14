@@ -5,9 +5,12 @@ import { BarChartProps } from '@/types/data';
 
 interface Props extends BarChartProps {
 	data: {
-		day: string;
-		sales: number;
+		x: string;
+		y: number;
 	}[];
+	width: number;
+	height: number;
+	title: string;
 }
 
 const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
@@ -19,8 +22,8 @@ const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
 		const width = 500 - margin.left - margin.right;
 		const height = 250 - margin.top - margin.bottom;
 
-		const xScale = d3.scaleBand().domain(data.map(d => d.day)).range([0, width]).padding(0.5);
-		const yScale = d3.scaleLinear().domain([0, d3.max(data, d => d.sales)]).nice().range([height, 0]);
+		const xScale = d3.scaleBand().domain(data.map(d => d.x)).range([0, width]).padding(0.5);
+		const yScale = d3.scaleLinear().domain(d3.extent(data, d => d.y) as [number, number]).nice().range([height, 0]);
 
 		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -30,7 +33,7 @@ const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
 			.attr('transform', `translate(0,${height})`)
 			.call(d3.axisBottom(xScale)
 				.tickSize(-height)
-				.tickFormat('') // Remove tick labels
+				.tickFormat(() => '') // Remove tick labels
 			)
 			.selectAll('line')
 			.attr('stroke', '#e5e5e5'); // Style the grid lines
@@ -39,7 +42,7 @@ const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
 			.attr('class', 'grid')
 			.call(d3.axisLeft(yScale)
 				.tickSize(-width)
-				.tickFormat('') // Remove tick labels
+				.tickFormat(() => '') // Remove tick labels
 			)
 			.selectAll('line')
 			.attr('stroke', '#e5e5e5'); // Style the grid lines
@@ -48,10 +51,10 @@ const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
 			.data(data)
 			.enter()
 			.append('rect')
-			.attr('x', d => xScale(d.day))
-			.attr('y', d => yScale(d.sales))
+			.attr('x', d => xScale(d.x) || 0) // Use a default value of 0 if xScale(d.day) is undefined
+			.attr('y', d => yScale(d.y))
 			.attr('width', xScale.bandwidth())
-			.attr('height', d => height - yScale(d.sales))
+			.attr('height', d => height - yScale(d.y))
 			.attr('fill', 'blue');
 
 		// Add the X Axis

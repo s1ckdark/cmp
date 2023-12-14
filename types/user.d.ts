@@ -19,8 +19,6 @@ export interface UserAccessHistory {
     phone: string;
     zipcode: string;
     addr: string;
-    privileges: string[];
-    accessHist: UserAccessHist;
     lastLogDt: string | null;
     regId: string;
     regName: string;
@@ -31,11 +29,10 @@ export interface UserAccessHistory {
     memberNo: string;
     memberName: string;
     salesName: string;
-    roles: string | null;
-    enabled: boolean;
-    admin: boolean;
-    activated: boolean;
-    accountNonExpired: boolean;
+    isAdmin: boolean;
+    isActivated: boolean;
+    accessHist: UserAccessHist;
+    privileges: string[];
     credentialsNonExpired: boolean;
     authorities: string[];
     accountNonLocked: boolean;

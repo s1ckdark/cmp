@@ -1,0 +1,45 @@
+.usage hgroup h1 {
+  margin: 50px 0 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.usage table tr th {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+}
+.usage table tr:first-child th:first-child {
+  width: 5%;
+}
+.usage table tr:first-child th:nth-child(2) {
+  width: 10%;
+}
+.usage table tr:first-child th:nth-child(3) {
+  width: 5%;
+}
+.usage table tr:first-child th:nth-child(4) {
+  width: 10%;
+}
+.usage table tr:first-child th:nth-child(5) {
+  width: 5%;
+}
+.usage table tr:first-child th:nth-child(6) {
+  width: 8%;
+}
+.usage table tr:first-child th:nth-child(7) {
+  width: 20%;
+}
+.usage table tr:first-child th:nth-child(8) {
+  width: 8%;
+}
+.usage table tr:first-child th:nth-child(9) {
+  width: 8%;
+}
+.usage table tr td {
+  text-align: center;
+  padding: 10px 0;
+  border: 1px solid #DEE1E7;
+  background-color: #fff;
+}

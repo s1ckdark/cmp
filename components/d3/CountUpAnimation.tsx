@@ -18,7 +18,7 @@ const CountUpAnimation: React.FC<{ endValue: number, duration: number }> = ({ en
       .attr('x', 180)
       .attr('y', 50)
       .style('text-anchor', 'middle')
-      // .style('font-size', '60px')
+      // .style('font-size', '40px')
       // .style('fill', 'black')
       .text('0')
       .transition()

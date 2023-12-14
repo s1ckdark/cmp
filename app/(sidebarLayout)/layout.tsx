@@ -1,17 +1,19 @@
-'use client';
-import Header from '@/components/layout/Header';
-import Sidebar from "@/components/layout/Sidebar";
-import Footer from "@/components/layout/Footer";
+import Header from '@/app/(sidebarLayout)/_common/Header';
+import Sidebar from "@/app/(sidebarLayout)/_common/Sidebar";
+import Footer from "@/app/(sidebarLayout)/_common/Footer";
+import { ReactNode } from 'react';
+import { sessionChecker } from '@/components/Server';
 
-export default function SidebarLayout({
+const checker = async ()=> await sessionChecker();
+export default async function SidebarLayout({
     children,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     return (
-        <>
+        <>  
             <Sidebar />
-            <div className="page">
+            <div className="page bg-white dark:bg-black">
                 <div className="container">
                     <Header />
                     {children}

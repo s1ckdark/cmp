@@ -1,0 +1,77 @@
+.container {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+    background: #202124;
+    .user_name {
+        font-size: 16px;
+        color: #fff;
+    }
+    .navigationItem {
+        width: 100%;
+        position: relative;
+        .firstItem {
+            display: flex;
+            width: 80%;
+            margin-left: 20%;
+            align-items: center;
+            justify-content: flex-end;
+            border-radius: 30px;
+            padding: 15px 12px;
+            position: relative;
+            &:hover {
+                background-color: #43B69A;
+            }
+           
+            & > svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            span {
+                width: 30px;
+                text-align: center;
+                margin-left:30px;
+            }
+        > p {
+            text-decoration: none;
+            border-radius: 30px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+        }
+    }
+        .depth {
+            &First {
+                p {font-size: 20px;}
+                color: #fff;
+            }
+            &Second {
+                width: 200px;
+                position: absolute;
+                right:-200px;
+                top: 0;
+                padding: 15px;
+                background-color:#33353c;
+                > div {
+                        position: relative;
+                    p {
+                        font-size: 16px;
+                    }
+                }
+            }
+            &Third {
+                width: 200px;
+                position: absolute;
+                right:-215px;
+                top: -5px;
+                padding: 10px;
+                background-color:#33353c;
+                p {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

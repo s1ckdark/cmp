@@ -1,6 +1,8 @@
+import { valueof } from '@/types';
+
 export interface DonutChartProps {
-  name: string,
-  value: number
+  name:string;
+  value:number;
 }
 
 export interface SalesDataPoint {
@@ -8,13 +10,8 @@ export interface SalesDataPoint {
   sales: number;
 }
 
-export interface SalesDataSeries {
-  name: string;
-  data: SalesDataPoint[];
-}
-
 export interface LineChartProps {
-  data: SalesDataSeries[];
+  data: SalesDataPoint[];
   width?: number;
   height?: number;
 }
@@ -31,21 +28,79 @@ export interface top10Props {
   sales: string;
 }
 
-export interface fetchData {
-  // Define the shape of your data here
-  id: number;
+// export interface fetchData {
+//   // Define the shape of your data here
+//   id: number;
+//   name: string;
+//   // ...
+// }
+
+// export interface UseDataFetchReturnType {
+//   data: fetchData | null;
+//   fetchedData: fetchData | undefined;
+//   isLoading: boolean;
+//   isError: boolean;
+// }
+
+// export interface DonutChartProps {
+//   data: Array<DonutChart>;
+//   title: string;
+// }
+
+
+export interface TableHeaderProps {
+  className?: string;
+  rowType?: rowType;
+}
+
+export interface rowType {
+  [key: string]: 'announce' | 'support' | 'top10' | 'per_month' | 'announceOverview' | 'customers' | 'billing' | 'billingCustomers'| '고객자사상품' | 'users' | 'menu' | 'role' | 'roleReg' | 'roleMod' | 'access' | 'productGd' | 'productSW' | 'productMSP' | 'productCategory' | 'vendor' | 'contract' | 'invoiceUsage' | 'invoiceList';
+
+}
+
+export interface TableBodyProps {
+  rowType: rowType;
+  data?: Array<any>;
+  pageNumber: number;
+  className: string;
+}
+
+export interface CustomerTableBodyProps {
+  data: Array<any>;
+}
+interface Array {
+  [key: string]: any; 
+}
+
+export interface TablesProps {
+  rowType: string;
+  data: Array<any>;
+  className?: string;
+}
+export interface SubHeader {
+  label: string;
+  subHeaders?: string[];
+  rowSpan?: number;
+}
+
+export interface UseDataReturnWithParams 
+  extends UseDataReturn {
+  setParams: (params: UseDataParams) => void;
+}
+export interface FetchProps {
+    tags?: string[];
+    revalidate?: number;
+    body?: any;
+    method: "GET" | "POST" | "PUT" | "DELETE";
+    headers?: any;
+}
+
+export interface Session {
+  id: string;
   name: string;
-  // ...
-}
-
-export interface UseDataFetchReturnType {
-  data: fetchData | null;
-  fetchedData: fetchData | undefined;
-  isLoading: boolean;
-  isError: boolean;
-}
-
-export interface DonutChartProps {
-  data: Array<DonutChart>;
-  title: string;
+  accessToken: string;
+  refreshToken: string;
+  maxAge: number;
+  userType?: string
+  privileges: string[];
 }

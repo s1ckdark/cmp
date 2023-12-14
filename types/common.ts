@@ -1,5 +1,7 @@
-type SidebarProps = {
+export type SidebarProps = {
     isOpen: boolean;
-  }
-  
-  export type { SidebarProps };
+}
+
+export interface keyword {
+  keyword: string;
+}

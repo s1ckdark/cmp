@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 export const setCookie = (name: string, value: string, expDays: number) => {
     const date = new Date();
     date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
@@ -6,6 +7,7 @@ export const setCookie = (name: string, value: string, expDays: number) => {
 };
 
 export const getCookie = (name: string) => {
+    if(typeof window !== 'object') return;
     const value = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
     return value ? decodeURI(value[2]) : null;
 };
@@ -22,3 +24,9 @@ interface Cookie {
 export const cookiesToString = (rawCookies: Cookie[]) => {
     return rawCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
 };
+
+export const isTokenExpired = (token: string) => {
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    return expiry;
+    // return (Math.floor((new Date()).getTime() / 1000)) >= expiry;
+  }

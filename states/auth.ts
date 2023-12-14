@@ -2,7 +2,7 @@ import { atom, useSetRecoilState, useRecoilState, useResetRecoilState, selector 
 
 export const authState = atom({
     key: 'authState',
-    default: null,
+    default: false,
 });
   
   export const logInLoadingAtom = atom({

@@ -1,16 +1,20 @@
-'use client';
+import React from 'react';
 import LandingPage from '@/containers/landing';
 import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
 import { atom, useRecoilValue, useRecoilState } from 'recoil';
-import { authState } from '@/states/auth';
+import { sessionState } from '@/states/auth';
 import { tokenState } from '@/states/localStorage';
 import { local } from 'd3';
+import { getUserInfo } from '@/services/auth';
+import { cookies } from 'next/headers';
+import { pushNoti } from '@/components/Toast';
 
 const dData1: DonutChartProps[] = [
   { name: "Oracle Enterprise Edition", value: 65 },
   { name: "Rocket hammer", value: 25 },
   { name: "aws MSK", value: 10 },
 ];
+
 const dData2: DonutChartProps[] = [
   { name: "Oracle Enterprise Edition", value: 58 },
   { name: "Rocket hammer", value: 33 },
@@ -193,7 +197,7 @@ const billing = [
 
 
 
-interface LandingProps {
+interface HomeProps {
   top10: top10Props[];
   billing: { day: number; sales: number; }[];
   support: { 번호: string; 제목: string; 고객사: string; 진행상태: string; 등록일자: string; }[];
@@ -203,14 +207,12 @@ interface LandingProps {
   lineChartData: SalesDataSeries[];
 }
 
-const Landing = () => {
-  const token = useRecoilValue(tokenState);
-  console.log(token);
-  return (
-    <LandingPage top10={top10} billing={billing} support={support} announce={announce} dData1={dData1} dData2={dData2} lineChartData={lineChartData} />
-  )
-}
+  const Landing = () => {
+    return (
+      <>
+        <LandingPage top10={top10} billing={billing} support={support} announce={announce} dData1={dData1} dData2={dData2} lineChartData={lineChartData} />
+      </>
+    );
+  };
 
 export default Landing;
-
-

@@ -1,14 +1,22 @@
-import { ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
-interface Props {
-    children: ReactNode;
+interface PortalProps {
+  children: ReactNode;
 }
 
-export default ({ children }: Props) => {
-    const el = document.getElementById('alert');
-    if (!el) {
-        return null;
-    }
-    return createPortal(children, el);
+const AlertPortal = ({ children }: PortalProps) => {
+    const [element, setElement] = useState<HTMLElement | null>(null);
+    const [isCSR, setIsCSR] = useState<boolean>(false);
+
+    useEffect(() => {
+      setElement(document.getElementById('portal'));
+      setIsCSR(true);
+    }, [])
+
+    if (!isCSR) return <></>;
+    if (!element) return <></>;
+    return createPortal(children, element!);
 };
+
+export default AlertPortal;

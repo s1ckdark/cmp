@@ -1,48 +1,43 @@
-'use client';
-import styled, * as styledComponents from "styled-components";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { GlobalStyle } from "@/styles/globalStyles";
+// import styled, * as styledComponents from "styled-components";
 import { theme } from '@/theme/theme';
 import '@/styles/globals.scss';
 import RecoilRootProvider from "@/utils/recoilRootProvider";
 import Alert from "@/components/Alert";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-export default function RootLayout({
-  children,
-}: {
+import React, { Suspense, ReactNode } from 'react';
+// import { metadata as profileMetadata } from './profile/page';
+import Provider from './Provider';
+import Toastify from '@/components/Toast';
+import { getSession, useSession } from 'next-auth/react';
+import { Session } from '@/types/data';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import AuthProvider from './AuthProvider';
+import Loading from '@/components/Loading';
+interface Props {
   children: React.ReactNode;
-}) {
-  const queryClient = new QueryClient();
+  params: any;
+}
+const RootLayout = ({ children }: Props) => {
   return (
     <html lang="kr">
       <body>
-        <RecoilRootProvider>
-          <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
-            <styledComponents.ThemeProvider theme={theme}>
-              <GlobalStyle />
-              <div id="portal" />
-              <div id='alert' />
-              <div id='modal' />
-              <ToastContainer />
-              <Alert />
-              {children}
-            </styledComponents.ThemeProvider>
-          </QueryClientProvider>
-        </RecoilRootProvider>
+      <Suspense fallback={<Loading />}>
+          <RecoilRootProvider>
+            <AuthProvider>
+              {/* <styledComponents.ThemeProvider theme={theme}> */}
+                <div id='portal' />
+                <div id='alert' />
+                <div id='modal' />
+                {/* <Alert /> */}
+                <Toastify />
+                {children as ReactNode}
+              {/* </styledComponents.ThemeProvider> */}
+            </AuthProvider>
+          </RecoilRootProvider>
+        </Suspense>
       </body>
     </html >
   );
 }
 
-const Applayout = styled.div`
-    display: flex;
-    flex-direction: row;
-    min-height: 100vh;
-    flex: 1;
-    flex-wrap: wrap;
-    align-items: flex-start;  
-    `;
+export default RootLayout
