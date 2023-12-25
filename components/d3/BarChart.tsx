@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import styles from './BarChart.module.scss';
-
 interface IDataPoint {
     x: string;
     y: number;
@@ -12,10 +11,11 @@ interface BarChartProps {
     aspectRatio?: number;
 }
 
-const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9 }) => {
+const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const [containerWidth, setContainerWidth] = useState<number>(0);
     const [containerHeight, setContainerHeight] = useState<number>(0);
+
     useEffect(() => {
         if (chartContainerRef.current) {
             const width = chartContainerRef.current.getBoundingClientRect().width;
@@ -31,20 +31,20 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9 }) => {
             d3.select(chartContainerRef.current).selectAll('*').remove();
 
             const svg = d3.select(chartContainerRef.current)
-                          .append('svg')
-                          .attr('width', width) // Full container width
-                          .attr('height', chartWidth / aspectRatio) // Full container height
-                          .append('g')
-                          .attr('transform', `translate(${margins.left},${margins.top})`);
+                        .append('svg')
+                        .attr('width', width) // Full container width
+                        .attr('height', chartWidth / aspectRatio) // Full container height
+                        .append('g')
+                        .attr('transform', `translate(${margins.left},${margins.top})`)
+                        .attr('style','overflow:visible');
 
-            // const minYValue = d3.min(data, d => d.y) || 0;
             const minYValue = 0;
-            const maxYValue = d3.max(data, d => d.y > 0 ? d.y : 0) * 1.33;  // Doubling the maximum data value
-            const domain = [minYValue, maxYValue * 2];
+            const maxYValue = d3.max(data, d => d.y) * 1.33;  // Doubling the maximum data value
+            const domain = [minYValue, maxYValue];
             // Scales
-            const xScale = d3.scaleBand()
-                             .domain(data.map(d => d.x))
-                             .rangeRound([0, containerWidth]);
+			const xScale = d3.scaleBand()
+							.domain(data.map(d => d.x))
+							.rangeRound([0, containerWidth]);
 
             const yScale = d3.scaleLinear()
                              .domain(domain)
@@ -52,39 +52,38 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9 }) => {
 
             // X Axis
             const xAxis = svg.append('g')
-               .attr('transform', `translate(0,${containerHeight})`)
-               .call(d3.axisBottom(xScale));
+            .attr('transform', `translate(0,${containerHeight})`)
+            .call(d3.axisBottom(xScale));
 
             xAxis.selectAll("text")   
-               .attr('font-size', '14px')
-               .style("fill", "#a1a1a1");
-
+                .attr('font-size', '14px')
+                .style("fill", "#a1a1a1");
             // Y Axis
             const yAxis = svg.append('g')
-                .attr('class', 'y axis')
-                .attr('color', '#a1a1a1')
-               .call(d3.axisLeft(yScale));
+            .attr('class', 'y axis')
+            .attr('color', '#a1a1a1')
+            .call(d3.axisLeft(yScale));
 
             // Y-axis Grid
             const yGrid = svg.append('g')
-               .attr('class', 'grid')
-               .call(d3.axisLeft(yScale)
+                .attr('class', 'grid')
+                .call(d3.axisLeft(yScale)
                     .tickSize(-containerWidth)
                     .tickFormat(''));
 
             yGrid.selectAll('.tick line')
-               .attr('stroke', '#ddd');
+                .attr('stroke', '#ddd');
 
             // Draw bars
             const bars = svg.selectAll('.bar')
-                .data(data)
-                .enter().append('rect')
-                .attr('class', 'bar')
-                .attr('x', d => xScale(d.x)! + (xScale.bandwidth() - barWidth) / 2)
-                .attr('width', barWidth)
-                .attr('y', containerHeight)
-                .attr('height', 0)
-                .attr('fill', '#c1c1c1');
+            .data(data)
+            .enter().append('rect')
+            .attr('class', 'bar')
+            .attr('x', d => xScale(d.x)! + (xScale.bandwidth() - barWidth) / 2)
+            .attr('width', barWidth)
+            .attr('y', containerHeight)
+            .attr('height', 0)
+            .attr('fill', '#c1c1c1');
 
             // Animation
             bars.transition()
@@ -92,37 +91,36 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9 }) => {
                 .attr('y', d => yScale(d.y))
                 .attr('height', d => containerHeight - yScale(d.y));
 
-            // Tooltip setup
-            const tooltip = d3.select('body').append('div')
-              .attr('class', `${styles.tooltip}`)
-              .style('opacity', 0);
 
-            // Tooltip event handlers
-            bars.on('mouseover', function(event, d) {
-                d3.select(this).attr('fill', '#43B69A'); // Change bar color on hover
-                tooltip.transition()
-                       .duration(200)
-                       .style('opacity', .9);
-                tooltip.html(`<label>${d.x} 전체 매출</label><h2>${d.y.toLocaleString()}</h2>`)
-                       .style('left', `${ xScale(d.x)! + chartContainerRef.current.offsetLeft + (xScale.bandwidth() - barWidth) / 2}px`)
-                       .style('top', `${yScale(d.y) + chartContainerRef.current.offsetTop - 28}px`);
-            })
+			 // Tooltip setup
+             const tooltip = d3.select('body').append('div')
+             .attr('class', `${styles.tooltip}`)
+             .style('opacity', 0);
 
-            .on('mouseout', function() {
-                d3.select(this).attr('fill', '#a1a1a1'); // Revert bar color
-                tooltip.transition()
-                       .duration(500)
-                       .style('opacity', 0);
-            });
+           // Tooltip event handlers
+           bars.on('mouseover', function(event, d) {
+               d3.select(this).attr('fill', '#43B69A'); // Change bar color on hover
+               tooltip.transition()
+                      .duration(200)
+                      .style('opacity', .9);
+               tooltip.html(`<label>${d.x} 전체 매출</label><h2>${d.y.toLocaleString()}</h2>`)
+                      .style('left', `${ xScale(d.x)! + chartContainerRef.current.offsetLeft + (xScale.bandwidth() - barWidth) / 2}px`)
+                      .style('top', `${yScale(d.y) + chartContainerRef.current.offsetTop - 28}px`);
+           })
 
-            // Remove axis lines
-            svg.selectAll('.domain').remove();
-            svg.selectAll('.tick line')
-               .style('stroke', '#C6CDD6');
+           .on('mouseout', function() {
+               d3.select(this).attr('fill', '#a1a1a1'); // Revert bar color
+               tooltip.transition()
+                      .duration(500)
+                      .style('opacity', 0);
+           });
+			svg.selectAll('.domain').remove();
+			svg.selectAll(".tick line")
+				.style("stroke","#C6CDD6");
         }
     }, [data, containerWidth, containerHeight, aspectRatio]);
 
-    return <div ref={chartContainerRef} className={styles.barChart} />;
+    return <div ref={chartContainerRef} style={{ width: '100%' }} />;
 };
 
 export default BarChart;

@@ -126,14 +126,13 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         
         const getDailyData = (data:any) => {
             const result = data.reduce((acc:any, cur:any) => {
-                acc.push({x: Number(cur.collected_dt.substr(8,2)), y: cur.dailyUsageAmount || 0})
-                return acc
+                acc.push({x: Number(cur.collected_dt.substr(8,2)), y: cur.dailyUsageAmount > 0 ? cur.dailyUsageAmount : 0})
+                return acc;
             },[])
             return result;
         }
         getAllData([targetUrl('month'), targetUrl('mainservice'), targetUrl('monthly'), targetUrl('weekly'), targetUrl('daily')]).then((res) => {
             const [month, mainservice, monthly, weekly, daily] = res;
-            console.log(daily,getDailyData(daily));
             setVisual({
                 ...visual,
                 month: month,
@@ -152,7 +151,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         <>
         <Breadcrumb />
         <div className={styles.btnArea}>
-            <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${month}`)}>상세이용내역</button>
+            {/* <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${targetMonth}`)}>상세이용내역</button> */}
             <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.back()}>닫기</button>
         </div>
         <div className={`${styles.container} min-h-screen`}>
