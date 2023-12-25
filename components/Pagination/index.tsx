@@ -27,7 +27,7 @@ const Button = styled.button<{ selected?: boolean }>`
   padding: 8px 12px;
   font-size: 16px;
   font-weight: normal;
-  background-color: ${({ selected }) => (selected ? "#36dafa" : "#fff")};
+  background-color: ${({ selected }) => (selected ? "#43B69A" : "#fff")};
   cursor: pointer;
   border-radius: 100%;
   width: 48px;

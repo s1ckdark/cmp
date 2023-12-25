@@ -12,9 +12,9 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useRecoilState(isOpenState);
   return (
     <>
-      <div className={`${styles.container} h-screen fixed ${isOpen ? styles.open : ""}`}>
+      <div className={`${styles.container} h-screen ${!isOpen ? styles.open : styles.close}`}>
         <NavigationBtn />
-        <UserInfo/>
+        {!isOpen ? <UserInfo/>: null}
         <Navigation />
       </div>
     </>

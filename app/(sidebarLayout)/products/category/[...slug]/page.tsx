@@ -7,15 +7,13 @@ const ProductPage = async({ params }:any) => {
   const { slug } = params;
   const type:string = slug[0];
   const id:number = parseInt(slug[1]);
-  const token = getCookie('next-auth.session-token');
-  console.log(token);
 
   const renderPage = () => {
     switch (type) {
       case 'view':
         return <ViewPage />;
       case 'list':
-        return <ListPage tableName={"customers"} pageNumber={id} className={"border"}/>
+        return <ListPage />
       case 'write':
         return <WritePage />;
       default:
@@ -26,10 +24,9 @@ const ProductPage = async({ params }:any) => {
   };
 
   return (
-    <div>
-      <h1>{type} - {id}</h1>
+    <>
       {renderPage()}
-    </div>
+    </>
   );
 };
 

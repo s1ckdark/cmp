@@ -1,12 +1,32 @@
-.container {
-    display: block;
+.userinfo {
     background: #2B3035;
-    
-    .user_name {
-        font-size: 16px;
-        color: #fff;
+    z-index:10;
+    .container {
+        display: block;
+        width:80%;
+        margin: 0 auto;
+        padding: 20px 10px;
+        .user_name {
+            font-size: 16px;
+            color: #fff;
+        }
     }
-    &.open {
-        display: none;
+    .linkArea {
+        display: flex;
+        justify-content: flex-end;
+        a {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 10px;
+            cursor: pointer;
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
     }
 }

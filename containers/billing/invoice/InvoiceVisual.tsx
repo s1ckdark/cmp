@@ -7,22 +7,13 @@ import BarChart from '@/components/d3/BarChart';
 import PieChart from '@/components/d3/PieChart';
 import DonutChart from '@/components/d3/DonutChart';
 import styles from "./InvoiceVisual.module.scss";
-import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
 import MonthBar from '@/components/MonthBar';
 import { useRecoilState } from 'recoil';
-import { monthAtom } from '@/states';
 import { visualAtom, dataListAtom } from '@/states/data';
 import { apiBe} from '@/services';
-
-interface Props {
-    top10: top10Props[];
-    billing: { day: number; sales: number; }[];
-    support: { 번호: string; 제목: string; 고객사: string; 진행상태: string; 등록일자: string; }[];
-    announce: { 번호: string; 제목: string; 등록일자: string; }[];
-    dData1: DonutChartProps[];
-    dData2: DonutChartProps[];
-    lineChartData: SalesDataSeries[];
-}
+import { useRouter } from 'next/navigation';
+import Loading from '@/components/Loading';
+import Breadcrumb from '@/components/Breadcrumb';
 interface DemandItem {
     rank: number;
     demandType: string;
@@ -35,6 +26,7 @@ interface DemandItem {
 const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:number}) => {
     const [visual, setVisual] = useRecoilState(visualAtom);
     const [ data, setData ] = useRecoilState(dataListAtom) || null;
+    const router = useRouter();
     useEffect(() => {
         const targetUrl = (arg:string) => {
             return `/billing/naver_summary/${arg}/${targetMonth}/${memberNo}`;
@@ -94,8 +86,8 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         const getMainService = (data:any) => {
             const { firstDayOfMonth, relevantDate }= generateDates(data.target_month);
             const { top } = data;
-            const totalSum = top.reduce((sum, item) => sum + item.sum_Of_demandAmount, 0);
-            return top.map(item => ({
+            const totalSum = top.reduce((sum:any, item:any) => sum + item.sum_Of_demandAmount, 0);
+            return top.map((item:any)=> ({
                 // ...item,
                 name: item.demandType,
                 rank : item.rank,
@@ -108,8 +100,8 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
 
         const getDonutChart = (data:any) => {
             const { top } = data;
-            const totalSum = top.reduce((sum, item) => sum + item.sum_Of_demandAmount, 0);
-            return top.map(item => ({
+            const totalSum = top.reduce((sum:any, item:any) => sum + item.sum_Of_demandAmount, 0);
+            return top.map((item:any) => ({
                 // ...item,
                 name: item.demandType,
                 value: totalSum > 0 ? item.sum_Of_demandAmount / totalSum : 0,
@@ -134,9 +126,10 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         
         const getDailyData = (data:any) => {
             const result = data.reduce((acc:any, cur:any) => {
-                acc.push({x: cur.collected_dt, y: cur.dailyUsageAmount || 0})
+                acc.push({x: Number(cur.collected_dt.substr(8,2)), y: cur.dailyUsageAmount || 0})
                 return acc
             },[])
+            console.log(result)
             return result;
         }
         getAllData([targetUrl('month'), targetUrl('mainservice'), targetUrl('monthly'), targetUrl('weekly'), targetUrl('daily')]).then((res) => {
@@ -152,16 +145,17 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                 perDay: getDailyData(daily),
             })
         });
-    }, [targetMonth])
+    }, [memberNo, targetMonth])
 
-   
-
-    if(!visual) return <div>Loading...</div>
-
-
-
+    if(!visual) return <Loading />
     const { month, mainservice, donutChart, perMonth, perWeek, perDay } = visual;
     return (
+        <>
+        <Breadcrumb />
+        <div className={styles.btnArea}>
+            <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${month}`)}>상세이용내역</button>
+            <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.back()}>닫기</button>
+        </div>
         <div className={`${styles.container} min-h-screen`}>
             <div className={`${styles.demandAmount} ${styles.boxSection}`}>
                 <h1 className={styles.memberName}>{month.memberName}</h1>
@@ -226,7 +220,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                     <div className={styles.left}>
-                         <BarChart data={perMonth} title={"월간 이용 추이"} width="100%" height="500px" />
+                         <BarChart data={perMonth} aspectRatio={4/1} />
                     </div>
                     <div className={styles.right}>
                         <Tables rowType={"perMonth"} data={perMonth} />
@@ -244,7 +238,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                         <div className={styles.left}>
-                            <BarChart data={perWeek} title={"월간 이용 추이"} width="100%" height="500px" /> 
+                            <BarChart data={perWeek} aspectRatio={ 4/1 }/> 
                         </div>
                         <div className={styles.right}>
                             <Tables rowType={'perWeek'} data={perWeek} />
@@ -261,13 +255,14 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                         <h2>일간 이용 추이</h2>
                     </div>
                     <div className="flex justify-center items-center">
-                        <BarChart data={perDay} title={"일간 이용 추이"} width="100%" height="500px" /> 
+                        <BarChart data={perDay} aspectRatio={ 4/1 }/> 
                     </div>
                 </>:<div>데이터가 없습니다</div>}
                 </div>
             </div>
          </div>
     </div>
+    </>
     )
 }
 

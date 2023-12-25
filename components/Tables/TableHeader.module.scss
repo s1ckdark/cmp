@@ -1,17 +1,27 @@
+.container {
+    tr {
+        margin: 15px 0 10px;
+        min-height: 50px;
+        font-size: 14px;
+        th {
+            font-weight: 600;
+            text-align: center;
+            padding: 10px 0;
+            border: 1px solid #DEE1E7;
+            background: #F7F8FE;
+            min-width: 100px;
+            min-height: 30px;
+        }
+    }
+}
 .invoiceList {
     margin: 0 auto;
     tr {
         &:nth-child(1) {
             th {
-                font-weight: 600;
-                text-align: center;
-                padding: 10px 0;
-                border: 1px solid #DEE1E7;
-                background: #F7F8FE;
-                min-width: 100px;
                 &:nth-child(1) {
                     width: 3%;
-                    min-width: 50px;
+                    min-width: 80px;
                 }
                 &:nth-child(2) {
                     width: 8%;
@@ -23,48 +33,45 @@
                 }
                 &:nth-child(4) {
                     width: 5%;
-                    min-width: 80px;
+                    min-width: 100px;
                 }
                 &:nth-child(5) {
                     width: 15%;
-                    min-width: 180px;
+                    min-width: 200px;
                 }
                 &:nth-child(6) {
                     width: 5%;
-                    min-width: 50px;
+                    min-width: 80px;
                 }
                 &:nth-child(7) {
                     width: 20%;
-                    min-width: 400px;
+                    min-width: 500px;
                 }
                 &:nth-child(8) {
                     width: 20%;
-                    min-width: 400px;
+                    min-width: 500px;
                 }
                 &:nth-child(9) {
                     width: 10%;
+                    min-width: 180px;
                 }
                 &:nth-child(10) {
                     width: 10%;
+                    min-width: 180px;
                 }
                 &:nth-child(11) {
                     width: 10%;
+                    min-width: 180px;
                 }
             }
         }
     }
 }
 .productGd {
-    margin:0 auto;
     tr {
         &:nth-child(1) {
             th {
-                font-weight: 600;
-                text-align: center;
-                padding: 10px 0;
-                border: 1px solid #DEE1E7;
-                background: #F7F8FE;
-                min-width: 100px;
+           
                 &:nth-child(1) {
                     width: 5%;
                     min-width: 50px;
@@ -101,3 +108,23 @@
         }
     }
 }
+
+.productCategory {
+    tr {
+        th {
+            &:nth-child {
+                width: 25%;
+            }
+            &:nth-child {
+                width: 30%;
+            }
+            &:nth-child {
+                width: 30%;
+            }
+            &:nth-child {
+                width: 15%;
+            }
+        }
+    }
+}
+    

@@ -1,9 +1,32 @@
+.btnArea {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    align-items: center;
+    .btn {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #F0F3F2;
+        border: none;
+        cursor: pointer;
+        &.backBtn {
+            background: #43B69A;
+            margin-right: 10px;
+        }
+    }
+
+}
+
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
+
 
 .memberName {
     font-size: 40px;
@@ -59,7 +82,13 @@
         font-size: 24px;
     }
     .countup {
-        position: relative;
+        font-size: 40px;
+        font-weight: 600;
+    }
+    .right {
+        .countup {
+                color: #43B69A;
+        }
     }
 }
 .rank {

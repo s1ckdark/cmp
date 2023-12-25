@@ -1,77 +1,109 @@
-'use client';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
-import { BarChartProps } from '@/types/data';
 
-interface Props extends BarChartProps {
-	data: {
-		x: string;
-		y: number;
-	}[];
-	width: number;
-	height: number;
-	title: string;
+interface IDataPoint {
+    x: string;
+    y: number;
 }
 
-const BarChart: React.FC<Props> = ({ data, width, height, title }) => {
-	const ref = useRef<SVGSVGElement>(null);
-
-	useEffect(() => {
-		const svg = d3.select(ref.current);
-		const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-		const width = 500 - margin.left - margin.right;
-		const height = 250 - margin.top - margin.bottom;
-
-		const xScale = d3.scaleBand().domain(data.map(d => d.x)).range([0, width]).padding(0.5);
-		const yScale = d3.scaleLinear().domain(d3.extent(data, d => d.y) as [number, number]).nice().range([height, 0]);
-
-		const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
-
-		// Add X grid lines
-		g.append('g')
-			.attr('class', 'grid')
-			.attr('transform', `translate(0,${height})`)
-			.call(d3.axisBottom(xScale)
-				.tickSize(-height)
-				.tickFormat(() => '') // Remove tick labels
-			)
-			.selectAll('line')
-			.attr('stroke', '#e5e5e5'); // Style the grid lines
-
-		g.append('g')
-			.attr('class', 'grid')
-			.call(d3.axisLeft(yScale)
-				.tickSize(-width)
-				.tickFormat(() => '') // Remove tick labels
-			)
-			.selectAll('line')
-			.attr('stroke', '#e5e5e5'); // Style the grid lines
-
-		g.selectAll('rect')
-			.data(data)
-			.enter()
-			.append('rect')
-			.attr('x', d => xScale(d.x) || 0) // Use a default value of 0 if xScale(d.day) is undefined
-			.attr('y', d => yScale(d.y))
-			.attr('width', xScale.bandwidth())
-			.attr('height', d => height - yScale(d.y))
-			.attr('fill', 'blue');
-
-		// Add the X Axis
-		g.append('g')
-			.attr('transform', `translate(0,${height})`)
-			.call(d3.axisBottom(xScale));
-
-		// Add the Y Axis
-		g.append('g')
-			.call(d3.axisLeft(yScale));
-
-	}, [data]);
-
-	return (
-		<svg ref={ref} width={500} height={250}></svg>
-	);
+interface BarChartProps {
+    data: IDataPoint[];
+    aspectRatio?: number;
 }
+
+const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const [containerWidth, setContainerWidth] = useState<number>(0);
+    const [containerHeight, setContainerHeight] = useState<number>(0);
+
+    useEffect(() => {
+        if (chartContainerRef.current) {
+            const width = chartContainerRef.current.getBoundingClientRect().width;
+            const height = width / aspectRatio;
+			const barWidth = 15;
+			const tooltip = d3.select("#tooltip");
+            setContainerWidth(width);
+            setContainerHeight(height);
+
+            d3.select(chartContainerRef.current).selectAll('*').remove();
+
+            const svg = d3.select(chartContainerRef.current)
+                          .append('svg')
+                          .attr('width', containerWidth)
+                          .attr('height', containerHeight)
+						  .attr('style','overflow:visible');
+
+            // Scales
+			const xScale = d3.scaleBand()
+							.domain(data.map(d => d.x))
+							.rangeRound([0, containerWidth]);
+
+            const yScale = d3.scaleLinear()
+                             .domain([0, d3.max(data, d => d.y)])
+                             .range([containerHeight, 0]);
+
+            // X Axis
+            svg.append('g')
+               .attr('transform', `translate(0,${containerHeight})`)
+               .call(d3.axisBottom(xScale))
+			   .attr('class', 'xAxis')
+			   .selectAll("text")   
+			   .attr('font-size','14px')
+			   .style("fill", "#C6CDD6"); 
+
+            // Y Axis
+            svg.append('g')
+               .call(d3.axisLeft(yScale));
+
+            // Y-axis Grid
+            svg.append('g')
+               .attr('class', 'grid')
+               .call(d3.axisLeft(yScale)
+                    .tickSize(-containerWidth)
+                    .tickFormat(''))
+               .selectAll('.tick line')
+               .attr('stroke', '#ddd');
+
+            // Draw bars
+            svg.selectAll('.bar')
+                .data(data)
+                .enter().append('rect')
+                .attr('class', 'bar')
+                .attr('x', (d, i) => xScale(d.x)! + (xScale.bandwidth() - barWidth) / 2) // Center the bar in the band
+                .attr('width', barWidth)
+                .attr('y', containerHeight)
+                .attr('height', 0)
+                .attr('fill', '#c1c1c1')
+                .transition()  // Start the transition
+                .duration(800) // Duration of the animation in milliseconds
+                .attr('y', d => yScale(d.y))
+                .attr('height', d => containerHeight - yScale(d.y));
+
+				// Draw bars with tooltip
+			svg.selectAll('.bar')
+				.data(data)
+				.enter().append('rect')
+				.attr('class', 'bar')
+				// ... (other attributes)
+				.on('mouseover', function(event, d) {
+					tooltip.style("visibility", "visible")
+							.text(`Y: ${d.y}`);
+				})
+				.on('mousemove', function(event) {
+					tooltip.style("top", (event.pageY - 10) + "px")
+							.style("left", (event.pageX + 10) + "px");
+				})
+				.on('mouseout', function() {
+					tooltip.style("visibility", "hidden");
+				});
+			
+			svg.selectAll('.domain').remove();
+			svg.selectAll(".tick line")
+				.style("stroke","#C6CDD6");
+        }
+    }, [data, containerWidth, containerHeight, aspectRatio]);
+
+    return <div ref={chartContainerRef} style={{ width: '100%' }} />;
+};
 
 export default BarChart;
-

@@ -1,121 +1,84 @@
-// 'use client';
-import { useState } from 'react';
-// import { Tables } from "@/components/Tables";
-import CountUpAnimation from '@/components/d3/CountUpAnimation';
-import LineChart from '@/components/d3/LineChart';
-import BarChart from '@/components/d3/BarChart';
-import PieChart from '@/components/d3/PieChart';
-import DonutChart from '@/components/d3/DonutChart';
-import styles from "./index.module.scss";
-import { top10Props, DonutChartProps, LineChartProps, SalesDataSeries } from '@/types/data';
-import { getUserInfo } from "@/services/auth";
-
-interface LandingProps {
-    top10: top10Props[];
-    billing: { day: number; sales: number; }[];
-    support: { 번호: string; 제목: string; 고객사: string; 진행상태: string; 등록일자: string; }[];
-    announce: { 번호: string; 제목: string; 등록일자: string; }[];
-    dData1: DonutChartProps[];
-    dData2: DonutChartProps[];
-    lineChartData: SalesDataSeries[];
-}
-
-const LandingPage: React.FC<LandingProps> = async({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
-
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import Summary from '@/components/Summary';
+import Breadcrumb from '@/components/Breadcrumb';
+import { useRecoilValue } from 'recoil';
+import { monthAtom } from '@/states';
+import styles from './index.module.scss';
+import { Tables } from '@/components/SummaryTables';
+import { generateDates } from '@/utils/date';
+const announce = [
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "regDt": "2023.09.10 12:33:42"
+    },
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "regDt": "2023.09.10 12:33:42"
+    },
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "regDt": "2023.09.10 12:33:42"
+    }
+  ]
+  const support = [
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "memberName": "비비탄",
+      "status": "진행중",
+      "regDt": "2023.09.10 12:33:42"
+    },
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "memberName": "비비탄",
+      "status": "완료",
+      "regDt": "2023.09.10 12:33:42"
+    },
+    {
+      "idx": "134",
+      "title": "2023년 하반기 서버 긴급 정검 안내 공지",
+      "memberName": "비비탄",
+      "status": "완료",
+      "regDt": "2023.09.10 12:33:42"
+    }
+  ]
+  
+const LandingPage = () => {
+    const month = useRecoilValue(monthAtom);
+    const term:any = generateDates(month)
     return (
-        <div className={`${styles.container} min-h-screen`}>
-            <div className="w-full flex items-center justify-center flex-wrap">
-                <div className={`${styles.box_section} prevMonth flex items-center justify-center flex-col w-1/2`}>
-                    <h2>전원 전체 매출</h2>
-                    <div className="whole">
-                        <label>전체고객사</label>
-                        <div><CountUpAnimation endValue={380320636} duration={500} /></div>
+        <>
+            <Breadcrumb />
+            <div className={`${styles.demandAmount} ${styles.boxSection}`}>
+                <h1 className={styles.currentMonth}><label>이용 기간</label>{term.firstDayOfMonth} - {term.relevantDate}</h1>
+            </div>
+            <Summary header={false} />
+            <div className={`${styles.announce} ${styles.boxSection}`}>
+                <div className={styles.inner}>
+                    <div className={styles.label}>
+                        <h2>공지사항</h2>
                     </div>
-                    <div className="supervised">
-                        <label>담당고객사</label>
-                        <div>
-                            <CountUpAnimation endValue={65320636} duration={500} />
-                        </div>
-                    </div>
-                </div>
-                <div className={`${styles.box_section} currentMonth flex items-center justify-center flex-col text-left w-1/2`}>
-                    <h2>당월 전체 매출</h2>
-                    <div className="whole">
-                        <label>전체고객사</label>
-                        <div>
-                            <CountUpAnimation endValue={584320636} duration={500} />
-                        </div>
-                    </div>
-                    <div className="supervised">
-                        <label>담당고객사</label>
-                        <div>
-                            <CountUpAnimation endValue={110320800} duration={500} />
-                        </div>
+                    <div className={styles.announceTable}>
+                    <Tables rowType={'announce'} data={announce}/>
                     </div>
                 </div>
             </div>
-            <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
-                <h2>월별 매출</h2>
-                <LineChart data={lineChartData} width="950" height="300" />
-                <div className="flex justify-center items-center">
-                    <div className="supervised w-1/2">
-                        {/* <Tables type="per_month" data={lineChartData[0].data} /> */}
+            <div className={`${styles.support} ${styles.boxSection}`}>
+                <div className={styles.inner}>
+                    <div className={styles.label}>
+                        <h2>고객지원 내역</h2>
                     </div>
-                    <div className="whole w-1/2"></div>
-                    {/* <Tables type="per_month" data={lineChartData[1].data} /> */}
-                </div>
-            </div>
-            <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
-                <h2>매출 TOP10</h2>
-                <div className="flex justify-center items-center">
-                    <div className="whole w-1/2">
-                        <div className="bg-gray-500 text-center">전체 고객사</div>
-                        {/* <Tables type="top10" data={top10} /> */}
-                    </div>
-                    <div className="supervised w-1/2">
-                        <div className="bg-gray-500 text-center">담당 고객사</div>
-                        {/* <Tables type="top10" data={top10} /> */}
+                    <div className={styles.supportTable}>
+                    <Tables rowType={'support'} data={support}/>
                     </div>
                 </div>
             </div>
-
-            <div className="service_usage">
-                <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
-                    <h2>서비스별 이용률</h2>
-                    <div className="flex justify-center items-center">
-                        <div className="whole w-1/2">
-                            <DonutChart data={dData1} title={"전체 서비스"} />
-                        </div>
-                        <div className="supervised w-1/2">
-                            <DonutChart data={dData2} title={"담당 서비스"} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div className="service_usage">
-                <div className={`${styles.box_section} period_sales flex items-center justify-center flex-wrap`}>
-                    <h2>서비스별 이용률</h2>
-                    <div className="flex justify-center items-center">
-                        <div className="whole w-4/5">
-                            <BarChart data={billing} title={"월간 이용 추이"} width="100%" height="500px" />
-                        </div>
-                        <div className="supervised w-1/5">
-                            <BarChart data={billing} title={"월간 이용 추이"} width="100%" height="500px" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className={`${styles.box_section} w-full`}>
-                <h2>공지사항</h2>
-                {/* <Tables type="announce" data={announce} /> */}
-            </div>
-            <div className={`${styles.box_section} w-full`}>
-                <h2>고객지원 내역</h2>
-                {/* <Tables type="support" data={support} /> */}
-            </div>
-        </div>
+         </>
     )
 }
 

@@ -6,8 +6,8 @@ export interface DonutChartProps {
 }
 
 export interface SalesDataPoint {
-  month: number;
-  sales: number;
+ x: number;
+  y: number;
 }
 
 export interface LineChartProps {
@@ -54,8 +54,7 @@ export interface TableHeaderProps {
 }
 
 export interface rowType {
-  [key: string]: 'announce' | 'support' | 'top10' | 'per_month' | 'announceOverview' | 'customers' | 'billing' | 'billingCustomers'| '고객자사상품' | 'users' | 'menu' | 'role' | 'roleReg' | 'roleMod' | 'access' | 'productGd' | 'productSW' | 'productMSP' | 'productCategory' | 'vendor' | 'contract' | 'invoiceUsage' | 'invoiceList';
-
+  [key: string]: 'announce' | 'support' | 'top10' | 'per_month' | 'announceOverview' | 'customers' | 'billing' | 'billingCustomers'|  'users' | 'menu' | 'role' | 'roleReg' | 'roleMod' | 'access' | 'productGd' | 'productSW' | 'productMSP' | 'productCategory' | 'vendor' | 'contract' | 'invoiceUsage' | 'invoiceList' | 'billingProductList' | 'billingProductDetail' | 'top10bycust' | 'trendMonth';
 }
 
 export interface TableBodyProps {

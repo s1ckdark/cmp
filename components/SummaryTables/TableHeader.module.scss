@@ -1,7 +1,17 @@
-.top10 {
+.headerContainer {
+    th {
+        border: 1px solid #DEE1E7;
+        font-size: 14px;
+        border: 1px solid #DEE1E7;
+        background: #F7F8FE;
+        color: #313131;
+        padding: 15px 0 10px;
+    }
+
+
+    &.top10 {
         tr {
             th {
-                font-size: 14px;
                 &:nth-child(1) {
                     width: 40%;
                 }
@@ -17,7 +27,7 @@
             }
         }
     }
-.perMonth, .perWeek {
+    &.perMonth, .perWeek {
         tr {
             th {
                 &:nth-child(1) {
@@ -29,3 +39,41 @@
             }
         }
     }
+    &.announce {
+        tr {
+            th {
+                &:nth-child(1) {
+                    width: 15%;
+                }
+                &:nth-child(2) {
+                    width: 70%;
+                }
+                &:nth-child(3) {
+                    width: 15%;
+                }
+            }
+        }
+    }
+    &.support {
+        tr {
+            th {
+                &:nth-child(1) {
+                    width: 10%;
+                }
+                &:nth-child(2) {
+                    width: 50%;
+                }
+                &:nth-child(3) {
+                    width: 15%;
+                }
+                &:nth-child(4) {
+                    width: 10%;
+                }
+                &:nth-child(5) {
+                    width: 15%;
+                }
+            }
+        }
+    }
+
+}

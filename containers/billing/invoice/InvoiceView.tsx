@@ -9,7 +9,8 @@ import { PdfExport } from '@/components/PdfExport';
 import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
 import { dataViewAtom} from '@/states/data';
-
+import Styles from './InvoiceView.module.scss';
+import { useRouter } from 'next/navigation';
 interface InvoiceViewCtProps {
     memberNo: string;
     targetMonth: string;
@@ -17,18 +18,17 @@ interface InvoiceViewCtProps {
 
 const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
     const [ data, setData ] = useRecoilState(dataViewAtom);
-    const breadcrumbs = [
-        { href: '/', label: 'Home' },
-        { href: '/billing', label: 'Billing' },
-        { href: `/billing/invoice/${memberNo}/${targetMonth}`, label: 'List' }
-    ];
-
+    const router = useRouter();
     const handlePdf = (id: string) => {
+        const target = document.querySelector('#invoice');
+        target?.classList.add(Styles.pdf);
         PdfExport(id);
+        target?.removeAttribute('class');
     };
 
     useEffect(() => {
         const fetching = async() => {
+            console.log(memberNo);
             const url = `/invoice/${memberNo}/${targetMonth}`;
             const response = await apiBe.get(url);
             if(response.status === 200) setData({data:response.data,memberNo:memberNo,targetMonth:targetMonth});
@@ -38,14 +38,19 @@ const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
 
     return (
         <>
-            <Breadcrumb title={memberNo} breadcrumbs={breadcrumbs} />
-            <div id="invoice">
-                <InfoSection type="supply" memberNo={memberNo} />
-                <InfoSection type="client" memberNo={memberNo} />
-                <Usage />
-                <Summary />
+            <Breadcrumb />
+            <div className={Styles.container}>
+                <div id="invoice">
+                    <InfoSection type="supply" />
+                    <InfoSection type="client" memberNo={memberNo} />
+                    <Usage />
+                    <Summary />
+                </div>
+                <div className={Styles.btnArea}>
+                    <Button onClick={()=>handlePdf('invoice')} className={`${Styles.btn} ${Styles.pdfBtn} flex justify-end mt-10`} skin="green">pdf</Button>
+                    <Button className={`${Styles.btn} ${Styles.backBtn} flex justify-end mt-10`} onClick={()=>router.back()} skin="green">목록</Button>
+                </div>
             </div>
-            <Button onClick={()=>handlePdf('invoice')} className="flex justify-end mt-10" skin="green">pdf</Button>
 
         </>
     )

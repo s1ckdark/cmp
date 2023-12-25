@@ -7,9 +7,8 @@ import { useRouter } from 'next/navigation';
 import { monthAtom } from '@/states';
 import { dataListAtom } from '@/states/data';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
+import { addComma } from '@/utils/data';
 export const TableBody: React.FC<TableBodyProps> = ({rowType, data}:{rowType:string, data:any[]}) => {
-    console.log(data);
     const display = {
         "invoiceList": ['overview','memberNo', 'memberName', 'naverCost.cloudType', 'term', 'naverCost.payCurrency_code', 'naverCost.useAmount', 'naverCost.totalDiscountAmt', 'naverSummary.thisMonthDemandAmount', 'gdSummary.swUseAmount', 'gdSummary.mspUseAmount', 'gdSummary.productdiscountamount', 'gdSummary.thisMonthDemandAmount', 'result.thisMonthDemandAmount', 'result.thisMonthVatAmount', 'result.totalDemandAmount'],
         "customers": ['memberNo', 'memberName', 'regionType', 'businessRegNo', 'customerContacts', 'salesContacts'],
@@ -17,6 +16,10 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType, data}:{rowType:str
         "top10": ['name', 'start','end','amount'],
         "perMonth": ["x", "y"],
         "perWeek": ["x", "y"],
+        "trendMonth": ["x", "y", "z", "a"],
+        "top10bycust": ["rank", "memberNo", "memberName", "totalDemandAmount"],
+        "announce": ['idx', 'title', 'regDt'],
+        "support": ['idx', 'title', 'memberName', 'status', 'regDt'],
     }
     
     // let newData = data['data'] && data['data'].map((item:any) => 
@@ -34,7 +37,7 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType, data}:{rowType:str
                         let tmp = key.split('.').reduce((acc, cur) => acc && acc[cur], item) || '-';
                         return (
                             <td key={keyIndex}>
-                                {tmp}
+                                {typeof tmp === 'number' ? addComma(Math.round(tmp*100) / 100):tmp}
                             </td>
                         )
                     })}

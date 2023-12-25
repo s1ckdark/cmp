@@ -21,7 +21,6 @@ export const convertColumns = (params: ColumnKeys) => {
         "naverCost.payCurrency_code": "결제통화",
         "naverCost.useAmount": "이용금액",
         "naverCost.totalDiscountAmt": "할인금액", // naverSummary.ectDiscountAmount + naverSummary.productDiscountAmount + naverSummary.customDiscountAmount 인 것인가요?
-        "naverSummary.totalDemandAmount": "공급가액", // demand는 수요아닌가요?
         "naverSummary.thisMonthDemandAmount": "공급가액", // 이 두가지가 공급가로 추정되는데 기준이 달라보입니다. 어떤게 맞을까요?
         "gdSummary.swUseAmount": "SW 이용금액",
         "gdSummary.mspUseAmount": "MSP 이용금액",
@@ -37,4 +36,8 @@ export const convertColumns = (params: ColumnKeys) => {
 export const isObjKeyExist = (obj: any, key: string) => {
     if(obj === null || obj === undefined) return false;
     return Object.keys(obj).includes(key) ? obj[key] : "N/A";
+}
+
+export const addComma = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }

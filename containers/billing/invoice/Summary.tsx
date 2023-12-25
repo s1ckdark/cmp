@@ -1,16 +1,15 @@
 import { useRecoilValue } from 'recoil';
 import { dataViewAtom } from '@/states/data'; // Import your Recoil state
 import styles from './Summary.module.scss';
-import { isObjKeyExist } from '@/utils/data';
+import { isObjKeyExist, addComma } from '@/utils/data';
 
 const Summary = () => {
     const resultData = useRecoilValue(dataViewAtom);
     const { data, memberNo, targetMonth } = resultData || {}; // Add null check and provide default value
-    const { naverSummary, result } = data
 
-    if (!data) {
-        return <div>Loading...</div>; // Or any other loading indicator
-    }
+
+    if (!data) return <div>Loading...</div>; // Or any other loading indicator
+    const { naverSummary, result } = data;
     return (
         <div className={styles.summary}>
             <hgroup>
@@ -71,52 +70,52 @@ const Summary = () => {
                 </thead>
                 <tbody>
                 <tr>
-                    <td>{isObjKeyExist(result, "useAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "useAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(naverSummary, "promiseDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(naverSummary, "promiseDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(naverSummary, "memberPriceDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(naverSummary, "memberPriceDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(naverSummary, "memberPromiseDiscountAddAmount")}</td>
+                    <td>{addComma(isObjKeyExist(naverSummary, "memberPromiseDiscountAddAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "etcDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "etcDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "estimateUseAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "estimateUseAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "useAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "useAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "productDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "productDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "customerDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "customerDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "coinUseAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "coinUseAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "rounddownDiscountAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "rounddownDiscountAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "overduePlusAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "overduePlusAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "thisMonthDemandAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "thisMonthDemandAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "thisMonthVatAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "thisMonthVatAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "defaultAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "defaultAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{isObjKeyExist(result, "totalDemandAmount")}</td>
+                    <td>{addComma(isObjKeyExist(result, "totalDemandAmount"))}</td>
                 </tr>
 
                 </tbody>

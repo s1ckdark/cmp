@@ -1,7 +1,14 @@
 .tableContainer {
-    overflow-x: scroll;
+    overflow-x: auto;
+    background-color:#fff;
     width: 100% !important;
+    padding: 0 50px;
+    table {
+
+        width: 100%; 
+    }
 }
+
 .support {
     thead {
         tr {
@@ -292,6 +299,27 @@
                     }
                 }
             }
+        }
+    }
+}
+.btnArea {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 15px;
+    padding: 15px 0;
+    .btn {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #F0F3F2;
+        border: none;
+        cursor: pointer;
+        &.backBtn {
+            background: #43B69A;
+            margin-right: 10px;
         }
     }
 }

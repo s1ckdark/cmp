@@ -48,3 +48,7 @@ export const historyToggleAtom = atom<boolean>({
     default: false,
 });
 
+export const searchAtom = atom<any>({
+    key: 'searchAtom',
+    default: {keyword:'', excute: false }
+});

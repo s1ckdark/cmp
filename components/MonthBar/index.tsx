@@ -10,7 +10,7 @@ const MonthBar = () => {
     const nextMonth = () => {
         const currentMonth = getCurrentMonth();
         const nextMonth = Number(month) + 1;
-        nextMonth > Number(currentMonth) ? Toast('error','다음달 이용내역서가 없습니다.') : setMonth(nextMonth.toString());
+        nextMonth > Number(currentMonth) ? Toast('error','다음달 이용내역서가 없습니다.') :         setMonth(nextMonth.toString());
     }
 
     const prevMonth = () => {
@@ -18,13 +18,15 @@ const MonthBar = () => {
         setMonth(prevMonth.toString());
     }
     const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
-    const getMonth = () => {
-        const currentMonth = getCurrentMonth();
-        month !== currentMonth ? setMonth(currentMonth): null;
-    }
-    useEffect(() => {
-        getMonth();
-    },[])
+
+   
+    // useEffect(() => {
+    //     const getMonth = () => {
+    //         const currentMonth = getCurrentMonth();
+    //         month !== currentMonth ? setMonth(currentMonth): setMonth(month)
+    //     }
+    //     getMonth();
+    // },[])
 return (
     <div className={styles.monthBar}>
         <div className={styles.monthBarLeft}>

@@ -1,183 +1,138 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import { SalesDataPoint, LineChartProps } from '@/types/data';
-import styles from '@/styles/components/d3/Linecharts.module.scss';
-
-const LineChart: React.FC<LineChartProps> = ({ data, width = 600, height = 400 }) => {
-  console.log(data);
-  const svgRef = useRef();
-  const [hoveredValue, setHoveredValue] = useState(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [activeTooltip, setActiveTooltip] = useState(null);
-
-  const handleMouseOver = (event: any, d: any) => {
-    const [x, y] = d3.pointer(event);
-    setHoveredValue(d.sales);
-    setTooltipPosition({ x, y: y - 30 }); // Position the tooltip 30 pixels above the mouse pointer
-    setActiveTooltip(d); // Set the currently active tooltip
-    setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setHoveredValue(null);
-    setActiveTooltip(null); // Clear the active tooltip when mouse moves out
-    setIsHovering(false);
-  };
-  useEffect(() => {
-    const margin = { top: 20, right: 30, bottom: 30, left: 40 };
-    const innerWidth = width - margin.left - margin.right;
-    const innerHeight = height - margin.top - margin.bottom;
-
-    const svg = d3.select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scaleLinear()
-      .domain([1, 12])
-      .range([0, innerWidth]);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data.flatMap(series => series), d => d.sales)])
-      .nice()
-      .range([innerHeight, 0]);
-
-    const line = d3.line()
-      // .defined(d => !isNaN(d.sales))
-      .x(d => x(d.month))
-      .y(d => y(d.sales))
-    // .y(innerHeight) // Start the line at the bottom
-    // .curve(d3.curveMonotoneX); // Add a curve for smoother animation
-
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-    const transitionPath = d3
-      .transition()
-      .ease(d3.easeSin)
-      .duration(2500);
-
-    const xAxis = (g) => g
-      .attr('transform', `translate(0,${innerHeight})`)
-      .call(d3.axisBottom(x));
-
-    const yAxis = (g) => g
-      // .attr('transform', `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y));
-
-    // Create the grid line functions.
-    const xGrid = (g) => g
-      .attr('class', 'grid-lines')
-      .selectAll('line')
-      .data(x.ticks())
-      .join('line')
-      .attr('x1', d => x(d))
-      .attr('x2', d => x(d))
-      .attr('y1', margin.top)
-      .attr('y2', height - margin.bottom);
-
-    const yGrid = (g) => g
-      .attr('class', 'grid-lines')
-      .selectAll('line')
-      .data(y.ticks())
-      .join('line')
-      .attr("stroke", "gray")
-      .attr("opacity", 0.2)
-      .attr("stroke-width", 2)
-      .attr('x1', 0)
-      .attr('x2', width - margin.right)
-      .attr('x2', width)
-      .attr('y1', d => y(d))
-      .attr('y2', d => y(d));
-
-    const transitionDuration = 2000;
-    data.forEach((series, index) => {
-      // Draw the line
-      const linePath = svg.append('path')
-        .datum(series.data)
-        .attr('d', line)
-        .attr('fill', 'none')
-        .attr('stroke', color(index))
-        .attr('stroke-width', 2)
-        .attr('stroke-dasharray', function () {
-          const length = this.getTotalLength();
-          return `${length} ${length}`;
-        })
-        .attr('stroke-dashoffset', function () {
-          return this.getTotalLength();
-        })
-        .transition()
-        .duration(transitionDuration)
-        .ease(d3.easeLinear)
-        .attr('stroke-dashoffset', 0);
-
-      // Add point circles for this data series with hover effect
-      svg.selectAll(`.circle-${index}`)
-        .data(series.data)
-        .enter()
-        .append('circle')
-        .attr('cx', d => x(d.month))
-        .attr('cy', d => y(d.sales))
-        .attr('r', 4) // Adjust the radius of the circles
-        .attr('fill', color(index))
-        .attr('class', `circle-${index}`)
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut);
-    });
-
-
-
-    // Add X and Y axes
-    svg.append('g').call(xAxis)
-    svg.append('g').call(yAxis)
-
-    // Add X and Y grid lines
-    // svg.append('g').call(xGrid);
-    svg.append('g').call(yGrid);
-
-    // Create a legend
-    const legend = svg.append('g')
-      .attr('transform', `translate(${innerWidth + 10},-40)`);
-
-    const legendSpacing = 120; // Adjust as needed
-    const legendOffset = -40; // Adjust as needed
-
-    data.forEach((series, index) => {
-      const legendItem = legend.append('g')
-        .attr('transform', `translate(-${index * legendSpacing},${0})`);
-
-      legendItem.append('rect')
-        .attr('width', 10)
-        .attr('height', 10)
-        .attr('fill', color(index));
-
-      legendItem.append('text')
-        .attr('x', 15)
-        .attr('y', 6)
-        .attr('font-size', '11px')
-        .attr('dy', '0.32em')
-        .text(series.name);
-    });
-
-    // Remove the tooltip when hoveredValue is null
-    if (isHovering && hoveredValue !== null) {
-      svg.append('text')
-        .attr('x', tooltipPosition.x) // Position based on mouse coordinates
-        .attr('y', tooltipPosition.y) // Position based on mouse coordinates
-        .attr('class', 'hovered-value')
-        .text(`Hovered Value: ${hoveredValue}`);
-    } else {
-      svg.selectAll('.hovered-value').remove();
-    }
-  }, [data, width, height, hoveredValue, isHovering, tooltipPosition]);
-
-
-
-
-  return (
-    <svg ref={svgRef}></svg>
-  );
+import styles from './LineChart.module.scss'
+import { addComma } from '@/utils/data';
+interface IDataPoint {
+    x: number;
+    y: number;
+    z: number;
+    a: number
 }
+
+interface LineChartProps {
+    data: IDataPoint[];
+    aspectRatio: number;
+}
+
+const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
+    const d3Container = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (data && d3Container.current) {
+            const margin = { top: 30, right: 20, bottom: 30, left: 20 };
+            const width = d3Container.current.offsetWidth;
+            const height = width / aspectRatio;
+            // const width = Width - margin.left - margin.right;
+           
+            const maxY = d3.max(data, d => Math.abs(d.y)) as number;
+            const minY = d3.min(data, d => Math.abs(d.y)) as number;
+            // Clear previous SVG
+            d3.select(d3Container.current).selectAll('*').remove();
+
+            const svg = d3.select(d3Container.current)
+                          .append('svg')
+                          // .attr('width', width)
+                          // .attr('height', height)
+                          .attr('viewBox', `0 0 ${width} ${height}`)
+                          .attr('stroke', '#C6CDD6') // Border color
+                          .attr('stroke-width', '1px') // Border width
+                          .append('g')
+                          // .attr('transform', `translate(${margin.left},${margin.top})`);
+
+            const x = d3.scaleLinear()
+                        .domain([d3.min(data, d => d.x) as number, d3.max(data, d => d.x) as number])
+                        .range([margin.left, width-margin.left-margin.right])
+            
+
+
+            const y = d3.scaleLinear()
+                        .domain([0, maxY*1.5])
+                        // .domain([-maxY, maxY])
+                        .range([height, 0]);
+
+            // X-axis grid
+            // svg.append('g')
+            //   .attr('class', 'grid')
+            //   .attr('transform', `translate(0,${height})`)
+            //   .call(d3.axisBottom(x)
+            //         .tickSize(-height)
+            //         .tickFormat(() => '')
+            //   )
+            //   .selectAll('.tick line')
+            //   .attr('stroke', '#ddd');
+
+            // Y-axis grid
+            svg.append('g')
+              .attr('class', 'grid')
+              .call(d3.axisLeft(y)
+                    .tickSize(-width)
+                    .tickFormat(() => '')
+              )
+              .selectAll('.tick line')
+              .attr('stroke', '#ddd');
+
+            // Line
+            const line = d3.line<IDataPoint>()
+                           .x(d => x(d.x))
+                           .y(d => y(d.y));
+
+            const path = svg.append('path')
+                            .datum(data)
+                            .attr('fill', 'none')
+                            .attr('stroke', '#52BF8A')
+                            .attr('stroke-width', 3)
+                            .attr('d', line);
+
+            // Animation
+            const totalLength = path.node()!.getTotalLength();
+            path.attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+                .attr('stroke-dashoffset', totalLength)
+                .transition()
+                .duration(2000)
+                .attr('stroke-dashoffset', 0);
+
+            // Tooltip
+            const tooltip = d3.select('body').append('div')
+                              .attr('class', `${styles.tooltip}`)
+                              .style('opacity', 0);
+
+            svg.selectAll('.dot')
+               .data(data)
+               .enter().append('circle')
+               .attr('class', 'dot')
+               .attr('fill', '#52BF8A')
+               .attr('cx', d => x(d.x))
+               .attr('cy', d => y(d.y))
+               .attr('r', 5)
+               .on('mouseover', (event, d) => {
+                   tooltip.transition()
+                          .duration(200)
+                          .style('opacity', .9);
+                   tooltip.html(`<label>${d.x}월 전체 매출</label><h2>${addComma(d.y)}</h2>`)
+                          .style('left', `${event.pageX}px`)
+                          .style('top', `${event.pageY - 28}px`);
+               })
+               .on('mouseout', () => {
+                   tooltip.transition()
+                          .duration(500)
+                          .style('opacity', 0);
+               });
+
+               // domain color 
+               
+               svg.append('g')
+               .attr("transform",`translate(${0},${height})`)
+               .call(d3.axisBottom(x).tickSize(1).ticks(12).tickFormat((d:any) => d + '월'));
+  
+               svg.selectAll('.domain').remove();
+               svg.selectAll(".x.axis line")
+                  .style("stroke","#C6CDD6");
+                  svg.selectAll(".x.axis")
+                  .style("font-size","14px");
+              }
+    }, [data]);
+
+    return <div ref={d3Container} className={styles.lineChart} />;
+};
 
 export default LineChart;

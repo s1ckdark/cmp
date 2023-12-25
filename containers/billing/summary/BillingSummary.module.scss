@@ -1,0 +1,143 @@
+.btnArea {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+    align-items: center;
+    .btn {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #F0F3F2;
+        border: none;
+        cursor: pointer;
+        &.backBtn {
+            background: #43B69A;
+            margin-right: 10px;
+        }
+    }
+
+}
+.lineChart {
+    width: 100%;
+    min-height: 300px;
+    height: auto;
+    margin-bottom: 30px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+
+.memberName {
+    font-size: 40px;
+    text-align: center;
+    padding:  40px 0 30px 0;
+    color: #313131;
+
+}
+
+.boxSection {
+    width: 100%;
+    margin: 0 0 20px 0;
+    border: 1px solid #DEE1E7;
+    background-color: #FBFCFF;
+    .inner {
+        padding: 50px;
+        width: 100%;
+        .label {
+            font-size: 24px;
+            color: #313131;
+            width: 100%;
+            display: block;
+            margin-bottom: 20px;
+        }
+    }
+}
+.col2 {
+    &.half {
+        .left {
+            width: calc(50% - 12px); 
+            margin-right: 12px;
+        }
+        .right {
+            width: calc(50% - 12px); 
+            margin-left: 12px;
+        }
+    }
+    &.asymc {
+        .left {
+            width: calc(70% - 12px); 
+            margin-right: 12px;
+        }
+        .right {
+            width: calc(30% - 12px); 
+            margin-left: 12px;
+        }
+    }
+}
+.demandAmount {
+    width: 100%;
+    margin: 0 0 20px 0;
+    .label {
+        h2 {
+            font-size: 24px;
+            span {
+                margin-left: 5px;
+                color: #EE6161;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                letter-spacing: -1px;
+            }
+        }
+    }
+    .countup {
+        position: relative; 
+        
+        label {
+            color: #313131;
+            font-family: NanumGothic;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+        > div {
+            font-size: 60px;
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+    }
+}
+.trendMonth {
+    width: 100%;
+    margin: 0 0 20px 0;
+    .lineChart {
+        margin-bottom: 100px;
+    }
+    .trendMonthTable {
+    }
+}
+.rank {
+    width: 100%;
+  
+}   
+.perMonth {
+    width: 100%;
+  
+}   
+.perWeek {
+    width: 100%;
+  
+}   
+.perDay {
+    width: 100%;
+}   
+
+}

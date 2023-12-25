@@ -18,7 +18,13 @@ import BoxLeftArrow from './boxLeftArrow.svg';
 import BoxRightArrow from './boxRightArrow.svg';
 import LeftArrow from './leftArrow.svg';
 import History from './history.svg';
+import IconOverview from './overview.svg'
+import IconSearch from './search.svg';
+import IconCalendar from './calendar.svg';
 export {
+    IconCalendar,
+    IconSearch,
+    IconOverview,
     History,
     BoxLeftArrow,
     BoxRightArrow,

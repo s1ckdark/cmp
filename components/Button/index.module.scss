@@ -38,7 +38,9 @@
         height: var(--h-comment-form);
         padding: 0 14px;
         font-size: 14px;
-        width: 100%;
+        min-width: 100px;
+        max-width: 300px;
+        min-height: 40px;
     }
 
     // Skin
@@ -73,14 +75,24 @@
     }
 
     &.green {
-        width: 300px;
-        height: 40px;
+        color: var(--color-white);
         background: #43B69A;
         display: table-cell;
     }
 
     &.gray {
         color: var(--color-gray-4);
+        background-color: var(--color-white);
+        border: 1px solid var(--color-gray-9);
+
+        &:hover,
+        &:focus {
+            border-color: var(--color-gray-4);
+        }
+    }
+
+    &.back {
+        color: var(--color-red-4);
         background-color: var(--color-white);
         border: 1px solid var(--color-gray-9);
 

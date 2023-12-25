@@ -1,33 +1,28 @@
 'use client';
 import Breadcrumb from '@/components/Breadcrumb';
 import React, { use, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { dataListAtom, historyListAtom, historyToggleAtom } from '@/states/data';
+import { monthAtom } from '@/states';
 import { pageNumberType } from '@/types/props';
 import { Tables } from '@/components/Tables';
 import { apiBe } from '@/services';
 import { currentPageAtom } from '@/states';
 import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
-import { set } from 'lodash';
 
 const ProductList = ({ pageNumber }: pageNumberType) => {
-    const [data, setData] = useRecoilState(dataListAtom) || null;;
+    const [data, setData] = useRecoilState(dataListAtom) || null;
+    const targetMonth = useRecoilValue(monthAtom);
     const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
     const [history, setHistory] = useRecoilState(historyListAtom || null);
     const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
 
-    const breadcrumbs = [
-        { href: '/', label: 'Home' },
-        { href: '/billing', label: '빌링내역' },
-        { href: '/billing/product/list', label: '이용내역서' }
-    ];
-
     useEffect(() => {
-        setCurrentPage(0);
+        setCurrentPage(1);
         const fetching = async (pageNumber: number) => {
-            const url = `/product/product`;
-            const response = await apiBe.get(url, { params: { page:currentPage} });
+            const url = `/product/gdbilling`;
+            const response = await apiBe.get(url, { params: { page:pageNumber, target_month:targetMonth} });
             console.log(response);
             if (response.status === 200 && response.data.content !== null) {
                 setData({ data: response.data.content, totalPages: response.data.totalPages});
@@ -36,15 +31,15 @@ const ProductList = ({ pageNumber }: pageNumberType) => {
             }
         };
         fetching(currentPage);
-    }, [currentPage]);
+    }, [currentPage, targetMonth]);
 
 
 
     return (
         <>
-            <Breadcrumb title={'전체이용내역서'} breadcrumbs={breadcrumbs} />
+            <Breadcrumb />
             <MonthBar />
-            <Tables data={data?.data} rowType={'productGd'} className={'productGd'} />
+            <Tables data={data?.data} rowType={'billingProductList'} className={'billingProductList'} />
         </>
     );
 };

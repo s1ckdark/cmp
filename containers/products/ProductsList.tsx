@@ -17,11 +17,7 @@ const ProductList = () => {
     const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
     const [ month, setMonth ] = useRecoilState(monthAtom);
     const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
-    const breadcrumbs = [
-        { href: '/', label: 'Home' },
-        { href: '/products', label: '자사상품'},
-        { href: '/products/product', label: '전체' },
-    ];
+
 
     useEffect(() => {
         const fetching = async (pageNumber: number) => {
@@ -41,7 +37,7 @@ const ProductList = () => {
     }
     return (
         <>
-            <Breadcrumb title={'자사 상품 전체'} breadcrumbs={breadcrumbs} />
+            <Breadcrumb />
             <Tables data={data?.data} rowType={'productGd'} className={'productList'} />
             {historyToggle && <div className={Styles.history}><div className={Styles.closeBtn} onClick={closeHistory}>&times;</div><Tables data={history?.data} rowType={'history'} className={'history'} /></div>}
         </>

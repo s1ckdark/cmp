@@ -1,55 +1,62 @@
 import React from  'react';
-import Styles from './ProductsWrite.module.scss';
+import Styles from './ProductsView.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
+import { usePathname, useRouter } from 'next/navigation'
+import { useRecoilValue } from 'recoil';
+import { dataListAtom } from '@/states/data';
+import lodash from 'lodash';
+import Loading from '@/components/Loading';
+
 const ProductsView = () => {
-    const header = {
-        title: '자사상품 등록',
-        breadcrumbs: [
-            { href: '/', label: 'Home' },
-            { href: '/products', label: '자사상품'},
-            { href: '/products/product', label: '전체' },
-            { href: '/products/product/write', label: '자사상품 등록' },
-        ]
-    }
+    const data = useRecoilValue(dataListAtom);
+    const pathname = usePathname();
+    const router = useRouter();
+    const id = lodash.last(pathname.split('/'));
+    console.log(data);
+    const product = lodash.find(data?.data, {id});
+    console.log('product', id, product);
+    if(!product) return <Loading />
+    const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
     return (
         <>
-            <Breadcrumb title={header.title} breadcrumbs={header.breadcrumbs} />
-        <div className={Styles.container}>
-                <div className={Styles.inputGroup}>
-                    <label>상품명</label>
-                    <input type="text" placeholder='상품명을 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>상품분류</label>
-                    <input type="radio" name="product" value="SW" />사용SW
-                    <input type="radio" name="product" value="MSP" />MSP
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>상품상세분류</label>
-                    <input type="text" placeholder='상품상세분류를 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>상품명</label>
-                    <input type="text" placeholder='상품가격기준을 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>정식단가</label>
-                    <input type="text" placeholder='정식단가를 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>벤더사 영업 이름</label>
-                    <input type="text" placeholder='벤더사 영업 이름을 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>벤더사 영업 이메일</label>
-                    <input type="text" placeholder='벤더사 영업 이메일을 입력하세요' />
-                </div>
-                <div className={Styles.inputGroup}>
-                    <label>코멘트</label>
-                    <textarea placeholder='벤더사 영업 전화번호를 입력하세요' />
-                </div>
-                <Button type="submit" className={Styles.submitBtn} skin={"green"}>등록</Button>
-        </div>
+            <Breadcrumb />
+            <div className={Styles.container}>
+                    <div className={`${Styles.inputGroup} ${Styles.prodNamet}`}>
+                        <label>상품명</label>
+                        <p>{prodName} </p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.prodType}`}>
+                        <label>상품분류</label>
+                        <p>{prodType}</p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.prodDetailType}`}>
+                        <label>상품상세분류</label>
+                        <p>{prodDetailType}</p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.prodDetailTypeStd}`}>
+                        <label>상품가격기준</label>
+                        <p>{prodDetailTypeStd || '-'}</p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.prodDesc}`}>
+                        <label>상품설명</label>
+                        <p>{prodDesc}</p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.stdPrice}`}>
+                        <label>정식단가</label>
+                        <p>{stdPrice}</p>
+                    </div>
+                    <div className={`${Styles.inputGroup} ${Styles.comment}`}>
+                        <label>코멘트</label>
+                        <p>{comment}</p>
+                    </div>
+                    <div className={Styles.btnArea}>
+                        <Button type="submit" className={`${Styles.submitBtn} ${Styles.btn}`} skin={"green"}>수정</Button>
+                        <Button type="button" className={`${Styles.backBtn} ${Styles.btn}`}  onClick={()=> router.back()} skin={"back"}>돌아가기</Button>
+                    </div>
+            </div>
         </>
     )
+}
+
+export default ProductsView

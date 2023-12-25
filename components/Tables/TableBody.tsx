@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation';
 import { monthAtom, currentPageAtom } from '@/states';
 import { dataListAtom, historyListAtom, historyToggleAtom } from '@/states/data';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { History } from '@/public/svgs';
-import { set } from 'lodash';
+import { History, IconOverview } from '@/public/svgs';
+import { addComma } from '@/utils/data';
 
 export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) => {
     const [data, setData] = useRecoilState(dataListAtom) || null;
@@ -20,17 +20,22 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     const router = useRouter();
     const display = {
         "invoiceList": ['overview','memberNo', 'memberName', 'naverCost.cloudType', 'term', 'naverCost.payCurrency_code', 'naverCost.useAmount', 'naverCost.totalDiscountAmt', 'naverSummary.thisMonthDemandAmount', 'gdSummary.swUseAmount', 'gdSummary.mspUseAmount', 'gdSummary.productdiscountamount', 'gdSummary.thisMonthDemandAmount', 'result.thisMonthDemandAmount', 'result.thisMonthVatAmount', 'result.totalDemandAmount'],
-        "productGd":['id','prodName', 'prodType','prodDesc','stdPrice','regName','regDt','history'],
+        "productGd":['idx','prodName', 'prodType','prodDesc','stdPrice','regName','regDt','history'],
         "customers": ['memberNo', 'memberName', 'regionType', 'businessRegNo', 'customerContacts', 'salesContacts'],
         "users": ['email', 'username', 'userType', 'privileges', 'regName', 'regDt', 'lasLogDt'],
+        "billingProductList":['memberNo','memberName','category','prodName','prodDetailType', 'prodDetailTypeStd','stdPrice','expPrice','discountRate','regName','regDt'], 
+        "productCategory":['prodType','prodDetailType','prodDetailTypeStd','regDt','regName']
     }
     
-    const view = (memberNo?:number) => {
+    const view = (props?:any) => {
+        console.log([props]);
         const typeUrl = {
-            "invoiceList": `/billing/invoice/view/${memberNo}/${targetMonth}`,
+            "invoiceList": `/billing/invoice/view/${[props.memberNo]}/${targetMonth}`,
             "customers": '/customer',
             "users": '/user',
-            "productGd":'/products/product/view/'
+            "productGd":`/products/product/view/${[props.id]}`,
+            "productCategory":`/products/category/view/${[props.id]}`,
+            "billingProductList":`/billing/product/view/${[props.prodId]}`,
 
         }
         router.push(typeUrl[rowType]);
@@ -45,7 +50,7 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
                 break;
             case 'productGd':
                 return data['data'] && data['data'].map((item:any, index:number) => 
-                    Object.assign({}, item, {id: totalItems - index - (pageNumber-1)*10,history: <History onClick={()=>setHistory(item.prodHist)}/>})
+                    Object.assign({}, item, {idx: totalItems - index - (pageNumber-1)*10,history: <History onClick={()=>setHistory(item.prodHist)}/>})
                 )
                 break;
             default:
@@ -58,21 +63,42 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
         setHistoryToggle(true);
     }
 
+    const visual = (memberNo:string) => {
+        console.log(memberNo);
+        router.push(`/billing/invoice/visual/${memberNo}/${targetMonth}`);
+    }
     const field = display[rowType];
+
+    const renderCell = (key:any, keyIndex:number, item:any) => {
+        let content;
+        const fieldValue = key.split('.').reduce((acc, cur) => acc && acc[cur], item) || '-';
+    
+        switch (key) {
+            case 'history':
+                content = <td key={keyIndex}><History onClick={() => historyView(item.prodHist)}/></td>;
+                break;
+            case 'overview':
+                content = <td key={keyIndex} onClick={()=>visual(item.memberNo)}><IconOverview /></td>;
+                break;
+            // Add additional cases here
+            // Example: case 'date': // handle date format
+            // Example: case 'status': // handle status format
+            default:
+                content = <td key={keyIndex} onClick={() => view(item)}>{typeof fieldValue !== 'number' ? fieldValue:addComma(fieldValue)}</td>;
+                break;
+        }
+    
+        return content;
+    }
+
     if(!data?.data) return <div>Loading...</div>
     return (
-        <tbody className={`${Styles.bodyContainer} ${Styles.productGd}`}>
+        <tbody className={`${Styles.container} ${Styles[rowType]}`}>
             {newData(rowType).map((item: any, index: number) => (
                 <tr key={index}>
-                    {field.map((key: string, keyIndex: number) => {
-                        let tmp = key.split('.').reduce((acc, cur) => acc && acc[cur], item) || '-';
-                        key !== 'history' ? tmp = <td  key={keyIndex} onClick={()=>view()}>{tmp}</td> : tmp = <History onClick={()=>historyView(item.prodHist)}/>;
-                        return (
-                            <>
-                                {tmp}
-                            </>
-                        )
-                    })}
+                    {field.map((key: string, keyIndex: number) => (
+                        <>{renderCell(key, keyIndex, item)}</>
+                    ))}
                 </tr>
             ))}
         </tbody>

@@ -23,11 +23,10 @@ const ProductPage = async({ params }:any) => {
   };
 
   return (
-    <div>
-      <h1>{type} - {id}</h1>
+    <>
       {renderPage()}
-    </div>
-  );
+    </>
+    );
 };
 
 export default ProductPage

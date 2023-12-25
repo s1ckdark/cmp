@@ -2,9 +2,7 @@ import Header from '@/app/(sidebarLayout)/_common/Header';
 import Sidebar from "@/app/(sidebarLayout)/_common/Sidebar";
 import Footer from "@/app/(sidebarLayout)/_common/Footer";
 import { ReactNode } from 'react';
-import { sessionChecker } from '@/components/Server';
 
-const checker = async ()=> await sessionChecker();
 export default async function SidebarLayout({
     children,
 }: {
@@ -12,8 +10,8 @@ export default async function SidebarLayout({
 }) {
     return (
         <>  
-            <Sidebar />
-            <div className="page bg-white dark:bg-black">
+            <div className="flex page bg-white dark:bg-black">
+                <Sidebar />
                 <div className="container">
                     <Header />
                     {children}

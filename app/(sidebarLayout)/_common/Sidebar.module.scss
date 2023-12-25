@@ -1,7 +1,26 @@
 .container {
     background: #202124;
-    width: 256px;
+    position: relative;
     &.open {
+        width: 220px;
+        a {
+            padding: 0;
+            justify-content: center;
+            p {
+                display: block;
+            }
+        }
+        .fullbg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 220px;
+            height: 100%;
+            background: #202124;
+            z-index:0;
+        }
+    }
+    &.close {
         width: 90px;
         a {
             padding: 0;
@@ -10,9 +29,16 @@
                 display: none;
             }
         }
-        [class~='userinfo'] {
-            display: none;
+        .fullbg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 90px;
+            height: 100%;
+            background: #202124;
+            z-index:0;
         }
+
     }
     .toggle_btn {
         background: #2B3035;
@@ -21,7 +47,5 @@
             width: 40px;
         }
     }
-    .userinfo {
-        display: block;
-    }
+
 }

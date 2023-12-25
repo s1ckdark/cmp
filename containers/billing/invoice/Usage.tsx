@@ -3,7 +3,7 @@ import { TableHeader } from '@/components/Tables/TableHeader';
 import styles from './Usage.module.scss';
 import { useRecoilValue } from 'recoil';
 import { dataViewAtom } from '@/states/data';
-
+import { addComma } from '@/utils/data';
 interface UsageProps {
     type: string;
     data: any;
@@ -14,9 +14,7 @@ const Usage = () => {
     const invoice = useRecoilValue(dataViewAtom);
     const { data, memberNo, targetMonth } = invoice || {}; // Add null check and provide default value
 
-    if (!data) {
-        return <div>Loading...</div>;
-    }
+
 
     const GroupedDataTable = ({ data }) => {
         const productTypes = ['naverProduct','gdSw', 'gdMsp'];
@@ -58,7 +56,6 @@ const Usage = () => {
                 const { demandType } = item;
                 acc[demandType] = acc[demandType] || [];
                 acc[demandType].push(item);
-                console.log(acc);
                 return acc;
             }, {});
     
@@ -81,12 +78,12 @@ const Usage = () => {
                                 <td>{renderValue(item, 'region')}</td>
                                 <td>{renderValue(item, 'instanceName')}</td>
                                 <td>{renderValue(item, 'process_method')}</td>
-                                <td>{renderValue(item, 'useAmount')}</td>
-                                <td>{renderValue(item, 'promiseDiscountAmount')}</td>
-                                <td>{renderValue(item, 'memberPriceDiscountAmount')}</td>
-                                <td>{renderValue(item, 'memberPromiseDiscountAddAmount')}</td>
-                                <td>{renderValue(item, 'etcDiscountAmount')}</td>
-                                <td>{renderValue(item, 'demandAmount')}</td>
+                                <td>{addComma(renderValue(item, 'useAmount'))}</td>
+                                <td>{addComma(renderValue(item, 'promiseDiscountAmount'))}</td>
+                                <td>{addComma(renderValue(item, 'memberPriceDiscountAmount'))}</td>
+                                <td>{addComma(renderValue(item, 'memberPromiseDiscountAddAmount'))}</td>
+                                <td>{addComma(renderValue(item, 'etcDiscountAmount'))}</td>
+                                <td>{addComma(renderValue(item, 'demandAmount'))}</td>
                                 <td>{data.target_start_date}</td>
                                 <td>{data.target_end_date}</td>
                             </tr>
@@ -108,10 +105,7 @@ const Usage = () => {
             </table>
         );
     };
-    
-    
-
-
+    if (!data) return <div>Loading...</div>;
     return (
         <div className={styles.usage}>
             <hgroup>

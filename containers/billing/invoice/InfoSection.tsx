@@ -22,8 +22,14 @@ interface InfoSectionProps {
     modId: string;
     modDt: string;
 }
-
-const InfoSection = ({ type, memberNo }: { type: string, memberNo: string }) => {
+const goodusData = {
+    "memberName": "굿어스데이터",
+    "custCeo": "전상현",
+    "businessRegNo": "679-81-01070",
+    "custPhone": "070-7017-4200",
+    "address": [{"addr":"서울시 강남구 테헤란로 44길 8","addrDetail":"아이콘 역삼빌딩 5층"}]
+}
+const InfoSection = ({ type, memberNo }: { type: string, memberNo?: string }) => {
     const invoice = useRecoilValue(dataViewAtom);
     const [ customer, setCustomer ] = useState<any>([]);
     const title = type === 'supply' ? '공급자' : '수신자';
@@ -34,8 +40,8 @@ const InfoSection = ({ type, memberNo }: { type: string, memberNo: string }) => 
             const response = await apiBe.get(url);
             if(response.status === 200) setCustomer(response.data);
         }
-        fetching();
-    }, [memberNo])
+        type === 'supply' ? setCustomer(goodusData):fetching();
+    }, [type, memberNo])
 
     return (
         <div className={`${styles.infoSection}`}>
