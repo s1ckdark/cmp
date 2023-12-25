@@ -4,7 +4,7 @@ import { getMetaData } from '@/app/shareMetadata';
 
 export const metadata = getMetaData({
   url: 'https://argos.goodusdata.com/landing',
-  title: "ARGOS LANDING",
+  title: "ARGOS HOME",
   description: 'ARGOS',
   imageUrl: '',
   keywords: ['argos'],

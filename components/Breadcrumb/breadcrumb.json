@@ -1,0 +1,139 @@
+{
+    "/products/product/list":{
+        "title":"자사상품 전체",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/product/list", "label": "전체"}
+        ]
+    },
+    "/products/product/view":{
+        "title":"자사상품 상세",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/product/list", "label": "전체"},
+            { "href": "/products/product/view", "label": "자사상품 상세"}
+        ]
+    },
+    "/products/product/write": {
+        "title": "자사상품 등록",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품"},
+            { "href": "/products/product/list", "label": "전체" },
+            { "href": "/products/product/write", "label": "자사상품 등록"}
+        ]
+    },
+     "/products/product/modify":{
+        "title":"자사상품 목록",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "자사상품" },
+            { "href": "/billing/product/list", "label": "전체" },
+            { "href": "/billing/product/view", "label": "자사상품 상세" },
+            { "href": "/billing/product/modify", "label": "자사상품 수정" }
+        ]
+    },
+     "/products/category/list":{
+        "title":"상품분류 관리",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/category/list", "label": "상품분류 관리" }
+        ]
+    },
+     "/products/category/write":{
+        "title":"상품분류 등록",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/write", "label": "상품분류 등록" }
+
+        ]
+    },
+     "/products/category/view":{
+        "title":"상품분류 상세",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/view", "label": "상품분류 상세" }
+
+        ]
+    },
+     "/products/category/modify":{
+        "title":"상품분류 수정",
+        "breadcrumb":[
+            { "href": "/", "label": "Home" },
+            { "href": "/products", "label": "자사상품" },
+            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/view", "label": "상품분류 상세" },
+            { "href": "/products/category/modify", "label": "상품분류 수정" }
+
+        ]
+    },
+    "/billing/invoice/list":{
+        "title":"전체 이용내역",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "빌링" },
+            { "href": "/billing/invoice/list", "label": "전체 이용내역"}
+        ]
+    },
+    "/billing/invoice/visual":{
+        "title":"고객사 세부 요약",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "빌링" },
+            { "href": "/billing/invoice/list", "label": "전체 이용내역"},
+            { "href": "/billing/invoice/visual", "label": "고객사 세부 요약"}
+        ]
+    },
+    "/billing/invoice/view":{
+        "title": "서비스 이용내역서",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "Billing" },
+            { "href": "/billing/invoice/list", "label": "이용내역서" },
+            { "href": "/billing/invoice/view", "label": "서비스 이용내역서" }
+        ]
+    },
+    "/billing/product/list":{
+        "title": "고객사 자사상품",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "Billing" },
+            { "href": "/billing/product/list", "label": "고객사 자사상품" }
+        ]
+    },
+    "/billing/product/view":{
+        "title": "고객사 자사상품 상세",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "Billing" },
+            { "href": "/billing/product/list", "label": "고객사 자사상품" },
+            { "href": "/billing/product/view", "label": "자사상품 상세" }
+        ]
+    },
+
+    "/billing/product/write":{
+        "title": "고객사 자사상품 등록",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "Billing" },
+            { "href": "/billing/product/list", "label": "고객사 자사상품" },
+            { "href": "/billing/product/write", "label": "자사상품 등록" }
+        ]
+    },
+    "/billing/product/modify":{
+        "title": "고객사 자사상품 수정",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/billing", "label": "Billing" },
+            { "href": "/billing/product/view", "label": "자사상품 상세" },
+            { "href": "/billing/product/modify", "label": "자사상품 수정" }
+        ]
+    }
+}

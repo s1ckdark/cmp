@@ -45,4 +45,54 @@ export const getTimeDiffText = (_date?: dayjs.ConfigType, preserveDay?: boolean)
     }
 };
 
+export const getKRCurrrentTime = () => {
+    // Create a new date object for the current time
+    var now = new Date();
+
+    // Extract the year, month, day, hours, minutes, and seconds
+    var year = now.getFullYear();
+    var month = ('0' + (now.getMonth() + 1)).slice(-2); // Add leading zero and months are 0-indexed
+    var day = ('0' + now.getDate()).slice(-2); // Add leading zero
+    var hours = ('0' + now.getHours()).slice(-2); // Add leading zero
+    var minutes = ('0' + now.getMinutes()).slice(-2); // Add leading zero
+    var seconds = ('0' + now.getSeconds()).slice(-2); // Add leading zero
+
+    // Format and return the date and time in 'YYYY-MM-DD HH:MM:SS' format
+    return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+}
+
 export { dayjs };
+
+export const generateDates = (targetMonth:string) => {
+    // Extracting the year and month from the input string
+    const generateYear = parseInt(targetMonth.substring(0, 4), 10);
+    const month = parseInt(targetMonth.substring(4, 6), 10) - 1; // Month is 0-indexed in JavaScript
+
+    // Creating the first day of the specified month
+    const firstDayOfMonth = new Date(generateYear, month, 1);
+
+    const lastDayOfMonth = new Date(generateYear, month + 1, 0);
+    
+    const currentDate = new Date();
+    // Creating the current date object
+    const isCurrentDayLastDayOfMonth = () => {
+        return currentDate.getFullYear() === lastDayOfMonth.getFullYear() &&
+               currentDate.getMonth() === lastDayOfMonth.getMonth() &&
+               currentDate.getDate() === lastDayOfMonth.getDate();
+    };
+
+    // Determining the relevant date based on the condition
+    const relevantDate = isCurrentDayLastDayOfMonth() ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1) : lastDayOfMonth ;
+
+    // Function to format a date in 'YYYY/MM/DD' format
+    const formatDate = (date:any) => {
+        const formattedMonth = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
+        const formattedDay = ('0' + date.getDate()).slice(-2); // Adding leading zero
+        return `${date.getFullYear()}.${formattedMonth}.${formattedDay}`;
+    };
+
+    return { 
+        firstDayOfMonth: formatDate(firstDayOfMonth), 
+        relevantDate: formatDate(relevantDate)
+    };
+}

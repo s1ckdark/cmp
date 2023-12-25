@@ -1,13 +1,58 @@
-import axios, { AxiosError } from 'axios';
-interface FetchProps {
-    tags?: string[];
-    revalidate?: number;
-}
-    
-export const fetchClient = (url: string, options?: FetchProps) =>
-    fetch(`${process.env.NEXT_PUBLIC_BE_URL}/api${url}`, {
-        next: { revalidate: options?.revalidate ?? 60 * 60 * 10, tags: options?.tags }, // 1시간 캐시
+import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders } from 'axios';
+import { setCookie, getCookie } from '@/utils/cookie';
+import { useRecoilState } from 'recoil';
+import { onLoginSuccess } from './auth';
+import { FetchProps } from '@/types/data';
+import { useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { useQuery } from '@tanstack/react-query';
+import { request } from 'http';
+import { getSession, getCsrfToken } from 'next-auth/react'
+import type { Session } from 'next-auth';
+import { pushNoti } from '@/components/Toast';
+import { useRouter } from 'next/navigation';
+
+export const fetchClient = async (url: string, options?: FetchProps,): Promise<Response|undefined> => {
+  try {
+    const { data: session, status } = useSession();
+    if ((session as any)?.accessToken) {
+    let accessToken = (session as any).accessToken;
+
+    const headers = {
+      'Authorization': `Bearer ${accessToken}`,
+      ...options?.headers // Spread any additional headers provided in options
+    };
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BE_URL}/apibe/${url}`, {
+      method: options?.method || 'GET', // Default to GET if no method specified
+      headers: headers,
+      mode: 'cors',
+      body: options?.body ? JSON.stringify(options.body) : null, // Stringify the body if provided
+      ...options
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+  }
+    return response;
+}
+  } catch (error) {
+    console.log("fetchClient Error :", error);
+  }
+};
+
+export const fetcher = async (url:string) => {
+  const { data: session, status } = useSession();
+  if ((session as any)?.accessToken) {
+    let accessToken = (session as any).accessToken;
+  const response = await axios.get(url, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+  console.log(response);
+  return response.data;
+} 
+};
 
 /**
  * 브라우저 → 백엔드 서버, 혹은 프론트엔드 서버 → 백엔드 서버
@@ -15,7 +60,7 @@ export const fetchClient = (url: string, options?: FetchProps) =>
  */
 
 export const apiBe = axios.create({
-    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}/apibe`,
+    baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
     timeout: 30000,
     withCredentials: true,
 });
@@ -42,61 +87,65 @@ export const apiFe = axios.create({
 });
 
 apiBe.interceptors.request.use(
-    (config) => {
-        const accessToken = localStorage.getItem('token');
-        if (accessToken && config.headers) config.headers.Authorization = `Bearer ${accessToken}`;
-        return config;
-    },
-    (error) => {
-      return Promise.reject(error);
+  async (config) => {
+    const session = await getSession();
+    if (session?.accessToken) {
+      config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
+    config.headers['Cache-Control'] = 'no-store';
+    config.headers['Pragma'] = 'no-store';
+    config.headers['Expires'] = '0';
+    console.log("apiBe config :",config);
+    return config;
+  }
+)
+
+
+apiBe.interceptors.response.use(
+    (response) => response.data, // 2xx 범위일 때
+    (error) => {
+      if (error.response && error.response.status) {
+        switch (error.response.status) {
+          case 401:
+            if (error.response.config?.url === '/auth/session') {
+              return Promise.reject(error);
+            }
+            if (error.response.data.message === 'BAD REQUEST') {
+              window.dispatchEvent(
+                new CustomEvent('axiosError', {
+                  detail: {
+                    message: 'Bad Request',
+                  },
+                }),
+              );
+            } else {
+              window.dispatchEvent(
+                new CustomEvent('axiosError', {
+                  detail: {
+                    message: 'Unauthorized',
+                  },
+                }),
+              );
+            }
+            return Promise.reject(error);
+          case 403:
+            window.dispatchEvent(
+              new CustomEvent('axiosError', {
+                detail: {
+                  message: 'Forbidden',
+                },
+              }),
+            );
+            return new Promise(() => {});
+          default:
+            return Promise.reject(error);
+        }
+      }
+  
+      return Promise.reject(error);
+    },
   );
   
-apiBe.interceptors.response.use(
-    (response) => response, // 2xx 범위일 때
-    (error) => {
-        if (error.response && error.response.status) {
-            switch (error.response.status) {
-                case 401:
-                    if (error.response.config?.url === '/auth/session') {
-                        return Promise.reject(error);
-                    }
-                    if (error.response.data.message === 'BAD REQUEST') {
-                        window.dispatchEvent(
-                            new CustomEvent('axiosError', {
-                                detail: {
-                                    message: 'Bad Request',
-                                },
-                            }),
-                        );
-                    } else {
-                        window.dispatchEvent(
-                            new CustomEvent('axiosError', {
-                                detail: {
-                                    message: 'Unauthorized',
-                                },
-                            }),
-                        );
-                    }
-                    return Promise.reject(error);
-                case 403:
-                    window.dispatchEvent(
-                        new CustomEvent('axiosError', {
-                            detail: {
-                                message: 'Forbidden',
-                            },
-                        }),
-                    );
-                    return new Promise(() => { });
-                default:
-                    return Promise.reject(error);
-            }
-        }
-
-        return Promise.reject(error);
-    },
-);
-
 export const isAxiosError = (err: unknown | AxiosError): err is AxiosError => {
     return axios.isAxiosError(err);
 };
@@ -110,3 +159,4 @@ export const revalidatePathApi = (path: string) => apiFe(`/revalidate/path?path=
 export const revalidateTagApi = (tag: string) => apiFe(`/revalidate/tag?tag=${tag}`);
 
 export const batchUpdateApi = () => apiBe<Comment[]>('/test');
+

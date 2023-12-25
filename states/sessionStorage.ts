@@ -17,6 +17,6 @@ interface UserInfoAtom {
 
 export const recoil: RecoilState<UserInfoAtom> = atom({
     key: "userInfo",
-    default: [],
+    default: null,
     effects_UNSTABLE: [persistAtom]
 })

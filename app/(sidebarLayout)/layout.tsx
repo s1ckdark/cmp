@@ -1,17 +1,17 @@
-'use client';
-import Header from '@/components/layout/Header';
-import Sidebar from "@/components/layout/Sidebar";
-import Footer from "@/components/layout/Footer";
+import Header from '@/app/(sidebarLayout)/_common/Header';
+import Sidebar from "@/app/(sidebarLayout)/_common/Sidebar";
+import Footer from "@/app/(sidebarLayout)/_common/Footer";
+import { ReactNode } from 'react';
 
-export default function SidebarLayout({
+export default async function SidebarLayout({
     children,
 }: {
-    children: React.ReactNode;
+    children: ReactNode;
 }) {
     return (
-        <>
-            <Sidebar />
-            <div className="page">
+        <>  
+            <div className="flex page bg-white dark:bg-black">
+                <Sidebar />
                 <div className="container">
                     <Header />
                     {children}

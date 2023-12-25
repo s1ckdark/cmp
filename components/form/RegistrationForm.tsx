@@ -3,7 +3,8 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import styles from './RegistrationForm.module.scss';
 import Button from '@/components/Button';
-function RegistrationForm() {
+
+const RegistrationForm = () => {
     const { control, handleSubmit } = useForm({
         defaultValues: {
             memberId: '',
@@ -14,7 +15,8 @@ function RegistrationForm() {
             contact: '',
             landline: '',
             email: '',
-            address: '',
+            address1: '',
+            address2: '',
             company: ''
         }
     });
@@ -107,15 +109,15 @@ function RegistrationForm() {
                 <label htmlFor="address" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">주소:</label>
                 <div className="grid gap-6 mb-6 md:grid-cols-2">
                     <Controller
-                        name="address"
+                        name="address1"
                         control={control}
-                        render={({ field }) => <input type="text" id="address" {...field} required />}
+                        render={({ field }) => <input type="text" id="address1" {...field} required />}
                     />
                     {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                     <Controller
-                        name="address"
+                        name="address2"
                         control={control}
-                        render={({ field }) => <input type="text" id="address" {...field} required />}
+                        render={({ field }) => <input type="text" id="address2" {...field} required />}
                     />
                     {/* <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">We’ll never share your details. Read our <a href="#" class="font-medium text-blue-600 hover:underline dark:text-blue-500">Privacy Policy</a>.</p> */}
                 </div>

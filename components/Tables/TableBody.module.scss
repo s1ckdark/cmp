@@ -1,0 +1,47 @@
+.container {
+    tr {
+        margin: 15px 0 10px;
+        height: 50px;
+        line-height: 25px;
+        td {
+            text-align: center;
+            border: 1px solid #DEE1E7;
+            padding: 10px;
+        }
+    }
+}
+.invoiceList {
+    tr {
+        td {
+            position: relative;
+            svg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
+.productGd {
+    tr {
+        td {
+            border: 1px solid #DEE1E7;
+            position: relative;
+            svg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+}
+.productCategory {
+        tr {
+            td {
+                border: 1px solid #DEE1E7;
+            }
+        }
+    }
+    

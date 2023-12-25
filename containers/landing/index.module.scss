@@ -1,38 +1,29 @@
-.container {
-    padding: 50px;
-}
 
-.box_section {
+.boxSection {
+    width: 100%;
+    margin: 0 0 20px 0;
     border: 1px solid #DEE1E7;
-    border-radius: 4px;
-    background: #FBFCFF;
-    padding: 50px;
-    margin-bottom: 20px;
-
-    h2 {
-        font-size: 24px;
-        font-weight: 600;
-        margin-bottom: 40px;
-    }
-
-    >* {
+    background-color: #FBFCFF;
+    .inner {
+        padding: 50px;
         width: 100%;
-        text-align: left;
-    }
-
-    svg {
-        font-size: 60px;
-        overflow: visible;
-    }
-}
-
-.donutChart {
-    ul {
-        li {
-            span {
-                width: 146px;
-                height: 51px;
-            }
+        .label {
+            font-size: 24px;
+            color: #313131;
+            width: 100%;
+            display: block;
+            margin-bottom: 20px;
         }
     }
+    .currentMonth{
+        font-size: 24px;
+        text-align: center;
+        padding:  40px 0 30px 0;
+        color: #313131;
+        label {
+            margin-right: 15px;
+        }
+    
+    }
+    
 }

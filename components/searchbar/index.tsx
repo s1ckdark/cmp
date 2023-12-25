@@ -1,9 +1,10 @@
-import { Icon } from '@iconify/react'
-import { useRef } from 'react'
-import { FocusScope } from 'react-aria'
-
-import styled from 'styled-components'
-
+import { useEffect, useRef, useState } from 'react'
+import Styles from './index.module.scss';
+import { usePathname } from 'next/navigation';
+import { useRecoilState } from 'recoil';
+import { searchAtom } from '@/states/data';
+import { IconSearch } from '@/public/svgs';
+import Button from '@/components/Button';
 export interface SearchBarProps {
   placeholder: string
   onChange: (value: string) => void
@@ -11,122 +12,53 @@ export interface SearchBarProps {
   disabled?: boolean
 }
 
-export default function SearchBar({
-  placeholder,
-  onChange,
-  value,
-  disabled = false,
-  ...props
-}: SearchBarProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
+interface boxProps {
+  placeholder: string
+  wording: string
+}
+const SearchBar = () => {
+  const [search, setSearch] = useRecoilState(searchAtom);
+  const [box, setBox] = useState<boxProps>({placeholder:"", wording:""});
+  const pathname = usePathname();
 
+  const matching:any = {
+    "/billing/invoice/list": {
+      "placeholder":"업체명을 입력해주세요",
+      "wording":"전체 내역"
+    }
+  }
+  const init = (pathname:string) => {
+    const path = pathname.split('/').slice(0,4).join('/');
+    setBox(matching[path]);
+  }
+  const onChange = (value: string) => {
+    setSearch({...search, keyword:value});
+  }
+  const searchAll = () => {
+    setSearch({...search, keyword:"",excute:true});
+  }
+  const onSearch = () => {
+    setSearch({...search, excute: true});
+  }
+  useEffect(() => {
+    init(pathname);
+  },[pathname])
+
+  const {placeholder, wording} = box;
   return (
-    <SearchBarWrapper>
-      <SearchBarInput
+    <div className={Styles.searchBar}>
+      <div className={Styles.inputGroup}>
+      <input
         type="text"
         placeholder={placeholder}
-        value={value}
+        value={search.keyword}
         onChange={(e) => onChange(e.target.value)}
-        disabled={disabled}
-        ref={inputRef}
         role="searchbox"
-        {...props}
       />
-      <SearchIcon
-        icon="ic:outline-search"
-        width={24}
-        height={24}
-        color="#757F8F"
-        aria-label="Search"
-        disabled={disabled}
-        onClick={() => inputRef?.current?.focus()}
-      />
-      {value?.length > 0 && (
-        <FocusScope restoreFocus>
-          <ClearIconButton onClick={() => onChange('')}>
-            <Icon
-              icon="radix-icons:cross-2"
-              width={16}
-              height={16}
-              color="#757F8F"
-            />
-          </ClearIconButton>
-        </FocusScope>
-      )}
-    </SearchBarWrapper>
+      <span className={Styles.searchBtn} onClick={onSearch}><IconSearch /></span>
+    </div>
+      <Button type="button" onClick={searchAll} skin={"green"} className={Styles.searchAllBtn}>{wording}</Button>
+    </div>
   )
 }
-
-const ClearIconButton = styled.button`
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s;
-
-  &:focus-visible {
-    box-shadow: 0px 0px 0px 2.5px ${({ theme: { colors } }) => colors.primary};
-  }
-`
-
-const SearchIcon = styled(Icon)<{ disabled: boolean }>`
-  position: absolute;
-  cursor: text;
-  top: 50%;
-  left: 24px;
-  transform: translate(-50%, -50%);
-
-  &:hover {
-    fill: ${({ theme: { colors }, disabled }) => !disabled && colors.primary};
-  }
-`
-
-export const SearchBarWrapper = styled.div`
-  position: relative;
-  width: fit-content;
-`
-
-const SearchBarInput = styled.input`
-  width: 100%;
-  height: 48px;
-  background-color: ${({ theme: { colors } }) => colors.secondary};
-  border-radius: 27px;
-  border: none;
-  outline: none;
-  padding: 0 48px;
-  font-size: 16px;
-  color: ${({ theme: { colors } }) => colors.neutral};
-  transition: all 0.2s;
-
-  &:disabled {
-    cursor: not-allowed;
-
-    & + ${SearchIcon} {
-      cursor: not-allowed;
-    }
-  }
-
-  &:focus-visible,
-  &:hover:not(:disabled) {
-    & + ${SearchIcon} {
-      fill: ${({ theme: { colors } }) => colors.primary};
-    }
-  }
-
-  &::placeholder {
-    color: ${({ theme: { colors } }) => colors.textSecondary};
-  }
-
-  &:focus-visible {
-    box-shadow: 0px 0px 0px 2.5px ${({ theme: { colors } }) => colors.primary};
-  }
-`
+export default SearchBar;

@@ -5,7 +5,7 @@ import useAuth from '@/hooks/useAuth';
 import { alertState } from '@/states/alert'; // Adjust the import path as needed
 
 const useAlert = () => {
-    const { isAdmin, isSupporter, user } = useAuth();
+    const { isAdmin, isTech, isSale, isCustomer } = useAuth();
     const [alert, setAlert] = useRecoilState(alertState);
 
     const addAlert = useCallback(

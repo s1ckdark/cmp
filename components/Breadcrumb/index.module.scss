@@ -1,0 +1,20 @@
+.navi {
+    margin-left: 30px;
+    li {
+        a {
+            text-decoration: none;
+        }
+
+        &:first-child {
+            svg {
+                width: 12px;
+                margin-right: 10px;
+            }
+        }
+
+        svg {
+            width: 5px;
+            margin-right: 10px;
+        }
+    }
+}

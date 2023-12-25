@@ -33,6 +33,12 @@ const nextConfig = {
       },
     ],
   },
+  modularizeImports: {
+    lodash: {
+      transform: 'lodash/{{member}}',
+      preventFullImport: true,
+    },
+  },
   async headers() {
     return [
       {
@@ -46,9 +52,6 @@ const nextConfig = {
         ],
       },
     ];
-  },
-  eslint: {
-    // dirs: ['pages', 'utils'], // Only run ESLint on the 'pages' and 'utils' directories during production builds (next build)
   },
   webpack(config) {
     config.module.rules.push({
@@ -76,16 +79,16 @@ const nextConfig = {
                 //     },
                 //   },
                 // },
-                {
-                  name: 'prefixIds',
-                  params: {
-                    // Use that ID here.
-                    // Do NOT generate the ID itself in the "prefix" function
-                    // because that will result in each ID being unique,
-                    // breaking the gradient references within a single SVG.
-                    prefix: id,
-                  },
-                },
+                // {
+                //   name: 'prefixIds',
+                //   params: {
+                //     // Use that ID here.
+                //     // Do NOT generate the ID itself in the "prefix" function
+                //     // because that will result in each ID being unique,
+                //     // breaking the gradient references within a single SVG.
+                //     prefix: id,
+                //   },
+                // },
               ],
             },
           },

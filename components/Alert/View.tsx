@@ -1,10 +1,12 @@
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import useAlert from '@/hooks/useAlert';
-import { Alert } from '@/states/alert';
+import { alertState } from '@/states/alert';
 
 import Button from '@/components/Button';
 import styles from './index.module.scss';
+
+import { Alert } from '@/types/alert';
 
 interface Props {
     alert: Alert;
