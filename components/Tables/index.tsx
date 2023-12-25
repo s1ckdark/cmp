@@ -71,10 +71,12 @@ export const Tables = ({rowType, className}:TablesProps) => {
     return (
         <>
             <div className={styles.tableContainer}>
+            <div className={styles.scroller}>
                 <table className={styles[rowType]}>
                     <TableHeader rowType={rowType} />
                     <TableBody rowType={rowType} data={data} />
                 </table>
+            </div>
             </div>
          
             <div className={styles.btnArea}>

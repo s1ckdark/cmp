@@ -1,0 +1,52 @@
+.barChart {
+    svg {
+        overflow: visible;
+        width: 100%;
+        height: auto;
+    }
+}
+.tooltip {
+    position: absolute;
+    top:50%;
+    // right: 50%;
+    transform: translate(0, -90%);
+    text-align: center;
+    width: 150px;
+    padding: 15px;
+    font-size: 14px;
+    background:#181C18;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    &:after {
+        content: "";
+        position: absolute;
+        bottom: -10px; /* Size of the arrow */
+        left: 50%;
+        margin-left: -5px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent transparent transparent #181C18;
+    }
+    
+    label {
+        color: #96A1B4;
+        font-family: NanumGothic;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-bottom: 5px;
+    }
+    h2 {
+        color: #40E8BF;
+        font-family: Abel;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -1.2px;
+    }
+}

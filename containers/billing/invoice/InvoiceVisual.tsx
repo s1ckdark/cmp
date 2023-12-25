@@ -129,12 +129,11 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                 acc.push({x: Number(cur.collected_dt.substr(8,2)), y: cur.dailyUsageAmount || 0})
                 return acc
             },[])
-            console.log(result)
             return result;
         }
         getAllData([targetUrl('month'), targetUrl('mainservice'), targetUrl('monthly'), targetUrl('weekly'), targetUrl('daily')]).then((res) => {
             const [month, mainservice, monthly, weekly, daily] = res;
-            console.log(monthly, getPerMonthData(monthly))
+            console.log(daily,getDailyData(daily));
             setVisual({
                 ...visual,
                 month: month,
@@ -220,7 +219,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                     <div className={styles.left}>
-                         <BarChart data={perMonth} aspectRatio={4/1} />
+                         <BarChart data={perMonth} aspectRatio={7/3} />
                     </div>
                     <div className={styles.right}>
                         <Tables rowType={"perMonth"} data={perMonth} />
@@ -229,38 +228,38 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                 </div>
             </div></div>:<div>데이터가 없습니다</div>}
 
-
+            {perWeek.length > 0 ? 
             <div className={styles.perWeek}>
                 <div className={`${styles.boxSection} period_sales flex items-center justify-center flex-wrap`}>
                 <div className={styles.inner}>
-                {perWeek.length > 0 ?  <><div className={styles.label}>
+                <div className={styles.label}>
                     <h2>주간 이용 추이</h2>
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                         <div className={styles.left}>
-                            <BarChart data={perWeek} aspectRatio={ 4/1 }/> 
+                            <BarChart data={perWeek} aspectRatio={ 7/3 }/> 
                         </div>
                         <div className={styles.right}>
                             <Tables rowType={'perWeek'} data={perWeek} />
                         </div>
-                    </div></>:<div>데이터가 없습니다</div>}
+                    </div>
                     </div>
                 </div>
-            </div>
+            </div>:<div>데이터가 없습니다</div>}
          
+            {perDay.length > 0 ? 
             <div className={styles.perDay}>
                 <div className={`${styles.boxSection} period_sales flex items-center justify-center flex-wrap`}>
                 <div className={styles.inner}>
-                {perDay.length > 0 ? <><div className={styles.label}>
+                <div className={styles.label}>
                         <h2>일간 이용 추이</h2>
                     </div>
                     <div className="flex justify-center items-center">
-                        <BarChart data={perDay} aspectRatio={ 4/1 }/> 
+                        <BarChart data={perDay} aspectRatio={ 7/3 }/> 
                     </div>
-                </>:<div>데이터가 없습니다</div>}
                 </div>
             </div>
-         </div>
+         </div>:<div>데이터가 없습니다</div>}
     </div>
     </>
     )

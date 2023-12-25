@@ -45,9 +45,9 @@ const InvoiceList = ({ pageNumber }: pageNumberType) => {
         <>
             <Breadcrumb />
             <MonthBar />
-            <div className={Styles.table}>
+            <div className={`${Styles.table} ${Styles.withSearchbar}`}>
                 <SearchBar />
-                <Tables data={data?.data} rowType={'invoiceList'} className={'invoiceList'} />
+                <Tables data={data?.data} rowType={'invoiceList'} />
             </div>
         </>
     );

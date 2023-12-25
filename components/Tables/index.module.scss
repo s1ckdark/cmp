@@ -1,10 +1,16 @@
 .tableContainer {
-    overflow-x: auto;
+   
     background-color:#fff;
-    width: calc(100% - 100px) !important;
-    padding: 0 50px;
+    width: 100%;
+    padding: 50px;
+    .scroller {
+        overflow-x: auto;
+    }
     table {
         width: 100%; 
+    }
+    .withSearch {
+        width:100%;
     }
 }
 

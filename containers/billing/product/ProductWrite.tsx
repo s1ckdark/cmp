@@ -118,7 +118,7 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
             let objectStructure:any = {};
 
             for (let key in field) {
-                objectStructure[key] = field[key].reduce((acc, cur) => {
+                objectStructure[key] = field[key].reduce((acc:any, cur:any) => {
                     acc[cur] = ''; // Set each field to an empty string or any default value
                     return acc;
                 }, {});
