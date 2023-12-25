@@ -16,6 +16,7 @@ const MonthBar = () => {
     const prevMonth = () => {
         const prevMonth = Number(month) - 1;
         setMonth(prevMonth.toString());
+        Toast('info','데이터를 가져오는 중입니다.')
     }
     const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
 

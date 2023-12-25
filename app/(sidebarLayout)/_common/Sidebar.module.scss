@@ -1,6 +1,7 @@
 .container {
     background: #202124;
     position: relative;
+    flex-shrink: 0;
     &.open {
         width: 220px;
         a {

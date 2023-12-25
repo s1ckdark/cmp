@@ -9,7 +9,7 @@ import { apiBe } from '@/services';
 import { monthAtom,currentPageAtom } from '@/states';
 import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
-import Styles from './productsList.module.scss';
+import Styles from './ProductsList.module.scss';
 
 const ProductList = () => {
     const [data, setData] = useRecoilState(dataListAtom) || null;;
