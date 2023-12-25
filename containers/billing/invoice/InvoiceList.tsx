@@ -10,6 +10,7 @@ import { monthAtom,currentPageAtom } from '@/states';
 import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
 import SearchBar from '@/components/Searchbar';
+import Styles from './InvoiceList.module.scss';
 const InvoiceList = ({ pageNumber }: pageNumberType) => {
     const [data, setInvoice] = useRecoilState(dataListAtom) || null;;
     const [ month, setMonth ] = useRecoilState(monthAtom);
@@ -44,7 +45,7 @@ const InvoiceList = ({ pageNumber }: pageNumberType) => {
         <>
             <Breadcrumb />
             <MonthBar />
-            <div className="bg-white">
+            <div className={Styles.table}>
                 <SearchBar />
                 <Tables data={data?.data} rowType={'invoiceList'} className={'invoiceList'} />
             </div>

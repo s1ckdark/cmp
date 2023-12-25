@@ -12,7 +12,7 @@ export default async function SidebarLayout({
         <>  
             <div className="flex page bg-white dark:bg-black">
                 <Sidebar />
-                <div className="container">
+                <div className="container mainContent">
                     <Header />
                     {children}
                     <Footer />
