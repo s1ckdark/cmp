@@ -40,7 +40,6 @@ interface ComplexHeader {
   }
   
 export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
-    console.log(rowType);
     const types: TableHeaderData = {
         "announceOverview": ['번호', '제목', '등록일자'],
         "announce": ['번호', '제목', '유형', '등록자', '첨부파일', '등록일자'],
@@ -128,7 +127,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
             {headers
                 .filter((header: { subHeaders?: string[] }) => header.subHeaders)
                 .flatMap((header: { subHeaders?: string[] }) => header.subHeaders!.map((subHeader: string, index: number) => (
-                    <th key={index} className={"border"}>
+                    <th key={subHeader+'-'+index} className={"border"}>
                         {subHeader}
                     </th>
                 )))

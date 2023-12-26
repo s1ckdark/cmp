@@ -17,7 +17,7 @@ const Navigation = styled.nav`
   justify-content: center;
   align-items: center;
   display:flex;
-  margin: 50px auto;
+  margin: 10px auto;
 `;
 
 const Button = styled.button<{ selected?: boolean }>`

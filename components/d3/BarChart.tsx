@@ -39,7 +39,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
                         .attr('style','overflow:visible');
 
             const minYValue = 0;
-            const maxYValue = d3.max(data, d => d.y) * 1.33;  // Doubling the maximum data value
+            const maxYValue = d3.max(data, d => d.y === 0 ? 5 : d.y) * 1.33;  // Doubling the maximum data value
             const domain = [minYValue, maxYValue];
             // Scales
 			const xScale = d3.scaleBand()
@@ -83,7 +83,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
             .attr('width', barWidth)
             .attr('y', containerHeight)
             .attr('height', 0)
-            .attr('fill', '#c1c1c1');
+            .attr('fill', '#a1a1a1');
 
             // Animation
             bars.transition()

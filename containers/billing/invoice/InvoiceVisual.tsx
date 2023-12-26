@@ -147,6 +147,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
 
     if(!visual) return <Loading />
     const { month, mainservice, donutChart, perMonth, perWeek, perDay } = visual;
+    if(!month || !mainservice || !donutChart || !perMonth || !perWeek || !perDay) return <Loading />
     return (
         <>
         <Breadcrumb />
@@ -156,7 +157,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         </div>
         <div className={`${styles.container} min-h-screen`}>
             <div className={`${styles.demandAmount} ${styles.boxSection}`}>
-                <h1 className={styles.memberName}>{month.memberName}</h1>
+                {month.memberName && <h1 className={styles.memberName}>{month.memberName}</h1>}
                 <MonthBar />
             </div>
             <div className={styles.demandAmount}>
@@ -167,7 +168,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                                 <h2>전월 비용</h2>
                             </div>
                             <div className={styles.countup}>
-                                <CountUpAnimation endValue={visual.month.trend.pre_totalDemandAmount} duration={500} />
+                                <CountUpAnimation endValue={month.trend.pre_totalDemandAmount} duration={500} />
                             </div>
                         </div>
                     </div>
@@ -177,7 +178,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                                 <h2>금월 비용</h2>
                             </div>
                             <div className={styles.countup}>
-                                <CountUpAnimation endValue={visual.month.trend.current_totalDemandAmount} duration={500} />
+                                <CountUpAnimation endValue={month.trend.current_totalDemandAmount} duration={500} />
                             </div>
                         </div>
                     </div>

@@ -10,9 +10,13 @@ import { LogInSchema, logInValidator } from '@/utils/validator';
 import styles from './index.module.scss';
 import Button from '@/components/Button';
 
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+
 const LogIn = () => {
   const { logInEmail, logInLoading, logInError } = useAuth();
-
+  const { data: session } = useSession();
+  const router = useRouter();
   const methods = useForm<LogInSchema>({ mode: 'onBlur', resolver: yupResolver(logInValidator) });
 
   const {
@@ -34,10 +38,10 @@ const LogIn = () => {
 
   const errorMessage = Object.values(errors).length > 0 ? Object.values(errors)[0].message : undefined;
   const disabled = logInLoading;
-
+  if(session) router.push('/landing');
   return (
     <>
-    <form onSubmit={onSignIn}>
+    <form onSubmit={onSignIn} className={styles.loginForm}>
     <div className={`flex flex-wrap mb-3 ${styles.inputField}`}>
       <label className="inline-flex items-center justify-center px-3 text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                             ID
@@ -47,7 +51,7 @@ const LogIn = () => {
                             placeholder='이메일'
                             // disabled={disabled}
                             className={`${styles.input_id} rounded-none rounded-r-lg bg-white border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} />
-                        {errors.email && <span className="w-full">This field is required</span>}
+                        {errors.email && <span className="w-full">입력 필수 항목입니다!</span>}
       </div>
       <div className={`flex flex-wrap mb-3 ${styles.inputField}`}>
       <label className="inline-flex items-center px-3  justify-center text-sm text-gray-900 bg-white border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
@@ -59,7 +63,7 @@ const LogIn = () => {
                             autoComplete='off'
                             // disabled={disabled}
                             className={`${styles.input_password} rounded-none rounded-r-lg bg-white border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`} />
-                        {errors.password && <span className="w-full">This field is required</span>}
+                        {errors.password && <span className="w-full">입력 필수 항목입니다!</span>}
                 </div>
                 <div className="mb-10">
                         <Button type='submit'

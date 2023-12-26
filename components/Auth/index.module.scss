@@ -82,23 +82,14 @@
   button[type='submit'] {
     width: 100%;
   }
-
-  .toOtherTab {
-    margin-top: 14px;
-    font-size: 11px;
-
-    button {
-      font-size: 11px;
-      color: var(--color-blue);
-
-      &:disabled {
-        opacity: 0.3;
-      }
-
-      &:hover,
-      &:focus {
-        text-decoration: underline;
-      }
-    }
+}
+.loginForm {
+.inputField {
+  label {
+    width: 50px;
   }
+}
+.btnLogin {
+  width: 100%;
+}
 }

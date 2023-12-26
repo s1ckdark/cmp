@@ -9,7 +9,7 @@ import { dataListAtom, historyListAtom, historyToggleAtom } from '@/states/data'
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { History, IconOverview } from '@/public/svgs';
 import { addComma } from '@/utils/data';
-
+import Loading from '@/components/Loading';
 export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) => {
     const [data, setData] = useRecoilState(dataListAtom) || null;
     const pageNumber = useRecoilValue(currentPageAtom);
@@ -28,7 +28,6 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     }
     
     const view = (props?:any) => {
-        console.log([props]);
         const typeUrl = {
             "invoiceList": `/billing/invoice/view/${[props.memberNo]}/${targetMonth}`,
             "customers": '/customer',
@@ -75,27 +74,27 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     
         switch (key) {
             case 'history':
-                content = <td key={keyIndex}><History onClick={() => historyView(item.prodHist)}/></td>;
+                content = <td key={key+'-'+keyIndex}><History onClick={() => historyView(item.prodHist)}/></td>;
                 break;
             case 'overview':
-                content = <td key={keyIndex} onClick={()=>visual(item.memberNo)}><IconOverview /></td>;
+                content = <td key={key+'-'+keyIndex} onClick={()=>visual(item.memberNo)}><IconOverview /></td>;
                 break;
             // Add additional cases here
             // Example: case 'date': // handle date format
             // Example: case 'status': // handle status format
             default:
-                content = <td key={keyIndex} onClick={() => view(item)}>{typeof fieldValue !== 'number' ? fieldValue:addComma(fieldValue)}</td>;
+                content = <td key={key+'-'+keyIndex} onClick={() => view(item)}>{typeof fieldValue !== 'number' ? fieldValue:addComma(fieldValue)}</td>;
                 break;
         }
     
         return content;
     }
 
-    if(!data?.data) return <div>Loading...</div>
+    if(!data?.data) return <Loading />
     return (
         <tbody className={`${Styles.container} ${Styles[rowType]}`}>
             {newData(rowType).map((item: any, index: number) => (
-                <tr key={index}>
+                <tr key={item.memberNo+'-'+item.targetMonth+'-'+index}>
                     {field.map((key: string, keyIndex: number) => (
                         <>{renderCell(key, keyIndex, item)}</>
                     ))}
