@@ -1,5 +1,5 @@
 'use client';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Suspense} from 'react';
 import { TableHeader } from './TableHeader';
 import { TableBody } from './TableBody';
 import styles from './index.module.scss';
@@ -10,6 +10,7 @@ import { currentPageAtom } from '@/states';
 import { dataListAtom } from '@/states/data';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/Button';
+import Loading from '@/components/Loading';
 export const Tables = ({rowType, className}:TablesProps) => {
     const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
     const [data, setData ] = useRecoilState(dataListAtom) || null;

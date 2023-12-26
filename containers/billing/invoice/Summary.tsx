@@ -2,13 +2,14 @@ import { useRecoilValue } from 'recoil';
 import { dataViewAtom } from '@/states/data'; // Import your Recoil state
 import styles from './Summary.module.scss';
 import { isObjKeyExist, addComma } from '@/utils/data';
+import Loading from '@/components/Loading';
 
 const Summary = () => {
     const resultData = useRecoilValue(dataViewAtom);
     const { data, memberNo, targetMonth } = resultData || {}; // Add null check and provide default value
 
 
-    if (!data) return <div>Loading...</div>; // Or any other loading indicator
+    if (!data) return <Loading />; 
     const { naverSummary, result } = data;
     return (
         <div className={styles.summary}>
@@ -38,9 +39,6 @@ const Summary = () => {
                         <th colSpan={2}>납부예상금액</th>
                     </tr>
                     <tr>
-                        <th colSpan={3}>크레딧할인</th>
-                    </tr>
-                    <tr>
                     <th colSpan={3}>크레딧할인</th>
                     </tr>
                     <tr>
@@ -54,6 +52,9 @@ const Summary = () => {
                     </tr>
                     <tr>
                     <th colSpan={3}>100원미만할인</th>
+                    </tr>
+                    <tr>
+                    <th colSpan={3}>미납금(누적+가산금액 포함)</th>
                     </tr>
                     <tr>
                     <th colSpan={3}>세전</th>
@@ -88,7 +89,7 @@ const Summary = () => {
                     <td>{addComma(isObjKeyExist(result, "thisMonthDemandAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{addComma(isObjKeyExist(result, "useAmount"))}</td>
+                    <td>{addComma(isObjKeyExist(result, "creditDiscountAmount"))}</td>
                 </tr>
                 <tr>
                     <td>{addComma(isObjKeyExist(result, "productDiscountAmount"))}</td>

@@ -1,6 +1,5 @@
 'use client';
 import { TableHeaderProps } from '@/types/data';
-import { convertColumns } from '@/utils/data';
 import Styles from './TableHeader.module.scss';
 
 interface TableHeaderData {
@@ -16,11 +15,11 @@ interface TableHeaderData {
   
 export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
     const types: TableHeaderData = {
-        "top10": ['서비스명', '시작일자', '종료일자', '금액'],
-        "perMonth": ['월', '비용'],
-        "perWeek": ["요일", "비용"],
+        "top10": ['서비스명', '시작일자', '종료일자', '금액(KRW)'],
+        "perMonth": ['월', '비용(KRW)'],
+        "perWeek": ["요일", "비용(KRW)"],
         "top10bycust": ["월","고객","고객명","금액(KRW)"],
-        "trendMonth": ["월", "매출", "전월대비 증감액","증감율"],
+        "trendMonth": ["월", "매출", "전월대비 증감액(KRW)","증감율(%)"],
         "announce": ['번호', '제목', '등록일자'],
         'support': ['번호', '제목', '고객사', '진행상태', '등록일자'],
     }
@@ -36,7 +35,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
                         rowSpan={header.rowSpan || 1}
                         colSpan={header.subHeaders ? header.subHeaders.length : 1}
                     >
-                        {convertColumns(header.label || header)}
+                         {header.label || header}
                     </th>
                 ))
             }

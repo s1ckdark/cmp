@@ -21,7 +21,6 @@ const ProductList = ({ pageNumber }: pageNumberType) => {
     const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
 
     useEffect(() => {
-        setCurrentPage(1);
         const fetching = async (pageNumber: number, memberNo?:string, memberName?:string) => {
             const url = `/product/gdbilling`;
             const response = await apiBe.get(url, { params: { page:pageNumber, target_month:targetMonth} });
@@ -32,8 +31,6 @@ const ProductList = ({ pageNumber }: pageNumberType) => {
             } else {
                 Toast('error', '데이터를 불러오는데 실패하였습니다.');
             }
-
-            
         };
         fetching(currentPage);
     }, [currentPage, targetMonth]);

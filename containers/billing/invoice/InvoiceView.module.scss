@@ -27,5 +27,31 @@
 }
 .pdf {
     padding: 50px;
+    .hGroup {
+        h1 {
+            opacity: 1;
+        }
+    }
+}
+.hGroup {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+    h1 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+        opacity: 0;
+    }
+    .date {
+        label {
+            margin-right: 10px;
+        }
+        letter-spacing: 1px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: right;
+    }
 }
 }

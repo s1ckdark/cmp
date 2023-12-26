@@ -63,7 +63,7 @@ export const getKRCurrrentTime = () => {
 
 export { dayjs };
 
-export const generateDates = (targetMonth:string) => {
+export const generateDates = (targetMonth: string) => {
     // Extracting the year and month from the input string
     const generateYear = parseInt(targetMonth.substring(0, 4), 10);
     const month = parseInt(targetMonth.substring(4, 6), 10) - 1; // Month is 0-indexed in JavaScript
@@ -74,18 +74,20 @@ export const generateDates = (targetMonth:string) => {
     const lastDayOfMonth = new Date(generateYear, month + 1, 0);
     
     const currentDate = new Date();
-    // Creating the current date object
-    const isCurrentDayLastDayOfMonth = () => {
-        return currentDate.getFullYear() === lastDayOfMonth.getFullYear() &&
-               currentDate.getMonth() === lastDayOfMonth.getMonth() &&
-               currentDate.getDate() === lastDayOfMonth.getDate();
-    };
 
-    // Determining the relevant date based on the condition
-    const relevantDate = isCurrentDayLastDayOfMonth() ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1) : lastDayOfMonth ;
+    // Check if the generated month is the current month
+    const isCurrentMonth = currentDate.getFullYear() === generateYear && currentDate.getMonth() === month;
 
-    // Function to format a date in 'YYYY/MM/DD' format
-    const formatDate = (date:any) => {
+    // If it's the current month, set relevantDate to yesterday; otherwise, to the last day of the month
+    let relevantDate;
+    if (isCurrentMonth) {
+        relevantDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
+    } else {
+        relevantDate = lastDayOfMonth;
+    }
+
+    // Function to format a date in 'YYYY.MM.DD' format
+    const formatDate = (date: Date) => {
         const formattedMonth = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
         const formattedDay = ('0' + date.getDate()).slice(-2); // Adding leading zero
         return `${date.getFullYear()}.${formattedMonth}.${formattedDay}`;
@@ -95,4 +97,27 @@ export const generateDates = (targetMonth:string) => {
         firstDayOfMonth: formatDate(firstDayOfMonth), 
         relevantDate: formatDate(relevantDate)
     };
+};
+
+export const getMonth = (dateStr:string, operation:string) => {
+    var year = parseInt(dateStr.substring(0, 4), 10);
+    var month = parseInt(dateStr.substring(4, 6), 10) - 1; // JavaScript months are 0-indexed
+
+    var date = new Date(year, month);
+
+    // Adjust the month based on the operation
+    if (operation === 'next') {
+        date.setMonth(date.getMonth() + 1);
+    } else if (operation === 'prev') {
+        date.setMonth(date.getMonth() - 1);
+    } else if (operation === 'current') {
+        date.setMonth(date.getMonth());
+    } else {
+        throw new Error('Invalid operation: Use "next" or "prev"');
+    }
+
+    var adjustedYear = date.getFullYear();
+    var adjustedMonth = date.getMonth() + 1; // Convert back to 1-indexed
+
+    return adjustedYear + '년 ' + (adjustedMonth < 10 ? '0' : '') + adjustedMonth + '월';
 }

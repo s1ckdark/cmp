@@ -152,7 +152,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
         <>
         <Breadcrumb />
         <div className={styles.btnArea}>
-            {/* <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${targetMonth}`)}>상세이용내역</button> */}
+            <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${targetMonth}`)}>상세이용내역</button>
             <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.back()}>닫기</button>
         </div>
         <div className={`${styles.container} min-h-screen`}>

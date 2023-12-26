@@ -103,7 +103,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
                tooltip.transition()
                       .duration(200)
                       .style('opacity', .9);
-               tooltip.html(`<label>${d.x} 전체 매출</label><h2>${d.y.toLocaleString()}</h2>`)
+               tooltip.html(`<label>${d.x} 전체 매출</label><h2>${d.y.toLocaleString()}<span>KRW</span></h2>`)
                       .style('left', `${ xScale(d.x)! + chartContainerRef.current.offsetLeft + (xScale.bandwidth() - barWidth) / 2}px`)
                       .style('top', `${yScale(d.y) + chartContainerRef.current.offsetTop - 28}px`);
            })
@@ -116,7 +116,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
            });
 			svg.selectAll('.domain').remove();
 			svg.selectAll(".tick line")
-				.style("stroke","#C6CDD6");
+				.style("stroke","#eee");
         }
     }, [data, containerWidth, containerHeight, aspectRatio]);
 

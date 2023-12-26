@@ -22,6 +22,7 @@ interface InfoSectionProps {
     modId: string;
     modDt: string;
 }
+
 const goodusData = {
     "memberName": "굿어스데이터",
     "custCeo": "전상현",
@@ -29,6 +30,7 @@ const goodusData = {
     "custPhone": "070-7017-4200",
     "address": [{"addr":"서울시 강남구 테헤란로 44길 8","addrDetail":"아이콘 역삼빌딩 5층"}]
 }
+
 const InfoSection = ({ type, memberNo }: { type: string, memberNo?: string }) => {
     const invoice = useRecoilValue(dataViewAtom);
     const [ customer, setCustomer ] = useState<any>([]);

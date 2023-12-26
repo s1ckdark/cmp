@@ -34,7 +34,7 @@ const NavItem = ({ item, depthIndex }: any) => {
     const depthClass = "depth_"+depthIndex;
     return (
         <li className={ isOpen ? `${Styles.navigationItem} ${Styles.open}`: `${Styles.navigationItem}`}>
-            <Link href={item.link} onClick={hasChildren ? toggle : null} className={`${Styles.depth} ${Styles[depthClass]}`}>
+            <Link href={item.link} onClick={hasChildren ? toggle : undefined} className={`${Styles.depth} ${Styles[depthClass]}`}>
                 <p className="flex justify-end">{item.label}</p>{item.icon && <span>{renderIcon(item.icon)}</span>} 
                 {/* {hasChildren ? (isOpen ? '[-]' : '[+]') : ''} */}
             </Link>
@@ -72,11 +72,11 @@ const Navigation = () => {
                 {
                     "label": "고객사 자사상품",
                     "children": [],
-                    "link": "/billing/product/list/1",
+                    "link": "/billing/product/list",
                 },
                 {
-                    "label": "전체 이용 내역서",
-                    "link": "/billing/invoice/list/1",
+                    "label": "전체 이용 내역",
+                    "link": "/billing/invoice/list",
                     "children": []
                 }
             ]
@@ -87,12 +87,12 @@ const Navigation = () => {
             "children": [
                 {
                     "label": "전체",
-                    "link": "/products/product/list/1",
+                    "link": "/products/product/list",
                     "children": []
                 },
                 {
                     "label": "상품분류 관리",
-                    "link": "/products/category/list/1",
+                    "link": "/products/category/list",
                     "children": []
                 }
             ],
@@ -110,46 +110,6 @@ const Navigation = () => {
             "children": [],
             "link": "#",
         },
-        {
-            "label": "지식관리",
-            "icon": "IconNaviBot",
-            "link": "#",
-            "children": [
-                {
-                    "label": "고객지원",
-                    "link": "#",
-                    "children": [
-                        {
-                            "label": "전체고객사",
-                            "children": [], 
-                            "link": "/notice",
-                        },
-                        {
-                            "label": "요약",
-                            "children": [],
-                            "link": "/notice",
-                        }
-                    ]
-                },
-                {
-                    "label": "내부지원",
-                    "link": "#",
-                    "children": [
-                        {
-                            "label": "빌링내역",
-                            "link": "#",
-                            "children": [
-                                {
-                                    "label": "전체이용내역서",
-                                    "children": [],
-                                    "link": "/notice",
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
     ];    
     
     return (

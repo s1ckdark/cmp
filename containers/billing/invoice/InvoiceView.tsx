@@ -7,10 +7,13 @@ import Usage from './Usage';
 import Summary from './Summary';
 import { PdfExport } from '@/components/PdfExport';
 import Button from '@/components/Button';
-import { useRecoilState } from 'recoil';
-import { dataViewAtom} from '@/states/data';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { dataViewAtom } from '@/states/data';
+import { adjustedMonthSelector } from '@/states/';
 import Styles from './InvoiceView.module.scss';
 import { useRouter } from 'next/navigation';
+import { Toast } from '@/components/Toast';
+
 interface InvoiceViewCtProps {
     memberNo: string;
     targetMonth: string;
@@ -18,10 +21,13 @@ interface InvoiceViewCtProps {
 
 const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
     const [ data, setData ] = useRecoilState(dataViewAtom);
+    const nextMonth = useRecoilValue(adjustedMonthSelector('next'));
+    const currentMonth = useRecoilValue(adjustedMonthSelector('current'));
     const router = useRouter();
     const handlePdf = (id: string) => {
         const target = document.querySelector('#invoice');
         target?.classList.add(Styles.pdf);
+        Toast('info', 'pdf 변환중입니다.')
         PdfExport(id);
         target?.removeAttribute('class');
     };
@@ -42,6 +48,10 @@ const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
             <Breadcrumb />
             <div className={Styles.container}>
                 <div id="invoice">
+                    <div className={Styles.hGroup}>
+                        <h1>서비스 이용내역서</h1>
+                        <span className={Styles.date}><label>청구년월</label>{nextMonth}({currentMonth}분)</span>
+                    </div>
                     <InfoSection type="supply" />
                     <InfoSection type="client" memberNo={memberNo} />
                     <Usage />

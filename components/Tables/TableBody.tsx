@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, ReactNode, useEffect }  from 'react';
+import React, { useState, ReactNode, useEffect, Suspense }  from 'react';
 import styles from './index.module.scss'
 import { TableBodyProps } from '@/types/data';
 import Styles from './TableBody.module.scss';
@@ -63,14 +63,13 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     }
 
     const visual = (memberNo:string) => {
-        console.log(memberNo);
         router.push(`/billing/invoice/visual/${memberNo}/${targetMonth}`);
     }
     const field = display[rowType];
 
     const renderCell = (key:any, keyIndex:number, item:any) => {
         let content;
-        const fieldValue = key.split('.').reduce((acc:any, cur:any) => acc && acc[cur], item) || '-';
+        const fieldValue = key.split('.').reduce((acc:any, cur:any) => acc && acc[cur], item);
     
         switch (key) {
             case 'history':
@@ -78,6 +77,9 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
                 break;
             case 'overview':
                 content = <td key={key+'-'+keyIndex} onClick={()=>visual(item.memberNo)}><IconOverview /></td>;
+                break;
+            case 'discountRate':
+                content = <td key={key+'-'+keyIndex} onClick={()=>visual(item.memberNo)}>{item.discountRate}%</td>;
                 break;
             // Add additional cases here
             // Example: case 'date': // handle date format
@@ -91,15 +93,16 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     }
 
     if(!data?.data) return <Loading />
+    console.log(data.data);
     return (
         <tbody className={`${Styles.container} ${Styles[rowType]}`}>
-            {newData(rowType).map((item: any, index: number) => (
+            <Suspense fallback={<Loading />}>{newData(rowType).map((item: any, index: number) => (
                 <tr key={item.memberNo+'-'+item.targetMonth+'-'+index}>
                     {field.map((key: string, keyIndex: number) => (
                         <>{renderCell(key, keyIndex, item)}</>
                     ))}
                 </tr>
-            ))}
+            ))}</Suspense>
         </tbody>
     );
 }

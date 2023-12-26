@@ -100,7 +100,7 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
                             </div>
                             <div className={styles.countup}>
                                 <label>전체고객사</label>
-                                <CountUpAnimation endValue={diffMonth.trend.prev_totalDemandAmount} duration={500} />
+                                <span><CountUpAnimation endValue={diffMonth.trend.prev_totalDemandAmount} duration={500} /> KRW</span>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
                             </div>
                             <div className={styles.countup}>
                                 <label>전체고객사</label>
-                                <CountUpAnimation endValue={diffMonth.trend.current_totalDemandAmount} duration={500} />
+                                <span><CountUpAnimation endValue={diffMonth.trend.current_totalDemandAmount} duration={500} /> KRW</span>
                             </div>
                         </div>
                     </div>

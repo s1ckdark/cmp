@@ -108,7 +108,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
                    tooltip.transition()
                           .duration(200)
                           .style('opacity', .9);
-                   tooltip.html(`<label>${d.x}월 전체 매출</label><h2>${addComma(d.y)}</h2>`)
+                   tooltip.html(`<label>${d.x}월 전체 매출</label><h2>${addComma(d.y)}<span>KRW</span></h2>`)
                           .style('left', `${event.pageX}px`)
                           .style('top', `${event.pageY - 28}px`);
                })

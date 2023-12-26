@@ -9,8 +9,9 @@ import { useQuery } from '@tanstack/react-query';
 import { request } from 'http';
 import { getSession, getCsrfToken } from 'next-auth/react'
 import type { Session } from 'next-auth';
-import { pushNoti } from '@/components/Toast';
+import { Toast} from '@/components/Toast';
 import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
 
 export const fetchClient = async (url: string, options?: FetchProps,): Promise<Response|undefined> => {
   try {
@@ -49,7 +50,6 @@ export const fetcher = async (url:string) => {
       'Authorization': `Bearer ${accessToken}`,
     },
   });
-  console.log(response);
   return response.data;
 } 
 };
@@ -61,7 +61,7 @@ export const fetcher = async (url:string) => {
 
 export const apiBe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    timeout: 30000,
+    timeout: 10000,
     withCredentials: true,
 });
 
@@ -72,7 +72,7 @@ export const apiBe = axios.create({
 
 export const apiBePure = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    timeout: 30000,
+    timeout: 10000,
     withCredentials: true,
 });
 
@@ -82,13 +82,14 @@ export const apiBePure = axios.create({
  */
 export const apiFe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_FE_URL}`,
-    timeout: 30000,
+    timeout: 10000,
     withCredentials: true,
 });
 
 apiBe.interceptors.request.use(
-  async (config) => {
+  async(config) => {
     const session = await getSession();
+    console.log(session);
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
@@ -99,6 +100,7 @@ apiBe.interceptors.request.use(
     return config;
   }
 )
+
 
 
 apiBe.interceptors.response.use(

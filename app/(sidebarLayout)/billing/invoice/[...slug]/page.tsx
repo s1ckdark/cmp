@@ -1,13 +1,15 @@
+'use client';
 import InvoiceView from './view';
 import InvoiceList from './list';
 import InvoiceVisual from './visual';
+import { redirect } from 'next/navigation';
 
 const invoicePage = ({params}:any) => {
     const { slug } = params;
     const pageType = slug[0];
     let pageNumber = 1, memberNo = '', targetMonth = '';
     if(pageType === 'list') {
-        pageNumber = slug[1];
+        slug.length === 1 ? redirect('./list/1') : pageNumber = slug[1];
     } else {
         memberNo = slug[1];
         targetMonth = slug[2];
