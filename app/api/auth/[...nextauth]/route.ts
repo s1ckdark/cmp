@@ -7,7 +7,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const backend = process.env.NEXTAUTH_BACKEND_URL;
 
-interface Token { accessToken: string; refreshToken: string;name:string; email:string;sub:string; id:string; iat:number; exp:number; jtu:string;accessTokenExpires:number; user: { id?: string | null | undefined; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; username: string; }};
+interface Token { accessToken: string; refreshToken: string;name:string; email:string;sub:string; id:string; iat:number; exp:number; jtu:string;accessTokenExpires:number; error?: any; user: { id?: string | null | undefined; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; username: string;maxAge:number }};
 interface User extends NextAuthUser { accessToken: string; refreshToken: string; username: string; }
 interface Session extends NextAuthSession { accessToken: string; refreshToken: string;  user: { id?: string | null | undefined; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; username: string;}; accessTokenExpires: number; };
 interface JWT extends NextAuthJWT { accessToken: string; refreshToken: string; user: { id?: string | null | undefined; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; username: string; }; }

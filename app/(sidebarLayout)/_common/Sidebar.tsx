@@ -4,8 +4,6 @@ import Navigation from "./Navigation";
 import styles from "./Sidebar.module.scss";
 import { atom, useRecoilState } from "recoil";
 import { isOpenState } from "@/states";
-import Loading from '@/components/Loading'
-import { UserName } from '@/components/Server';
 import UserInfo  from "./UserInfo";
 
 const Sidebar = () => {
