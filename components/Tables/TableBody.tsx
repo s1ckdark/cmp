@@ -93,7 +93,6 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
     }
 
     if(!data?.data) return <Loading />
-    console.log(data.data);
     return (
         <tbody className={`${Styles.container} ${Styles[rowType]}`}>
             <Suspense fallback={<Loading />}>{newData(rowType).map((item: any, index: number) => (

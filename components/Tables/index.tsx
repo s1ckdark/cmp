@@ -69,6 +69,8 @@ export const Tables = ({rowType, className}:TablesProps) => {
                 return true;
         }
     }
+    console.log(data);
+    if(!data?.data.length > 0) return <Loading />;
     return (
         <>
             <div className={styles.tableContainer}>

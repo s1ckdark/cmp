@@ -19,7 +19,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
         "perMonth": ['월', '비용(KRW)'],
         "perWeek": ["요일", "비용(KRW)"],
         "top10bycust": ["월","고객","고객명","금액(KRW)"],
-        "trendMonth": ["월", "매출", "전월대비 증감액(KRW)","증감율(%)"],
+        "trendMonth": ["월", "매출(KRW)", "전월대비 증감액(KRW)","증감율(%)"],
         "announce": ['번호', '제목', '등록일자'],
         'support': ['번호', '제목', '고객사', '진행상태', '등록일자'],
     }

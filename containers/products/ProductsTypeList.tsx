@@ -11,6 +11,7 @@ import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
 import Styles from './ProductsTypeList.module.scss';
 import { usePathname } from 'next/navigation';
+import Loading from '@/components/Loading';
 const ProductsTypeList = () => {
     const [data, setData] = useRecoilState(dataListAtom) || null;;
     const [history, setHistory] = useRecoilState(historyListAtom || null);
@@ -34,6 +35,7 @@ const ProductsTypeList = () => {
     const closeHistory = () => {
         setHistoryToggle(false);
     }
+    if(!data) return <Loading />;
     return (
         <>
             <Breadcrumb />

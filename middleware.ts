@@ -2,6 +2,7 @@ import { NextRequest, NextResponse, NextFetchEvent } from 'next/server';
 import { cookies } from 'next/headers';
 import { all } from 'axios';
 import { getServerSession } from 'next-auth';
+import { getToken } from "next-auth/jwt";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 // import { withAuth } from 'next-auth/middleware'
 
@@ -13,6 +14,8 @@ interface Cookie {
 export const middleware = async (request: NextRequest, response: NextResponse, event: NextFetchEvent) => {
   console.log("Middleware executing!");
   const { pathname } = request.nextUrl;
+  // let accessToken = request.cookies.get("next-auth.session-token");
+
   // const session = await getServerSession(authOptions);
   // console.log("serverSession :",session);
   // if(!session) return NextResponse.redirect("/signin");
@@ -24,7 +27,7 @@ export const middleware = async (request: NextRequest, response: NextResponse, e
   // const accessToken: string | undefined = request.cookies.get('next-auth.session-token')?.value;
   // if(accessToken) {
   //   try {
-  //     console.log("accessToken in middleware :",accessToken);
+  // //     console.log("accessToken in middleware :",accessToken);
   //     const requestHeaders = new Headers(request.headers)
   //     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
   //     const newRequest: any = new Request(request, {
