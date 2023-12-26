@@ -15,12 +15,10 @@ export const currentPageAtom = atom<number>({
 
 const generateDate = selector({
     key: 'generateDate',
-    get: async({get}: any) => {
-        return generateDates(get);
-    }
+    get: ({ get }:{get:any}) => generateDates(get(monthAtom))
 });
 
 export const geneMonthDateAtom = atom<any>({
     key: 'geneMonthDate',
-    default:generateDates
+    default:generateDate
 });

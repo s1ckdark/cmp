@@ -82,10 +82,10 @@ const Summary = () => {
                     <td>{addComma(isObjKeyExist(naverSummary, "memberPromiseDiscountAddAmount"))}</td>
                 </tr>
                 <tr>
-                    <td>{addComma(isObjKeyExist(result, "etcDiscountAmount"))}</td>
+                    <td>{addComma(isObjKeyExist(result, "etcdiscountamount"))}</td>
                 </tr>
                 <tr>
-                    <td>{addComma(isObjKeyExist(result, "estimateUseAmount"))}</td>
+                    <td>{addComma(isObjKeyExist(result, "thisMonthDemandAmount"))}</td>
                 </tr>
                 <tr>
                     <td>{addComma(isObjKeyExist(result, "useAmount"))}</td>

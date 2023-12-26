@@ -70,7 +70,7 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
 
     const renderCell = (key:any, keyIndex:number, item:any) => {
         let content;
-        const fieldValue = key.split('.').reduce((acc, cur) => acc && acc[cur], item) || '-';
+        const fieldValue = key.split('.').reduce((acc:any, cur:any) => acc && acc[cur], item) || '-';
     
         switch (key) {
             case 'history':

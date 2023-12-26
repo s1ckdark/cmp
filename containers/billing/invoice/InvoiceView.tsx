@@ -32,10 +32,11 @@ const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
             const url = `/invoice/${memberNo}/${targetMonth}`;
             const response = await apiBe.get(url);
             if(response.status === 200) setData({data:response.data,memberNo:memberNo,targetMonth:targetMonth});
+            console.log(response.data);
         }
         fetching();
     }, [memberNo, targetMonth]);
-
+ 
     return (
         <>
             <Breadcrumb />

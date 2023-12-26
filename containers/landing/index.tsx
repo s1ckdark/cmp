@@ -6,7 +6,6 @@ import { useRecoilValue } from 'recoil';
 import { monthAtom, geneMonthDateAtom } from '@/states';
 import styles from './index.module.scss';
 import { Tables } from '@/components/SummaryTables';
-import { generateDates } from '@/utils/date';
 const announce = [
     {
       "idx": "134",
@@ -51,13 +50,11 @@ const announce = [
 const LandingPage = () => {
     const month = useRecoilValue(monthAtom);
     const geneMonthDate = useRecoilValue(geneMonthDateAtom);
-    const term:any = generateDates(month)
-    console.log(geneMonthDate)
     return (
         <>
             <Breadcrumb />
             <div className={`${styles.demandAmount} ${styles.boxSection}`}>
-                <h1 className={styles.currentMonth}><label>이용 기간</label>{term.firstDayOfMonth} - {term.relevantDate}</h1>
+                <h1 className={styles.currentMonth}><label>이용 기간</label>{geneMonthDate.firstDayOfMonth} - {geneMonthDate.relevantDate}</h1>
             </div>
             <Summary header={false} />
             <div className={`${styles.announce} ${styles.boxSection}`}>

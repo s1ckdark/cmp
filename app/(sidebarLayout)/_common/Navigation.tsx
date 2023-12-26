@@ -70,7 +70,7 @@ const Navigation = () => {
                     "link": "/billing/overview",
                 },
                 {
-                    "label": "고객 자사 상품",
+                    "label": "고객사 자사상품",
                     "children": [],
                     "link": "/billing/product/list/1",
                 },
