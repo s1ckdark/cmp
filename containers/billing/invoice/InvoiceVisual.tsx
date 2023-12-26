@@ -14,6 +14,7 @@ import { apiBe} from '@/services';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import Breadcrumb from '@/components/Breadcrumb';
+import {generateDates} from '@/utils/date';
 interface DemandItem {
     rank: number;
     demandType: string;
@@ -41,39 +42,6 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
             if(response.status === 200) return response.data;
         }
 
-        const generateDates = (targetMonth:string) => {
-            // Extracting the year and month from the input string
-            const year = parseInt(targetMonth.substring(0, 4), 10);
-            const month = parseInt(targetMonth.substring(4, 6), 10) - 1; // Month is 0-indexed in JavaScript
-
-            // Creating the first day of the specified month
-            const firstDayOfMonth = new Date(year, month, 1);
-
-            const lastDayOfMonth = new Date(year, month + 1, 0);
-            
-            const currentDate = new Date();
-            // Creating the current date object
-            const isCurrentDayLastDayOfMonth = () => {
-                return currentDate.getFullYear() === lastDayOfMonth.getFullYear() &&
-                       currentDate.getMonth() === lastDayOfMonth.getMonth() &&
-                       currentDate.getDate() === lastDayOfMonth.getDate();
-            };
-        
-            // Determining the relevant date based on the condition
-            const relevantDate = isCurrentDayLastDayOfMonth() ? new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1) : lastDayOfMonth ;
-        
-            // Function to format a date in 'YYYY/MM/DD' format
-            const formatDate = (date:any) => {
-                const formattedMonth = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
-                const formattedDay = ('0' + date.getDate()).slice(-2); // Adding leading zero
-                return `${date.getFullYear()}.${formattedMonth}.${formattedDay}`;
-            };
-        
-            return { 
-                firstDayOfMonth: formatDate(firstDayOfMonth), 
-                relevantDate: formatDate(relevantDate)
-            };
-        }
         const getOverview = (data:any) => {
             const result = data.reduce((acc:any, cur:any) => {
                 acc.push({targe_month: cur.targetMonth.substr(4,6), useAmount: cur.summary.useAmount})

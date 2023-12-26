@@ -61,7 +61,7 @@ export const fetcher = async (url:string) => {
 
 export const apiBe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    timeout: 10000,
+    timeout: 30000,
     withCredentials: true,
 });
 
@@ -72,7 +72,7 @@ export const apiBe = axios.create({
 
 export const apiBePure = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
-    timeout: 10000,
+    timeout: 30000,
     withCredentials: true,
 });
 
@@ -82,13 +82,13 @@ export const apiBePure = axios.create({
  */
 export const apiFe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_FE_URL}`,
-    timeout: 10000,
+    timeout: 30000,
     withCredentials: true,
 });
 
 apiBe.interceptors.request.use(
   async(config) => {
-    const session = await getSession();
+    const session:any = await getSession();
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }

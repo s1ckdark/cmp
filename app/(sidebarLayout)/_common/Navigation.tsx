@@ -1,9 +1,8 @@
-'use client';
 import Link from "next/link";
 import Styles from "./Navgiation.module.scss";
 import React,{ useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import { isOpenState } from "@/states/sidebarState";
+import { isOpenState } from "@/states";
 import { IconNaviBot, IconNaviBill, IconNaviClient, IconNaviNotice, IconNaviProduct, IconNaviSupport } from "@/public/svgs";
 
 const NavItem = ({ item, depthIndex }: any) => {

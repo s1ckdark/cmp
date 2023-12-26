@@ -20,7 +20,6 @@ interface ComplexHeader {
     top10:ComplexHeader[];
     per_month: any[];
     support: any[];
-    customers: any[];
     billingProductList: any[];
     billingProductDetail: any[];
     users: any[];
@@ -39,8 +38,7 @@ interface ComplexHeader {
     customerPiC: any[];
   }
   
-export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
-    console.log(rowType);
+export const TableHeader = ({ rowType }:{rowType:any}) => {
     const types: TableHeaderData = {
         "announceOverview": ['번호', '제목', '등록일자'],
         "announce": ['번호', '제목', '유형', '등록자', '첨부파일', '등록일자'],
@@ -138,8 +136,8 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
 
     return (
         <thead className={`${Styles.container} ${Styles[rowType]}`}>
-            <RenderHeader headers={types[rowType]} />
-            {types[rowType].some((header: any) => header.subHeaders) && <RenderSubHeaders headers={types[rowType]} />}
+            <RenderHeader headers={types[rowType as keyof TableHeaderData]} />
+            {types[rowType].some((header: any) => header.subHeaders) && <RenderSubHeaders headers={types[rowType] as Array<{ subHeaders?: string[] }>} />}
         </thead >
     )
 }

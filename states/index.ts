@@ -26,8 +26,14 @@ export const geneMonthDateAtom = atom<any>({
 
 export const adjustedMonthSelector = selectorFamily({
     key: 'adjustedMonthSelector',
-    get: (operation) => ({ get }) => {
+    get: (operation:string) => ({ get }) => {
       const currentMonth = get(monthAtom);
       return getMonth(currentMonth, operation);
     },
   });
+
+export const isOpenState = atom({
+    key: "isOpenState",
+    default: false
+  });
+  

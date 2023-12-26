@@ -9,7 +9,7 @@ import { apiBe, fetchClient} from '@/services';
 import { monthAtom,currentPageAtom } from '@/states';
 import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
-import SearchBar from '@/components/Searchbar';
+import Searchbar from '@/components/Searchbar';
 import Styles from './InvoiceList.module.scss';
 
 const InvoiceList = ({ pageNumber }: pageNumberType) => {
@@ -37,7 +37,7 @@ const InvoiceList = ({ pageNumber }: pageNumberType) => {
             <Breadcrumb />
             <MonthBar />
             <div className={`${Styles.table} ${Styles.withSearchbar}`}>
-                <SearchBar />
+                <Searchbar />
                 <Tables data={data?.data} rowType={'invoiceList'} />
             </div>
         </>

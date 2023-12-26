@@ -10,11 +10,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { History, IconOverview } from '@/public/svgs';
 import { addComma } from '@/utils/data';
 import Loading from '@/components/Loading';
-export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) => {
+export const TableBody = ({rowType}:{rowType:string}) => {
     const [data, setData] = useRecoilState(dataListAtom) || null;
     const pageNumber = useRecoilValue(currentPageAtom);
     const [history, setHistory] = useRecoilState(historyListAtom || null);
-    const { totalPages, totalItems } = data;
+    const { totalPages, totalItems } = data || {};
     const targetMonth = useRecoilValue(monthAtom);
     const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
     const router = useRouter();
@@ -88,7 +88,7 @@ export const TableBody: React.FC<TableBodyProps> = ({rowType}:{rowType:string}) 
                 content = <td key={key+'-'+keyIndex} onClick={() => view(item)}>{typeof fieldValue !== 'number' ? fieldValue:addComma(fieldValue)}</td>;
                 break;
         }
-    
+
         return content;
     }
 

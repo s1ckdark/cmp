@@ -43,21 +43,6 @@ const useAlert = () => {
         callback();
     };
 
-    const alertSupporterOnly = (callback) => {
-        if (isAdmin || isSupporter) {
-            callback();
-            return;
-        }
-        if (!user) {
-            addAlert({ message: '미안, 구경 잘 했어? 로그인 하고 돌아오자.' });
-            return;
-        }
-        if (!isSupporter) {
-            addAlert({
-                message: '서포터로 등록된 사람만 쓸 수 있는 기능이야.\n이준혁에게 메시지를 보내보자.',
-            });
-        }
-    };
 
     return {
         alert,
@@ -65,8 +50,7 @@ const useAlert = () => {
         limitLengthAlert,
         deleteWarningAlert,
         removeAlert,
-        alertUserOnly,
-        alertSupporterOnly,
+        alertUserOnly
     };
 };
 

@@ -1,7 +1,7 @@
 'use client';
 import { useQuery } from "@tanstack/react-query";
 import { atom, useRecoilState } from "recoil";
-import { isOpenState } from "@/states/sidebarState";
+import { isOpenState } from "@/states";
 import styles from "./NavigationBtn.module.scss";
 import { HambugerNavi, LeftArrow } from "@/public/svgs";
 

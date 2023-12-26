@@ -19,7 +19,7 @@ interface boxProps {
   placeholder: string
   wording?: string
 }
-const SearchBar = () => {
+const Searchbar = () => {
   const month = useRecoilValue(monthAtom);
   const [ invoice, setInvoice ] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
@@ -74,4 +74,4 @@ const SearchBar = () => {
     </div>
   )
 }
-export default SearchBar;
+export default Searchbar;

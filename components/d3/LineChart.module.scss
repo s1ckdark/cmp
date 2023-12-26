@@ -26,7 +26,6 @@
     
     label {
         color: #96A1B4;
-        font-family: NanumGothic;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
@@ -36,11 +35,15 @@
     h2 {
         color: #40E8BF;
         font-family: Abel;
-        font-size: 24px;
+        font-size: 20px;
         font-style: normal;
         font-weight: 400;
         line-height: normal;
         letter-spacing: -1.2px;
+        span {
+            margin-left: 5px;
+            font-size: 12px;
+        }
     }
 }
 
