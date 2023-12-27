@@ -13,17 +13,22 @@ import Toastify from '@/components/Toast';
 // import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import AuthProvider from './AuthProvider';
 import Loading from '@/components/Loading';
+import { getServerSession } from "next-auth/next"
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
 interface Props {
   children: React.ReactNode;
   params: any;
 }
-const RootLayout = ({ children }: Props) => {
+
+const RootLayout = async({ children }: Props) => {
+  const session = await getServerSession(authOptions)
   return (
     <html lang="kr">
       <body>
       <Suspense fallback={<Loading />}>
           <RecoilRootProvider>
-            <AuthProvider>
+            <AuthProvider session={session}>
               {/* <styledComponents.ThemeProvider theme={theme}> */}
                 <div id='portal' />
                 <div id='alert' />
