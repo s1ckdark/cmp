@@ -136,7 +136,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                                 <h2>전월 비용</h2>
                             </div>
                             <div className={styles.countup}>
-                                <CountUpAnimation endValue={month.trend.pre_totalDemandAmount} duration={500} />
+                                <span><CountUpAnimation endValue={month.trend.pre_totalDemandAmount} duration={500} />KRW</span>
                             </div>
                         </div>
                     </div>
@@ -146,7 +146,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:n
                                 <h2>금월 비용</h2>
                             </div>
                             <div className={styles.countup}>
-                                <CountUpAnimation endValue={month.trend.current_totalDemandAmount} duration={500} />
+                                <span><CountUpAnimation endValue={month.trend.current_totalDemandAmount} duration={500} />KRW</span>
                             </div>
                         </div>
                     </div>
