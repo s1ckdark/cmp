@@ -17,28 +17,28 @@ const nextConfig = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
-  compress: true,
-  images: {
-    imageSizes: [100, 140, 200, 280],
-    minimumCacheTTL: 86400,
-    domains: ['localhost'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-      },
-    ],
-  },
-  modularizeImports: {
-    lodash: {
-      transform: 'lodash/{{member}}',
-      preventFullImport: true,
-    },
-  },
+  // compress: true,
+  // images: {
+  //   imageSizes: [100, 140, 200, 280],
+  //   minimumCacheTTL: 86400,
+  //   domains: ['localhost'],
+  //   remotePatterns: [
+  //     {
+  //       protocol: 'https',
+  //       hostname: '**',
+  //     },
+  //     {
+  //       protocol: 'http',
+  //       hostname: 'localhost',
+  //     },
+  //   ],
+  // },
+  // modularizeImports: {
+  //   lodash: {
+  //     transform: 'lodash/{{member}}',
+  //     preventFullImport: true,
+  //   },
+  // },
   async headers() {
     return [
       {

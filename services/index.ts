@@ -87,14 +87,15 @@ export const apiFe = axios.create({
 });
 
 apiBe.interceptors.request.use(
-  async(config) => {
+  async (config) => {
     const session:any = await getSession();
+    const cookies = parseCookies();
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
-    config.headers['Cache-Control'] = 'no-store';
-    config.headers['Pragma'] = 'no-store';
-    config.headers['Expires'] = '0';
+    config.headers['Cache-Control'] = 'public';
+    // config.headers['Pragma'] = 'no-store';
+    // config.headers['Expires'] = '0';
     console.log("apiBe config :",config);
     return config;
   }

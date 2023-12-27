@@ -12,7 +12,7 @@ const Sidebar = () => {
     <>
       <div className={`${styles.container} ${!isOpen ? styles.open : styles.close}`}>
         <NavigationBtn />
-        {!isOpen ? <UserInfo/>: null}
+        <UserInfo/>
         <Navigation />
       </div>
     </>

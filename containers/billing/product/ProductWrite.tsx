@@ -254,7 +254,7 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
     // 상품정보 sw
     return (
         <>
-            <Breadcrumb />
+            {/* <Breadcrumb />
             <div className={Styles.container}>
                 <form className={Styles.form} onSubmit={handleSubmit(onSubmit)}>
                     <div className={Styles.inputSection}>
@@ -263,7 +263,7 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
                                 <input type="text" {...register("memberNo")} />
-                            {errors.memberNo && <span className={Styles.error}>{errors.memberNo?.message || null}</span>}
+                            {errors.memberNo && <span className={Styles.error}>{errors.memberNo.message || null}</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
@@ -379,12 +379,12 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
                             <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
                         </div>
                     </div>
-                    {/* <div className={Styles.btnArea}>
+                    <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
                         <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
                     </div>
-                </form> */}
-            </div>
+                </form>
+            </div> */}
         </>
     )
 }

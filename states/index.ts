@@ -1,5 +1,5 @@
 import { get } from 'lodash';
-import { atom, selector, selectorFamily } from 'recoil';
+import { atom, selector, selectorFamily, RecoilState } from 'recoil';
 import { generateDates } from '@/utils/date';
 import { getMonth } from '@/utils/date';
 const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
@@ -32,8 +32,8 @@ export const adjustedMonthSelector = selectorFamily({
     },
   });
 
-export const isOpenState = atom({
+
+  export const isOpenState: RecoilState<boolean> = atom({
     key: "isOpenState",
     default: false
-  });
-  
+});

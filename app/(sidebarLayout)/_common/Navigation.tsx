@@ -1,15 +1,34 @@
 import Link from "next/link";
 import Styles from "./Navgiation.module.scss";
 import React,{ useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { isOpenState } from "@/states";
 import { IconNaviBot, IconNaviBill, IconNaviClient, IconNaviNotice, IconNaviProduct, IconNaviSupport } from "@/public/svgs";
 
+
+
 const NavItem = ({ item, depthIndex }: any) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isDepthOpen, setIsDepthOpen] = useState(false);
+    const [isOpen, setIsOpen] = useRecoilState(isOpenState);
     const hasChildren = item.children && item.children.length > 0;
+
+    useEffect(() => {
+        // Automatically set isDepthOpen to false when isOpen is false
+        if (isOpen) {
+            setIsDepthOpen(false);
+        } else {
+
+        }
+    }, [isOpen]);
+
     const toggle = () => {
-        setIsOpen(!isOpen);
+        // Toggle isDepthOpen only if isOpen is true
+        if (!isOpen) {
+            setIsDepthOpen(!isDepthOpen);
+           
+        } else {
+            setIsOpen(!isOpen)
+        }
     };
 
     const renderIcon = (icon: string) => {
@@ -32,12 +51,12 @@ const NavItem = ({ item, depthIndex }: any) => {
     };
     const depthClass = "depth_"+depthIndex;
     return (
-        <li className={ isOpen ? `${Styles.navigationItem} ${Styles.open}`: `${Styles.navigationItem}`}>
+        <li className={ isDepthOpen ? `${Styles.navigationItem} ${Styles.open}`: `${Styles.navigationItem}`}>
             <Link href={item.link} onClick={hasChildren ? toggle : undefined} className={`${Styles.depth} ${Styles[depthClass]}`}>
                 <p className="flex justify-end">{item.label}</p>{item.icon && <span>{renderIcon(item.icon)}</span>} 
-                {/* {hasChildren ? (isOpen ? '[-]' : '[+]') : ''} */}
+                {/* {hasChildren ? (isDepthOpen ? '[-]' : '[+]') : ''} */}
             </Link>
-            {hasChildren && isOpen && (
+            {hasChildren && isDepthOpen &&  (
                 <ul>
                     {item.children.map((child: any, index: number) => (
                         <NavItem key={index} item={child} depthIndex={depthIndex + 1} />

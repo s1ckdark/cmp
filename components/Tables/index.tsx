@@ -69,15 +69,14 @@ export const Tables = ({rowType, className}:TablesProps) => {
                 return true;
         }
     }
-    console.log(data);
-    if(!data?.data.length > 0) return <Loading />;
+    if(!data?.data) return <Loading />;
     return (
         <>
             <div className={styles.tableContainer}>
             <div className={styles.scroller}>
                 <table className={styles[rowType]}>
                     <TableHeader rowType={rowType} />
-                    <TableBody rowType={rowType} data={data} />
+                    <TableBody rowType={rowType} />
                 </table>
             </div>
             </div>

@@ -13,8 +13,12 @@ interface TableHeaderData {
     support?: string[];
 }
   
-export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
-    const types: TableHeaderData = {
+interface TypesMap {
+    [key:string]: string[];
+}
+
+export const TableHeader = ({ rowType }:any) => {
+    const types: TypesMap = {
         "top10": ['서비스명', '시작일자', '종료일자', '금액(KRW)'],
         "perMonth": ['월', '비용(KRW)'],
         "perWeek": ["요일", "비용(KRW)"],

@@ -1,11 +1,11 @@
 'use client';
 import Breadcrumb from '@/components/Breadcrumb';
-import React, { use, useEffect, Suspense } from 'react';
+import React, { use, useEffect, Suspense, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { dataListAtom, searchAtom } from '@/states/data';
 import { pageNumberType } from '@/types/props';
 import { Tables } from '@/components/Tables';
-import { apiBe, fetchClient} from '@/services';
+import { apiBe, apiFe, fetchClient} from '@/services';
 import { monthAtom,currentPageAtom } from '@/states';
 import MonthBar from '@/components/MonthBar';
 import { Toast } from '@/components/Toast';
@@ -16,8 +16,10 @@ const InvoiceList = ({ pageNumber }: pageNumberType) => {
     const [data, setInvoice] = useRecoilState(dataListAtom) || null;;
     const [ month, setMonth ] = useRecoilState(monthAtom);
     const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
-    
+
     useEffect(() => {
+        // const api = apiFe('/fetch');
+        // console.log(api);
         const fetching = async (pageNumber: number, targetMonth:string = month) => {
             const url = `/invoice/search`;
             const response = await apiBe.get(url, { params: { page:currentPage , targetMonth: month } });
@@ -31,14 +33,13 @@ const InvoiceList = ({ pageNumber }: pageNumberType) => {
     }, [currentPage, month]);
 
 
-
     return (
         <>
             <Breadcrumb />
             <MonthBar />
             <div className={`${Styles.table} ${Styles.withSearchbar}`}>
                 <Searchbar />
-                <Tables data={data?.data} rowType={'invoiceList'} />
+                <Tables rowType={'invoiceList'} />
             </div>
         </>
     );

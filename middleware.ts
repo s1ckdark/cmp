@@ -14,6 +14,7 @@ interface Cookie {
 export const middleware = async (request: NextRequest, response: NextResponse, event: NextFetchEvent) => {
   console.log("Middleware executing!");
   const { pathname } = request.nextUrl;
+  console.log("pathname : ",pathname);
   // let accessToken = request.cookies.get("next-auth.session-token");
 
   // const session = await getServerSession(authOptions);

@@ -2,9 +2,9 @@
 import cx from 'clsx';
 import { ReactNode } from 'react';
 import styles from './index.module.scss';
-import { TableHeaderProps } from '@/types/data';
-import { convertColumns } from '@/utils/data';
 import Styles from './TableHeader.module.scss';
+
+
 interface ComplexHeader {
     label: string;
     rowSpan?: number;
@@ -14,32 +14,39 @@ interface ComplexHeader {
   type Header = string | ComplexHeader;
   
   interface TableHeaderData {
-    announceOverview: any[];
-    announce: any[];
-    supportOverview: any[];
-    top10:ComplexHeader[];
-    per_month: any[];
-    support: any[];
-    billingProductList: any[];
-    billingProductDetail: any[];
-    users: any[];
-    menu: any[];
-    role: any[];
-    roleReg: any[];
-    roleMod: any[];
-    access: any[];
-    productGd: any[];
-    productSW: any[];
-    productMSP: any[];
-    productCategory: any[];
-    contracts: any[];
-    invoiceUsage: ComplexHeader[];
-    invoiceList: ComplexHeader[];
-    customerPiC: any[];
+    announceOverview?: any[];
+    announce?: any[];
+    supportOverview?: any[];
+    top10?:ComplexHeader[];
+    per_month?: any[];
+    support?: any[];
+    billingProductList?: any[];
+    billingProductDetail?: any[];
+    users?: any[];
+    menu?: any[];
+    role?: any[];
+    roleReg?: any[];
+    roleMod?: any[];
+    access?: any[];
+    productGd?: any[];
+    productSW?: any[];
+    productMSP?: any[];
+    productCategory?: any[];
+    contracts?: any[];
+    invoiceUsage?: ComplexHeader[];
+    invoiceList?: ComplexHeader[];
+    customerPiC?: any[];
+  }
+  interface TypesMap {
+    [key:string]: string[] | ComplexHeader[];
   }
   
-export const TableHeader = ({ rowType }:{rowType:any}) => {
-    const types: TableHeaderData = {
+  interface TableHeaderProps {
+    rowType: any;  // Use the defined RowType here
+  }
+
+export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
+    const types: TypesMap = {
         "announceOverview": ['번호', '제목', '등록일자'],
         "announce": ['번호', '제목', '유형', '등록자', '첨부파일', '등록일자'],
         "per_month" : ['월','매출','전월대비 증감액(KRW)','증감율(%)'],  //수정(컬럼 2개 추가됨)
@@ -136,7 +143,7 @@ export const TableHeader = ({ rowType }:{rowType:any}) => {
 
     return (
         <thead className={`${Styles.container} ${Styles[rowType]}`}>
-            <RenderHeader headers={types[rowType as keyof TableHeaderData]} />
+            <RenderHeader headers={types[rowType]} />
             {types[rowType].some((header: any) => header.subHeaders) && <RenderSubHeaders headers={types[rowType] as Array<{ subHeaders?: string[] }>} />}
         </thead >
     )

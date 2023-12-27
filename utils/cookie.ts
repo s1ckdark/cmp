@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { parseCookies } from 'nookies';
 export const setCookie = (name: string, value: string, expDays: number) => {
     const date = new Date();
     date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
@@ -30,3 +31,4 @@ export const isTokenExpired = (token: string) => {
     return expiry;
     // return (Math.floor((new Date()).getTime() / 1000)) >= expiry;
   }
+

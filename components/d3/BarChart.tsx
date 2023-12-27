@@ -12,7 +12,7 @@ interface BarChartProps {
 }
 
 const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
-    const chartContainerRef = useRef<HTMLDivElement>(null);
+    const chartContainerRef = useRef<HTMLDivElement>(null) || null;
     const [containerWidth, setContainerWidth] = useState<number>(0);
     const [containerHeight, setContainerHeight] = useState<number>(0);
 
@@ -40,7 +40,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
 
             const minYValue = 0;
             const maxYValue = d3.max(data, d => d.y === 0 ? 5 : d.y) * 1.33;  // Doubling the maximum data value
-            const domain = [minYValue, maxYValue];
+            const domain:any = [minYValue, maxYValue];
             // Scales
 			const xScale = d3.scaleBand()
 							.domain(data.map(d => d.x))
@@ -67,9 +67,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
             // Y-axis Grid
             const yGrid = svg.append('g')
                 .attr('class', 'grid')
-                .call(d3.axisLeft(yScale)
-                    .tickSize(-containerWidth)
-                    .tickFormat(''));
+                .call(d3.axisLeft(yScale).tickSize(-containerWidth).tickFormat(null));
 
             yGrid.selectAll('.tick line')
                 .attr('stroke', '#ddd');
@@ -104,8 +102,8 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
                       .duration(200)
                       .style('opacity', .9);
                tooltip.html(`<label>${d.x} 전체 매출</label><h2>${d.y.toLocaleString()}<span>KRW</span></h2>`)
-                      .style('left', `${ xScale(d.x)! + chartContainerRef.current.offsetLeft + (xScale.bandwidth() - barWidth) / 2}px`)
-                      .style('top', `${yScale(d.y) + chartContainerRef.current.offsetTop - 28}px`);
+                      .style('left', `${ xScale(d.x)! + (chartContainerRef.current?.offsetLeft || 0) + (xScale.bandwidth() - barWidth) / 2}px`)
+                      .style('top', `${yScale(d.y) + (chartContainerRef.current?.offsetTop || 0) - 28}px`);
            })
 
            .on('mouseout', function() {

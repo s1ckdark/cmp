@@ -10,15 +10,20 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { History, IconOverview } from '@/public/svgs';
 import { addComma } from '@/utils/data';
 import Loading from '@/components/Loading';
-export const TableBody = ({rowType}:{rowType:string}) => {
+
+  interface TypesMap {
+    [key:string]: string[]
+  }
+  
+export const TableBody = ({rowType}:any) => {
     const [data, setData] = useRecoilState(dataListAtom) || null;
     const pageNumber = useRecoilValue(currentPageAtom);
     const [history, setHistory] = useRecoilState(historyListAtom || null);
-    const { totalPages, totalItems } = data || {};
+    const totalItems:any = data?.totalItems;
     const targetMonth = useRecoilValue(monthAtom);
     const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
     const router = useRouter();
-    const display = {
+    const display: TypesMap  = {
         "invoiceList": ['overview','memberNo', 'memberName', 'naverCost.cloudType', 'term', 'naverCost.payCurrency_code', 'naverCost.useAmount', 'naverCost.totalDiscountAmt', 'naverSummary.thisMonthDemandAmount', 'gdSummary.swUseAmount', 'gdSummary.mspUseAmount', 'gdSummary.productdiscountamount', 'gdSummary.thisMonthDemandAmount', 'result.thisMonthDemandAmount', 'result.thisMonthVatAmount', 'result.totalDemandAmount'],
         "productGd":['idx','prodName', 'prodType','prodDesc','stdPrice','regName','regDt','history'],
         "customers": ['memberNo', 'memberName', 'regionType', 'businessRegNo', 'customerContacts', 'salesContacts'],
@@ -28,7 +33,7 @@ export const TableBody = ({rowType}:{rowType:string}) => {
     }
     
     const view = (props?:any) => {
-        const typeUrl = {
+        const typeUrl:any= {
             "invoiceList": `/billing/invoice/view/${[props.memberNo]}/${targetMonth}`,
             "customers": '/customer',
             "users": '/user',
@@ -43,17 +48,17 @@ export const TableBody = ({rowType}:{rowType:string}) => {
     const newData = (rowType:string) => {
         switch(rowType){
             case 'invoiceList':
-                return data['data'] && data['data'].map((item:any) => 
+                return data?.data && data.data.map((item:any) =>
                     Object.assign({}, item, {term:item.target_start_date + ' ~ ' + item.target_end_date})
                 )
                 break;
             case 'productGd':
-                return data['data'] && data['data'].map((item:any, index:number) => 
+                return data?.data && data['data'].map((item:any, index:number) => 
                     Object.assign({}, item, {idx: totalItems - index - (pageNumber-1)*10,history: <History onClick={()=>setHistory(item.prodHist)}/>})
                 )
                 break;
             default:
-                return data['data']
+                return data?.data
         }
     }
 
@@ -95,13 +100,13 @@ export const TableBody = ({rowType}:{rowType:string}) => {
     if(!data?.data) return <Loading />
     return (
         <tbody className={`${Styles.container} ${Styles[rowType]}`}>
-            <Suspense fallback={<Loading />}>{newData(rowType).map((item: any, index: number) => (
+           {newData(rowType)?.map((item: any, index: number) => (
                 <tr key={item.memberNo+'-'+item.targetMonth+'-'+index}>
                     {field.map((key: string, keyIndex: number) => (
-                        <>{renderCell(key, keyIndex, item)}</>
+                         <Suspense fallback={<Loading />}>{renderCell(key, keyIndex, item)}</Suspense>
                     ))}
                 </tr>
-            ))}</Suspense>
+            ))}
         </tbody>
     );
 }
