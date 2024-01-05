@@ -65,12 +65,13 @@ export const signin = async (email: string, password: string) => {
     }
 
     const { data } = await response.json();
+    
     // const cookie = await apiFe.post('/auth/session/',{ accessToken: data.accessToken, refreshToken: data.refreshToken })
-    if (cookie.status === 200) {
-      onLoginSuccess(data);
-    } else {
-      throw new Error('login failed');
-    }
+    // if (cookie.status === 200) {
+    //   onLoginSuccess(data);
+    // } else {
+    //   throw new Error('login failed');
+    // }
     return data;
   }
 

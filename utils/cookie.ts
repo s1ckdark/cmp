@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import { parseCookies } from 'nookies';
+
 export const setCookie = (name: string, value: string, expDays: number) => {
     const date = new Date();
     date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
@@ -7,10 +8,10 @@ export const setCookie = (name: string, value: string, expDays: number) => {
     document.cookie = `${name}=${value}; ${expires}; path=/`;
 };
 
-export const getCookie = (name: string) => {
-    if(typeof window !== 'object') return;
-    const value = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
-    return value ? decodeURI(value[2]) : null;
+export const getCookie = (name:string) => {
+    if (typeof window !== 'object') return;
+    const cookie = parseCookies();
+    return cookie[name];
 };
 
 export const deleteCookie = (name: string) => {

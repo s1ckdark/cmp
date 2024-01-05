@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: flex-end;
   border-radius: 27px;
-  font-size: 16px;
   transition: all 0.2s;
   display: flex;  
   margin: 20px 0 10px;
@@ -11,7 +10,6 @@
 
   .inputGroup {
     position: relative;
-    margin-right: 15px;
     input {
       border: 1px solid #DEE1E7;
       background: #F7F8FE;
@@ -20,7 +18,7 @@
       padding: 10px 20px;
       border: none;
       outline: none;
-      font-size: 16px;
+      font-size: 14px;
       color: 2E322F;
       
       &::placeholder {

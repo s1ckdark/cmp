@@ -18,7 +18,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
 
     useEffect(() => {
         if (chartContainerRef.current) {
-            const width = chartContainerRef.current.getBoundingClientRect().width;
+            const { width } = chartContainerRef.current.getBoundingClientRect();
 
             // Adjust the margins to allow space for axis labels
             const margins = { top: 0, right: 0, bottom: 50, left: 60 };
@@ -39,7 +39,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
                         .attr('style','overflow:visible');
 
             const minYValue = 0;
-            const maxYValue = d3.max(data, d => d.y === 0 ? 5 : d.y) * 1.33;  // Doubling the maximum data value
+            const maxYValue = (d3.max(data, d => d.y === 0 ? 5 : d.y) as number) * 1.33;  // Doubling the maximum data value
             const domain:any = [minYValue, maxYValue];
             // Scales
 			const xScale = d3.scaleBand()
@@ -67,7 +67,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
             // Y-axis Grid
             const yGrid = svg.append('g')
                 .attr('class', 'grid')
-                .call(d3.axisLeft(yScale).tickSize(-containerWidth).tickFormat(null));
+                .call(d3.axisLeft(yScale).tickSize(-containerWidth).tickFormat((d:any) => ''));
 
             yGrid.selectAll('.tick line')
                 .attr('stroke', '#ddd');

@@ -24,14 +24,14 @@ const Button = styled.button<{ selected?: boolean }>`
   color: ${({ selected }) => (selected ? "#fff" : "#000")};
   border: 0;
   margin: 0;
-  padding: 8px 12px;
-  font-size: 16px;
+  padding: 0 12px;
+  font-size: 14px;
   font-weight: normal;
   background-color: ${({ selected }) => (selected ? "#43B69A" : "#fff")};
   cursor: pointer;
   border-radius: 100%;
-  width: 48px;
-  height: 48px;
+  width: 30px;
+  height: 30px;
 
   &:hover {
     background-color: #ccc;

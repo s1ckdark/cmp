@@ -36,4 +36,4 @@ export const adjustedMonthSelector = selectorFamily({
   export const isOpenState: RecoilState<boolean> = atom({
     key: "isOpenState",
     default: false
-});
+  });

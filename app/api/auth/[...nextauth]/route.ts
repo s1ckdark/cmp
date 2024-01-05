@@ -1,240 +1,178 @@
-import CredentialsProvider from 'next-auth/providers/credentials';
-import NextAuth, { NextAuthOptions, Session as NextAuthSession, User as NextAuthUser } from "next-auth";
-import { JWT as NextAuthJWT } from "next-auth/jwt"; 
-import { setCookie } from 'nookies';
-import { NextApiRequest, NextApiResponse } from 'next';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions, User, Session } from "next-auth";
+import { cookies } from "next/headers";
 
 const beUrl = process.env.NEXT_PUBLIC_BE_URL;
-const feUrl = process.env.NEXT_PUBLIC_FE_URL;
-interface Token { accessToken: string; refreshToken: string;name:string; email:string;sub:string; id:string; iat:number; exp:number; jtu:string;accessTokenExpires:number; error?: any; user: { id?: string | null | undefined; name?: string | null | undefined; email?: string | null | undefined; image?: string | null | undefined; username: string;maxAge:number }};
-interface User extends NextAuthUser { 
-    accessToken: string; 
-    refreshToken: string; 
-    username: string; 
-}
+// const feUrl = process.env.NEXT_PUBLIC_FE_URL;
 
-interface Session extends NextAuthSession { 
-    accessToken?: string | undefined;
-    refreshToken?: string | undefined;
-      user: { 
-         id?: string | null | undefined
-         name?: string | null | undefined
-         email?: string | null | undefined
-         image?: string | null | undefined
-    }
-    accessTokenExpires?: number | undefined;
- }
-    
-
-interface JWT extends NextAuthJWT { 
-    accessToken: string; 
-    refreshToken: string; 
-    user?: { 
-        id?: string | null | undefined; 
-        name?: string | null | undefined; 
-        email?: string | null | undefined; 
-        image?: string | null | undefined; 
-        username?: string; 
-    }; 
-    }
-
-interface loginData {
-    id: string;
-    username: string;
-    email: string;
-    accessToken: string;
-    refreshToken: string;
-    maxAge: number;
-    userType?: string
-    privileges: string[];
-}
-
-async function refreshAccessToken(token:any) {
-    console.log(token,"refreshAccessToken");
+async function refreshAccessToken(token: any) {
     try {
-        const url = `http://localhost:3000/apibe/auth/access-token`
-        const response = await fetch(url, {
-            headers: {
-            'Content-Type': 'application/json',
-            // 'Authorization': "Bearer " + token.accessToken, // accessToken이 없어도 되는 이유는 refresh token이 있기 때문에
-            },
+        // Call your API to refresh the token
+        const response = await fetch(`${beUrl}/auth/access-token`, {
             method: "POST",
-            body: JSON.stringify({refreshToken: token.refreshToken})
-            }
-        )
-
-      if (response.status === 401 ) {
-        // throw refreshedTokens
-        // throw new Error("RefreshAccessTokenError 401");
-        return {
-            ...token,
-            error: "RefreshAccessTokenError 401"
-        }
-      }
-      if (response.status === 500 ) {
-        // throw refreshedTokens
-        // throw new Error("RefreshAccessTokenError 500")
-        return {
-            ...token,
-            error: "RefreshAccessTokenError 500"
-        }
-      }
-      
-    if(response.status === 200) {
-        const refreshedTokens = await response.json()
-        console.log( Date.now() + token.user.maxAge, "success regenerage refreshedTokens");
-        fetch(`${feUrl}/api/fetch/refresh?accessToken=${refreshedTokens.data.accessToken}`)
-        //     method: 'GET',
-        //     mode: 'cors',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(refreshedTokens.data),
-        // });
-        // console.log(refreshedTokens.data.accessToken, "refreshedTokens.data.accessToken")
-        fetch(`${feUrl}/fetch/access-token`, {
-            method: 'POST',
-            mode: 'cors',
+            body: JSON.stringify({ refreshToken: token.refreshToken }),
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(refreshedTokens.data),
         });
+
+        const refreshedTokens = await response.json();
+
+        if (!response.ok) {
+            throw refreshedTokens;
+        }
+
+
+        cookies().set("accessToken", token.accessToken , {
+            maxAge: 60 * 10, // 10 minutes
+            path: "/",
+            // httpOnly: true,
+        });
+        cookies().set("refreshToken", token.refreshToken , {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: "/",
+        // httpOnly: true,
+        });
+        console.log("set cookie complete");
         return {
             ...token,
             accessToken: refreshedTokens.data.accessToken,
-            accessTokenExpires: Date.now() + token.user.maxAge,
-            refreshToken: refreshedTokens.data.refreshToken
-        }
-    }
+            accessTokenExpires: Math.floor(Date.now() / 1000) + 60 * 10, // 10 minutes
+            refreshToken: refreshedTokens.data.refreshToken, // if the refresh token was also refreshed
+        };
     } catch (error) {
-      console.log("error :",error)
-      return {
-        ...token,
-        error: "RefreshAccessTokenError",
-      }
+        console.error("Error refreshing access token: ", error);
+        return {
+            ...token,
+            error: "Error refreshing access token",
+        };
     }
-  }
+}
 
-
-
-
-export const authOptions: NextAuthOptions = {
-        providers: [
-            CredentialsProvider({
-                name: 'Crendentials',
-                credentials: {
-                    email: { label: "Email", type: "email", placeholder: "test@test.com" },
-                    password: { label: "Password", type: "password" }
-                },
-                async authorize(credentials, req) {
-                    try {
-                        const res = await fetch(`${be}/auth/login`, {
-                            method: 'POST',
-                            mode: 'cors',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(credentials),
-                        });
-                        const user = await res.json();
-                        if(user) {
-                            const resProfile = await fetch(`${be}/users/profile`, {
-                                method: 'GET',
-                                mode: 'cors',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${user.data.accessToken}`
-                                },
-                            })
-                            const { data } = await resProfile.json();
-                            return {
-                                id: data.id,
-                                username: data.userFullName,
-                                email: data.email,
-                                accessToken: user.data.accessToken,
-                                refreshToken: user.data.refreshToken,
-                                privileges: data.privileges,
-                                userType: data.userType,
-                                maxAge: 60 * 1 * 1000
-                            }
-                        } else {
-                            return null;
-                        }
-                    } catch (error: any) {
-                        console.log("error :",error);
-                        throw new Error(error?.response?.data.message);
-                    }
-                }
-            })
-        ],
-        secret: process.env.NEXTAUTH_SECRET,
-        callbacks: {
-            async jwt({ token, user }: { token:any; user:any;}) {
-                if (user) {
-                    // console.log("redfine token by user");
-                    token.accessToken = user.accessToken;
-                    token.refreshToken = user.refreshToken;
-                    token.accessTokenExpires = Date.now() + user.maxAge;
-                    token.user = user;
-                    // console.log(Date.now(),token.accessTokenExpires, "first set accessTokenExpires in jwt");
-                }
-                if(Date.now() <= token.accessTokenExpires) {
-                    console.log("keep going", token.accessTokenExpires);
-                    return token;
-                }
-                console.log("call Refresh Token");
-                // console.log(token.accessTokenExpires,"token in jwt");
-                return refreshAccessToken(token);
+const authOptions: NextAuthOptions = {
+    providers: [
+        CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+                email: { label: "Email", type: "email" },
+                password: { label: "Password", type: "password" },
             },
-            async signIn({ user }) {
+            authorize: async (credentials) => {
                 try {
-                    const isAllowedToSignIn = true;
-                    return true; 
-                } catch (error) {
-                    if (error instanceof Error) {
-                        return `signin?errorcode=${error.message}`;
-                    }
-                    return false; 
-                }
-            },
-            async session({ session, token, user }: { session: Session; token: Token; user: User;}) {
-                // Check if the user object exists in the session
-                if (!session.user) {
-                    session.user = {} as User;
-                }
-    
-                // Add token details to the session
-                session.accessToken = token.accessToken;
-                session.refreshToken = token.refreshToken;
-                session.accessTokenExpires = token.accessTokenExpires;
-    
-                // Update user details in the session
-                session.user.id = token.user.id ?? session.user.id;
-                session.user.name = token.user.username ?? session.user.name ?? 'Unknown';
-                session.user.email = token.user.email ?? session.user.email ?? 'Unknown';
-    
-                return session;
-            },
-            // async redirect ({url, baseUrl}) {
-            //             if (url.startsWith("/")) {
-            //                 return `${baseUrl}${url}`
-            //             }
-            //             else if ( new URL(url).origin === baseUrl) {
-            //                 return `${baseUrl}`
-            //             }
-            //             return baseUrl
-            //         }
-        },
-        session: {
-            strategy: "jwt",
-        },
-        debug: false,
-        pages:{
-            signIn: '/signin',
-        },
-    }
+                    const loginRes = await fetch(`${beUrl}/auth/login`, {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(credentials),
+                    });
 
+                    if (!loginRes.ok) {
+                        throw new Error("Login failed");
+                    }
+
+                    const user = await loginRes.json();
+
+                    // Assuming user.data contains the necessary user information
+                    if (!user.data) {
+                        return null;
+                    }
+
+                    const profileRes = await fetch(`${beUrl}/users/profile`, {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${user.data.accessToken}`,
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    if (!profileRes.ok) {
+                        throw new Error("Failed to retrieve user profile");
+                    }
+
+                    const profile = await profileRes.json();
+                    const cookieData = {
+                        id: profile.data.id,
+                        username: profile.data.userFullName,
+                        email: profile.data.email,
+                        accessToken: user.data.accessToken,
+                        refreshToken: user.data.refreshToken,
+                    }
+                    cookies().set("username",profile.data.userFullName , {
+                        maxAge: 2 * 24 * 60 * 60,
+                        path: "/",
+                        // httpOnly: true,
+                    });
+                    cookies().set("accessToken", user.data.accessToken , {
+                        maxAge: 2 * 24 * 60 * 60,
+                        path: "/",
+                        // httpOnly: true,
+                    });
+                     cookies().set("refreshToken", user.data.refreshToken , {
+                        maxAge: 2 * 24 * 60 * 60,
+                        path: "/",
+                        // httpOnly: true,
+                    });
+                    // Construct and return the user object
+                    return cookieData;
+                } catch (error) {
+                    console.error("Authorization error:", error);
+                    throw new Error("Authorization error");
+                }
+            },
+        }),
+    ],
+
+    secret: process.env.NEXTAUTH_SECRET,
+    callbacks: {
+        async jwt({ token, user }: any) {
+            // const { user } = token;
+            const isSignIn = user ? true : false;
+            // If signing in, set initial token properties
+            if (isSignIn) {
+                token.accessToken = user.accessToken;
+                token.refreshToken = user.refreshToken;
+                token.user = user;
+                token.accessTokenExpires =
+                    Math.floor(Date.now() / 1000) + 60 * 10; // 10 minutes
+            }
+            // Check if the token needs to be refreshed
+            // For example, if it's within 1 hour of expiring
+            const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
+            if (token.accessTokenExpires < shouldRefreshTime) {
+                // Refresh token logic
+                console.log("Refreshing token...");
+                const refreshedToken = await refreshAccessToken(token);
+                return refreshedToken;
+            }
+            return token;
+        },
+        async signIn({ user }) {
+            if (user) {
+                return true;
+            }
+            return false;
+        },
+        async redirect({ url, baseUrl }) {
+            if (url.startsWith(baseUrl)) return url;
+            else if (url.startsWith("/"))
+                return new URL(url, baseUrl).toString();
+            return baseUrl;
+        },
+        async session({ token }: any) {
+            return token;
+        },
+    },
+    session: {
+        strategy: "jwt",
+    },
+    debug: process.env.NODE_ENV === "development",
+    pages: {
+        signIn: "/signin",
+    },
+};
 
 const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };

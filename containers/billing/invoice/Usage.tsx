@@ -1,9 +1,11 @@
 import React from 'react';
-import { TableHeader } from '@/components/Tables/TableHeader';
-import styles from './Usage.module.scss';
 import { useRecoilValue } from 'recoil';
+
 import { dataViewAtom } from '@/states/data';
 import { addComma } from '@/utils/data';
+
+import styles from './Usage.module.scss';
+import { TableHeader } from '@/components/Tables/TableHeader';
 interface UsageProps {
     type: string;
     data: any;
@@ -16,10 +18,10 @@ const Usage = () => {
 
 
 
-    const GroupedDataTable = ({ data }) => {
+    const GroupedDataTable = ({ tableData }:any) => {
         const productTypes = ['naverProduct','gdSw', 'gdMsp'];
-        const normalizeData = (productData, productType) => {
-            return productData.map(item => {
+        const normalizeData = (productData:any, productType:any) => {
+            return productData.map((item:any)=> {
                 if (productType === 'gdSw' || productType === 'gdMsp') {
                     return {
                         ...item,
@@ -45,14 +47,14 @@ const Usage = () => {
         };
         
         
-        const renderProdutType = (productType) => {
+        const renderProdutType = (productType:string) => {
             return productType === 'naverProduct' ? '네이버' : '자사'
         }
 
-        const renderProductData = (productType, productData) => {
+        const renderProductData = (productType:any, productData:any) => {
             const normalizedData = normalizeData(productData, productType);
     
-            const groupedData = normalizedData.reduce((acc, item) => {
+            const groupedData = normalizedData.reduce((acc:any, item:any) => {
                 const { demandType } = item;
                 acc[demandType] = acc[demandType] || [];
                 acc[demandType].push(item);
@@ -61,14 +63,14 @@ const Usage = () => {
     
             const totalRows = normalizedData.length;
     
-            const renderValue = (item, key) => {
+            const renderValue = (item:any, key:any) => {
                 return item[key] !== undefined ? item[key] : '-';
             };
     
             return (
                 <>
-                    {Object.entries(groupedData).map(([demandType, items], groupIndex) => (
-                        items.map((item, index) => (
+                    {Object.entries(groupedData).map(([demandType, items]:any, groupIndex) => (
+                        items.map((item:any, index:any) => (
                             <tr key={`${productType}-${demandType}-${index}-${groupIndex}`}>
                                 {groupIndex === 0 && index === 0 && (
                                     <td rowSpan={totalRows}>{renderProdutType(productType)}</td>
@@ -84,8 +86,8 @@ const Usage = () => {
                                 <td>{addComma(renderValue(item, 'memberPromiseDiscountAddAmount'))}</td>
                                 <td>{addComma(renderValue(item, 'etcDiscountAmount'))}</td>
                                 <td>{addComma(renderValue(item, 'demandAmount'))}</td>
-                                <td>{data.target_start_date}</td>
-                                <td>{data.target_end_date}</td>
+                                <td>{tableData.target_start_date}</td>
+                                <td>{tableData.target_end_date}</td>
                             </tr>
                         ))
                     ))}
@@ -98,7 +100,7 @@ const Usage = () => {
                 <TableHeader rowType={'invoiceUsage'} />
                 <tbody>
                 {productTypes.map(productType => 
-                    data[productType] && Array.isArray(data[productType]) ? renderProductData(productType, data[productType]) : null
+                    tableData[productType] && Array.isArray(tableData[productType]) ? renderProductData(productType, tableData[productType]) : null
 
                 )}
                         </tbody>
@@ -111,7 +113,7 @@ const Usage = () => {
             <hgroup>
                 <h1>이용내역</h1>
             </hgroup>
-            <GroupedDataTable data={data} />
+            <GroupedDataTable tableData={data} />
         </div>
     );
 };

@@ -1,52 +1,48 @@
 'use client';
-import { useState, useCallback, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { postIdTokenApi, getUserInfoLocal, logoutApi, signin, signup, getUserInfo, onLoginSuccess } from '@/services/auth';
-import { Privileges, User } from '@/types/auth.d'; // Assuming ROLE and User types are defined here
-import useAuthModal from '@/components/Auth/useAuthModal';
-import { atom, useSetRecoilState, useRecoilState, useResetRecoilState } from 'recoil';
-import { tokenState } from '@/states/localStorage';
-import { recoil } from '@/states/sessionStorage';
-import { logInErrorAtom, logInLoadingAtom, signUpErrorAtom, signUpLoadingAtom, resetSignUpErrorAtom, } from '@/states/auth';
-import { get } from 'lodash';
-import { signIn } from 'next-auth/react'
-import { Toast } from '@/components/Toast';
-import { useRouter } from 'next/navigation';
-
-interface UseAuthHook {
-  user: User | null;
-  logOut: () => void;
-  logOutLoading: boolean;
-  isAdmin: boolean;
-  isTech: boolean;
-  isMine: (authorId: string) => boolean;
-  isMineOrAdmin: (authorId: string) => boolean;
-  isLoadingMe: boolean;
-  getUseInfoLocal: () => void;
-  getUserInfo: () => void;
-  showLoginModalWhenLoggedOut: (callback?: () => void) => void;
-  signUpEmail: (email: string, password: string) => Promise<void>;
-  logInEmail: (email: string, password: string) => Promise<void>;
-  logInLoading: boolean;
-  signUpLoading: boolean;
-  logInError: string;
-  signUpError: string;
-  cleanUpEmailRelatedState: () => void;
-  onLoginSuccess: (response: any) => void;
-  onSilentRefresh: () => void;
-}
+// import { useState, useCallback } from 'react';
+// import { signin, getUserInfo  } from '@/services/auth';
+// import { Privileges, User } from '@/types/auth.d'; // Assuming ROLE and User types are defined here
+// import { useSetRecoilState, useRecoilState, useResetRecoilState } from 'recoil';
+// import { recoil } from '@/states/sessionStorage';
+// import { logInErrorAtom, logInLoadingAtom, signUpErrorAtom, signUpLoadingAtom, resetSignUpErrorAtom, } from '@/states/auth';
+// import { signIn } from 'next-auth/react'
+// import { Toast } from '@/components/Toast';
+// import { useRouter } from 'next/navigation';
+// import {  parseCookies, setCookie  } from 'nookies';
+;
+// interface UseAuthHook {
+//   user: User | null;
+//   logOut: () => void;
+//   logOutLoading: boolean;
+//   isAdmin: boolean;
+//   isTech: boolean;
+//   isMine: (authorId: string) => boolean;
+//   isMineOrAdmin: (authorId: string) => boolean;
+//   isLoadingMe: boolean;
+//   getUseInfoLocal: () => void;
+//   getUserInfo: () => void;
+//   showLoginModalWhenLoggedOut: (callback?: () => void) => void;
+//   signUpEmail: (email: string, password: string) => Promise<void>;
+//   logInEmail: (email: string, password: string) => Promise<void>;
+//   logInLoading: boolean;
+//   signUpLoading: boolean;
+//   logInError: string;
+//   signUpError: string;
+//   cleanUpEmailRelatedState: () => void;
+//   onLoginSuccess: (response: any) => void;
+//   onSilentRefresh: () => void;
+// }
 
 const useAuth = () => {
-  const [logOutLoading, setLogOutLoading] = useState(false);
-  const [ userInfo, setUserInfo ] = useRecoilState(recoil);
-  const { onClose } = useAuthModal();
-  const [logInLoading, setLogInLoading] = useRecoilState(logInLoadingAtom);
-  const [logInError, setLogInError] = useRecoilState(logInErrorAtom);
-  const resetLogInError = useResetRecoilState(logInErrorAtom);
-  const [signUpLoading, setSignUpLoading] = useRecoilState(signUpLoadingAtom);
-  const [signUpError, setSignUpError] = useRecoilState(signUpErrorAtom);
-  const resetSignUpError = useResetRecoilState(signUpErrorAtom);
-  const router = useRouter();
+  // const [logOutLoading, setLogOutLoading] = useState(false);
+  // const [ userInfo, setUserInfo ] = useRecoilState(recoil);
+  // const [logInLoading, setLogInLoading] = useRecoilState(logInLoadingAtom);
+  // const [logInError, setLogInError] = useRecoilState(logInErrorAtom);
+  // const resetLogInError = useResetRecoilState(logInErrorAtom);
+  // const [signUpLoading, setSignUpLoading] = useRecoilState(signUpLoadingAtom);
+  // const [signUpError, setSignUpError] = useRecoilState(signUpErrorAtom);
+  // const resetSignUpError = useResetRecoilState(signUpErrorAtom);
+  // const router = useRouter();
 //   const { data: currentUser = null, refetch, isLoading: isLoadingMe} = useQuery({
 //     queryKey: ['getUserInfoLocal'], queryFn: () =>
 //       getUserInfoLocal()
@@ -100,34 +96,30 @@ const useAuth = () => {
 //   };
 
 
-  const cleanUpEmailRelatedState = useCallback(() => {
-    resetLogInError();
-    resetSignUpError();
-  }, [resetLogInError, resetSignUpError]);
+  // const cleanUpEmailRelatedState = useCallback(() => {
+  //   resetLogInError();
+  //   resetSignUpError();
+  // }, [resetLogInError, resetSignUpError]);
 
-  const logInEmail = useCallback(async (email: string, password: string) => {
-    setLogInLoading(true);
-    try {
-      const response = await signIn("credentials", {
-        email: email, 
-        password: password,
-        redirect: false,
-        callbackUrl: "/landing"
-      });
-      if(response.ok) Toast('success', 'Login Success',() => router.push('/landing'))
-      else Toast('error','Login Failed')
-      onClose();
-      cleanUpEmailRelatedState();
-      console.log("final");
-      // getUserInfo();
-      setLogInLoading(false)
-      // await router.push(response.ur
-    } catch (error: any) {
-      console.log(error);
-      Toast('error', error)
-      setLogInError(`Login failed ${error.code}`); // Replace with actual error handling
-    } 
-  }, [cleanUpEmailRelatedState, getUserInfo, onClose, setLogInError, setLogInLoading]);
+  // const logInEmail = useCallback(async (email: string, password: string) => {
+  //   setLogInLoading(true);
+  //   try {
+  //     const response:any = await signIn("credentials", {
+  //       email: email, 
+  //       password: password,
+  //       redirect: false,
+  //       callbackUrl: "/landing"
+  //     });
+  //     if(response.ok) {
+  //       // Toast('success', 'Login Success',() => router.push('/landing'))
+  //     } else { Toast('error','Login Failed')}
+  //     cleanUpEmailRelatedState();
+  //     setLogInLoading(false)
+  //   } catch (error: any) {
+  //     Toast('error', error)
+  //     setLogInError(`Login failed ${error.code}`); // Replace with actual error handling
+  //   } 
+  // }, [cleanUpEmailRelatedState, getUserInfo, setLogInError, setLogInLoading]);
 
 //   const signUpEmail = useCallback(async (email: string, password: string) => {
 //     setSignUpLoading(true);
@@ -144,7 +136,7 @@ const useAuth = () => {
   return {
     // user: currentUser,
     // logOut,
-    logOutLoading,
+    // logOutLoading,
     // isAdmin,
     // isTech,
     // isSale,
@@ -155,12 +147,12 @@ const useAuth = () => {
     // getUserInfo,
     // showLoginModalWhenLoggedOut,
     // signUpEmail,
-    logInEmail,
-    logInLoading,
-    signUpLoading,
-    logInError,
-    signUpError,
-    cleanUpEmailRelatedState,
+    // logInEmail,
+    // logInLoading,
+    // signUpLoading,
+    // logInError,
+    // signUpError,
+    // cleanUpEmailRelatedState,
   };
 };
 

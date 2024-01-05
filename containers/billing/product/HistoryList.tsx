@@ -12,20 +12,12 @@ import { Toast } from '@/components/Toast';
 import Loading from '@/components/Loading';
 
 const HistoryList = ({ pageNumber }: pageNumberType) => {
-    const [data, setData] = useRecoilState(dataListAtom) || null;;
-    const [currentPage, setCurrentPage] = useRecoilState(currentPageAtom);
-    const breadcrumbs = [
-        { href: '/', label: 'Home' },
-        { href: '/billing', label: '빌링내역' },
-        { href: '/billing/product/list', label: '이용내역서' }
-    ];
-
     if(!data) return <Loading />;
     return (
         <>
-            <Breadcrumb title={'전체이용내역서'} breadcrumbs={breadcrumbs} />
+            <Breadcrumb />
             <MonthBar />
-            <Tables data={data?.data.} rowType={'productList'} className={'productList'} />
+            <Tables rowType={'productHistory'} className={'productHistory'} />
         </>
     );
 };

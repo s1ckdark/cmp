@@ -1,13 +1,14 @@
 import ProductView from './view';
 import ProductList from './list';
 import ProductWrite from './write';
+import { redirect }  from 'next/navigation';
 
 const productPage = ({params}:any) => {
     const { slug } = params;
     const pageType = slug[0];
     let pageNumber = 1, memberNo = '', targetMonth = '';
     if(pageType === 'list') {
-        pageNumber = slug[1];
+        slug.length === 1 ? redirect('./list/1') :  pageNumber = slug[1];
     } else {
         memberNo = slug[1];
         targetMonth = slug[2];

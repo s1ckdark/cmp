@@ -1,19 +1,15 @@
-import { fetchClient, apiBe } from '@/services';
-import ProductView from '@/containers/billing/product/ProductView';
-import { invoiceViewAtom} from '@/states/invoice';
-import { useRecoilState } from 'recoil';
-import useSWR from 'swr';
+import ProductView from "@/containers/billing/product/ProductView";
 
 interface ProductViewProps {
-    memberNo: string;
-    targetMonth: string;
+    memberNo: any;
+    targetMonth: any;
 }
 
-const ProductViewPage = ({memberNo, targetMonth}:ProductViewProps) => {
+const ProductViewPage = ({ memberNo, targetMonth }: ProductViewProps) => {
     return (
         <>
-            <ProductView memberNo={memberNo} targetMonth={targetMonth}/>
-       </>
-    )
-}
+            <ProductView />
+        </>
+    );
+};
 export default ProductViewPage;

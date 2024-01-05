@@ -57,7 +57,7 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
 
         const getPerMonthData = (data:any) => {
             const result = data.reduce((acc:any, cur:any) => {
-                acc.push({x: Number(cur.trend.current_month.substr(4,2)), y: cur.trend.current_totalDemandAmount, z:cur.trend.diff, a:cur.trend.growth_rate})
+                acc.push({x:cur.trend.current_month.substr(4,2), y: cur.trend.current_totalDemandAmount, z:cur.trend.diff, a:cur.trend.growth_rate})
                 return acc
             },[])
             return result;
@@ -66,7 +66,6 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
         const fetching = () => {
         getAllData([targetUrl('top10bycust'), targetUrl('monthly'), targetUrl('month')]).then((res:any) => {
             const [top10bycust, monthly, diffMonth] = res;
-            
             setVisual({
                 ...visual,
                 diffMonth: diffMonth,
@@ -99,7 +98,7 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
                                 <h2>전월 네이버 전체매출</h2>
                             </div>
                             <div className={styles.countup}>
-                                <label>전체고객사</label>
+                                <label htmlFor="totalDemandAmount">전체고객사</label>
                                 <span><CountUpAnimation endValue={diffMonth.trend.prev_totalDemandAmount} duration={500} /> KRW</span>
                             </div>
                         </div>
@@ -110,7 +109,7 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
                                 <h2>당월 네이버 전체매출<span>{Math.round(diffMonth.trend.growth_rate)}&#37;</span></h2>
                             </div>
                             <div className={styles.countup}>
-                                <label>전체고객사</label>
+                                <label htmlFor="totalDemandAmount">전체고객사</label>
                                 <span><CountUpAnimation endValue={diffMonth.trend.current_totalDemandAmount} duration={500} /> KRW</span>
                             </div>
                         </div>

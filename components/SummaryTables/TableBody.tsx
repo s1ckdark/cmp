@@ -8,8 +8,12 @@ import { monthAtom } from '@/states';
 import { dataListAtom } from '@/states/data';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { addComma } from '@/utils/data';
-export const TableBody: React.FC<TableBodyProps> = ({rowType, data}:{rowType:string, data:any[]}) => {
-    const display = {
+interface TypesMap {
+    [key:string]: string[]
+  }
+  
+export const TableBody = ({rowType, data}:any) => {
+    const display: TypesMap = {
         "invoiceList": ['overview','memberNo', 'memberName', 'naverCost.cloudType', 'term', 'naverCost.payCurrency_code', 'naverCost.useAmount', 'naverCost.totalDiscountAmt', 'naverSummary.thisMonthDemandAmount', 'gdSummary.swUseAmount', 'gdSummary.mspUseAmount', 'gdSummary.productdiscountamount', 'gdSummary.thisMonthDemandAmount', 'result.thisMonthDemandAmount', 'result.thisMonthVatAmount', 'result.totalDemandAmount'],
         "customers": ['memberNo', 'memberName', 'regionType', 'businessRegNo', 'customerContacts', 'salesContacts'],
         "users": ['email', 'username', 'userType', 'privileges', 'regName', 'regDt', 'lasLogDt'],

@@ -1,9 +1,9 @@
 'use client';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { ProductForm } from '@/types/form';
+import { ProductForm as ProductFormType } from '@/types/form';
 
 const ProductForm = () => {
-    const initialFormData: ProductForm = {
+    const initialFormData: ProductFormType = {
         productName: '',
         productCategory: '',
         productSubCategory: '',
@@ -14,7 +14,7 @@ const ProductForm = () => {
         comment: '',
     };
 
-    const [formData, setFormData] = useState<ProductForm>(initialFormData);
+    const [formData, setFormData] = useState<ProductFormType>(initialFormData);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -53,7 +53,7 @@ const ProductForm = () => {
         <input type="email" id="vendorSalesEmail" name="vendorSalesEmail"/>
     
         <label htmlFor="comment">코멘트:</label>
-        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+        <textarea id="comment" name="comment" rows={4} cols={50}></textarea>
     
         <input type="submit" value="제출"/>
     </form>

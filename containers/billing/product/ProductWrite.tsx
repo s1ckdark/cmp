@@ -11,8 +11,8 @@ import { Toast } from '@/components/Toast';
 import { IconSearch, IconCalendar } from '@/public/svgs';
 
 interface ProductViewCtProps {
-    memberNo: string;
-    targetMonth: string;
+    memberNo: any;
+    targetMonth: any;
 }
 interface form {
     "memberNo": "string",

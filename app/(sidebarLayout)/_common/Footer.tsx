@@ -1,10 +1,12 @@
 'use client';
+
 import React from "react";
 import Link from "next/link";
+
 import styles from './Footer.module.scss';
+
 const Footer = () => {
   return (
-    <>
       <div className="footer">
         <div className={`${styles.container} w-100 flex justify-between align-center`}>
           <div className="flex justify-start align-center items-center text-center">
@@ -15,12 +17,11 @@ const Footer = () => {
             <Link href="/">공지사항</Link>
           </div>
           <div className="relative py-5">
-            <div className={`${styles.goodus_logo} absolute right-0`}></div>
+            <div className={`${styles.goodus_logo} absolute right-0`} />
             <div className={styles.copyright}><p>Copyright © 2018 goodusdata. All rights reserved.</p></div>
           </div>
         </div>
       </div>
-    </>
   );
 };
 

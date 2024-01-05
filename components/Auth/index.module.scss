@@ -1,73 +1,30 @@
-.authModal {
-    width: 320px;
-    padding: 32px;
-  
-    .head {
-      flex-direction: column;
-  
-      .imageWrapper {
-        position: relative;
-        width: 100px;
-        height: 100px;
-  
-        &.hidePassword::after {
-          width: 30px;
-          height: 10px;
-          content: '';
-          background-color: black;
-        }
-  
-        img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-  
-      .welcome {
-        margin-bottom: 14px;
-        font-size: 12px;
-        line-height: 1.6;
-        text-align: center;
-      }
-    }
-  
-    .desc {
-      margin: 8px 0 14px;
-      font-size: 12px;
-      line-height: 1.6;
-      text-align: center;
-    }
-  
-    .commonError {
-      height: 20px;
-      margin: 4px 0;
-      font-size: 10px;
-      color: var(--color-red);
-    }
-  }
-.emailBased {
-  flex-direction: column;
-
-  form {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .inputWrapper {
+.form {
+  width: 300px;
+  .inputGroup {
     position: relative;
-    width: 200px;
+    width: 300px;
     height: calc(32px + 2px);
-
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #ccc;
+    margin-bottom: 5px;
+    font-size: 14px;
+    label {
+      width: 50px;
+      text-align: center;
+      color: #a1a1a1;
+    }
     input {
       position: relative;
-      width: 100%;
-      padding: 0 8px;
+      width: 250px;
+      padding: 0 10px;
       font-size: 12px;
       line-height: 32px;
-      border: 1px solid var(--color-gray-c);
+      border: 1px solid #ccc;
       border-radius: 2px;
-
-      &:disabled {
+      color:#2E322F;
+        &:disabled {
         color: var(--color-gray-c);
         cursor: not-allowed;
         background-color: var(--color-gray-e);
@@ -78,18 +35,7 @@
       }
     }
   }
-
-  button[type='submit'] {
+  button {
     width: 100%;
   }
-}
-.loginForm {
-.inputField {
-  label {
-    width: 50px;
-  }
-}
-.btnLogin {
-  width: 100%;
-}
 }

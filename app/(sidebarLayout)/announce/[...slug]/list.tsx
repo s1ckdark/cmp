@@ -41,7 +41,7 @@ const ListPage: React.FC = () => {
 
     return (
         <div className='container'>
-            <Breadcrumb title={pageTitle} breadcrumbs={breadcrumbs} />
+            <Breadcrumb />
             {/* <TableHeader type="announce" /> */}
 
         </div>

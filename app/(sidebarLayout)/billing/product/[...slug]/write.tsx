@@ -4,7 +4,7 @@ const ProductWritePage = ({pageNumber}:any) => {
     console.log("ProductWrite pageNumber :",pageNumber)
     return (
             <>
-                <ProductWrite />
+                {/* <ProductWrite memberNo={memberNo} targetMonth={targetMonth} /> */}
             </>
 
     );

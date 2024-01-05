@@ -4,7 +4,7 @@
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/product/list", "label": "전체"}
+            { "href": "/products/product/list/1", "label": "전체"}
         ]
     },
     "/products/product/view":{
@@ -12,7 +12,7 @@
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/product/list", "label": "전체"},
+            { "href": "/products/product/list/1", "label": "전체"},
             { "href": "/products/product/view", "label": "자사상품 상세"}
         ]
     },
@@ -21,18 +21,18 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품"},
-            { "href": "/products/product/list", "label": "전체" },
+            { "href": "/products/product/list/1", "label": "전체" },
             { "href": "/products/product/write", "label": "자사상품 등록"}
         ]
     },
-     "/products/product/modify":{
+     "/products/product/edit":{
         "title":"자사상품 목록",
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "자사상품" },
-            { "href": "/billing/product/list", "label": "전체" },
+            { "href": "/billing/product/list/1", "label": "전체" },
             { "href": "/billing/product/view", "label": "자사상품 상세" },
-            { "href": "/billing/product/modify", "label": "자사상품 수정" }
+            { "href": "/billing/product/edit", "label": "자사상품 수정" }
         ]
     },
      "/products/category/list":{
@@ -40,7 +40,7 @@
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/category/list", "label": "상품분류 관리" }
+            { "href": "/products/category/list/1", "label": "상품분류 관리" }
         ]
     },
      "/products/category/write":{
@@ -48,7 +48,7 @@
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/list/1", "label": "상품분류 관리" },
             { "href": "/products/category/write", "label": "상품분류 등록" }
 
         ]
@@ -58,19 +58,19 @@
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/list/1", "label": "상품분류 관리" },
             { "href": "/products/category/view", "label": "상품분류 상세" }
 
         ]
     },
-     "/products/category/modify":{
+     "/products/category/edit":{
         "title":"상품분류 수정",
         "breadcrumb":[
             { "href": "/", "label": "Home" },
             { "href": "/products", "label": "자사상품" },
-            { "href": "/products/category/list", "label": "상품분류 관리" },
+            { "href": "/products/category/list/1", "label": "상품분류 관리" },
             { "href": "/products/category/view", "label": "상품분류 상세" },
-            { "href": "/products/category/modify", "label": "상품분류 수정" }
+            { "href": "/products/category/edit", "label": "상품분류 수정" }
 
         ]
     },
@@ -79,7 +79,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "빌링" },
-            { "href": "/billing/invoice/list", "label": "전체 이용내역"}
+            { "href": "/billing/invoice/list/1", "label": "전체 이용내역"}
         ]
     },
     "/billing/invoice/visual":{
@@ -87,7 +87,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "빌링" },
-            { "href": "/billing/invoice/list", "label": "전체 이용내역"},
+            { "href": "/billing/invoice/list/1", "label": "전체 이용내역"},
             { "href": "/billing/invoice/visual", "label": "고객사 세부 요약"}
         ]
     },
@@ -96,7 +96,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "Billing" },
-            { "href": "/billing/invoice/list", "label": "이용내역서" },
+            { "href": "/billing/invoice/list/1", "label": "이용내역서" },
             { "href": "/billing/invoice/view", "label": "서비스 이용내역서" }
         ]
     },
@@ -105,7 +105,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "Billing" },
-            { "href": "/billing/product/list", "label": "고객사 자사상품" }
+            { "href": "/billing/product/list/1", "label": "고객사 자사상품" }
         ]
     },
     "/billing/product/view":{
@@ -113,7 +113,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "Billing" },
-            { "href": "/billing/product/list", "label": "고객사 자사상품" },
+            { "href": "/billing/product/list/1", "label": "고객사 자사상품" },
             { "href": "/billing/product/view", "label": "자사상품 상세" }
         ]
     },
@@ -123,17 +123,90 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "Billing" },
-            { "href": "/billing/product/list", "label": "고객사 자사상품" },
+            { "href": "/billing/product/list/1", "label": "고객사 자사상품" },
             { "href": "/billing/product/write", "label": "자사상품 등록" }
         ]
     },
-    "/billing/product/modify":{
+    "/billing/product/edit":{
         "title": "고객사 자사상품 수정",
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/billing", "label": "Billing" },
             { "href": "/billing/product/view", "label": "자사상품 상세" },
-            { "href": "/billing/product/modify", "label": "자사상품 수정" }
+            { "href": "/billing/product/edit", "label": "자사상품 수정" }
+        ]
+    },
+    "/admin/user/list":{
+        "title": "사용자 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/users/list/1", "label": "사용자" }
+        ]
+    },
+    "/admin/user/write":{
+        "title": "사용자 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/users/list/1", "label": "사용자" }
+        ]
+    },
+    "/admin/menu/list": {
+        "title": "메뉴 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/menu/list/1", "label": "메뉴" }
+        ]
+    },
+    "/admin/menu/write": {
+        "title": "메뉴 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/menu/list/1", "label": "메뉴" }
+        ]
+    },
+    "/admin/role/list": {
+        "title": "권한 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/role/list/1", "label": "권한" }
+        ]
+    },
+    "/admin/role/write": {
+        "title": "권한 등록",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/role/write", "label": "권한 등록" }
+        ]
+    },
+    "/mypage/view": {
+        "title": "마이페이지",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/mypage", "label": "마이페이지" },
+            { "href": "/mypage/view", "label": "마이페이지" }
+        ]
+    },
+    "/mypage/edit": {
+        "title": "마이페이지",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/mypage", "label": "마이페이지" },
+            { "href": "/mypage/view", "label": "마이페이지" },
+            { "href": "/mypage/edit", "label": "마이페이지 수정" }
+        ]
+    },
+    "/customers/customer/list":{
+        "title": "고객사 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/customers", "label": "Customers" },
+            { "href": "/customers/customer/list/1", "label": "고객사" }
         ]
     }
 }

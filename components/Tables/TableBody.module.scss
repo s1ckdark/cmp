@@ -1,13 +1,14 @@
 .container {
     tr {
         margin: 15px 0 10px;
-        height: 50px;
+        height: 30px;
         line-height: 25px;
         cursor: pointer;
         td {
             text-align: center;
             border: 1px solid #DEE1E7;
             padding: 10px;
+            font-size: 14px;
         }
     }
 }

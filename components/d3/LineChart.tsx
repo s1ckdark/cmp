@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import styles from './LineChart.module.scss'
 import { addComma } from '@/utils/data';
 interface IDataPoint {
-    x: number;
+    x: any;
     y: number;
     z: number;
     a: number
@@ -12,6 +12,11 @@ interface IDataPoint {
 interface LineChartProps {
     data: IDataPoint[];
     aspectRatio: number;
+}
+
+interface ILine {
+    x: number;
+    y: number;
 }
 
 const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
@@ -25,29 +30,25 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
             // const width = Width - margin.left - margin.right;
            
             const maxY = d3.max(data, d => Math.abs(d.y)) as number;
-            const minY = d3.min(data, d => Math.abs(d.y)) as number;
+            // const minY = d3.min(data, d => Math.abs(d.y)) as number;
             // Clear previous SVG
             d3.select(d3Container.current).selectAll('*').remove();
 
             const svg = d3.select(d3Container.current)
                           .append('svg')
-                          // .attr('width', width)
-                          // .attr('height', height)
                           .attr('viewBox', `0 0 ${width} ${height}`)
                           .attr('stroke', '#C6CDD6') // Border color
                           .attr('stroke-width', '1px') // Border width
                           .append('g')
-                          // .attr('transform', `translate(${margin.left},${margin.top})`);
 
-            const x = d3.scaleLinear()
-                        .domain([d3.min(data, d => d.x) as number, d3.max(data, d => d.x) as number])
-                        .range([margin.left, width-margin.left-margin.right])
+            const x:any = d3.scaleBand()
+                // .domain([d3.min(data, d => d.x), d3.max(data, d => d.x) as number])
+                .domain(data.map((d) => d.x))
+                // .range([0, width - margin.left - margin.right])
+                .range([margin.left, width-margin.left-margin.right])
             
-
-
             const y = d3.scaleLinear()
                         .domain([0, maxY*1.5])
-                        // .domain([-maxY, maxY])
                         .range([height, 0]);
 
             // X-axis grid
@@ -73,8 +74,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
 
             // Line
             const line = d3.line<IDataPoint>()
-                           .x(d => x(d.x))
-                           .y(d => y(d.y));
+                        .x(d => x(d.x) + x.bandwidth() / 2)
+                        .y(d => y(d.y));
 
             const path = svg.append('path')
                             .datum(data)
@@ -101,7 +102,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
                .enter().append('circle')
                .attr('class', 'dot')
                .attr('fill', '#52BF8A')
-               .attr('cx', d => x(d.x))
+               .attr('cx', d => x(d.x) + x.bandwidth() / 2)
                .attr('cy', d => y(d.y))
                .attr('r', 5)
                .on('mouseover', (event, d) => {
@@ -121,8 +122,8 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
                // domain color 
                
                svg.append('g')
-               .attr("transform",`translate(${0},${height})`)
-               .call(d3.axisBottom(x).tickSize(1).ticks(12).tickFormat((d:any) => d + '월'));
+                    .attr("transform", `translate(0,${height})`) // Adjust the transform
+                    .call(d3.axisBottom(x).tickSize(1).ticks(data.length).tickFormat((d:any) => d + '월'));
   
                svg.selectAll('.domain').remove();
                svg.selectAll(".x.axis line")

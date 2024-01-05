@@ -5,9 +5,9 @@ import dynamic from 'next/dynamic';
 
 export default function ViewPage() {
 
-    const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), {
-        ssr: false
-    });
+    // const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), {
+    //     ssr: false
+    // });
     const onchange = (value: any) => {
         console.log(value);
     }

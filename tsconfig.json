@@ -40,6 +40,9 @@
     "hooks/useRecoilPersistts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/dist",
+    "theme/*.ts",
+    "theme/*.tsx",
   ]
 }

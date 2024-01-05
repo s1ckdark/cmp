@@ -3,18 +3,30 @@ import { cookies } from 'next/headers';
 import { all } from 'axios';
 import { getServerSession } from 'next-auth';
 import { getToken } from "next-auth/jwt";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-// import { withAuth } from 'next-auth/middleware'
 
 interface Cookie {
   name: string;
   value: string;
 }
 
-export const middleware = async (request: NextRequest, response: NextResponse, event: NextFetchEvent) => {
+export const middleware = async (req: NextRequest, res: NextResponse, event: NextFetchEvent) => {
   console.log("Middleware executing!");
-  const { pathname } = request.nextUrl;
+  const { pathname } = req.nextUrl;
   console.log("pathname : ",pathname);
+  // //미들웨어 쿠키
+  // let cookie = req.cookies.get("Authroization")?.value || ""
+
+
+  // //setting Headers
+  // const requestHeaders = new Headers(req.headers);
+  // requestHeaders.set("Authroization", cookie);
+
+
+  // const token = await getToken({ req });
+  // console.log("Token ",token);
+  // const {searchParams} = req.nextUrl;
+  // const callbackUrl = searchParams.get("callbackUrl");
+  
   // let accessToken = request.cookies.get("next-auth.session-token");
 
   // const session = await getServerSession(authOptions);

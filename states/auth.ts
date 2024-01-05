@@ -1,8 +1,8 @@
 import { atom, useSetRecoilState, useRecoilState, useResetRecoilState, selector } from 'recoil';
 
-export const authState = atom({
-    key: 'authState',
-    default: false,
+export const sessionAtom = atom({
+    key: 'sessionAtom',
+    default: null,
 });
   
   export const logInLoadingAtom = atom({

@@ -54,7 +54,7 @@ const LandingPage = () => {
         <>
             <Breadcrumb />
             <div className={`${styles.demandAmount} ${styles.boxSection}`}>
-                <h1 className={styles.currentMonth}><label>이용 기간</label>{geneMonthDate.firstDayOfMonth} - {geneMonthDate.relevantDate}</h1>
+                <h1 className={styles.currentMonth}><label htmlFor="term">이용 기간</label>{geneMonthDate.firstDayOfMonth} - {geneMonthDate.relevantDate}</h1>
             </div>
             <Summary header={false} />
             <div className={`${styles.announce} ${styles.boxSection}`}>

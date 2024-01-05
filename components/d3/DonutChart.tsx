@@ -2,7 +2,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { DonutChartProps } from '@/types/data';
-
+interface DataItem {
+  name: string;
+  value: number;
+}
 const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({ data, title }) => {
   const d3Container = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -24,7 +27,7 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse());
 
     // Create a D3 pie layout
-    const pie = d3.pie<{ value: number }>()
+    const pie = d3.pie<DataItem>()
       .padAngle(1 / radius)
       .sort(null)
       .value(d => d.value);
@@ -47,10 +50,10 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .selectAll()
       .data(pie(data))
       .join("path")
-      .attr("fill", d => color(d.data.name))
-      .attr("d", arc)
+      .attr("fill", ((d:any)=> color(d.data.name)).toString())
+      .attr("d", arc as any)
       .append("title")
-      .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
+      .text((d: any) => `${d.data.name}: ${d.data.value.toLocaleString()}`);
 
     // svg.append("g")
     //   .attr("font-size", 12)
@@ -77,7 +80,7 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .append('li');
 
     legend.append('span')
-      .style('background-color', (d, i) => color(d.name))
+      .style('background-color', ((d:any, i:any) => color(d.name)).toString())
       .style('display', 'inline-block')
       .style('width', '1rem')
       .style('height', '1rem')

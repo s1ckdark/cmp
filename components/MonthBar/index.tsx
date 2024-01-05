@@ -1,49 +1,84 @@
-import { monthAtom } from '@/states';
-import { Toast } from '@/components/Toast';
-import { useRecoilState } from 'recoil';
-import React, {useEffect} from 'react';
-import styles from './index.module.scss';
-import { BoxLeftArrow, BoxRightArrow } from '@/public/svgs';
+import { monthAtom } from "@/states";
+import { Toast } from "@/components/Toast";
+import { useRecoilState } from "recoil";
+import React, { useEffect } from "react";
+import styles from "./index.module.scss";
+import { BoxLeftArrow, BoxRightArrow } from "@/public/svgs";
 
 const MonthBar = () => {
-    const [ month, setMonth ] = useRecoilState(monthAtom);
-    const nextMonth = () => {
-        const currentMonth = getCurrentMonth();
-        const nextMonth = Number(month) + 1;
-        nextMonth > Number(currentMonth) ? Toast('error','다음달 이용내역서가 없습니다.') :         setMonth(nextMonth.toString());
-    }
+    const [month, setMonth] = useRecoilState(monthAtom);
 
-    const prevMonth = () => {
-        const prevMonth = Number(month) - 1;
-        setMonth(prevMonth.toString());
-        Toast('info','데이터를 가져오는 중입니다.')
-    }
-    const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
+    const getCurrentMonth = () => {
+        return (
+            new Date().getFullYear().toString() +
+            (new Date().getMonth() + 1).toString().padStart(2, "0")
+        );
+    };
+    const prevMonth = (inputMonth: string) => {
+        // Parse the input string into year and month parts
+        let year = parseInt(inputMonth.slice(0, 4), 10);
+        let month = parseInt(inputMonth.slice(4, 6), 10);
 
-   
-    // useEffect(() => {
-    //     const getMonth = () => {
-    //         const currentMonth = getCurrentMonth();
-    //         month !== currentMonth ? setMonth(currentMonth): setMonth(month)
-    //     }
-    //     getMonth();
-    // },[])
-return (
-    <div className={styles.monthBar}>
-        <div className={styles.monthBarLeft}>
-            <button className={styles.monthBarLeftBtn} onClick={prevMonth}>
-                <BoxLeftArrow /> <span>이전달</span>
-            </button>
+        // Subtract 1 from the month
+        month--;
+
+        // Handle the case where the month becomes 0 (December)
+        if (month === 0) {
+            month = 12;
+            year--;
+        }
+
+        // Format the previous month as "YYYYMM"
+        const previousMonth =
+            year.toString() + month.toString().padStart(2, "0");
+
+        setMonth(previousMonth);
+    };
+
+    const nextMonth = (inputMonth: string) => {
+        // Parse the input string into year and month parts
+        let year = parseInt(inputMonth.slice(0, 4), 10);
+        let month = parseInt(inputMonth.slice(4, 6), 10);
+
+        // Add 1 to the month
+        month++;
+
+        // Handle the case where the month becomes 13 (January of the next year)
+        if (month === 13) {
+            month = 1;
+            year++;
+        }
+
+        // Format the previous month as "YYYYMM"
+        const nextMonth = year.toString() + month.toString().padStart(2, "0");
+
+        setMonth(nextMonth);
+    };
+
+    return (
+        <div className={styles.monthBar}>
+            <div className={styles.monthBarLeft}>
+                <button
+                    className={styles.monthBarLeftBtn}
+                    onClick={() => prevMonth(month)}
+                >
+                    <BoxLeftArrow /> <span>이전달</span>
+                </button>
+            </div>
+            <div className={styles.monthBarCenter}>
+                <p className={styles.monthBarCenterText}>
+                    {month.slice(0, 4)}년 {month.slice(4, 6)}월
+                </p>
+            </div>
+            <div className={styles.monthBarRight}>
+                <button
+                    className={styles.monthBarRightBtn}
+                    onClick={() => nextMonth(month)}
+                >
+                    <span>다음달</span> <BoxRightArrow />
+                </button>
+            </div>
         </div>
-        <div className={styles.monthBarCenter}>
-            <p className={styles.monthBarCenterText}>{month.slice(0,4)}년 {month.slice(4,6)}월</p>
-        </div>
-        <div className={styles.monthBarRight}>
-            <button className={styles.monthBarRightBtn} onClick={nextMonth}>
-               <span>다음달</span> <BoxRightArrow />
-            </button>
-        </div>
-    </div>
-)
-}
+    );
+};
 export default MonthBar;

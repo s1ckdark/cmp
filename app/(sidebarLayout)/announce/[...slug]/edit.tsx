@@ -12,9 +12,9 @@ interface announce {
     contents: string;
 }
 
-const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), {
-    ssr: false
-});
+// const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), {
+//     ssr: false
+// });
 
 const EditPage = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -79,10 +79,10 @@ const EditPage = () => {
                         </li>
                     </ul>
                 </div>
-                <ToastEditor
+                {/* <ToastEditor
                     content=''
                     editorRef={ref}
-                />
+                /> */}
                 <Button type="submit" skin="green">Submit</Button>
             </form>
         </div>

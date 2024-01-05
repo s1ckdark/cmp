@@ -2,9 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Tables } from "@/components/SummaryTables";
 import CountUpAnimation from '@/components/d3/CountUpAnimation';
-import LineChart from '@/components/d3/LineChart';
 import BarChart from '@/components/d3/BarChart';
-import PieChart from '@/components/d3/PieChart';
 import DonutChart from '@/components/d3/DonutChart';
 import styles from "./InvoiceVisual.module.scss";
 import MonthBar from '@/components/MonthBar';
@@ -23,7 +21,6 @@ interface DemandItem {
     start: string;
     end: string;
 }
-// const InvoiceVisual: React.FC<Props> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
 const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:number}) => {
     const [visual, setVisual] = useRecoilState(visualAtom);
     const [ data, setData ] = useRecoilState(dataListAtom) || null;

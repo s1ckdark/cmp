@@ -12,3 +12,8 @@ export const isObjKeyExist = (obj: any, key: string) => {
 export const addComma = (num: number) => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
+
+export const pathSpliter = (path: string) => {
+    const pathArr = path.split('/');
+    return { pageNumber: Number(pathArr[pathArr.length - 1]) }
+}

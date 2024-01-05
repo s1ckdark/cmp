@@ -1,5 +1,5 @@
 'use client';
-import "@toast-ui/editor/dist/toastui-editor.css";
+// import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
 import React, { useEffect } from "react";
 import axios from "axios";

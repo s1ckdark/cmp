@@ -1,8 +1,11 @@
+
 import { useRecoilValue } from 'recoil';
+
 import { dataViewAtom } from '@/states/data'; // Import your Recoil state
-import styles from './Summary.module.scss';
 import { isObjKeyExist, addComma } from '@/utils/data';
+
 import Loading from '@/components/Loading';
+import styles from './Summary.module.scss';
 
 const Summary = () => {
     const resultData = useRecoilValue(dataViewAtom);
@@ -10,7 +13,7 @@ const Summary = () => {
 
 
     if (!data) return <Loading />; 
-    const { naverSummary, result } = data;
+    const { naverSummary, result }:any = data;
     return (
         <div className={styles.summary}>
             <hgroup>

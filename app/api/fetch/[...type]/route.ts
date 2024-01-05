@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { fetcher } from '@/services';
+import { getToken } from "next-auth/jwt";
+
 interface Cookie {
   name: string;
   value: string;
@@ -39,10 +41,10 @@ export const GET = async (request: Request) => {
 
 export const POST = async(request: Request) => {
   const body = await request.json();
-  console.log("api call success", body);
+  console.log("api call success", typeof body);
   const { accessToken, refreshToken } = body;
-  cookies().set('accessToken', accessToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
-  cookies().set('refreshToken', refreshToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
+  // cookies().set('accessToken', accessToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
+  // cookies().set('refreshToken', refreshToken, {maxAge: 60 * 60 * 24 * 30, path: '/'});
   return NextResponse.json({ accessToken, refreshToken });
 }
 
