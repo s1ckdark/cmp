@@ -8,21 +8,33 @@ import styles from "./index.module.scss";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { visualAtom, dataListAtom } from '@/states/data';
 import { apiBe} from '@/services';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import MonthBar from '@/components/MonthBar';
 import { monthAtom } from '@/states';
 import Loading from '@/components/Loading';
 import { generateDates } from '@/utils/date';
-
+import lodash from 'lodash';
+interface visualType {
+    top10bycust: any;
+    trendMonth: any;
+    donutChart: any;
+    diffMonth: any;
+}
 // const InvoiceVisual: React.FC<Props> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
 const Summary = ({header}:{header: boolean} = { header: true }) => {
     const month= useRecoilValue(monthAtom);
-    const [visual, setVisual] = useRecoilState(visualAtom);
+    const [visual, setVisual] = useState<visualType>({
+        top10bycust: null,
+        trendMonth: null,
+        donutChart: null,
+        diffMonth: null
+    });
     const [ data, setData ] = useRecoilState(dataListAtom) || null;
     const svgContainer = useRef<HTMLDivElement>(null);
     const router = useRouter();
-
+    const path = usePathname();
+    
     useEffect(() => {
         const targetUrl = (arg:string) => {
             return `/billing/total/${arg}/${month}`;

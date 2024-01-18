@@ -29,14 +29,14 @@ const MonthBar = () => {
         }
 
         // Format the previous month as "YYYYMM"
-        const previousMonth =
-            year.toString() + month.toString().padStart(2, "0");
-
+        const previousMonth = year.toString() + month.toString().padStart(2, "0");
+        console.log("prev month", prevMonth);
         setMonth(previousMonth);
     };
 
     const nextMonth = (inputMonth: string) => {
         // Parse the input string into year and month parts
+        if (inputMonth === getCurrentMonth()) { Toast("warning", "이번달 이후의 데이터는 조회할 수 없습니다."); return; }
         let year = parseInt(inputMonth.slice(0, 4), 10);
         let month = parseInt(inputMonth.slice(4, 6), 10);
 
@@ -51,10 +51,11 @@ const MonthBar = () => {
 
         // Format the previous month as "YYYYMM"
         const nextMonth = year.toString() + month.toString().padStart(2, "0");
-
+        
+        console.log("next month", nextMonth);
         setMonth(nextMonth);
     };
-
+    
     return (
         <div className={styles.monthBar}>
             <div className={styles.monthBarLeft}>

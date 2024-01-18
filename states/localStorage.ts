@@ -49,3 +49,9 @@ export const userProfileAtom = atom({
   effects_UNSTABLE: [persistAtom]
 });
 
+
+export const userInfoAtom = atom<any>({
+  key: 'userInfoAtom',
+  default: null,
+  effects_UNSTABLE: [persistAtom]
+});

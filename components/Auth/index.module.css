@@ -1,0 +1,40 @@
+.form {
+  width: 300px;
+}
+.form .inputGroup {
+  position: relative;
+  width: 300px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.form .inputGroup label {
+  width: 50px;
+  text-align: center;
+  color: #a1a1a1;
+}
+.form .inputGroup input {
+  position: relative;
+  width: 250px;
+  padding: 0 10px;
+  font-size: 12px;
+  line-height: 32px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  color: #2E322F;
+}
+.form .inputGroup input:disabled {
+  color: var(--color-gray-c);
+  cursor: not-allowed;
+  background-color: var(--color-gray-e);
+}
+.form .inputGroup input:focus {
+  border-color: var(--color-gray-a);
+}
+.form button {
+  width: 100%;
+}/*# sourceMappingURL=index.module.css.map */

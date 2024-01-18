@@ -4,10 +4,15 @@ import Button from "@/components/Button";
 import styles from "./index.module.scss";
 import { Toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { getIpAddr, getUserAgent } from "@/utils";
+import { getKRCurrrentTime } from "@/utils/date";
 
 type FormData = {
     email: string;
     password: string;
+    ipAddr: string;
+    client: string;
 };
 
 const SignIn = () => {
@@ -17,11 +22,15 @@ const SignIn = () => {
         formState: { errors },
     } = useForm<FormData>();
     const router = useRouter();
+
+
     const onSubmit = handleSubmit(async (data) => {
         const response = await signIn("credentials", {
             redirect: false,
             email: data.email,
             password: data.password,
+            ipAddr: await getIpAddr(),
+            client: getUserAgent(),      
         });
         if (response?.ok) {
             Toast("success", "로그인에 성공하였습니다.", () =>

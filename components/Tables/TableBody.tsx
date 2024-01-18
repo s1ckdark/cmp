@@ -5,11 +5,8 @@ import { TableBodyProps } from "@/types/data";
 import Styles from "./TableBody.module.scss";
 import { useRouter } from "next/navigation";
 import { monthAtom, currentPageAtom } from "@/states";
-import {
-    dataListAtom,
-    historyListAtom,
-    historyToggleAtom,
-} from "@/states/data";
+import { historyListAtom, historyToggleAtom } from "@/states/data";
+import { userInfoAtom } from "@/states/localStorage";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { History, IconOverview } from "@/public/svgs";
 import { addComma } from "@/utils/data";
@@ -20,7 +17,8 @@ interface TypesMap {
 }
 
 export const TableBody = ({ rowType, data }: any) => {
-    // const [data, setData] = useRecoilState(dataListAtom) || null;
+    // const [viewData, setViewData] = useRecoilState(dataViewAtom) || null;
+    const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
     const pageNumber = useRecoilValue(currentPageAtom);
     const [history, setHistory] = useRecoilState(historyListAtom || null);
     const totalItems: any = data?.totalItems;
@@ -104,22 +102,43 @@ export const TableBody = ({ rowType, data }: any) => {
             "regDt",
             "modName",
             "modDt"
-            
+        ],
+        role: [
+            // "index",
+            "name",
+            "description"
+        ],
+        log: [
+            "userId",
+            "userName",
+            "ipAddress",
+            "clientInfo",
+            "regDt"
         ]
     };
 
     const view = (props?: any) => {
+        switch (rowType) {
+            case "user":
+                setUserInfo(props)
+                break;
+            default:
+                break;
+        }
         const typeUrl: any = {
             invoice: `/billing/invoice/view/${[
                 props.memberNo,
             ]}/${targetMonth}`,
-            customer: `/customer/view/${[props.id]}`,
-            user: `/admin/user/view/${[props.id]}`,
-            productGd: `/products/product/view/${[props.id]}`,
-            productCategory: `/products/category/view/${[props.id]}`,
-            billingProduct: `/billing/product/view/${[props.prodId]}`,
+            customer: `/customer/view/${props.id}`,
+            user: `/admin/user/view`,
+            productGd: `/products/product/view/${props.id}`,
+            productCategory: `/products/category/view/${props.id}`,
+            billingProduct: `/billing/product/view/${props.prodId}`,
+            role: `/admin/role/view/${props.id}`,
         };
-        router.push(typeUrl[rowType] + "/" + props.id);
+
+
+        router.push(typeUrl[rowType]);
     };
 
     const newData = (rowType: string) => {
@@ -180,6 +199,13 @@ export const TableBody = ({ rowType, data }: any) => {
                     </td>
                 );
                 break;
+            // case "index":
+            //     content = (
+            //         <td key={key + "-" + keyIndex} onClick={() => view(item)}>
+            //             {data.data.length - index}
+            //         </td>
+            //     );
+            //     break;
             case "history":
                 content = (
                     <td key={key + "-" + keyIndex}>

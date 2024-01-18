@@ -6,74 +6,88 @@ import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
 import { dataViewAtom} from '@/states/data';
 import Styles from './ProductWrite.module.scss';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Toast } from '@/components/Toast';
 import { IconSearch, IconCalendar } from '@/public/svgs';
-
-interface ProductViewCtProps {
-    memberNo: any;
-    targetMonth: any;
-}
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
+import dayjs from 'dayjs';
 interface form {
-    "memberNo": "string",
-    "memberName": "string",
-    "memberType": "string",
-    "target_start_date": "string",
-    "target_end_date": "string",
-    "target_month": "string"
-  }
+    "memberNo": string;
+    "memberName": string;
+    "memberType": string;
+    "target_start_date": string;
+    "target_end_date": string;
+    "target_month": string;  
+}
 
 interface ISW {
-    "billingId": "string",
-    "prodId": "string",
-    "prodName": "string",
-    "prodDetailType": "string",
-    "prodDetailTypeStd": "string",
-    "expPrice": 0,
-    "stdPrice": 0,
-    "discountRate": 0,
-    "etcdiscountamount": 0,
-    "estimateuseAmount": 0,
-    "trimDiscUnit": 0,
-    "promiseDiscountamount": 0,
-    "memberpricediscountamount": 0,
-    "memberpromisediscountadddamount": 0,
-    "billingUnit": "string",
-    "service_start_date": "string",
-    "service_end_date": "string",
-    "comment": "string"
+    "billingId": string;
+    "prodId": string;
+    "prodName": string;
+    "prodDetailType": string;
+    "prodDetailTypeStd": string;
+    "expPrice": number;
+    "stdPrice": number;
+    "discountRate": number;
+    "etcdiscountamount": number;
+    "estimateuseAmount": number;
+    "trimDiscUnit": number;
+    "promiseDiscountamount": number;
+    "memberpricediscountamount": number;
+    "memberpromisediscountadddamount": number;
+    "billingUnit": string;
+    "service_start_date": string;
+    "service_end_date": string;
+    "comment": string;
   }
 interface IMSP {
-    "billingId": "string",
-    "prodId": "string",
-    "prodName": "string",
-    "prodDetailType": "string",
-    "qty": 0,
-    "stdPrice": 0,
-    "discountRate": 0,
-    "promiseDiscountamount": 0,
-    "memberpricediscountamount": 0,
-    "memberpromisediscountadddamount": 0,
-    "trimDiscUnit": 0,
-    "etcdiscountamount": 0,
-    "billingUnit": "string",
-    "estimateuseAmount": 0,
-    "service_start_date": "string",
-    "service_end_date": "string",
-    "comment": "string"
+    "billingId": string;
+    "prodId": string;
+    "prodName": string;
+    "prodDetailType": string;
+    "qty": number;
+    "stdPrice": number;
+    "discountRate": number;
+    "promiseDiscountamount": number;
+    "memberpricediscountamount": number;
+    "memberpromisediscountadddamount": number;
+    "trimDiscUnit": number;
+    "etcdiscountamount": number;
+    "billingUnit": string;
+    "estimateuseAmount": number;
+    "service_start_date": string;
+    "service_end_date": string;
+    "comment": string;
   }
-const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
-    const [ form, setForm ] = useState();
+const ProductWrite= () => {
+    const [form, setForm] = useState<form>();
     const [ prodSw, setProdSw ] = useState<ISW[]>([]);
     const [ prodMsp, setProdMsp ] = useState<IMSP[]>([]);
-    const { register, handleSubmit, watch, reset, getValues, setError, setFocus, formState: { errors } } = useForm();
-    const onSubmit = (data:form) => {
-        console.log(data);
+    const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm();
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(new Date());
+    const [ targetMonth, setTargetMonth ] = useState<string>('');
+    const onSubmit = async (data: any) => {
+        let target_start_date = dayjs(data.target_start_date).format('YYYYMMDD');
+        let target_end_date = dayjs(data.target_end_date).format('YYYYMMDD');
+        let target_month = dayjs(data.target_start_date).format('YYYYMM');
+        let tmp: form = data;
+        tmp.target_month = target_month;
+        tmp.target_start_date = target_start_date;
+        tmp.target_end_date = target_end_date;
         const url = `/product/gdbilling`;
 
-        apiBe.put(url, data).then((res) => {
-            console.log(res);
-        })
+        const response = await apiBe.put(url, tmp);
+        if (response.status === 201) {
+            const result = response.data;
+            if (result.status === 201) {
+                Toast('success', '저장되었습니다.')
+            } else {
+                Toast('error', "저장에 실패하였습니다.");
+            }
+        }
     }
     const handleChange = (e:any, idx:number, prod:string) => {
         console.log(e.target.name, e.target.value, prod);
@@ -87,15 +101,16 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
             setProdMsp(updateItems);
         }
     }
-    // const handleSwChange = (e:any) => {
-    //     console.log(e.target.name, e.target.value);
-        
-    // }
 
-    // const handleMspChange = (e:any) => {
-    //     console.log(e.target.name, e.target.value);
+    const handleSwChange = (e:any) => {
+        console.log(e.target.name, e.target.value);
         
-    // }
+    }
+
+    const handleMspChange = (e:any) => {
+        console.log(e.target.name, e.target.value);
+        
+    }
     const updateProdSw = () => {
         console.log(prodSw);
         const url = '/product/gdbilling/product/sw';
@@ -107,8 +122,8 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
 
     }
     const addLine = (prod:string) => {
-        // const target = document.querySelector(`.${Styles[prod]} tbody`);
-        // if (target) {
+        const target = document.querySelector(`.${Styles[prod]} tbody`);
+        if (target) {
             const bodyRow = document.createElement('tr');
             let field:any = {
                 "sw": ["billingId", "prodId", "prodName", "prodDetailType", "prodDetailTypeStd", "expPrice", "stdPrice", "discountRate", "etcdiscountamount", "estimateuseAmount", "promiseDiscountamount", "memberpricediscountamount", "memberpromisediscountadddamount", "service_start_date", "service_end_date", "comment"],
@@ -126,41 +141,41 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
 
     
             // Check if the product type exists in the field object
-            // if (field[prod]) {
-            //     // Create a delete button cell
-            //     let deleteCell = document.createElement('td');
-            //     let deleteSpan = document.createElement('span');
-            //     deleteSpan.setAttribute('idx', 'delete')
-            //     deleteSpan.innerHTML = '&times;';
-            //     deleteSpan.style.cursor = 'pointer';
-            //     deleteSpan.addEventListener('click', () => bodyRow.remove());
-            //     deleteCell.appendChild(deleteSpan);
-            //     bodyRow.appendChild(deleteCell);
+            if (field[prod]) {
+                // Create a delete button cell
+                let deleteCell = document.createElement('td');
+                let deleteSpan = document.createElement('span');
+                deleteSpan.setAttribute('idx', 'delete')
+                deleteSpan.innerHTML = '&times;';
+                deleteSpan.style.cursor = 'pointer';
+                deleteSpan.addEventListener('click', () => bodyRow.remove());
+                deleteCell.appendChild(deleteSpan);
+                bodyRow.appendChild(deleteCell);
 
-            //     // Create input cells for each field
-            //     field[prod].forEach((fieldName:any) => {
-            //         let cell = document.createElement('td');
-            //         let input:any = document.createElement('input');
-            //         input.type = 'text';
-            //         input.setAttribute('name', fieldName);
-            //         input.onchange = (event:any) => handleChange(event, prod);
-            //         // Register the input with react-hook-form
-            //         // register(input);
+                // Create input cells for each field
+                field[prod].forEach((fieldName:any) => {
+                    let cell = document.createElement('td');
+                    let input:any = document.createElement('input');
+                    input.type = 'text';
+                    input.setAttribute('name', fieldName);
+                    input.onchange = (event:any) => handleChange(event, prod);
+                    // Register the input with react-hook-form
+                    // register(input);
 
-            //         cell.appendChild(input);
-            //         bodyRow.appendChild(cell);
-            //     });
-            // }
+                    cell.appendChild(input);
+                    bodyRow.appendChild(cell);
+                });
+            }
             
             // Append the new row to the table body
-            // target.appendChild(bodyRow);
+            target.appendChild(bodyRow);
             if(prod === 'sw') {
                 setProdSw([...prodSw, objectStructure[prod]])
             } else {
                 setProdMsp([...prodMsp, objectStructure[prod]])
             
             }
-        // }
+        }
     };
     const deleteLine = (prod:string, idx:number) => {
         console.log(idx);
@@ -229,54 +244,158 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
         const prevMonth = Number(getCurrentMonth()) - 1;
         return prevMonth.toString();
     }
+    
     const from_month = prev_month();
     const to_month = getCurrentMonth();
-    useEffect(() => {
-        const getCurrentMonthBilling = async() => {
-            const copyurl = `/product/gdbilling/copy/${memberNo}/${from_month}/${to_month}`;
-            const ieExistUrl = `/product/gdbilling?memberNo=${memberNo}&target_month=${targetMonth}`;
-            const response = await apiBe.post(copyurl);
-            if(response.status === 200) {
-                setForm(response.data)
-            } else {
-                Toast('error', '동일한 청구가 존재합니다')
-                const getFormData = await apiBe.get(ieExistUrl);
-                if(getFormData.status === 200) {
-                    setForm(getFormData.data[0])
+
+    const closeModal = () => {
+        const modal: any = document.querySelector("#modal");
+        const modalHeader = modal.querySelector('#modalHeader');
+        const modalBody = modal.querySelector('#modalBody');
+
+        const searchBtn = modal.querySelector('#searchBtn');
+
+        if (modal) {
+            modalHeader.innerHTML = '';
+            modalBody.innerHTML = '';
+            modal.classList.remove(Styles.open);
+            modal.querySelector('#modalContent').className = Styles.modalContent;
+            // searchBtn.removeEventListener('click', () => { });
+        }
+    }
+
+    const openModal = async(type: string) => {
+        const modal: any = document.querySelector("#modal");
+        const modalContent = modal.querySelector('#modalContent');
+        const modalHeader = modal.querySelector('#modalHeader');
+        const modalBody = modal.querySelector('#modalBody');
+        let inner = "";
+
+        switch (type) {
+            case "member":
+                inner = "<input type='text' id='memberInput' placeholder='회사 이름을 입력하세요.' /><button id='memberSearchBtn'>회사 검색</button>";
+                break;
+            default:
+                inner = "<p>알 수 없는 검색 유형입니다.</p>"; // "Unknown search type"
+        }
+
+        if (modal) {
+            modal.classList.add(Styles.open);
+            modalContent.classList.add(Styles[type]);
+            modalHeader.innerHTML = inner;
+
+            const searchBtn = type === "product" ? modalHeader.querySelector('#productSearchBtn') : modalHeader.querySelector('#memberSearchBtn');
+            const searchInput = type === "product" ? modalHeader.querySelector('#productInput') : modalHeader.querySelector('#memberInput');
+
+            searchBtn.addEventListener('click', () => {
+                if (searchBtn) {
+                    switch (type) {
+                        case "member":
+                            memberSearch(searchInput.value);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            });
+        }
+    }
+    const addMemberNo = (memberNo: string, memberName: string, memberType:string) => {
+        const modal: any = document.querySelector("#modal");
+        const modalContent = modal.querySelector('#modalContent');
+        const modalHeader = modal.querySelector('#modalHeader');
+        const modalBody = modal.querySelector('#modalBody');
+
+        if (modal) {
+            modalHeader.innerHTML = '';
+            modalBody.innerHTML = '';
+            modal.classList.remove(Styles.open);
+            modalContent.classList.remove(Styles.member);
+            setValue("memberNo", memberNo);
+            setValue("memberName", memberName);
+            setValue("memberType", memberType);
+        }
+    }
+    const memberSearch = async(value: string) => {
+        const url = '/customer';
+        const modalBody = document.querySelector("#modalBody");
+        const response = await apiBe(url, { params: { memberName: value } });
+        if (response.status === 200 || response.status === 201) {
+            const result = response.data;
+            let content = '';
+            let customers = result.content;
+            if (customers.length === 0) {
+                Toast("error", '회사명이 존재하지 않습니다.');
+            } else {
+                content = customers.map((item: any) => {
+                    return `<div data-memberno="${item.memberNo}" data-membername="${item.memberName}" data-memberType="${item.memberType}"><p>${item.memberNo} - ${item.memberName} - ${item.memberType}</p></div>`;
+                }).join('');
+            }
+      
+            if (modalBody) {
+                modalBody.innerHTML = content;
+
+                // Attach click event listeners to the dynamically created div elements
+                const divElements = modalBody.querySelectorAll('div');
+                divElements.forEach((div:any) => {
+                    const getMemberNo = div.getAttribute('data-memberno');
+                    const getMemberName = div.getAttribute('data-membername');
+                    const getMemberType = div.getAttribute('data-memberType');
+                    div.addEventListener('click', () => {
+                        if (getMemberNo && getMemberName && getMemberType) {
+                            addMemberNo(getMemberNo, getMemberName, getMemberType);
+                        }
+                    });
+                });
             }
         }
-        getCurrentMonthBilling();
-    }, [memberNo, targetMonth]);
+    }
+    // useEffect(() => {
+    //     const getCurrentMonthBilling = async() => {
+    //         const copyurl = `/product/gdbilling/copy/${memberNo}/${from_month}/${to_month}`;
+    //         const ieExistUrl = `/product/gdbilling?memberNo=${memberNo}&target_month=${targetMonth}`;
+    //         const response = await apiBe.post(copyurl);
+    //         if(response.status === 200) {
+    //             setForm(response.data)
+    //         } else {
+    //             Toast('error', '동일한 청구가 존재합니다')
+    //             const getFormData = await apiBe.get(ieExistUrl);
+    //             if(getFormData.status === 200) {
+    //                 setForm(getFormData.data[0])
+    //             }
+    //         }
+    //     }
+    //     getCurrentMonthBilling();
+    // }, [memberNo, targetMonth]);
     // 고객정보. 기간 저장 먼저하고
     // 그 후에 상품정보 저장
     // 상품정보 msp
     // 상품정보 sw
     return (
         <>
-            {/* <Breadcrumb />
+            <Breadcrumb />
             <div className={Styles.container}>
                 <form className={Styles.form} onSubmit={handleSubmit(onSubmit)}>
                     <div className={Styles.inputSection}>
                         <h1>고객 정보</h1>
                         <div className={Styles['col-3']}>
                             <div className={Styles.inputGroup}>
-                                <label htmlFor="memberNo">고객번호</label>
-                                <input type="text" {...register("memberNo")} />
-                            {errors.memberNo && <span className={Styles.error}>{errors.memberNo.message || null}</span>}
-                            </div>
-                            <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("memberName")} />
+                                    <input type="text" {...register("memberName")} onClick={() => openModal('member')} />
                                     <IconSearch />
                                 </div>
-                                {errors.memberName && <span className={Styles.error}>{errors.memberName?.message || null}</span>}
+                                {errors.memberName && <span className={Styles.error}>{errors.memberName.message}</span>}
+                            </div>
+                            <div className={Styles.inputGroup}>
+                                <label htmlFor="memberNo">고객번호</label>
+                                <input type="text" {...register("memberNo")} />
+                            {errors.memberNo && <span className={Styles.error}>{errors.memberNo.message}</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
                                 <input type="text" {...register("memberType")} />
-                                {errors.memberType && <span className={Styles.error}>{errors.memberType?.message || null}</span>}
+                                {errors.memberType && <span className={Styles.error}>{errors.memberType.message}</span>}
                             </div>
                         </div>
                     </div>
@@ -286,20 +405,58 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_month">청구년월</label>
                             <div className={Styles.search}>
-                                <input type="text" {...register("target_month")} />
-                                <IconCalendar />
+                                <input type="text" {...register("target_month")} value={targetMonth} />
+                                <IconCalendar /> 
                             </div>
-                            {errors.target_month && <span className={Styles.error}>{errors.target_month?.message || null}</span>}
+                            {errors.target_month && <span className={Styles.error}>{errors.target_month.message}</span>}
                         </div>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
-                            <input type="text" {...register("target_start_date")} />
-                            {errors.target_start_date && <span className={Styles.error}>{errors.target_start_date?.message || null}</span>}
-                        </div>
+                                <div className={Styles.search}>
+                                     <Controller
+                                        name="target_start_date"
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                        <DatePicker
+                                            selected={value}
+                                            onChange={(date) => {
+                                                onChange(date);
+                                                setStartDate(date);
+                                                setTargetMonth(dayjs(date).format('YYYYMM'));
+                                            }}   
+                                            dateFormat="yyyy/MM/dd"
+                                                isClearable
+                                            popperProps={{ strategy: "fixed" }}
+                                        />
+                                        )}
+                                    /> 
+                                    {/* <IconCalendar /> */}
+                                </div>
+                            {errors.target_start_date && <span className={Styles.error}>{errors.target_start_date.message}</span>}
+                            </div>
+                            
                         <div className={Styles.inputGroup}>
-                            <label htmlFor="target_end_date">상품종료일</label>
-                            <input type="text" {...register("target_end_date")} />
-                            {errors.target_end_date && <span className={Styles.error}>{errors.target_end_date?.message || null}</span>}
+                                <label htmlFor="target_end_date">상품종료일</label>
+                                <div className={Styles.search}>
+                                <Controller
+                                        name="target_end_date"
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <DatePicker
+                                            selected={value}
+                                            disabled={startDate ? false : true}
+                                            minDate={startDate}
+                                            maxDate={getLastDayOfMonth(startDate)}
+                                            onChange={(date) => { onChange(date); setEndDate(date) }}
+                                            dateFormat="yyyy/MM/dd"
+                                            isClearable
+                                            popperProps={{ strategy: "fixed" }}
+                                        />
+                                        )}
+                                    /> 
+                                    {/* <IconCalendar /> */}
+                                </div>
+                            {errors.target_end_date && <span className={Styles.error}>{errors.target_end_date.message}</span>}
                         </div>
                     </div>
                     </div>
@@ -383,8 +540,14 @@ const ProductWrite= ({memberNo, targetMonth}:ProductViewCtProps) => {
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
                         <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
                     </div>
-                </form>
-            </div> */}
+            </div> 
+            <div id="modal" className={Styles.modal}>
+                <div id="modalContent" className={Styles.modalContent}>
+                    <span className={Styles.closeBtn} onClick={()=> closeModal()}>&times;</span>
+                    <div id="modalHeader" className={Styles.modalHeader}></div>
+                    <div id="modalBody" className={Styles.modalBody}></div>
+                </div>
+            </div>
         </>
     )
 }

@@ -1,0 +1,55 @@
+.summary {
+  font-size: 14px;
+}
+.summary hgroup h1 {
+  margin: 50px 0 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+.summary table thead, .summary table tbody {
+  display: inline-table;
+}
+.summary table tr th {
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 20px;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+}
+.summary table tr:first-child th:first-child {
+  width: 15%;
+}
+.summary table tr:first-child th:nth-child(2) {
+  width: 30%;
+}
+.summary table tr:first-child th:nth-child(3) {
+  width: 55%;
+}
+.summary table tr td {
+  text-align: left;
+  padding: 10px 20px;
+  border-right: 1px solid #DEE1E7;
+  border-top: 1px solid #DEE1E7;
+  border-bottom: 1px solid #DEE1E7;
+  background-color: #fff;
+  height: 40px;
+}
+.summary table thead {
+  width: 45%;
+}
+.summary table tbody {
+  width: 55%;
+}
+.summary table tbody tr td {
+  width: 100%;
+}
+
+.summary__total {
+  margin-top: 20px;
+  text-align: right;
+  font-size: 16px;
+  font-weight: 600;
+}
+.summary__total tr td {
+  height: 42px;
+}/*# sourceMappingURL=Summary.module.css.map */

@@ -1,0 +1,53 @@
+.container {
+  background: #202124;
+  position: relative;
+  flex-shrink: 0;
+}
+.container.open {
+  width: 160px;
+}
+.container.open a {
+  padding: 0;
+  justify-content: center;
+}
+.container.open a p {
+  display: block;
+}
+.container.open .fullbg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 160px;
+  height: 100%;
+  background: #202124;
+  z-index: 0;
+}
+.container.close {
+  width: 90px;
+}
+.container.close a {
+  padding: 0;
+  justify-content: center;
+}
+.container.close a p {
+  display: none;
+}
+.container.close .fullbg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 90px;
+  height: 100%;
+  background: #202124;
+  z-index: 0;
+}
+.container.close .userName {
+  opacity: 0;
+}
+.container .toggle_btn {
+  background: #2B3035;
+}
+.container .toggle_btn button {
+  height: 40px;
+  width: 40px;
+}/*# sourceMappingURL=Sidebar.module.css.map */

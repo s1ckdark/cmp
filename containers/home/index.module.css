@@ -1,0 +1,11 @@
+.bgIntro {
+  background-image: url("/images/landingBg.png");
+  background-size: cover;
+}
+
+.btnStart {
+  width: 300px;
+  height: 40px;
+  background: #43B69A;
+  display: table-cell;
+}/*# sourceMappingURL=index.module.css.map */

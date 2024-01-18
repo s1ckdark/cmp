@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders } from "axios";
 import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
-import { parseCookies } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
@@ -86,7 +86,6 @@ export const apiFe = axios.create({
 });
 
 apiBe.interceptors.request.use((config) => {
-  
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -96,18 +95,51 @@ apiBe.interceptors.request.use((config) => {
     console.log("apiBe config :", config);
     return config;
 });
+const regenerateTokens = async () => {
+    try {
+        const {refreshToken} = cookie;
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BE_URL}/auth/access-token`, 
+            {refreshToken: refreshToken}
+        );
+        if (response.data.status === 200) {
+            const { accessToken, refreshToken } = response.data.data;
+            setCookie(null, 'accessToken', accessToken, { maxAge: 11 * 60 });
+            setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24 }); // 30 days
+            console.log("new accessToken", accessToken);
+            return accessToken;
+        }
+    } catch (error) {
+        console.log("error :", error);
+    }
+}
 
 apiBe.interceptors.response.use(
-    (response) => response.data, // 2xx 범위일 때
+    (response) => {
+        if (response.status === 200 || response.status === 201) {
+            console.log("response",response.data.status, response);
+            if (response.data.status === 200 || response.data.status === 201) {
+                 console.log("response",response.data.status, response);
+                return response.data // 2xx 범위일 때
+            } else if (response.data.status === 401) {
+                window.dispatchEvent(
+                    new CustomEvent("axiosError", {
+                        detail: {
+                            message: "Unauthorized",
+                        },
+                    }),
+                );
+                return regenerateTokens().then((token) => {
+                    response.config.headers.Authorization = `Bearer ${token}`;
+                    return axios.request(response.config);
+                });
+            }
+        }
+    },
     (error) => {
+        console.log("error",error);
         if (error.response && error.response.status) {
             switch (error.response.status) {
                 case 401:
-                    const session = getSession();
-                    console.log(session);
-                    if (error.response.config?.url === "/auth/session") {
-                        return Promise.reject(error);
-                    }
                     if (error.response.data.message === "BAD REQUEST") {
                         window.dispatchEvent(
                             new CustomEvent("axiosError", {
@@ -116,7 +148,7 @@ apiBe.interceptors.response.use(
                                 },
                             }),
                         );
-                    } else {
+                    } else if (error.response.data.message === "Full authentication is required to access this resource"){
                         window.dispatchEvent(
                             new CustomEvent("axiosError", {
                                 detail: {
@@ -124,6 +156,18 @@ apiBe.interceptors.response.use(
                                 },
                             }),
                         );
+                        console.log("Unauthorized");
+                    
+                    }
+                    else {
+                        window.dispatchEvent(
+                            new CustomEvent("axiosError", {
+                                detail: {
+                                    message: "Unauthorized",
+                                },
+                            }),
+                        );
+                        console.log()
                     }
                     return Promise.reject(error);
                 case 403:
@@ -131,6 +175,15 @@ apiBe.interceptors.response.use(
                         new CustomEvent("axiosError", {
                             detail: {
                                 message: "Forbidden",
+                            },
+                        }),
+                    );
+                    return new Promise(() => { });
+                case 409:
+                    window.dispatchEvent(
+                        new CustomEvent("axiosError", {
+                            detail: {
+                                message: "Duplicate Data",
                             },
                         }),
                     );

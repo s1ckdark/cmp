@@ -14,14 +14,14 @@
         }
     }
 }
-.invoiceList {
+.invoice {
     margin: 0 auto;
     tr {
         &:nth-child(1) {
             th {
                 &:nth-child(1) {
                     width: 3%;
-                    min-width: 80px;
+                    min-width: 50px;
                 }
                 &:nth-child(2) {
                     width: 8%;
@@ -104,6 +104,30 @@
                     width: 5%;
                     min-width: 50px;
                 }
+            }
+        }
+    }
+}
+.log {
+    tr {
+        &:nth-child(1) {
+            th {
+                &:nth-child(1) {
+                    width: 220px;
+                }
+                &:nth-child(2) {
+                    width: 100px;
+                }
+                &:nth-child(3) {
+                    width: 100px;
+                }
+                &:nth-child(4) {
+                    width:980px;
+                }
+                &:nth-child(5) {
+                    width: 150px;
+                }
+  
             }
         }
     }

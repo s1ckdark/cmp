@@ -18,7 +18,7 @@ const InvoiceList = () => {
             <Breadcrumb />
             <MonthBar />
             <div className={`${Styles.table} ${Styles.withSearchbar}`}>
-                <Searchbar />
+                <Searchbar rowType={'invoice'} />
                 <Tables rowType={"invoice"} />
             </div>
         </>

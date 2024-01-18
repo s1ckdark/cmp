@@ -40,10 +40,22 @@
     }
 }
 .productCategory {
-        tr {
-            td {
-                border: 1px solid #DEE1E7;
+    tr {
+        td {
+            border: 1px solid #DEE1E7;
+        }
+    }
+}
+
+.log {
+    tr {
+        td {
+            font-size: 12px;
+            &:nth-child(4) {
+                text-align: left;
+            }
+            &:nth-child(5) {
             }
         }
     }
-    
+}

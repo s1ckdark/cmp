@@ -1,0 +1,40 @@
+.container {
+  background-color: #fff;
+  padding: 50px;
+}
+.container .inputGroup {
+  margin-bottom: 30px;
+}
+.container .inputGroup label {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  display: block;
+}
+.container .inputGroup p {
+  width: 100%;
+  border: 1px solid #DEE1E7;
+  border-radius: 5px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+  padding: 20px;
+}
+.container .btnArea {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+.container .btnArea .btn {
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 10px;
+}
+.container .btnArea .btn:last-child {
+  margin-right: 0;
+}/*# sourceMappingURL=ProductsView.module.css.map */

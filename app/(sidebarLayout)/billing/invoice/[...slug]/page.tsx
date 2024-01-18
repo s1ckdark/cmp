@@ -1,16 +1,16 @@
-"use client";
 import InvoiceView from "./view";
 import InvoiceList from "./list";
 import InvoiceVisual from "./visual";
 
+
 const invoicePage = ({ params }: any) => {
     const { slug } = params;
+    console.log(params);
     const pageType = slug[0];
     let pageNumber = 1,
         memberNo = "",
         targetMonth = "";
     if (pageType === "list") {
-        // slug.length === 1 ? redirect('./list/1') :  pageNumber = slug[1];
         pageNumber = slug[1];
     } else {
         memberNo = slug[1];

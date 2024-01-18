@@ -1,3 +1,4 @@
+import axios from "axios";
 
 /** 숫자를 입력받아 갯수만큼 아이템을 가진 어레이 리턴 */
 export const getNumberArr = (length: number): number[] => {
@@ -24,3 +25,18 @@ export const valueOr = (value: string | boolean | undefined, _placeholder?: stri
     if (value === '') return placeholder;
     return ifTrue ?? value;
 };
+
+export const getIpAddr = async() => {
+    const response = await axios("https://api.ipify.org?format=json");
+    const result = response.data;
+    return result.ip;
+}
+    
+export const getUserAgent = () => {
+    const userAgent = window.navigator.userAgent;
+    const platform = window.navigator.platform;
+    const randomString = Math.random().toString(20).substring(2, 14) + Math.random().toString(20).substring(2, 14);
+
+    const deviceID = `${userAgent}-${platform}-${randomString}`;
+    return deviceID;
+}

@@ -1,0 +1,9 @@
+.table {
+  background-color: #fff;
+}
+.table.withSearchbar > div {
+  padding: 20px 50px 10px;
+}
+.table.withSearchbar > div:nth-child(2) {
+  padding: 0 50px 0 50px;
+}/*# sourceMappingURL=InvoiceList.module.css.map */

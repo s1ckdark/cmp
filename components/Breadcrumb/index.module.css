@@ -1,0 +1,14 @@
+.navi {
+  margin-left: 30px;
+}
+.navi li a {
+  text-decoration: none;
+}
+.navi li:first-child svg {
+  width: 12px;
+  margin-right: 10px;
+}
+.navi li svg {
+  width: 5px;
+  margin-right: 10px;
+}/*# sourceMappingURL=index.module.css.map */

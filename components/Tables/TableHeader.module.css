@@ -1,0 +1,124 @@
+.container tr {
+  margin: 15px 0 10px;
+  min-height: 40px;
+  font-size: 14px;
+}
+.container tr th {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+  min-width: 100px;
+  min-height: 20px;
+}
+
+.invoice {
+  margin: 0 auto;
+}
+.invoice tr:nth-child(1) th:nth-child(1) {
+  width: 3%;
+  min-width: 50px;
+}
+.invoice tr:nth-child(1) th:nth-child(2) {
+  width: 8%;
+  min-width: 100px;
+}
+.invoice tr:nth-child(1) th:nth-child(3) {
+  width: 15%;
+  min-width: 180px;
+}
+.invoice tr:nth-child(1) th:nth-child(4) {
+  width: 5%;
+  min-width: 100px;
+}
+.invoice tr:nth-child(1) th:nth-child(5) {
+  width: 15%;
+  min-width: 200px;
+}
+.invoice tr:nth-child(1) th:nth-child(6) {
+  width: 5%;
+  min-width: 80px;
+}
+.invoice tr:nth-child(1) th:nth-child(7) {
+  width: 20%;
+  min-width: 500px;
+}
+.invoice tr:nth-child(1) th:nth-child(8) {
+  width: 20%;
+  min-width: 500px;
+}
+.invoice tr:nth-child(1) th:nth-child(9) {
+  width: 10%;
+  min-width: 180px;
+}
+.invoice tr:nth-child(1) th:nth-child(10) {
+  width: 10%;
+  min-width: 180px;
+}
+.invoice tr:nth-child(1) th:nth-child(11) {
+  width: 10%;
+  min-width: 180px;
+}
+
+.productGd tr:nth-child(1) th:nth-child(1) {
+  width: 5%;
+  min-width: 50px;
+}
+.productGd tr:nth-child(1) th:nth-child(2) {
+  width: 15%;
+  min-width: 100px;
+}
+.productGd tr:nth-child(1) th:nth-child(3) {
+  width: 10%;
+  min-width: 100px;
+}
+.productGd tr:nth-child(1) th:nth-child(4) {
+  width: 30%;
+  min-width: 80px;
+}
+.productGd tr:nth-child(1) th:nth-child(5) {
+  width: 10%;
+  min-width: 100px;
+}
+.productGd tr:nth-child(1) th:nth-child(6) {
+  width: 10%;
+  min-width: 50px;
+}
+.productGd tr:nth-child(1) th:nth-child(7) {
+  width: 10%;
+  min-width: 100px;
+}
+.productGd tr:nth-child(1) th:nth-child(8) {
+  width: 5%;
+  min-width: 50px;
+}
+
+.log tr:nth-child(1) th:nth-child(1) {
+  width: 220px;
+}
+.log tr:nth-child(1) th:nth-child(2) {
+  width: 100px;
+}
+.log tr:nth-child(1) th:nth-child(3) {
+  width: 100px;
+}
+.log tr:nth-child(1) th:nth-child(4) {
+  width: 980px;
+}
+.log tr:nth-child(1) th:nth-child(5) {
+  width: 150px;
+}
+
+.productCategory tr th:nth-child {
+  width: 25%;
+}
+.productCategory tr th:nth-child {
+  width: 30%;
+}
+.productCategory tr th:nth-child {
+  width: 30%;
+}
+.productCategory tr th:nth-child {
+  width: 15%;
+}/*# sourceMappingURL=TableHeader.module.css.map */

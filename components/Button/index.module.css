@@ -1,0 +1,76 @@
+.commonButton {
+  white-space: nowrap;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+.commonButton:disabled {
+  opacity: 0.4;
+}
+.commonButton.tiny {
+  min-width: 80px;
+  height: 20px;
+  padding: 0 8px;
+  font-size: 12px;
+  color: var(--color-gray-4);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-9);
+  border-radius: 3px;
+}
+.commonButton.tiny:hover, .commonButton.tiny:focus {
+  border-color: var(--color-gray-4);
+}
+.commonButton.small {
+  min-width: 80px;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+.commonButton.normal {
+  height: var(--h-comment-form);
+  padding: 0 14px;
+  font-size: 14px;
+  min-width: 100px;
+  max-width: 300px;
+  min-height: 36px;
+}
+.commonButton.primary {
+  color: var(--color-white);
+  background-color: var(--color-blue);
+}
+.commonButton.primary:hover, .commonButton.primary:focus {
+  background-color: var(--color-blue-dark);
+}
+.commonButton.inverse {
+  color: var(--color-black);
+}
+.commonButton.inverse:hover, .commonButton.inverse:focus {
+  text-decoration: underline;
+}
+.commonButton.ghost {
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-c);
+}
+.commonButton.ghost:hover, .commonButton.ghost:focus {
+  border: 1px solid var(--color-gray-a);
+}
+.commonButton.green {
+  color: var(--color-white);
+  background: #43B69A;
+  display: table-cell;
+}
+.commonButton.gray {
+  color: var(--color-gray-4);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-9);
+}
+.commonButton.gray:hover, .commonButton.gray:focus {
+  border-color: var(--color-gray-4);
+}
+.commonButton.back {
+  color: var(--color-red-4);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-9);
+}
+.commonButton.back:hover, .commonButton.back:focus {
+  border-color: var(--color-gray-4);
+}/*# sourceMappingURL=index.module.css.map */

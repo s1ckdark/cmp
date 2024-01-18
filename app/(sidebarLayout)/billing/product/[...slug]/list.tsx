@@ -1,10 +1,9 @@
 import ProductList from "@/containers/billing/product/ProductList";
 
-const ProductListPage = ({pageNumber}:any) => {
-    console.log("ProductList pageNumber :",pageNumber)
+const ProductListPage = () => {
     return (
             <>
-                <ProductList pageNumber={pageNumber} />
+                <ProductList />
             </>
 
     );

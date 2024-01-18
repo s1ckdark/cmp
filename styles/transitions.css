@@ -1,0 +1,37 @@
+.frontTransition::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+.frontTransition::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fadeOut, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slideToLeft;
+}
+.frontTransition::view-transition-new(root) {
+  mix-blend-mode: plus-lighter;
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fadeIn, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slideFromRight;
+}
+
+.backTransition::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+.backTransition::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fadeOut, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slideToRight;
+}
+.backTransition::view-transition-new(root) {
+  mix-blend-mode: plus-lighter;
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fadeIn, 300ms cubic-bezier(0.4, 0, 0.2, 1) both slideFromLeft;
+}
+
+.baseTransition::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+.baseTransition::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fadeOut;
+}
+.baseTransition::view-transition-new(root) {
+  mix-blend-mode: plus-lighter;
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fadeIn;
+}
+
+::view-transition-old(transition-m2-album),
+::view-transition-new(transition-m2-album) {
+  height: 100%;
+}/*# sourceMappingURL=transitions.css.map */

@@ -7,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: "/apibe/:path*",
-        destination: "http://10.20.19.96:30006/api/:path*",
+        destination: process.env.NEXT_BACKEND_URL+"/api/:path*",
       },
     ];
   },

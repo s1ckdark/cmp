@@ -7,6 +7,7 @@ import { monthAtom } from '@/states';
 import { IconSearch } from '@/public/svgs';
 import { Toast } from '../Toast';
 import { apiBe } from '@/services';
+import { pathSpliter } from '@/utils/data';
 
 export interface SearchBarProps {
   placeholder: string
@@ -14,38 +15,60 @@ export interface SearchBarProps {
   value: string
   disabled?: boolean
 }
+interface fetchingProps {
+  memberName?: string;
+  targetMonth?: string;
+  pageNumber?: number;
+  userName?: string;
+  userEmail?: string;
+}
 
 interface boxProps {
   placeholder: string
   wording?: string
 }
-const Searchbar = () => {
+const Searchbar = ({ rowType }:{rowType:string}) => {
   const month = useRecoilValue(monthAtom);
-  const [ invoice, setInvoice ] = useRecoilState(dataListAtom) || null;
+  const [ data, setData ] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
-
-  const matching:any = {
+  const { pageNumber }: any = pathSpliter(pathname);
+  const matching: any = {
     "/billing/invoice/list": {
-      "placeholder":"업체명을 입력해주세요",
+      "placeholder": "업체명을 입력해주세요",
     },
     "/products/product/list": {
-      "placeholder":"업체명을 입력해주세요",
+      "placeholder": "업체명을 입력해주세요",
+    },
+    "/admin/log/list": {
+      "placeholder": "유저명을 입력해주세요",
+    },
+    "/admin/user/list": {
+      "placeholder": "유저명을 입력해주세요",
     }
   }
   const init = () => {
-    const path = pathname.split('/').slice(0,4).join('/');
+    const path = pathname.split('/').slice(0, 4).join('/');
     return matching[path].placeholder;
   }
   const onChange = (value: string) => {
     setKeyword(value);
   }
   
-  const fetching = async (pageNumber: number, targetMonth:string = month, memberName:string) => {
-    const url = `/invoice/search`;
-    const response = await apiBe.get(url, { params: { memberName:memberName , targetMonth: month } });
+  const fetching = async (rowType:string, params:any) => {
+    const endpoint: any = {
+      invoice: {
+        url: `/invoice/search`,
+        key: 'content'
+      },
+      log: {
+        url: `/user/logging`,
+        key:'content'
+      }
+    }
+    const response = await apiBe.get(endpoint[rowType].url, { params: params});
     if (response.status === 200 && response.data.content !== null) {
-        setInvoice({ data: response.data.content, totalPages: response.data.totalPages});
+        setData({ data: response.data.content, totalPages: response.data.totalPages, currentPage: pageNumber});
     } else {
         Toast('error', '데이터를 불러오는데 실패하였습니다.');
     }
@@ -54,7 +77,18 @@ const Searchbar = () => {
 
   const onSearch = async() => {
     Toast('info', '검색중입니다.');
-    fetching(1, month, keyword);
+    const params:any = {
+      "invoice": {
+        page: pageNumber || 1,
+        targetMonth: month,
+        memberName: keyword
+      },
+      "log": {
+        page:  pageNumber || 1,
+        userName: keyword
+      }
+    }
+    fetching(rowType, params[rowType]);
   };
 
 

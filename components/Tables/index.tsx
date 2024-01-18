@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import { TableHeader } from "./TableHeader";
 import { TableBody } from "./TableBody";
 import styles from "./index.module.scss";
-import { TablesProps, TableHeaderProps, TableBodyProps } from "@/types/data";
+import { TablesProps } from "@/types/data";
 import Pagination from "@/components/Pagination";
-import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
-import { currentPageAtom } from "@/states";
+import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
+// import { currentPageAtom } from "@/states";
 import { dataListAtom } from "@/states/data";
 import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
@@ -17,12 +17,19 @@ import { apiBe } from "@/services";
 import { Toast } from "@/components/Toast";
 import { monthAtom } from "@/states";
 
-export const Tables = ({ rowType, className }: TablesProps) => {
-    const [data, setData] = useState([]);
+interface dataProps {
+    data: any;
+    totalPages: number;
+    currentPage?: number;
+}
+export const Tables = ({ rowType }: TablesProps) => {
+    useResetRecoilState(dataListAtom);
+    const [data, setData] = useRecoilState(dataListAtom);
     const [ mounted, setMounted ] = useState(false);
     const targetMonth = useRecoilValue(monthAtom) || null;
     const router = useRouter();
     const path = usePathname();
+    
     
     
     useEffect(() => {
@@ -40,8 +47,8 @@ export const Tables = ({ rowType, className }: TablesProps) => {
             },
             productCategory: {
                 url: "/product/producttype",
-                params: { targetMonth, page: pageNumber },
-                key: "products",
+                params: { page: pageNumber },
+                key: "content",
             },
             productGd: {
                 url: "/product/product",
@@ -62,26 +69,35 @@ export const Tables = ({ rowType, className }: TablesProps) => {
                 url: "/menu",
                 params: { page: pageNumber },
             },
+            role: {
+                url: "/role",
+                params: { page: pageNumber },
+            },
+            log: {
+                url: "/user/logging",
+                params: { page: pageNumber },
+                key: "content",
+            }
         };
 
-        const fetching = async (
-            pageNumber: number,
-        ) => {
+        const fetching = async () => {
+            
             const response = await apiBe.get(endpoint[rowType]['url'], {
                 params: endpoint[rowType]['params']
             });
+            console.log(response);
             if (response.status === 200 || response.status === 201) {
                 setData({
                     data: endpoint[rowType]['key'] !== undefined ? response.data[endpoint[rowType]['key']]:response.data,
                     totalPages: response.data.totalPages,
-                    currentPage: pageNumber,
+                    currentPage: pageNumber
                 });
                 setMounted(true);
             } else {
                 Toast("error", "데이터를 불러오는데 실패하였습니다.");
             }
         };
-        fetching(pageNumber);
+        fetching();
     }, [path, rowType, targetMonth]);
 
     const onPageChange = (newPage: number) => {
@@ -98,35 +114,25 @@ export const Tables = ({ rowType, className }: TablesProps) => {
         billingProduct: "/billing/product",
         productCategory: "/products/category",
         menu: "/admin/menu",
+        role: "/admin/role",
+        log: "/admin/log",
     };
     
     const write = () => {
-        router.push(`${pageUrl[rowType]}/write`);
+        switch (rowType) {
+            case "user":
+                return router.push(`${pageUrl[rowType]}/register`);
+            default:
+                return router.push(`${pageUrl[rowType]}/write`);
+        }
     };
 
     const writeDisable = () => {
         switch (rowType) {
             case "invoice":
                 return false;
-                break;
-            case "productGd":
-                return true;
-                break;
-            case "customer":
-                return true;
-                break;
-            case "user":
-                return true;
-                break;
-            case "billingProduct":
-                return true;
-                break;
-            case "productCategory":
-                return true;
-                break;
-            case "menu":
-                return true;
-                break;
+            case "log":
+                return false;
             default:
                 return true;
         }

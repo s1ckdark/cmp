@@ -23,7 +23,6 @@ interface UsePaginationProps {
     const siblingsStart = Math.max(Math.min(page + 1 - siblingCount, count - boundaryCount - siblingCount * 2 - 1), boundaryCount + 2);
   
     const siblingsEnd = Math.min(Math.max(page + 1 + siblingCount, boundaryCount + siblingCount * 2 + 2), endPages.length > 0 ? endPages[0] - 2 : endPage - 1);
-  
     const itemList = [
       "prev",
       ...startPages,
@@ -48,7 +47,7 @@ interface UsePaginationProps {
         : {
             key: index,
             onClick: () => onPageChange(item === "next" ? page + 1 : page - 1),
-            disabled: disabled || item.indexOf("ellipsis") > -1 || (item === "next" ? page >= count - 1 : page - 1 < 0),
+            disabled: disabled || item.indexOf("ellipsis") > -1 || (item === "next" ? page >= count : page === 1),
             selected: false,
             item,
           }

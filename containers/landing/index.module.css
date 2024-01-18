@@ -1,0 +1,26 @@
+.boxSection {
+  width: 100%;
+  margin: 0 0 20px 0;
+  border: 1px solid #DEE1E7;
+  background-color: #FBFCFF;
+}
+.boxSection .inner {
+  padding: 50px;
+  width: 100%;
+}
+.boxSection .inner .label {
+  font-size: 24px;
+  color: #313131;
+  width: 100%;
+  display: block;
+  margin-bottom: 20px;
+}
+.boxSection .currentMonth {
+  font-size: 24px;
+  text-align: center;
+  padding: 40px 0 30px 0;
+  color: #313131;
+}
+.boxSection .currentMonth label {
+  margin-right: 15px;
+}/*# sourceMappingURL=index.module.css.map */

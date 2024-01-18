@@ -1,0 +1,38 @@
+.userinfo {
+  background: #2B3035;
+  z-index: 10;
+}
+.userinfo.open > div > div {
+  opacity: 1;
+}
+.userinfo.close > div > div {
+  opacity: 0;
+}
+.userinfo .container {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px 10px;
+}
+.userinfo .container .user_name {
+  font-size: 16px;
+  color: #fff;
+}
+.userinfo .linkArea {
+  display: flex;
+  justify-content: flex-end;
+}
+.userinfo .linkArea a {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.userinfo .linkArea a svg {
+  width: 20px;
+  height: 20px;
+}/*# sourceMappingURL=UserInfo.module.css.map */

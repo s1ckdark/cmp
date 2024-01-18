@@ -4,7 +4,7 @@ import { IconSetting, IconHome, IconUsers } from '@/public/svgs';
 import Loading from '@/components/Loading'
 import { parseCookies } from 'nookies';
 
-const UserInfo = async({isOpen}:{isOpen:boolean}) => {
+const UserInfo = ({isOpen}:{isOpen:boolean}) => {
   const cookie = parseCookies();
   const { username } = cookie;
   if(!username) return <Loading/>

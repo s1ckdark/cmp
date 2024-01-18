@@ -34,6 +34,7 @@
     "next-auth": "^4.24.5",
     "postcss": "8.4.28",
     "react": "^18.2.0",
+    "react-datepicker": "^4.25.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-hotkeys-hook": "^4.4.1",
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
     "@types/cookie": "^0.6.0",
+    "@types/react-datepicker": "^4.19.5",
     "@types/react-transition-group": "^4.4.8",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
@@ -66,6 +68,7 @@
     "nookies": "^2.5.2",
     "path": "^0.12.7",
     "prettier": "^3.0.3",
+    "react-select": "^5.8.0",
     "sass": "^1.68.0",
     "stylelint": "^15.11.0",
     "stylelint-config-prettier-scss": "^1.0.0",

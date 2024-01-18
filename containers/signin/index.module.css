@@ -1,0 +1,12 @@
+.loginForm {
+  background-color: #F5F8FB;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.bgIntro {
+  background-image: url("/images/loginBg.png");
+  background-size: cover;
+  background-position: center;
+}/*# sourceMappingURL=index.module.css.map */

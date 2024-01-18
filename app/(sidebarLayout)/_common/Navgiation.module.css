@@ -1,0 +1,101 @@
+.container {
+  width: 100%;
+  padding: 0;
+  margin: 30px auto;
+  background: #202124;
+}
+.container .user_name {
+  font-size: 16px;
+  color: #fff;
+}
+.container > ul {
+  margin: 15px 0 30px;
+}
+.container.open {
+  margin: 0;
+}
+.container.open > ul a {
+  margin-left: 30px;
+}
+.container.open > ul a > span {
+  margin-left: 15px;
+}
+.container.close {
+  margin: 0;
+}
+.container.close > ul a {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50%;
+  margin: 15px auto !important;
+  justify-content: center !important;
+}
+.container.close > ul a > span {
+  width: 20px;
+  height: 20px;
+}
+.container.close > ul a > span svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.container .navigationItem {
+  width: 100%;
+}
+.container .navigationItem .depth {
+  width: 80%;
+  margin: 0 auto;
+  color: #fff;
+  display: flex;
+}
+.container .navigationItem .depth_0 {
+  justify-content: flex-end;
+  align-items: center;
+  border-radius: 30px;
+  padding: 10px 12px;
+  position: relative;
+  display: flex;
+}
+.container .navigationItem .depth_0:hover {
+  background-color: #43B69A;
+}
+.container .navigationItem .depth_0 > svg {
+  width: 20px;
+  height: 20px;
+}
+.container .navigationItem .depth_0 span {
+  width: 20px;
+  text-align: center;
+  position: relative;
+}
+.container .navigationItem .depth_0 p {
+  text-decoration: none;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: -0.5px;
+  font-weight: 700;
+}
+.container .navigationItem .depth_1 {
+  font-size: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.container .navigationItem .depth_1 p {
+  margin-right: 10%;
+}
+.container .navigationItem .depth_2 {
+  font-weight: 500;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.container .navigationItem .depth_2 p {
+  margin-right: 10%;
+}/*# sourceMappingURL=Navgiation.module.css.map */

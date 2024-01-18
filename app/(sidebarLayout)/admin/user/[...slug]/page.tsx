@@ -5,6 +5,7 @@ import UserWrite from "./write";
 import UserEdit from "./edit";
 
 const userPage = async ({ params }: any) => {
+
     const { slug } = params;
     const pageType = slug[0];
     let pageNumber = 1,
@@ -25,7 +26,12 @@ const userPage = async ({ params }: any) => {
                 <UserView />
             );
             break;
-        case "write":
+        case "edit":
+            return (
+                <UserEdit />
+            );
+            break;
+        case "register":
             return (
                 <UserWrite  />
             );

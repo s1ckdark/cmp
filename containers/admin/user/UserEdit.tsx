@@ -1,8 +1,15 @@
+import Breadcrumb from "@/components/Breadcrumb";
+import RegistrationForm from "@/components/Form/RegistrationForm";
+import { userInfoAtom } from "@/states/data";
+import { useRecoilValue } from "recoil";
+
 const UserEdit = () => {
+    const userInfo = useRecoilValue(userInfoAtom);
     return (
-        <div>
-            <h1>Edit</h1>
-        </div>
+        <>
+            <Breadcrumb />
+            <RegistrationForm data={userInfo} type={"edit"} />
+        </>
     );
 }
 export default UserEdit;

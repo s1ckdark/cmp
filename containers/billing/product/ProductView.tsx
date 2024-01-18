@@ -1,23 +1,31 @@
 'use client';
-import React from  'react';
+import React, { useState } from  'react';
 import Styles from './ProductView.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useRecoilValue } from 'recoil';
-import { dataListAtom } from '@/states/data';
+import { dataViewAtom } from '@/states/data';
 import lodash from 'lodash';
 import Loading from '@/components/Loading';
-import { useRouter } from 'next/navigation';
 
 const ProductsView = () => {
-    const data = useRecoilValue(dataListAtom);
+    const [product, setProduct] = useState({});
     const pathname = usePathname();
     const router = useRouter();
     const prodId = lodash.last(pathname.split('/'));
-    const product = lodash.find(data?.data, {prodId});
 
-    console.log(data);
+    useEffect(() => {
+        const fetching = async() => {
+            const url = `/product/gdbliling?memberNo=${prodId}&targetMonth=${targetMonth}`;
+            const response = await apiBe.get(url);
+            console.log(response);
+            if(response.status === 200) setProduct(response.data);
+            console.log(response.data);
+        }
+        fetching();
+    
+    })
     console.log('product', prodId, product, data?.data);
     if(!product) return <Loading />
     const { prodName, category, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;

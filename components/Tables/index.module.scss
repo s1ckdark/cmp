@@ -305,6 +305,20 @@
             }
         }
     }
+    &.log {
+        table {
+            tr {
+                td {
+                    &:nth-child(4) {
+                        text-align: left;
+                    }
+                    &:nth-child(5) {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
 }
 .btnArea {
     display: flex;

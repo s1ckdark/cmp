@@ -121,3 +121,19 @@ export const getMonth = (dateStr:string, operation:string) => {
 
     return adjustedYear + '년 ' + (adjustedMonth < 10 ? '0' : '') + adjustedMonth + '월';
 }
+
+export const getCurrentMonth = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Convert back to 1-indexed
+
+    return year + (month < 10 ? '0' : '') + month;
+}
+
+export const getLastDayOfMonth = (date:Date) => {
+    var currentDate = date; // Get the current date
+    var year = currentDate.getFullYear(); // Get the current year
+    var month = currentDate.getMonth(); // Get the current month (0-11)
+    var lastDay = new Date(year, month + 1, 0); // Set date to the last day of the month
+    return lastDay; // Return the last day of the month
+}

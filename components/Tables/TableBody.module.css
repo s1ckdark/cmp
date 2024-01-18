@@ -1,0 +1,44 @@
+.container tr {
+  margin: 15px 0 10px;
+  height: 30px;
+  line-height: 25px;
+  cursor: pointer;
+}
+.container tr td {
+  text-align: center;
+  border: 1px solid #DEE1E7;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.invoiceList tr td {
+  position: relative;
+}
+.invoiceList tr td svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.productGd tr td {
+  border: 1px solid #DEE1E7;
+  position: relative;
+}
+.productGd tr td svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.productCategory tr td {
+  border: 1px solid #DEE1E7;
+}
+
+.log tr td {
+  font-size: 12px;
+}
+.log tr td:nth-child(4) {
+  text-align: left;
+}/*# sourceMappingURL=TableBody.module.css.map */

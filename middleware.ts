@@ -13,22 +13,21 @@ export const middleware = async (req: NextRequest, res: NextResponse, event: Nex
   console.log("Middleware executing!");
   const { pathname } = req.nextUrl;
   console.log("pathname : ",pathname);
-  // //미들웨어 쿠키
-  // let cookie = req.cookies.get("Authroization")?.value || ""
+  
+  // 미들웨어 쿠키
+  // const allCookies = req.cookies.getAll()
+  // console.log(allCookies)
+  // let accessToken = req.cookies.get("accessToken")?.value || "";
+  // console.log("accessToken in middleware :",cookies, accessToken);
 
-
-  // //setting Headers
+  //setting Headers
   // const requestHeaders = new Headers(req.headers);
-  // requestHeaders.set("Authroization", cookie);
+  // requestHeaders.set("Authroization", "bearer "+accessToken);
 
 
-  // const token = await getToken({ req });
-  // console.log("Token ",token);
   // const {searchParams} = req.nextUrl;
   // const callbackUrl = searchParams.get("callbackUrl");
   
-  // let accessToken = request.cookies.get("next-auth.session-token");
-
   // const session = await getServerSession(authOptions);
   // console.log("serverSession :",session);
   // if(!session) return NextResponse.redirect("/signin");
@@ -40,10 +39,9 @@ export const middleware = async (req: NextRequest, res: NextResponse, event: Nex
   // const accessToken: string | undefined = request.cookies.get('next-auth.session-token')?.value;
   // if(accessToken) {
   //   try {
-  // //     console.log("accessToken in middleware :",accessToken);
-  //     const requestHeaders = new Headers(request.headers)
+  //     const requestHeaders = new Headers(req.headers)
   //     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
-  //     const newRequest: any = new Request(request, {
+  //     const newRequest: any = new Request(req, {
   //       headers: requestHeaders,
   //     });
       
@@ -64,7 +62,7 @@ export const middleware = async (req: NextRequest, res: NextResponse, event: Nex
     // // You might need to use a different approach to set cookies.
     // headers.append('Set-Cookie', 'yourCookieName=yourCookieValue; Path=/; HttpOnly');
 
-    // // Create a new response with modified headers
+    // Create a new response with modified headers
     // return NextResponse.next({
     //     headers: headers
     // });

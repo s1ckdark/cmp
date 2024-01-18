@@ -1,0 +1,50 @@
+.headerContainer th {
+  border: 1px solid #DEE1E7;
+  font-size: 14px;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+  color: #313131;
+  padding: 15px 0 10px;
+}
+.headerContainer.top10 tr th:nth-child(1) {
+  width: 40%;
+}
+.headerContainer.top10 tr th:nth-child(2) {
+  width: 15%;
+}
+.headerContainer.top10 tr th:nth-child(3) {
+  width: 15%;
+}
+.headerContainer.top10 tr th:nth-child(4) {
+  width: 30%;
+}
+.headerContainer.perMonth tr th:nth-child(1), .headerContainer .perWeek tr th:nth-child(1) {
+  width: 25%;
+}
+.headerContainer.perMonth tr th:nth-child(2), .headerContainer .perWeek tr th:nth-child(2) {
+  width: 75%;
+}
+.headerContainer.announce tr th:nth-child(1) {
+  width: 15%;
+}
+.headerContainer.announce tr th:nth-child(2) {
+  width: 70%;
+}
+.headerContainer.announce tr th:nth-child(3) {
+  width: 15%;
+}
+.headerContainer.support tr th:nth-child(1) {
+  width: 10%;
+}
+.headerContainer.support tr th:nth-child(2) {
+  width: 50%;
+}
+.headerContainer.support tr th:nth-child(3) {
+  width: 15%;
+}
+.headerContainer.support tr th:nth-child(4) {
+  width: 10%;
+}
+.headerContainer.support tr th:nth-child(5) {
+  width: 15%;
+}/*# sourceMappingURL=TableHeader.module.css.map */

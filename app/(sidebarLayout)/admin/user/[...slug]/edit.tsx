@@ -1,10 +1,10 @@
-import UserWrite from '@/containers/admin/user/UserWrite';
+import UserEdit from '@/containers/admin/user/UserEdit';
 
-const UserWritePage = () => {
+const UserEditPage = () => {
     return (
         <>
-            <UserWrite/>
+            <UserEdit/>
        </>
     )
 }
-export default UserWritePage;
+export default UserEditPage;

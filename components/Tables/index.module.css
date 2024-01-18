@@ -1,0 +1,232 @@
+.tableContainer {
+  background-color: #fff;
+  width: 100%;
+  padding: 25px 50px;
+}
+.tableContainer .scroller {
+  overflow-x: auto;
+}
+.tableContainer table {
+  width: 100%;
+}
+.tableContainer .withSearch {
+  width: 100%;
+}
+
+.support thead tr th:first-child {
+  width: 5%;
+}
+.support thead tr th:nth-child(2) {
+  width: 5%;
+}
+.support thead tr th:nth-child(3) {
+  width: 10%;
+}
+.support thead tr th:nth-child(4) {
+  width: 10%;
+}
+.support thead tr th:nth-child(5) {
+  width: 10%;
+}
+.support thead tr th:nth-child(6) {
+  width: 10%;
+}
+.support thead tr th:nth-child(7) {
+  width: 10%;
+}
+.support thead tr th:nth-child(8) {
+  width: 10%;
+}
+.support thead tr th:nth-child(9) {
+  width: 10%;
+}
+.support thead tr th:nth-child(10) {
+  width: 10%;
+}
+.support thead tr th:nth-child(11) {
+  width: 10%;
+}
+
+.usage .table thead th {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+}
+.usage .table thead th:first-child {
+  width: 5%;
+}
+.usage .table thead th:nth-child(2) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(3) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(4) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(5) {
+  width: 5%;
+}
+.usage .table thead th:nth-child(6) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(7) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(8) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(9) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(10) {
+  width: 10%;
+}
+.usage .table thead th:nth-child(11) {
+  width: 10%;
+}
+.usage .table tbody td {
+  text-align: center;
+  padding: 0 10px;
+}
+
+thead.invoiceUsage tr:nth-child(1) th {
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 0;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(1) {
+  width: 4%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(2) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(3) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(4) {
+  width: 20%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(5) {
+  width: 5%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(6) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(7) {
+  width: 32%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(8) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(9) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(1) th:nth-child(10) {
+  width: 10%;
+}
+thead.invoiceUsage tr:nth-child(2) th {
+  font-weight: 500;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+}
+thead.invoiceUsage tr:nth-child(2) th:first-child {
+  width: 8%;
+}
+thead.invoiceUsage tr:nth-child(2) th:nth-child(2) {
+  width: 8%;
+}
+thead.invoiceUsage tr:nth-child(2) th:nth-child(3) {
+  width: 8%;
+}
+thead.invoiceUsage tr:nth-child(2) th:nth-child(4) {
+  width: 8%;
+}
+
+.overview tr th {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 0;
+  border: 1px solid #DEE1E7;
+  background: #F7F8FE;
+}
+.overview tr td {
+  padding: 10px 30px;
+  border: 1px solid #DEE1E7;
+  background: linear-gradient(0deg, #FBFCFF 0%, #FBFCFF 100%), #313131;
+  font-size: 14px;
+}
+.overview.announce table tr th:nth-child(1) {
+  width: 80px;
+}
+.overview.announce table tr th:nth-child(2) {
+  width: 790px;
+}
+.overview.announce table tr th:nth-child(3) {
+  width: 195px;
+}
+.overview.support table tr th:nth-child(1) {
+  width: 80px;
+}
+.overview.support table tr th:nth-child(2) {
+  width: 400px;
+}
+.overview.support table tr th:nth-child(3) {
+  width: 210px;
+}
+.overview.support table tr th:nth-child(4) {
+  width: 98px;
+}
+.overview.support table tr th:nth-child(5) {
+  width: 195px;
+}
+.overview.top10 table tr th:nth-child(1) {
+  width: 60px;
+}
+.overview.top10 table tr th:nth-child(2) {
+  width: 140px;
+}
+.overview.top10 table tr th:nth-child(3) {
+  width: 140px;
+}
+.overview.top10 table tr th:nth-child(4) {
+  width: 98px;
+}
+.overview.top10 table tr th:nth-child(5) {
+  width: 230px;
+}
+.overview.per_month table tr th:nth-child(1) {
+  width: 60px;
+}
+.overview.per_month table tr th:nth-child(2) {
+  width: 504px;
+}
+.overview.log table tr td:nth-child(4) {
+  text-align: left;
+}
+.overview.log table tr td:nth-child(5) {
+  font-size: 12px;
+}
+
+.btnArea {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 15px;
+  padding: 15px 0;
+}
+.btnArea .btn {
+  width: 100px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #F0F3F2;
+  border: none;
+  cursor: pointer;
+}
+.btnArea .btn.backBtn {
+  background: #43B69A;
+  margin-right: 10px;
+}/*# sourceMappingURL=index.module.css.map */

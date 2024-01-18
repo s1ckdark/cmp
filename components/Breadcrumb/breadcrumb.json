@@ -144,12 +144,20 @@
             { "href": "/admin/users/list/1", "label": "사용자" }
         ]
     },
-    "/admin/user/write":{
+    "/admin/log/list":{
+        "title": "이력 관리",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/admin", "label": "Admin" },
+            { "href": "/admin/log/list/1", "label": "이력" }
+        ]
+    },
+    "/admin/user/register":{
         "title": "사용자 관리",
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/admin", "label": "Admin" },
-            { "href": "/admin/users/list/1", "label": "사용자" }
+            { "href": "/admin/users/list/1", "label": "사용자 등록" }
         ]
     },
     "/admin/menu/list": {

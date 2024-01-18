@@ -2,7 +2,7 @@ import React from 'react';
 import Styles from './ProductsWrite.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler,  } from 'react-hook-form';
 import { apiBe } from '@/services';
 import { getKRCurrrentTime } from '@/utils/date';
 import { useRouter } from 'next/navigation';
@@ -32,6 +32,7 @@ interface IForm {
 const ProductsWrite = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
     const router = useRouter();
+    
     const onSubmit: SubmitHandler<FormValues> = (data) => {
         console.log(data);
         let tmp:object = {};
@@ -67,13 +68,13 @@ const ProductsWrite = () => {
                             message: "3글자 이상 입력해주세요."
                         }
                     })} />
-                    {/* {errors.prodName && <span className={Styles.error}>{errors.prodName?.message}</span>} */}
+                    {errors.prodName && <span className={Styles.error}>{errors.prodName?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodType">상품분류</label>
                     <input type="radio" {...register("prodType")} value="SW"/>사용SW
                     <input type="radio" {...register("prodType")} value="MSP" />MSP
-                    {/* {errors.prodType && <span className={Styles.error}>{errors.prodType?.message}</span>} */}
+                    {errors.prodType && <span className={Styles.error}>{errors.prodType?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailType">상품상세분류</label>
@@ -85,7 +86,7 @@ const ProductsWrite = () => {
                             message: "3글자 이상 입력해주세요."
                         }
                     })} />
-                    {/* {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>} */}
+                    {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
@@ -97,7 +98,7 @@ const ProductsWrite = () => {
                             message: "3글자 이상 입력해주세요."
                         }
                     })} />
-                    {/* {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message}</span>} */}
+                    {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
@@ -109,7 +110,7 @@ const ProductsWrite = () => {
                             message: "3글자 이상 입력해주세요."
                         }
                     })} />
-                    {/* {errors.prodDesc && <span className={Styles.error}>{errors.prodDesc?.message}</span>} */}
+                    {errors.prodDesc && <span className={Styles.error}>{errors.prodDesc?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
@@ -121,7 +122,7 @@ const ProductsWrite = () => {
                             message: "3글자 이상 입력해주세요."
                         }
                     })} />
-                    {/* {errors.stdPrice && <span className={Styles.error}>{errors.stdPrice?.message}</span>} */}
+                    {errors.stdPrice && <span className={Styles.error}>{errors.stdPrice?.message}</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>

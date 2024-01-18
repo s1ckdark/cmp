@@ -4,11 +4,11 @@ import Breadcrumb from "@/components/Breadcrumb";
 import React, { useEffect, useState } from 'react';
 import { apiBe } from "@/services";
 
-const UserWrite = async () => {
+const UserWrite = () => {
     return (
         <>
             <Breadcrumb />
-            <RegistrationForm type={'view'} />
+            <RegistrationForm type={'register'} />
         </>
     )
 }

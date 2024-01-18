@@ -1,0 +1,16 @@
+.history {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: #fff;
+}
+.history .closeBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 50px;
+}/*# sourceMappingURL=ProductsTypeList.module.css.map */

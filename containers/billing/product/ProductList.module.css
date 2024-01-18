@@ -1,0 +1,10 @@
+.table {
+  margin-top: 20px;
+  background-color: #fff;
+}
+.table.withSearchbar > div {
+  padding: 50px 50px 30px;
+}
+.table.withSearchbar > div:nth-child(2) {
+  padding: 0 50px 50px 50px;
+}/*# sourceMappingURL=ProductList.module.css.map */

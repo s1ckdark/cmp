@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 import { apiBe } from '@/services';
 
 interface fetchData {
@@ -19,8 +19,8 @@ interface dataViewType {
 }
 
 interface dataListType {
+    currentPage: number;
     totalPages: number;
-    totalItems?: number;
     data: any[];
 }
 export const dataViewAtom = atom<dataViewType | null>({
@@ -30,7 +30,7 @@ export const dataViewAtom = atom<dataViewType | null>({
 
 export const dataListAtom = atom<dataListType | null>({
     key: 'dataListAtom',
-    default: {data:[], totalPages:0}
+    default: {data:[], totalPages:0,currentPage:1}
 });
 
 export const visualAtom = atom<any | null>({
@@ -51,4 +51,10 @@ export const historyToggleAtom = atom<boolean>({
 export const searchAtom = atom<any>({
     key: 'searchAtom',
     default: {keyword:'', excute: false }
+});
+
+
+export const userInfoAtom = atom<any>({
+    key: 'userInfoAtom',
+    default: null
 });
