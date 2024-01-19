@@ -390,7 +390,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                     <Controller
                         name="password"
                         control={control}
-                        render={({ field }) => <input readOnly={isDisabled} type="password" id="password" {...field} readOnly/>}
+                        render={({ field }) => <input readOnly={isDisabled} type="password" id="password" {...field} />}
                     />
                 </div>
                             <div className={`${styles.btnArea} ${styles.btnPasswordCheck}`}>

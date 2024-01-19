@@ -56,7 +56,7 @@ const ProductsWrite = () => {
     return (
         <>
         <Breadcrumb />
-        <div className={Styles.container}>``
+        <div className={Styles.container}>
             <form className={Styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodName">상품명</label>

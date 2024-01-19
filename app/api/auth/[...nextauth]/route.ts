@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions, User, Session } from "next-auth";
 import { cookies } from "next/headers";
 
-const beUrl = process.env.NEXT_BACKEND_URL;
+const beUrl = process.env.NEXT_BACKEND_URL+"/api";
 // const feUrl = process.env.NEXT_PUBLIC_FE_URL;
 
 // async function refreshAccessToken(token: any) {

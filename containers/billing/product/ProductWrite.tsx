@@ -60,54 +60,123 @@ interface IMSP {
     "service_start_date": string;
     "service_end_date": string;
     "comment": string;
-  }
-const ProductWrite= () => {
-    const [form, setForm] = useState<form>();
-    const [ prodSw, setProdSw ] = useState<ISW[]>([]);
-    const [ prodMsp, setProdMsp ] = useState<IMSP[]>([]);
+}
+
+
+const ProductWrite = () => {
+    const [form, setForm] = useState<any>({});
+    const [regProd, setRegProd] = useState<boolean>(false);
+    const [prodSw, setProdSw] = useState<ISW[]>([]);
+    const [prodMsp, setProdMsp] = useState<IMSP[]>([]);
     const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm();
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
-    const [ targetMonth, setTargetMonth ] = useState<string>('');
+    const [targetMonth, setTargetMonth] = useState<string>('');
+    
     const onSubmit = async (data: any) => {
-        let target_start_date = dayjs(data.target_start_date).format('YYYYMMDD');
-        let target_end_date = dayjs(data.target_end_date).format('YYYYMMDD');
-        let target_month = dayjs(data.target_start_date).format('YYYYMM');
-        let tmp: form = data;
+        const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD');
+        const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD');
+        const target_month = dayjs(data.target_start_date).format('YYYYMM');
+        const tmp: form = data;
         tmp.target_month = target_month;
         tmp.target_start_date = target_start_date;
         tmp.target_end_date = target_end_date;
-        const url = `/product/gdbilling`;
 
-        const response = await apiBe.put(url, tmp);
-        if (response.status === 201) {
-            const result = response.data;
-            if (result.status === 201) {
-                Toast('success', '저장되었습니다.')
+        const prevMonth = dayjs(target_month).subtract(1, 'month').format('YYYYMM');
+        const chkPrevMonth = { url: `/product/gdbilling?memberNo=${data.memberNo}&target_month=${prevMonth}`, method: 'get' };
+        const insertUrl = { url: '/product/gdbilling', method: 'put' };
+        const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
+        const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
+        const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
+        if (chkResponse.status === 200 && chkResponse.data) {
+            Toast("success", '저장된 데이터를 가져옵니다.');
+            setForm(chkResponse.data);
+            setRegProd(true);
+        } else {
+            const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
+            console.log(chkPrevMonth.url, chkPrevMonthResponse);
+            if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
+                Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
+                const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
+                if (copyResponse.status === 200) {
+                    const updateData = await apiBe(getUrl.url, { method: getUrl.method });
+                    if (updateData.status === 200) {
+                        Toast("success", '로드 되었습니다.');
+                        setForm(updateData.data[0]);
+                        setRegProd(true);
+                    }
+                    
+                }
             } else {
-                Toast('error', "저장에 실패하였습니다.");
+                try {
+                    const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
+                    if (insertResponse.status === 200) {
+                        Toast("success", '저장되었습니다.');
+                        setForm(insertResponse.data);
+                        setRegProd(true);
+                    }
+                } catch (error: any) {
+                    console.log(error);
+                    Toast('error', error.response.data.message);
+                
+                }
+            
             }
         }
+            
+        // try {
+        //     const 
+        //     const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method })
+        //     console.log(copyResponse);
+        //     if (copyResponse.status === 200) {
+        //                 Toast("success", '저장되었습니다.');
+        //     } 
+        // } catch (error: any) {
+        //     console.log(error);
+        //     if (error.response && error.response.status === 409) {
+        //         Toast('error', '동일한 청구가 존재합니다.');
+        //         // data load
+        //         const getProdData = await apiBe(chkUrl.url, { method: chkUrl.method });
+        //         if (getProdData.status === 200) {
+        //             Toast("success", '저장된 데이터를 가져옵니다.');
+        //             console.log(getProdData.data);
+        //             setForm(getProdData.data.content);
+        //             setRegProd(true);
+        //         }
+        //     } else {
+        //         try {
+        //             const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
+        //             if (insertResponse.status === 200) {
+        //                 Toast("success", '저장되었습니다.');
+        //                 setRegProd(true);
+        //             }
+        //         } catch (error: any) {
+        //             console.log(error);
+        //             Toast('error', error.response.data.message);
+                
+        //         }
+        //     }
+        // }
     }
-    const handleChange = (e:any, idx:number, prod:string) => {
+    const handleChange = (e: any, idx: number, prod: string) => {
         console.log(e.target.name, e.target.value, prod);
-        if(prod === 'sw' && idx !== undefined) {
+        if (prod === 'sw' && idx !== undefined) {
             const updateItems = [...prodSw];
             updateItems[idx] = { ...updateItems[idx], [e.target.name]: e.target.value };
             setProdSw(updateItems);
-        } else if(prod === 'msp') {
+        } else if (prod === 'msp') {
             const updateItems = [...prodMsp];
             updateItems[idx] = { ...updateItems[idx], [e.target.name]: e.target.value };
             setProdMsp(updateItems);
         }
     }
 
-    const handleSwChange = (e:any) => {
+    const handleSwChange = (e: any) => {
         console.log(e.target.name, e.target.value);
         
     }
 
-    const handleMspChange = (e:any) => {
+    const handleMspChange = (e: any) => {
         console.log(e.target.name, e.target.value);
         
     }
@@ -121,19 +190,19 @@ const ProductWrite= () => {
         console.log(prodMsp);
 
     }
-    const addLine = (prod:string) => {
+    const addLine = (prod: string) => {
         const target = document.querySelector(`.${Styles[prod]} tbody`);
         if (target) {
             const bodyRow = document.createElement('tr');
-            let field:any = {
+            let field: any = {
                 "sw": ["billingId", "prodId", "prodName", "prodDetailType", "prodDetailTypeStd", "expPrice", "stdPrice", "discountRate", "etcdiscountamount", "estimateuseAmount", "promiseDiscountamount", "memberpricediscountamount", "memberpromisediscountadddamount", "service_start_date", "service_end_date", "comment"],
                 "msp": ["billingId", "prodId", "prodName", "prodDetailType", "qty", "stdPrice", "discountRate", "promiseDiscountamount", "memberpricediscountamount", "memberpromisediscountadddamount", "etcdiscountamount", "estimateuseAmount", "service_start_date", "service_end_date", "comment"]
             };
 
-            let objectStructure:any = {};
+            let objectStructure: any = {};
 
             for (let key in field) {
-                objectStructure[key] = field[key].reduce((acc:any, cur:any) => {
+                objectStructure[key] = field[key].reduce((acc: any, cur: any) => {
                     acc[cur] = ''; // Set each field to an empty string or any default value
                     return acc;
                 }, {});
@@ -153,12 +222,12 @@ const ProductWrite= () => {
                 bodyRow.appendChild(deleteCell);
 
                 // Create input cells for each field
-                field[prod].forEach((fieldName:any) => {
+                field[prod].forEach((fieldName: any, index: number) => {
                     let cell = document.createElement('td');
-                    let input:any = document.createElement('input');
+                    let input: any = document.createElement('input');
                     input.type = 'text';
                     input.setAttribute('name', fieldName);
-                    input.onchange = (event:any) => handleChange(event, prod);
+                    input.onchange = (event: any) => handleChange(event, index, prod);
                     // Register the input with react-hook-form
                     // register(input);
 
@@ -169,7 +238,7 @@ const ProductWrite= () => {
             
             // Append the new row to the table body
             target.appendChild(bodyRow);
-            if(prod === 'sw') {
+            if (prod === 'sw') {
                 setProdSw([...prodSw, objectStructure[prod]])
             } else {
                 setProdMsp([...prodMsp, objectStructure[prod]])
@@ -177,9 +246,9 @@ const ProductWrite= () => {
             }
         }
     };
-    const deleteLine = (prod:string, idx:number) => {
+    const deleteLine = (prod: string, idx: number) => {
         console.log(idx);
-        if(prod === 'sw') {
+        if (prod === 'sw') {
             const sw = prodSw.filter((item, index) => index !== idx);
             setProdSw(sw);
         } else {
@@ -188,11 +257,10 @@ const ProductWrite= () => {
         }
     }
     //billing id = objectId
-    const renderProdSw = prodSw.map((item, idx) => {
-        return (
-            <tr key={idx}>
-                <td><span onClick={() => deleteLine("sw",idx)}>&times;</span></td>
-                <td><input type="text" name="billingId" value={item.billingId} onChange={(e) => handleChange(e, idx,'sw')} /></td>
+    const RenderProdSw = () => {
+        return form['sw'].map((item: ISW, idx: number) => (
+            <tr key={item.prodId || idx}>
+                <td><span onClick={() => deleteLine("sw", idx)}>&times;</span></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e, idx, 'sw')} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e, idx, 'sw')} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e, idx, 'sw')} /></td>
@@ -211,42 +279,41 @@ const ProductWrite= () => {
                 <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e, idx, 'sw')} /></td>
                 <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e, idx, 'sw')} /></td>
             </tr>
-        )
-        })
-
-        const renderProdMsp = prodMsp.map((item, idx) => {
-            return (
-                <tr key={idx}>
-                    <td><span onClick={() => deleteLine("msp",idx)}>&times;</span></td>
-                    <td><input type="text" name="billingId" value={item.billingId} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="qty" value={item.qty} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="promiseDiscountamount" value={item.promiseDiscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="memberpricediscountamount" value={item.memberpricediscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="memberpromisediscountadddamount" value={item.memberpromisediscountadddamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    {/* <td><input type="text" name="trimDiscUnit" value={item.trimDiscUnit} onChange={(e) => handleChange(e, idx, 'msp')} /></td> */}
-                    <td><input type="text" name="etcdiscountamount" value={item.etcdiscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    {/* <td><input type="text" name="billingUnit" value={item.billingUnit} onChange={(e) => handleChange(e, idx, 'msp')} /></td> */}
-                    <td><input type="text" name="estimateuseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                    <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
-                </tr>
-            )
-        })
-        
-    const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
-    const prev_month = () => {
-        const prevMonth = Number(getCurrentMonth()) - 1;
-        return prevMonth.toString();
+        ))
     }
+
+    const RenderProdMsp = () => {
+        return form['msp'].map((item: IMSP, idx: number) => (
+            <tr key={item.prodId || idx}>
+                <td><span onClick={() => deleteLine("msp", idx)}>&times;</span></td>
+                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="qty" value={item.qty} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="promiseDiscountamount" value={item.promiseDiscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="memberpricediscountamount" value={item.memberpricediscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="memberpromisediscountadddamount" value={item.memberpromisediscountadddamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                {/* <td><input type="text" name="trimDiscUnit" value={item.trimDiscUnit} onChange={(e) => handleChange(e, idx, 'msp')} /></td> */}
+                <td><input type="text" name="etcdiscountamount" value={item.etcdiscountamount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                {/* <td><input type="text" name="billingUnit" value={item.billingUnit} onChange={(e) => handleChange(e, idx, 'msp')} /></td> */}
+                <td><input type="text" name="estimateuseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e, idx, 'msp')} /></td>
+            </tr>
+        ))
+}
+        
+    // const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
+    // const prev_month = () => {
+    //     const prevMonth = Number(getCurrentMonth()) - 1;
+    //     return prevMonth.toString();
+    // }
     
-    const from_month = prev_month();
-    const to_month = getCurrentMonth();
+    // const from_month = prev_month();
+    // const to_month = getCurrentMonth();
 
     const closeModal = () => {
         const modal: any = document.querySelector("#modal");
@@ -324,6 +391,7 @@ const ProductWrite= () => {
             const result = response.data;
             let content = '';
             let customers = result.content;
+            console.log(customers);
             if (customers.length === 0) {
                 Toast("error", '회사명이 존재하지 않습니다.');
             } else {
@@ -385,17 +453,17 @@ const ProductWrite= () => {
                                     <input type="text" {...register("memberName")} onClick={() => openModal('member')} />
                                     <IconSearch />
                                 </div>
-                                {errors.memberName && <span className={Styles.error}>{errors.memberName.message}</span>}
+                                {errors.memberName && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
                                 <input type="text" {...register("memberNo")} />
-                            {errors.memberNo && <span className={Styles.error}>{errors.memberNo.message}</span>}
+                            {errors.memberNo && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
                                 <input type="text" {...register("memberType")} />
-                                {errors.memberType && <span className={Styles.error}>{errors.memberType.message}</span>}
+                                {errors.memberType && <span className={Styles.error}>this field is required</span>}
                             </div>
                         </div>
                     </div>
@@ -408,7 +476,7 @@ const ProductWrite= () => {
                                 <input type="text" {...register("target_month")} value={targetMonth} />
                                 <IconCalendar /> 
                             </div>
-                            {errors.target_month && <span className={Styles.error}>{errors.target_month.message}</span>}
+                            {errors.target_month && <span className={Styles.error}>this field is required</span>}
                         </div>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
@@ -419,7 +487,7 @@ const ProductWrite= () => {
                                         render={({ field: { onChange, value } }) => (
                                         <DatePicker
                                             selected={value}
-                                            onChange={(date) => {
+                                            onChange={(date:any) => {
                                                 onChange(date);
                                                 setStartDate(date);
                                                 setTargetMonth(dayjs(date).format('YYYYMM'));
@@ -432,7 +500,7 @@ const ProductWrite= () => {
                                     /> 
                                     {/* <IconCalendar /> */}
                                 </div>
-                            {errors.target_start_date && <span className={Styles.error}>{errors.target_start_date.message}</span>}
+                            {errors.target_start_date && <span className={Styles.error}>this field is required</span>}
                             </div>
                             
                         <div className={Styles.inputGroup}>
@@ -447,7 +515,7 @@ const ProductWrite= () => {
                                             disabled={startDate ? false : true}
                                             minDate={startDate}
                                             maxDate={getLastDayOfMonth(startDate)}
-                                            onChange={(date) => { onChange(date); setEndDate(date) }}
+                                            onChange={(date:any) => { onChange(date); setEndDate(date) }}
                                             dateFormat="yyyy/MM/dd"
                                             isClearable
                                             popperProps={{ strategy: "fixed" }}
@@ -456,7 +524,7 @@ const ProductWrite= () => {
                                     /> 
                                     {/* <IconCalendar /> */}
                                 </div>
-                            {errors.target_end_date && <span className={Styles.error}>{errors.target_end_date.message}</span>}
+                            {errors.target_end_date && <span className={Styles.error}>this field is required</span>}
                         </div>
                     </div>
                     </div>
@@ -464,83 +532,88 @@ const ProductWrite= () => {
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
                         <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
                     </div>
-                </form>            
-                    <div className={Styles.inputSection}>
-                        <h1>상품정보SW</h1>
-                        <div className={Styles.btnArea}>
-                            <Button className={`${Styles.btn} ${Styles.addBtn}`} onClick={()=>addLine('sw')} skin={"green"}>상품추가</Button>
+                </form>    
+                {regProd &&
+                    <>
+                        <div className={Styles.inputSection}>
+                            <h1>상품정보</h1>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.addBtn}`} onClick={() => openModal('sw')} skin={"green"}>상품추가</Button>
+                            </div>
+                            <table className={Styles.sw}>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>상품아이디</th>
+                                        <th>상품명</th>
+                                        <th>상품분류</th>
+                                        <th>상품상세분류</th>
+                                        <th>상품가격기준</th>
+                                        <th>정식단가</th>
+                                        <th>노출단가</th>
+                                        <th>할인율</th>
+                                        <th>할인금액</th>
+                                        <th>납부예상금액</th>
+                                        <th>청구단위</th>
+                                        <th>절사금액</th>
+                                        <th>서비스 시작일시</th>
+                                        <th>서비스 종료일시</th>
+                                        <th>빌링ID</th>
+                                        <th>코멘트</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <RenderProdSw />
+                                </tbody>
+                            </table>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={() => updateProdSw} skin={"green"}>저장</Button>
+                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
+                            </div>
                         </div>
-                        <table className={Styles.sw}>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>상품아이디</th>
-                                    <th>상품명</th>
-                                    <th>상품분류</th>
-                                    <th>상품상세분류</th>
-                                    <th>상품가격기준</th>
-                                    <th>정식단가</th>
-                                    <th>노출단가</th>
-                                    <th>할인율</th>
-                                    <th>할인금액</th>
-                                    <th>납부예상금액</th>
-                                    <th>청구단위</th>
-                                    <th>절사금액</th>
-                                    <th>서비스 시작일시</th>
-                                    <th>서비스 종료일시</th>
-                                    <th>빌링ID</th>
-                                    <th>코멘트</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {renderProdSw}
-                            </tbody>
-                        </table>
-                        <div className={Styles.btnArea}>
-                        <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={()=>updateProdSw} skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                    </div>
-                    </div>
-                    <div className={Styles.inputSection}>
-                        <h1>상품정보MSP</h1>
-                        <div className={Styles.btnArea}>
-                            <Button className={`${Styles.btn} ${Styles.addBtn}`} onClick={()=>addLine('msp')} skin={"green"}>상품추가</Button>
+                        <div className={Styles.inputSection}>
+                            <h1>상품정보MSP</h1>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.addBtn}`} onClick={() => openModal('msp')} skin={"green"}>상품추가</Button>
+                            </div>
+                            <table className={Styles.msp}>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>상품아이디</th>
+                                        <th>상품명</th>
+                                        <th>상품분류</th>
+                                        <th>상품상세분류</th>
+                                        <th>수량</th>
+                                        <th>정식단가</th>
+                                        <th>할인율</th>
+                                        <th>할인금액</th>
+                                        <th>납부예상금액</th>
+                                        <th>청구단위</th>
+                                        <th>절사금액단위</th>
+                                        <th>서비스 시작일시</th>
+                                        <th>서비스 종료일시</th>
+                                        <th>빌링ID</th>
+                                        <th>코멘트</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <RenderProdMsp />
+                                </tbody>
+                            </table>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={() => updateProdMsp} skin={"green"}>저장</Button>
+                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
+                            </div>
                         </div>
-                        <table className={Styles.msp}>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>상품아이디</th>
-                                    <th>상품명</th>
-                                    <th>상품분류</th>
-                                    <th>상품상세분류</th>
-                                    <th>수량</th>
-                                    <th>정식단가</th>
-                                    <th>할인율</th>
-                                    <th>할인금액</th>
-                                    <th>납부예상금액</th>
-                                    <th>청구단위</th>
-                                    <th>절사금액단위</th>
-                                    <th>서비스 시작일시</th>
-                                    <th>서비스 종료일시</th>
-                                    <th>빌링ID</th>
-                                    <th>코멘트</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {renderProdMsp}
-                            </tbody>
-                        </table>
-                        <div className={Styles.btnArea}>
-                            <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={()=>updateProdMsp} skin={"green"}>저장</Button>
-                            <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                        </div>
-                    </div>
-                    <div className={Styles.btnArea}>
+                    </>}
+                    {/* <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
                         <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                    </div>
+                    </div> */}
+                
             </div> 
+           
             <div id="modal" className={Styles.modal}>
                 <div id="modalContent" className={Styles.modalContent}>
                     <span className={Styles.closeBtn} onClick={()=> closeModal()}>&times;</span>

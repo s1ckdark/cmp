@@ -123,11 +123,10 @@ export const getMonth = (dateStr:string, operation:string) => {
 }
 
 export const getCurrentMonth = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // Convert back to 1-indexed
+    const year = dayjs().get('year')
+    const month = dayjs().add(1, 'month').format('MM');
 
-    return year + (month < 10 ? '0' : '') + month;
+    return year + month;
 }
 
 export const getLastDayOfMonth = (date:Date) => {

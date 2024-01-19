@@ -116,7 +116,8 @@ const regenerateTokens = async () => {
 apiBe.interceptors.response.use(
     (response) => {
         if (response.status === 200 || response.status === 201) {
-            console.log("response",response.data.status, response);
+            console.log("response", response.data.status, response);
+          
             if (response.data.status === 200 || response.data.status === 201) {
                  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
@@ -132,12 +133,12 @@ apiBe.interceptors.response.use(
                     response.config.headers.Authorization = `Bearer ${token}`;
                     return axios.request(response.config);
                 });
-            }
+            } 
         }
     },
     (error) => {
-        console.log("error",error);
-        if (error.response && error.response.status) {
+        // console.log("error :", error.response);
+        if (error.response) {
             switch (error.response.status) {
                 case 401:
                     if (error.response.data.message === "BAD REQUEST") {
@@ -187,6 +188,7 @@ apiBe.interceptors.response.use(
                             },
                         }),
                     );
+                    // return Promise.reject(error);
                     return new Promise(() => {});
                 default:
                     return Promise.reject(error);
