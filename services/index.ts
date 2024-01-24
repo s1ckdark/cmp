@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders } from "axios";
+import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders, AxiosRequestConfig } from "axios";
 import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
@@ -121,7 +121,8 @@ apiBe.interceptors.response.use(
             if (response.data.status === 200 || response.data.status === 201) {
                  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
-            } else if (response.data.status === 401) {
+            }
+            else if (response.data.status === 401) {
                 window.dispatchEvent(
                     new CustomEvent("axiosError", {
                         detail: {
