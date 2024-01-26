@@ -1,8 +1,8 @@
 "use client";
-import MenuView from "./view";
-import MenuList from "./list";
-import MenuWrite from "./write";
-import MenuEdit from "./edit";
+// import MenuView from "./view";
+// import MenuList from "./list";
+// import MenuWrite from "./write";
+// import MenuEdit from "./edit";
 
 const menuPage = async ({ params }: any) => {
     const { slug } = params;
@@ -16,24 +16,24 @@ const menuPage = async ({ params }: any) => {
         id = slug[1];
        
     }
-    switch (pageType) {
-        case "list":
-            return <MenuList />;
-            break;
-        case "view":
-            return (
-                <MenuView />
-            );
-            break;
-        case "write":
-            return (
-                <MenuWrite  />
-            );
-            break;
-        default:
-            return <MenuList />;
-            break;
-    }
+    // switch (pageType) {
+    //     case "list":
+    //         return <MenuList />;
+    //         break;
+    //     case "view":
+    //         return (
+    //             <MenuView />
+    //         );
+    //         break;
+    //     case "write":
+    //         return (
+    //             <MenuWrite  />
+    //         );
+    //         break;
+    //     default:
+    //         return <MenuList />;
+    //         break;
+    // }
 };
 
 export default menuPage;

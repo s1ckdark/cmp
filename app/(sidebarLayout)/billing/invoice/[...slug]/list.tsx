@@ -12,7 +12,7 @@ const InvoiceListPage = async ({ pageNumber }: any) => {
 
     return (
         <>
-            <InvoiceList pageNumber={pageNumber} />
+            <InvoiceList/>
         </>
     );
 };

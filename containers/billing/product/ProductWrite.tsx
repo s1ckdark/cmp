@@ -239,35 +239,35 @@ const ProductWrite = () => {
             <tr key={item.prodId || idx}>
                 <td><span onClick={() => deleteProd(form.id, item.prodId, "SW")}>&times;</span></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly /></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly /></td>
+                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view}/></td>
             </tr>
         ))
     }
 
-    const RenderProdMsp = ({ data }:any) => {
+    const RenderProdMsp = ({ data, view }:any) => {
         return data.map((item: IMSP, idx: number) => (
             <tr key={item.prodId || idx}>
                 <td><span onClick={() => deleteProd(form.id, item.prodId, "MSP")}>&times;</span></td>
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e, '')} /></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e,'MSP')} /></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e,'MSP')} /></td>
+                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view} /></td>
             </tr>
         ))
 }
@@ -526,7 +526,7 @@ const ProductWrite = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <RenderProdMsp data={form.msp} view={'readOnly'} />
+                                <RenderProdMsp data={form.msp} view={true} />
                                 </tbody>
                             </table>
                             <div className={Styles.btnArea}>

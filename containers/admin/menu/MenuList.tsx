@@ -5,7 +5,7 @@ const MenuList = () => {
     return (
         <>
             <Breadcrumb />
-            <Tables rowType={'menu'} className={'MenuList'} />
+            <Tables rowType={'menu'} />
         </>
     )
 }

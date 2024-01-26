@@ -7,7 +7,7 @@ const RoleList = () => {
     return (
         <>
             <Breadcrumb />
-            <Tables rowType={'role'} className={'RoleList'} />
+            <Tables rowType={'role'} />
         </>
     );
 };

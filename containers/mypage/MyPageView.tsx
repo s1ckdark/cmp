@@ -3,9 +3,10 @@ import RegistrationForm from "@/components/Form/RegistrationForm";
 import Breadcrumb from "@/components/Breadcrumb";
 import React, { useEffect, useState } from 'react';
 import { apiBe } from "@/services";
+import { IRegistrationForm } from '@/types/form';
 
-const MyPageView = async () => {
-    const [data, setData] = useState({});
+const MyPageView = () => {
+    const [data, setData] = useState<IRegistrationForm>();
     useEffect(() => {
         const fetchData = async () => {
             const response = await apiBe('/users/profile');

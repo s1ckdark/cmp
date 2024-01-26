@@ -18,20 +18,16 @@ const customerPage = async ({ params }: any) => {
     }
     switch (pageType) {
         case "list":
-            return <CustomerList />;
+            return <CustomerList />
             break;
         case "view":
-            return (
-                <CustomerView />
-            );
+            return <CustomerView />
             break;
         case "write":
-            return (
-                <CustomerWrite  />
-            );
+            return <CustomerWrite />
             break;
         default:
-            return <CustomerList />;
+            return <CustomerList />
             break;
     }
 };

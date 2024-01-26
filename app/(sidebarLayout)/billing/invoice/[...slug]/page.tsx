@@ -18,7 +18,7 @@ const invoicePage = ({ params }: any) => {
     }
     switch (pageType) {
         case "list":
-            return <InvoiceList pageNumber={pageNumber} />;
+            return <InvoiceList />;
             break;
         case "view":
             return (
@@ -31,7 +31,7 @@ const invoicePage = ({ params }: any) => {
             );
             break;
         default:
-            return <InvoiceList pageNumber={pageNumber} />;
+            return <InvoiceList />;
             break;
     }
 };

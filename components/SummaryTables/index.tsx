@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 import { TablesProps, TableHeaderProps, TableBodyProps } from '@/types/data';
 import { useSetRecoilState, useRecoilState } from 'recoil';
 
-export const Tables = ({rowType, data, className}:TablesProps) => {
+export const Tables = ({rowType, data}:TablesProps) => {
     return (
         <>
             <div className={styles.tableContainer}>

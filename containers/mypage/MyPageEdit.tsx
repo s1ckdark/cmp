@@ -3,22 +3,23 @@ import RegistrationForm from "@/components/Form/RegistrationForm";
 import Breadcrumb from "@/components/Breadcrumb";
 import React, { useEffect, useState } from 'react';
 import { apiBe } from "@/services";
+import { IRegistrationForm } from "@/types/form";
 
-const MyPageEdit = async () => {
-    const [data, setData] = useState({});
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await apiBe('/users/profile');
-            const result = response.data;
-            setData(result);
-        }
-        fetchData();
-    },[])
-    return (
-        <>
-            <Breadcrumb />
-            <RegistrationForm data={data} type={'edit'} />
-        </>
+const MyPageEdit = () => {
+    const [data, setData] = useState<IRegistrationForm>();
+        useEffect(() => {
+                const fetchData = async () => {
+                        const response = await apiBe('/users/profile');
+                        const result = response.data;
+                        setData(result);
+                }
+                fetchData();
+        },[])
+        return (
+            <>
+                <Breadcrumb />
+                <RegistrationForm data={data} type={'edit'} />
+            </>
     )
 }
 export default MyPageEdit;

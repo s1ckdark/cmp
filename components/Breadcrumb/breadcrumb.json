@@ -209,12 +209,20 @@
             { "href": "/mypage/edit", "label": "마이페이지 수정" }
         ]
     },
-    "/customers/customer/list":{
+    "/customers/list":{
         "title": "고객사 관리",
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/customers", "label": "Customers" },
-            { "href": "/customers/customer/list/1", "label": "고객사" }
+            { "href": "/customers/customers/list/1", "label": "고객사" }
+        ]
+    },
+    "/customers/write":{
+        "title": "고객사 등록",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/customers", "label": "Customers" },
+            { "href": "/customers/customers/write", "label": "고객사 등록" }
         ]
     }
 }

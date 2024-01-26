@@ -153,7 +153,7 @@ const Navigation = () => {
             "label": "고객사",
             "icon": "IconNaviClient",
             "children": [],
-            "link": "/customer/list/1",
+            "link": "/customers/list/1",
         },
         {
             "label": "지원",

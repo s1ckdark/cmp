@@ -12,12 +12,12 @@ import { Toast } from '@/components/Toast';
 import Loading from '@/components/Loading';
 
 const HistoryList = ({ pageNumber }: pageNumberType) => {
-    if(!data) return <Loading />;
+    // if(!data) return <Loading />;
     return (
         <>
             <Breadcrumb />
             <MonthBar />
-            <Tables rowType={'productHistory'} className={'productHistory'} />
+            <Tables rowType={'productHistory'}  />
         </>
     );
 };

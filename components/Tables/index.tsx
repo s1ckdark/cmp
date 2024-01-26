@@ -52,12 +52,12 @@ export const Tables = ({ rowType }: TablesProps) => {
             },
             productGd: {
                 url: "/product/product",
-                params: { page: pageNumber - 1 },
+                params: { page: pageNumber },
                 key: "products",
             },
-            customer: {
+            customers: {
                 url: "/customer",
-                params: { targetMonth, page: pageNumber },
+                params: { page: pageNumber - 1 },
                 key: "content",
             },
             user: {
@@ -109,7 +109,7 @@ export const Tables = ({ rowType }: TablesProps) => {
     const pageUrl:any = {
         invoice: "/billing/invoice",
         productGd: "/products/product",
-        customer: "/customer",
+        customers: "/customers",
         user: "/admin/user",
         billingProduct: "/billing/product",
         productCategory: "/products/category",

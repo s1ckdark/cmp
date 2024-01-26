@@ -11,7 +11,7 @@ const CustomerList = () => {
     return (
         <>
             <Breadcrumb />
-            <Tables rowType={'customer'} className={'CustomerList'} />
+            <Tables rowType={'customers'} />
         </>
     );
 }

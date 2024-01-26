@@ -1,0 +1,14 @@
+.customers {
+    .customerItem {
+        display:flex;
+        justify-content: space-around;
+        .customerName {
+            width: 100px;   
+            padding: 10px 15px;
+        }
+        .customerNo {
+            width: 100px; 
+            padding: 10px 15px;  
+        }
+    }
+}

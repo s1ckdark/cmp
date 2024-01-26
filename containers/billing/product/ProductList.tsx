@@ -12,8 +12,8 @@ const ProductList = () => {
             <Breadcrumb />
             <MonthBar />
             <div className={`${Styles.table} ${Styles.withSearchbar}`}>
-                {/* <SearchBar /> */}
-                <Tables rowType={'billingProduct'} className={'billingProductList'} />
+                <SearchBar rowType={'billingProduct'} />
+                <Tables rowType={'billingProduct'}  />
             </div>
         </>
     );

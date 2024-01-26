@@ -11,28 +11,9 @@ import Select, { defaultTheme } from 'react-select';
 import { Privileges } from '@/types/auth';
 import { useRecoilState } from 'recoil';
 import Loading from '@/components/Loading';
+import { IRegistrationForm } from '@/types/form';
 
-interface IRegistrationForm {
-    username: string;
-    userFullName: string;
-    userType: string;
-    privileges: string[];
-    password: string;
-    email: string;
-    mobile: string;
-    phone: string;
-    addr: string;
-    addrDetail: string;
-    zipcode: string;
-    memberNo: string;
-    memberName: string;
-    salesName: string;
-    isAdmin: string;
-    isActivated: string;
-    regId: string;
-    regName: string;
-    regDt: string;
-}
+
 interface IRegistrationFormProps {
     data?: IRegistrationForm;
     type: "register" | "edit" | "view";
@@ -41,13 +22,14 @@ interface IRegistrationFormProps {
 const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const [mounted, setMounted] = useState(false);
     const [ isDisabled, setIsDisabled ] = useState(false);
-    const { username, userFullName, userType, privileges, password, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data ? data : {  username:'',userFullName: '', userType: '', privileges: [], password: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '',memberNo:'', memberName:'', salesName:'', isAdmin:'', isActivated:'', regId:'', regName:'', regDt:'' };
+    const { username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data ? data : {  username:'',userFullName: '', userType: '', privileges: [], password: '', confirmPassword:'', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '',memberNo:'', memberName:'', salesName:'', isAdmin:'', isActivated:'', regId:'', regName:'', regDt:'' };
     const { control, handleSubmit, getValues, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
             username: userFullName,
             userType: userType,
             privileges: privileges,
             password: password,
+            confirmPassword:password,
             email: email,
             mobile: mobile,
             phone: phone,
@@ -285,7 +267,9 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             }
         }
 
-        defaultPrivilegeOptions.length === 0 && getPrivilegeOptions();
+        if (defaultPrivilegeOptions.length === 0) {
+            getPrivilegeOptions();
+        }
             if (type === 'view') {
                 setIsDisabled(true);
             }
@@ -340,8 +324,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                     <label htmlFor="privileges" className="block text-sm font-medium text-gray-900 dark:text-black">권한:</label>
                     <Controller
                         name="privileges"
-                            control={control}
-                            
+                        control={control}
                         defaultValue={defaultPrivilegeOptions} // Set the default options
                         rules={{ required: true }}
                         render={({ field }) => (
@@ -350,7 +333,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                                 options={privilegeOptions}
                                 isDisabled={isDisabled}
                                 isMulti
-                                value={privilegeOptions.filter(option => field.value.includes(option.value))} // Corrected this line
+                                value={privilegeOptions.filter((option:any) => field.value.includes(option.value))} // Corrected this line
                                 onChange={(val) => field.onChange(val.map((item) => item.value))}
                             />
                         )}
@@ -438,7 +421,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="addr"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="addr" {...field} required defaultValue={addr} readOnly/>}
+                            render={({ field }) => <input readOnly={isDisabled} type="text" id="addr" {...field} required defaultValue={addr} />}
                         />
                         {errors.addr && <span className="text-red-500">This field is required</span>}
                     </div>
@@ -447,7 +430,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="addrDetail"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="addrDetail" {...field} required defaultValue={addrDetail} readOnly />}
+                            render={({ field }) => <input readOnly={isDisabled} type="text" id="addrDetail" {...field} required defaultValue={addrDetail} />}
                         />
                         </div>
                         {type === 'edit' || type === 'register' ? <div className={`${styles.btnArea} ${styles.btnAddrSearch}`}>
@@ -463,7 +446,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="memberNo"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberNo" {...field} defaultValue={memberNo} readOnly/>}
+                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberNo" {...field} defaultValue={memberNo}/>}
                             />
                             {errors.memberNo && <span className="text-red-500">This field is required</span>}
                     </div>
@@ -472,7 +455,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="memberName"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberName" {...field} defaultValue={memberName} readOnly />}
+                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberName" {...field} defaultValue={memberName} />}
                             />
                             {errors.memberName && <span className="text-red-500">This field is required</span>}
                     </div>

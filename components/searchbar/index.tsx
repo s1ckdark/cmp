@@ -8,6 +8,7 @@ import { IconSearch } from '@/public/svgs';
 import { Toast } from '../Toast';
 import { apiBe } from '@/services';
 import { pathSpliter } from '@/utils/data';
+import { url } from 'inspector';
 
 export interface SearchBarProps {
   placeholder: string
@@ -45,6 +46,9 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
     },
     "/admin/user/list": {
       "placeholder": "유저명을 입력해주세요",
+    },
+    "/billing/product/list": {
+      "placeholder": "고객명을 입력해주세요",
     }
   }
   const init = () => {
@@ -64,6 +68,9 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       log: {
         url: `/user/logging`,
         key:'content'
+      },
+      billingProduct: {
+        url:  `/product/gdbilling`
       }
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params});
@@ -86,6 +93,11 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       "log": {
         page:  pageNumber || 1,
         userName: keyword
+      },
+      "billingProduct": {
+        page: pageNumber || 1,
+        memberName: keyword,
+        targetMonth: month
       }
     }
     fetching(rowType, params[rowType]);

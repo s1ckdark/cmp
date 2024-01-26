@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import { atom, selector, selectorFamily, RecoilState } from 'recoil';
 import { generateDates } from '@/utils/date';
 import { getMonth } from '@/utils/date';
+import { modalProps, modalPassProps } from '@/types';
 const getCurrentMonth = () => { return new Date().getFullYear().toString() + (new Date().getMonth() + 1).toString().padStart(2, '0')}
 
 export const monthAtom = atom<string>({
@@ -33,7 +34,17 @@ export const adjustedMonthSelector = selectorFamily({
   });
 
 
-  export const isOpenState: RecoilState<boolean> = atom({
-    key: "isOpenState",
-    default: false
-  });
+export const isOpenState: RecoilState<boolean> = atom({
+  key: "isOpenState",
+  default: false
+});
+
+export const modalAtom = atom<modalProps>({
+  key: "modalAtom",
+  default: {
+    isOpen: false,
+    type: '',
+    data: null
+  }
+});
+

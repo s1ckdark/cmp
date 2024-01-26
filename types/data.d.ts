@@ -73,6 +73,7 @@ interface Array {
 
 export interface TablesProps {
   rowType: string;
+  data?: any;
 }
 export interface SubHeader {
   label: string;

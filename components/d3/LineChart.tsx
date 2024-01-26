@@ -131,7 +131,7 @@ const LineChart: React.FC<LineChartProps> = ({ data, aspectRatio = 4 / 1 }) => {
                   svg.selectAll(".x.axis")
                   .style("font-size","14px");
               }
-    }, [data]);
+    }, [data, aspectRatio]);
 
     return <div ref={d3Container} className={styles.lineChart} />;
 };

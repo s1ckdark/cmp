@@ -1,5 +1,4 @@
 "use client";
-import React, { useState, ReactNode, useEffect, Suspense } from "react";
 import styles from "./index.module.scss";
 import { TableBodyProps } from "@/types/data";
 import Styles from "./TableBody.module.scss";
@@ -55,13 +54,14 @@ export const TableBody = ({ rowType, data }: any) => {
             "regDt",
             "history",
         ],
-        customer: [
+        customers: [
             "memberNo",
             "memberName",
             "regionType",
             "businessRegNo",
             "customerContacts",
             "salesContacts",
+            "regDt"
         ],
         user: [
             "email",
@@ -129,11 +129,11 @@ export const TableBody = ({ rowType, data }: any) => {
             invoice: `/billing/invoice/view/${[
                 props.memberNo,
             ]}/${targetMonth}`,
-            customer: `/customer/view/${props.id}`,
+            customers: `/customers/view/${props.id}`,
             user: `/admin/user/view`,
             productGd: `/products/product/view/${props.id}`,
             productCategory: `/products/category/view/${props.id}`,
-            billingProduct: `/billing/product/view/${props.prodId}`,
+            billingProduct: `/billing/product/list/${props.memberNo}/${targetMonth}`,
             role: `/admin/role/view/${props.id}`,
         };
 

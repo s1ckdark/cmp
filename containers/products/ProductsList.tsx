@@ -7,7 +7,7 @@ const ProductList = () => {
     return (
         <>
             <Breadcrumb />
-            <Tables rowType={'productGd'} className={'productGd'} />
+            <Tables rowType={'productGd'}/>
         </>
     );
 };

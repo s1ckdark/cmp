@@ -116,7 +116,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, aspectRatio = 16 / 9}) => {
 			svg.selectAll(".tick line")
 				.style("stroke","#eee");
         }
-    }, [data, containerWidth, containerHeight, aspectRatio]);
+    }, [data, containerWidth, containerHeight, aspectRatio, chartContainerRef]);
 
     return <div ref={chartContainerRef} style={{ width: '100%' }} />;
 };

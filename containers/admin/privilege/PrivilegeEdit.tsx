@@ -4,7 +4,7 @@ const PrivilegeList = () => {
     return (
         <>
             <Breadcrumb />
-            <Tables rowType={'privilege'} className={'PrivilegeList'} />
+            <Tables rowType={'privilege'} />
         </>
     )
 }

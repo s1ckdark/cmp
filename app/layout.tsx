@@ -4,7 +4,7 @@ import React, { Suspense, ReactNode } from 'react';
 import Toastify from '@/components/Toast';
 import AuthProvider from './AuthProvider';
 import Loading from '@/components/Loading';
-
+import Modal from '@/components/Modal';
 interface Props {
   children: React.ReactNode;
   params: any;
@@ -17,8 +17,9 @@ const RootLayout = async ({ children }: Props) => {
       <Suspense fallback={<Loading />}>
           <RecoilRootProvider>
             <AuthProvider>
-                <Toastify />
-                {children as ReactNode}
+              <Toastify />
+              <Modal />
+              {children as ReactNode}
             </AuthProvider>
           </RecoilRootProvider>
         </Suspense>

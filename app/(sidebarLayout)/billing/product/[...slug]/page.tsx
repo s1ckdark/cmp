@@ -1,4 +1,3 @@
-import ProductView from './view';
 import ProductList from './list';
 import ProductWrite from './write';
 
@@ -9,8 +8,6 @@ const productPage = ({params}:any) => {
     switch(pageType) {
         case 'list':
             return <ProductList />;
-        case 'view':
-            return <ProductView />;
         case 'write':
             return <ProductWrite />;
         default:

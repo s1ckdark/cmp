@@ -10,7 +10,7 @@ const UserList = () => {
             <Breadcrumb />
             <div className={`${Styles.table} ${Styles.withSearchbar}`}>
                 <Searchbar rowType={"user"} />
-                <Tables rowType={'user'} className={'UserList'} />
+                <Tables rowType={'user'} />
             </div>
         </>
     );

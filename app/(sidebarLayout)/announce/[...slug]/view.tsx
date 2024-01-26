@@ -3,7 +3,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 // import styles from './write.module.scss';
 
-export default function ViewPage() {
+const ViewPage =() => {
 
     // const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), {
     //     ssr: false
@@ -53,3 +53,4 @@ export default function ViewPage() {
         </div>
     );
 }
+export default ViewPage;

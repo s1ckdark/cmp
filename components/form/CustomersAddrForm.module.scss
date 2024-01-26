@@ -1,0 +1,32 @@
+.addressForm {
+    padding: 50px;
+    background-color: #fff;
+    border: 1px solid #DEE1E7;
+    margin: 0 auto 10px;
+    .inputGroup {
+        position: relative;
+        width: 100%;
+        margin-bottom: 10px;
+        label {
+            color: #2E322F;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 700;
+        }
+
+        input {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .iconSearch {
+            position: absolute;
+            top: 50%;
+            right:0;
+            transform: translate( -50%, 0);
+        }
+    }
+}

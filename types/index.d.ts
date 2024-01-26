@@ -56,3 +56,9 @@ export interface BreadcrumbProps {
     title: string;
     breadcrumbs: Array<{ href: string; label: string }>;
 }
+
+export interface modalProps {
+    isOpen: boolean;
+    type: string;
+    data: any | null;
+}
