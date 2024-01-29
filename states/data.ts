@@ -1,11 +1,13 @@
 import { atom, selector, selectorFamily } from 'recoil';
 import { apiBe } from '@/services';
-
+import { IaddrData } from '@/types/data';
 interface fetchData {
     data: any[];
     memberNo: string;
     targetMonth: string;
 }
+
+
 
 export const dataState = atom<fetchData | null>({
     key: 'dataState',
@@ -57,4 +59,20 @@ export const searchAtom = atom<any>({
 export const userInfoAtom = atom<any>({
     key: 'userInfoAtom',
     default: null
+});
+
+export const addrAtom = atom<IaddrData>({
+    key: 'addrAtom',
+    default: {
+        id: '',
+        name: '',
+        addr: '',
+        addrDetail: '',
+        zipcode: ''
+    }
+});
+
+export const memberAtom = atom<any>({
+    key: 'memberAtom',
+    default: { memberNo: '', memberName: '' }
 });

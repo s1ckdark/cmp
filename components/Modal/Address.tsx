@@ -21,8 +21,8 @@ const Address = () => {
             ...modal,
             isOpen: false,
             data: {
-                zipNo: zipNo,
-                roadAddrPart1: roadAddrPart1
+                zipcode: zipNo,
+                addr: roadAddrPart1
             },
         })
     }
@@ -40,7 +40,7 @@ const Address = () => {
 
     return ( 
         <div className={styles.address}>
-            <div className={styles.serachInput}>
+            <div className={styles.searchInput}>
                 <input type="text" placeholder="주소를 입력하세요." onChange={onChange} value={keyword} />
                 <Button onClick={onSearch} skin={"green"}>검색</Button>
             </div>

@@ -102,3 +102,11 @@ export interface Session {
   userType?: string
   privileges: string[];
 }
+
+export interface IaddrData {
+    id: string;
+    name: string;
+    zipcode: string;
+    addr: string;
+    addrDetail: string;
+}

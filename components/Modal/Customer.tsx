@@ -42,17 +42,27 @@ const Customer = () => {
 
     return ( 
         <div className={styles.customers}>
-            <div className={styles.serachInput}>
+            <div className={styles.searchInput}>
                 <input type="text" placeholder="고객사명을 입력하세요." onChange={onChange} value={keyword} />
                 <Button onClick={onSearch} skin={"green"}>검색</Button>
             </div>
             <div className={styles.customerList}>
-                {data.length > 0 && data.map((item: any) => (
-                    <div className={styles.customerItem} key={item.memberNo} onClick={()=> pickup(item.memberNo, item.memberName)}>
-                        <div className={styles.customerName}>{item.memberName}</div>
-                        <div className={styles.customerNo}>{item.memberNo}</div>
-                    </div>
-                ))}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>고객사명</th>
+                            <th>고객사번호</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.length > 0 ? data.map((item: any) => (
+                            <tr className={styles.customerItem} key={item.memberNo} onClick={() => pickup(item.memberNo, item.memberName)}>
+                                <td className={styles.customerName}>{item.memberName}</td>
+                                <td className={styles.customerNo}>{item.memberNo}</td>
+                            </tr>
+                        )):<tr><td colSpan={2}>검색 결과가 없습니다.</td></tr>}
+                    </tbody>
+                </table>
             </div>
         </div>
     )

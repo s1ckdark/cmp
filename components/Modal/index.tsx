@@ -20,6 +20,7 @@ const Modal = () => {
     }
 
     const onTitle = (type: string) => {
+        console.log(type);
         switch (type) {
             case "address":
                 return "주소지 정보";
@@ -31,6 +32,8 @@ const Modal = () => {
                 return "회사 정보";
             case "user":
                 return "사용자 정보";
+            case "customer":
+                return "고객사 정보";
             default:
                 return "담당자";
         }
