@@ -1,0 +1,41 @@
+.template {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.template .inputGroup {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.template .inputGroup label {
+  color: #2E322F;
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+}
+.template .inputGroup input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  width: 100%;
+}
+.template .inputGroup .name, .template .inputGroup .description {
+  width: 100%;
+  margin-right: 15px;
+}
+.template .inputGroup .zipcode {
+  width: 200px;
+}
+.template .btnArea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+  height: 36px;
+}
+.template .btnArea .btnBack {
+  margin-left: 15px;
+  width: 100px;
+}/*# sourceMappingURL=RoleForm.module.css.map */
