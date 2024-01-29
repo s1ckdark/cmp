@@ -128,9 +128,10 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                     setValue('custCeo', data.custCeo);
                     setValue('custPhone', data.custPhone);
                     setValue('comment', data.comment);
-                    console.log(data.custContact.length);
-                    if(data.custContact.length > 0 && data.sales.userId !== '')  setAddMember({ ...addMember, custContact: true })
-                    if(data.sales.userId !== '') setAddMember({ ...addMember, sales: true })
+                    
+                    if(data.custContact.length > 0 && data.sales.userId !== '')  setAddMember({ custContact: true, sales: true })
+                    if(data.sales.userId !== '' && data.custContact.length === 0) setAddMember({ ...addMember, sales: true })
+                    if(data.sales.userId === '' && data.custContact.length > 0) setAddMember({ ...addMember, custContact: true })
                 }
             }
             getMember()
@@ -249,8 +250,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                 </div>
             </form>
 
-            {addMember.custContact && <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact || null} />}
-            {addMember.sales && <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null} />}
+            {addMember.custContact && <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact[0] || null} mode={type} />}
+            {addMember.sales && <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null}  mode={type} />}
             </>
     );
 }
