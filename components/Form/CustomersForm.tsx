@@ -157,11 +157,11 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         if (type === 'view') {
             setIsDisabled(true);
         }
-        // if (type === 'register') {
-        //     const addr = async () => {
-        //         const response = await apiBe.get(`/customer/${memberNo}/address`);
-        //     }
-        // }
+        if (type === 'register') {
+            const addr = async () => {
+                const response = await apiBe.get(`/customer/${memberNo}/address`);
+            }
+        }
 
         setMounted(true);
     }, [type])
