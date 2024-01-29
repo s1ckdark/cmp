@@ -2,6 +2,7 @@ const path = require('path')
 const id = Math.random().toString(32).slice(2);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: false,
   productionBrowserSourceMaps: false,
   async rewrites() {
