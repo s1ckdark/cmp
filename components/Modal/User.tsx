@@ -16,12 +16,13 @@ const User = () => {
         setKeyword(e.target.value);
     }
 
-    const pickup = (email:string) => {
+    const pickup = (email:string, name:string) => {
         setModal({
             ...modal,
             isOpen: false,
             data: {
-                email: email
+                email: email,
+                name: name
             },
         })
     }
@@ -39,16 +40,27 @@ const User = () => {
 
     return ( 
         <div className={styles.user}>
-            <div className={styles.serachInput}>
+            <div className={styles.searchInput}>
                 <input type="text" placeholder="사용자 이름을 입력하세요." onChange={onChange} value={keyword} />
                 <Button onClick={onSearch} skin={"green"}>검색</Button>
             </div>
             <div className={styles.userList}>
-                {data.length > 0 && data.map((item: any) => (
-                    <div className={styles.userItem} key={item.memberNo} onClick={()=> pickup(item.email)}>
-                        <div className={styles.item}>{item.email}</div>
-                    </div>
-                ))}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>이메일</th>
+                            <th>사용자 이름</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data && data.length > 0 && data.map((item: any) => (
+                            <tr className={styles.userItem} key={item.memberNo} onClick={()=> pickup(item.email, item.userFullName)}>
+                                <td>{item.email}</td>
+                                <td>{item.userFullName}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     )

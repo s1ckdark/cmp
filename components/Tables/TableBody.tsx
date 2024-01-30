@@ -129,7 +129,7 @@ export const TableBody = ({ rowType, data }: any) => {
             invoice: `/billing/invoice/view/${[
                 props.memberNo,
             ]}/${targetMonth}`,
-            customers: `/customers/view/${props.id}`,
+            customers: `/customers/view/${props.memberNo}`,
             user: `/admin/user/view`,
             productGd: `/products/product/view/${props.id}`,
             productCategory: `/products/category/view/${props.id}`,

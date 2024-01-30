@@ -57,11 +57,10 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
    
     const router = useRouter();
     const onSubmit = async (formData: any) => {
-
         formData.memberNo = member.memberNo;
         formData.memberName = member.memberName;
-        console.log(formData);
-        const response = await apiBe.put(`/customer`, formData);
+        
+        const response = type === 'register' ? await apiBe.put(`/customer`, formData): await apiBe.post(`/customer`, formData);
         if (response.status === 201) {
             const { data } = response;
             if (await addAddress(data.id, data.memberNo) === 201) {
@@ -79,7 +78,9 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             ...addr,
             id: id
         }
-        const response = await apiBe.put(`/customer/${memberNo}/address`, data);
+
+        
+        const response = type ==='register' ? await apiBe.put(`/customer/${memberNo}/address`, data): await apiBe.post(`/customer/${memberNo}/address/`, data);
         return response.status;
     }
     const openModal = (type:string) => {
@@ -99,7 +100,11 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         }
     }
     const editMode = () => {
-       router.push(`./edit`);
+       router.push(`/customers/edit/${memberNo}`);
+    }
+
+    const goBack = () => {
+        router.back();
     }
 
     useEffect(() => {
@@ -175,19 +180,19 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                 <div className="columns-3 gap-36">
                     <div className={`${styles.memberNo} ${styles.inputGroup}`}>
                         <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 번호:</label>
-                        <input readOnly={isDisabled} type="text" id="memberNo" {...register("memberNo")} defaultValue={memberNo} />
+                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo")} defaultValue={memberNo} />
                         {errors.memberNo && <span className="text-red-500">This field is required</span>}
                         {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch}  onClick={() => openModal('customer')} />:null}
                             {errors.memberNo && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 이름:</label>
-                        <input readOnly={isDisabled} type="text" id="memberName" {...register("memberName")} defaultValue={memberName} />
+                        <input readOnly={true} type="text" id="memberName" {...register("memberName")} defaultValue={memberName} />
                         {errors.memberName && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberType" className="block text-sm font-medium text-gray-900 dark:text-black">고객유형:</label>
-                        <input type="text" id="memberType" {...register("memberType")} defaultValue={memberType} />
+                        <input readOnly={isDisabled} type="text" id="memberType" {...register("memberType")} defaultValue={memberType} />
                         {errors.memberType && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
@@ -214,43 +219,41 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="industry" className="block text-sm font-medium text-gray-900 dark:text-black">산업분류:</label>
-                        <input type="text" id="industry" {...register("industry")} defaultValue={industry} />
+                        <input readOnly={isDisabled} type="text" id="industry" {...register("industry")} defaultValue={industry} />
                         {errors.industry && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="businessRegNo" className="block text-sm font-medium text-gray-900 dark:text-black">사업자번호:</label>
-                        <input type="text" id="businessRegNo" {...register("businessRegNo")} defaultValue={businessRegNo} />
+                        <input readOnly={isDisabled} type="text" id="businessRegNo" {...register("businessRegNo")} defaultValue={businessRegNo} />
                         {errors.businessRegNo && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
                 <div className="columns-3 gap-36">
                     <div className={styles.inputGroup}>
                         <label htmlFor="custCeo" className="block text-sm font-medium text-gray-900 dark:text-black">대표:</label>
-                        <input type="text" id="custCeo" {...register("custCeo")} defaultValue={custCeo} />
+                        <input readOnly={isDisabled} type="text" id="custCeo" {...register("custCeo")} defaultValue={custCeo} />
                         {errors.custCeo && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="custPhone" className="block text-sm font-medium text-gray-900 dark:text-black">고객 연락처:</label>
-                        <input type="text" id="custPhone" {...register("custPhone")} defaultValue={custPhone} />
+                        <input readOnly={isDisabled} type="text" id="custPhone" {...register("custPhone")} defaultValue={custPhone} />
                         {errors.custPhone && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
             
 
-            <CustomersAddrForm type={"register"} memberNo={member.memberNo} />
+               
            
-               <div className={`${styles.btnArea} mt-6 mx-auto`}>
-                    {type === 'view' ? <><Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>
-                        <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button>
-                        <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button></>: null}
-                    {type === 'edit' ? <><Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>
-                    <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button>
-                    <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button></>: null}
-                    {type === 'register' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>등 록</Button> : null}
+                <div className={`${styles.btnArea} mt-6 mx-auto`}>
+                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>등 록</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
+                    <Button type='button' className={styles.btnBack} onClick={() => goBack} skin='gray'>취 소</Button>
+                        {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
+                    {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}
+                  
                 </div>
             </form>
-
-            {addMember.custContact && <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact[0] || null} mode={type} />}
+            {member.memberNo && <CustomersAddrForm type={"register"} memberNo={member.memberNo} mode={type} />}
+            {addMember.custContact && <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact && member.custContact.length !== 0 ? member.custContact[0]:null} mode={type} />}
             {addMember.sales && <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null}  mode={type} />}
             </>
     );

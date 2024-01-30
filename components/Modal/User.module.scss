@@ -1,3 +1,50 @@
 .user {
-    
+    .searchInput {
+        input {
+            width: calc(100% - 110px);
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 8px 10px 8px 0;
+            box-sizing: border-box;
+        }
+    }
+    .userList {
+        margin: 30px auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+
+            thead {
+                background-color: #F5F6F7;
+                border : 1px solid #DEE1E7;
+                th {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    color: #2E322F;
+                    text-align: center;
+                    width: 50%;
+                }
+            }
+            tbody {
+                tr {
+                    border : 1px solid #DEE1E7;
+                    &:hover {
+                        background-color: #F5F6F7;
+                    }
+                    td {
+                        padding: 10px 15px;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        color: #2E322F;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
 }

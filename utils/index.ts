@@ -27,14 +27,14 @@ export const valueOr = (value: string | boolean | undefined, _placeholder?: stri
 };
 
 export const getIpAddr = async() => {
-    const response = await axios("https://api.ipify.org?format=json");
-    const result = response.data;
+    const response = await fetch('/api/getip');
+    const result = await response.json();
     return result.ip;
 }
     
 export const getUserAgent = () => {
-    const userAgent = window.navigator.userAgent;
-    const platform = window.navigator.platform;
+    const {userAgent} = window.navigator;
+    const {platform} = window.navigator;
     const randomString = Math.random().toString(20).substring(2, 14) + Math.random().toString(20).substring(2, 14);
 
     const deviceID = `${userAgent}-${platform}-${randomString}`;

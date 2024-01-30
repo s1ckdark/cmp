@@ -1,8 +1,12 @@
+import CustomersForm from "@/components/Form/CustomersForm";
+import Breadcrumb from "@/components/Breadcrumb";
+
 const CustomerEdit = () => {
     return (
-        <div>
-        <h1>Customer Edit</h1>
-        </div>
+        <>
+            <Breadcrumb />
+            <CustomersForm type={"edit"} />
+        </>
     );
 }
 export default CustomerEdit;

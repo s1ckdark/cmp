@@ -26,6 +26,9 @@ const customerPage = async ({ params }: any) => {
         case "write":
             return <CustomerWrite />
             break;
+        case "edit":
+            return <CustomerEdit />
+            break;
         default:
             return <CustomerList />
             break;

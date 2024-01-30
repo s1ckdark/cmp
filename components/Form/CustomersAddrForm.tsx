@@ -14,10 +14,11 @@ import { IaddrData } from '@/types/data';
 interface ICustomersAddrForm {
     type: string;
     memberNo: string;
+    mode: string;
 }
 
 
-const CustomersAddrForm = ({ type, memberNo }: ICustomersAddrForm) => {
+const CustomersAddrForm = ({ type, memberNo, mode }: ICustomersAddrForm) => {
     const [addrData, setAddrData] = useRecoilState(addrAtom);
     const [modal, setModal] = useRecoilState(modalAtom);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -78,11 +79,11 @@ const CustomersAddrForm = ({ type, memberNo }: ICustomersAddrForm) => {
     }, [modal]);
 
     useEffect(() => {
-        const getAddr = async () => {
-            const response = await apiBe.get(`/customers/${memberNo}/address`);
+        const getAddr = async (memberNo: string) => {
+            const response = await apiBe.get(`/customer/${memberNo}/address`);
             const { data } = response;
             if (response.status === 200 && data.length > 0) {
-                setAddrData(data);
+                setAddrData(data[0]);
             } else {
                 setAddrData({
                     id: '',
@@ -93,6 +94,8 @@ const CustomersAddrForm = ({ type, memberNo }: ICustomersAddrForm) => {
                 });
             }
         }
+        if(mode === "edit" || mode === "view") getAddr(memberNo);
+        if(mode === "view") setIsDisabled(true);
     }, [memberNo]);
 
 

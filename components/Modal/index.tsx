@@ -7,6 +7,7 @@ import { modalAtom } from '@/states/';
 import { modalProps } from '@/types';
 import Customer from '@/components/Modal/Customer';
 import Address from '@/components/Modal/Address';
+import User from '@/components/Modal/User';
 const Modal = () => {
     const [modal, setModal] = useRecoilState<modalProps>(modalAtom);
     const { isOpen, type } = modal;
@@ -45,6 +46,8 @@ const Modal = () => {
                 return <Customer />;
             case "address":
                 return <Address />;
+            case "user":
+                return <User />;
             default:
                 return;
         }

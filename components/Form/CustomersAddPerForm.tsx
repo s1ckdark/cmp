@@ -28,7 +28,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
     const [isDisabled, setIsDisabled] = useState(false);
     const [ modal, setModal ] = useRecoilState(modalAtom);
     const { userId, name, dept, email, phoneNo, mobileNo, comment } = data ? data : { userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' };
-    const { register, handleSubmit, control, formState: { errors } } = useForm<formProps>({
+    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<formProps>({
         defaultValues: {
             userId: modal?.data?.email ? modal?.data?.email : '',
             name: name,
@@ -64,6 +64,14 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
     const openModal = (type:string) => {
         setModal({isOpen: true, type: type, data:null});
     }
+
+    useEffect(() => {
+        if(modal.type === 'user') {
+            const { email, name} = modal.data;
+            setValue('userId', email);
+            setValue('name', name);
+        }
+    },[modal.data])
 
     useEffect(() => {
         if(mode === "view") setIsDisabled(true);
@@ -114,9 +122,13 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
                         {errors.comment && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
-            <div className={styles.btnArea}>
-                <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
-                <Button type="button" skin={"gray"}>취소</Button>
+                <div className={styles.btnArea}>
+                    {mode === 'edit' || mode === 'register' ?
+                        <>
+                            <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
+                            <Button type="button" skin={"gray"}>취소</Button>
+                            <Button type="button" skin={"gray"}>삭제</Button> 
+                        </>:<Button type="button" className={styles.submitBtn} onClick={()=> console.log("modify")} skin={"green"}>수정</Button>}
             </div>
         </form>
         </>
