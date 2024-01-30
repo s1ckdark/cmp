@@ -9,9 +9,9 @@ import { redirect } from 'next/navigation';
 const Login = () => {
     useEffect(() => {
         const IsLogin = getCookie('accessToken');
-        // if (IsLogin) {
-        //     redirect('/landing');
-        // }
+        if (IsLogin) {
+            redirect('/landing');
+        }
     }, []);
     return (
         <main className="flex items-center justify-center w-screen h-screen">

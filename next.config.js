@@ -4,7 +4,7 @@ const id = Math.random().toString(32).slice(2);
 const nextConfig = {
   experimental: {
     serverActions: {
-      allowedOrigins: [process.env.NEXT_BACKEND_URL, "localhost:3000"]
+      allowedOrigins: ["223.130.136.1:80", "localhost:3000"]
     }
   },
   output: 'standalone',

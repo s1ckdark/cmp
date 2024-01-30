@@ -40,7 +40,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     const [ member, setMember ] = useState<any>({memberNo: '', memberName: '', regionType: '', memberType: '일반', industry: '', businessRegNo: '', custCeo: '', custPhone: '', comment: ''});
     const pathname = usePathname();
     const { memberNo, memberName, regionType, memberType, industry, businessRegNo, custCeo, custPhone, comment } = member;
-    
+    const [step, setStep]= useState<string>('');
+
     const { control, register, handleSubmit, getValues, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
             memberNo: memberNo,
@@ -64,7 +65,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         if (response.status === 201) {
             const { data } = response;
             if (await addAddress(data.id, data.memberNo) === 201) {
-                Toast("success", '고객사 정보가 저장 되었습니다.', ()=> router.push('/customers/view/' + data.memberNo));
+                Toast("success", '고객사 정보가 저장 되었습니다.');
+
             } else {
                 Toast("error", '고객사 주소 저장에 실패하였습니다.')
             }
