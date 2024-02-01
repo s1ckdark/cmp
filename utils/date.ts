@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { first } from 'lodash';
 
 export const getTSBefore = (value: number, unit: 'hour' | 'day' | 'week' | 'year') => {
     return dayjs().subtract(value, unit).toDate();
@@ -64,38 +65,13 @@ export const getKRCurrrentTime = () => {
 export { dayjs };
 
 export const generateDates = (targetMonth: string) => {
-    // Extracting the year and month from the input string
-    const generateYear = parseInt(targetMonth.substring(0, 4), 10);
-    const month = parseInt(targetMonth.substring(4, 6), 10) - 1; // Month is 0-indexed in JavaScript
-
     // Creating the first day of the specified month
-    const firstDayOfMonth = new Date(generateYear, month, 1);
-
-    const lastDayOfMonth = new Date(generateYear, month + 1, 0);
-    
-    const currentDate = new Date();
-
-    // Check if the generated month is the current month
-    const isCurrentMonth = currentDate.getFullYear() === generateYear && currentDate.getMonth() === month;
-
-    // If it's the current month, set relevantDate to yesterday; otherwise, to the last day of the month
-    let relevantDate;
-    if (isCurrentMonth) {
-        relevantDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 1);
-    } else {
-        relevantDate = lastDayOfMonth;
-    }
-
-    // Function to format a date in 'YYYY.MM.DD' format
-    const formatDate = (date: Date) => {
-        const formattedMonth = ('0' + (date.getMonth() + 1)).slice(-2); // Adding leading zero
-        const formattedDay = ('0' + date.getDate()).slice(-2); // Adding leading zero
-        return `${date.getFullYear()}.${formattedMonth}.${formattedDay}`;
-    };
+    const firstDayOfMonth = dayjs(targetMonth).startOf("day").format('YYYY.MM.DD');
+    const relevantDayOfMonth = dayjs(targetMonth).endOf("month").format('YYYY.MM.DD');
 
     return { 
-        firstDayOfMonth: formatDate(firstDayOfMonth), 
-        relevantDate: formatDate(relevantDate)
+        firstDayOfMonth: firstDayOfMonth, 
+        relevantDate: relevantDayOfMonth
     };
 };
 
