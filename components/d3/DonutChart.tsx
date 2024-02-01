@@ -22,7 +22,7 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .innerRadius(radius * 0.67)
       .outerRadius(radius - 1);
 
-    const color = d3.scaleOrdinal()
+    const color:any = d3.scaleOrdinal()
       .domain(data.map(d => d.name))
       .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), data.length).reverse());
 
@@ -50,7 +50,7 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .selectAll()
       .data(pie(data))
       .join("path")
-      .attr("fill", ((d:any)=> color(d.data.name)).toString())
+      .attr("fill", ((d:any)=> color(d.data.name)))
       .attr("d", arc as any)
       .append("title")
       .text((d: any) => `${d.data.name}: ${d.data.value.toLocaleString()}`);
@@ -80,7 +80,7 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .append('li');
 
     legend.append('span')
-      .style('background-color', ((d:any, i:any) => color(d.name)).toString())
+      .style('background-color', ((d:any, i:any) => color(d.name)))
       .style('display', 'inline-block')
       .style('width', '1rem')
       .style('height', '1rem')

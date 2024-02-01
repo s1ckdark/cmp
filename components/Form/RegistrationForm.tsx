@@ -21,8 +21,9 @@ interface IRegistrationFormProps {
 
 const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const [mounted, setMounted] = useState(false);
-    const [ isDisabled, setIsDisabled ] = useState(false);
-    const { username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data ? data : {  username:'',userFullName: '', userType: '', privileges: [], password: '', confirmPassword:'', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '',memberNo:'', memberName:'', salesName:'', isAdmin:'', isActivated:'', regId:'', regName:'', regDt:'' };
+    const [isDisabled, setIsDisabled] = useState(false);
+    const [ myData, setMyData] = useState<IRegistrationForm>({ username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: '', isActivated: '', regId: '', regName: '', regDt: '' });
+    const { username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = myData; 
     const { control, handleSubmit, getValues, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
             username: userFullName,
@@ -251,7 +252,21 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     }
 
     useEffect(() => {
-        console.log(type);
+        console.log(type, data);
+        if (data) {
+            setValue('username', data.userFullName);
+            setValue('userType', data.userType);
+            setValue('privileges', data.privileges);
+            setValue('email', data.email);
+            setValue('mobile', data.mobile);
+            setValue('phone', data.phone);
+            setValue('zipcode', data.zipcode);
+            setValue('addr', data.addr);
+            setValue('addrDetail', data.addrDetail);
+            setValue('memberNo', data.memberNo);
+            setValue('memberName', data.memberName);
+            setValue('salesName', data.salesName);
+        }
         const getPrivilegeOptions = async () => {
             const response = await apiBe('/role');
             if (response.status === 200 || response.status === 201) {
@@ -274,7 +289,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 setIsDisabled(true);
             }
             setMounted(true);
-        }, [type])
+        }, [type,data])
     
     
     

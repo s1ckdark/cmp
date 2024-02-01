@@ -5,7 +5,7 @@ import { parseCookies, setCookie } from 'nookies';
 
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
-    
+
 export const fetchClient = async (
     url: string,
     options?: FetchProps,
@@ -86,6 +86,7 @@ export const apiFe = axios.create({
 });
 
 apiBe.interceptors.request.use((config) => {
+
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }

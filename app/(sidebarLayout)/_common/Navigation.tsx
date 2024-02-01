@@ -87,17 +87,12 @@ const Navigation = () => {
                     "children": [],
                     "link": "/admin/log/list/1"
                 },
+                // {
+                //     "label": "메뉴 관리",
+                //     "children": [],
+                //     "link": "/admin/menu/list/1"
+                // },
                 {
-                    "label": "메뉴 관리",
-                    "children": [],
-                    "link": "/admin/menu/list/1"
-                },
-                {
-                    "label": "권한 관리",
-                    "children": [],
-                    "link": "/admin/privilege/list/1",
-                },
-                                {
                     "label": "롤 관리",
                     "children": [],
                     "link": "/admin/role/list/1",

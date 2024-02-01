@@ -30,8 +30,6 @@ export const Tables = ({ rowType }: TablesProps) => {
     const router = useRouter();
     const path = usePathname();
     
-    
-    
     useEffect(() => {
         const { pageNumber }: any = pathSpliter(path);
         const endpoint:any = {
@@ -81,7 +79,6 @@ export const Tables = ({ rowType }: TablesProps) => {
         };
 
         const fetching = async () => {
-            
             const response = await apiBe.get(endpoint[rowType]['url'], {
                 params: endpoint[rowType]['params']
             });

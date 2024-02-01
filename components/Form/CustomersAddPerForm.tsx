@@ -5,9 +5,12 @@ import Button from '../Button';
 import { IconSearch } from '@/public/svgs';
 import { useRecoilState } from 'recoil';
 import { modalAtom } from '@/states';
+import { customerStep } from '@/states/data';
 import { apiBe } from '@/services';
 import { Toast } from '@/components/Toast';
+import { set } from 'lodash';
 interface formProps {
+    id?: string;
     userId?: string;
     name: string;
     dept: string;
@@ -24,13 +27,15 @@ interface CustomersAddPerFormProps {
 }
 
 
-const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormProps) => {
+const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerFormProps) => {
     const [isDisabled, setIsDisabled] = useState(false);
+    const [ step, setStep ] = useRecoilState(customerStep);
     const [ modal, setModal ] = useRecoilState(modalAtom);
-    const { userId, name, dept, email, phoneNo, mobileNo, comment } = data ? data : { userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' };
-    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm<formProps>({
+    const { id, userId, name, dept, email, phoneNo, mobileNo, comment } = data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' };
+    const { register, handleSubmit, control, setValue, reset, formState: { errors } } = useForm<formProps>({
         defaultValues: {
-            userId: modal?.data?.email ? modal?.data?.email : '',
+            id:id,
+            userId: userId,
             name: name,
             dept: dept,
             email: email,
@@ -51,11 +56,17 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
         }
     }
 
-    const onSubmit = async(data: any) => {
-        const url = type === 'custContact' ? '/customer/' + memberNo + '/contact' : '/customer/' + memberNo + '/sales';
-        const response = await apiBe.put(url, data);
-        if(response.status === 200 || response.status === 201) {
-            Toast("success", '저장이 완료되었습니다.');
+
+    const onSubmit = async (formData: any) => {
+        let fixedType = mode;
+        if (data === null && mode === 'edit') { fixedType = 'register' }
+    
+        let url = type === 'custContact' ? '/customer/' + memberNo + '/contact' : '/customer/' + memberNo + '/sales';
+        url = fixedType === 'edit' && type === 'custContact' ? url + '/' + formData.id : url;
+        const response = fixedType === 'register' ? await apiBe.put(url, formData):await apiBe.post(url, formData);
+        if (response.status === 200 || response.status === 201) {
+            if (mode === 'register') Toast("success", '저장이 완료되었습니다.', () => setStep(type === 'custContact' ? 3 : 4));
+            if (mode === 'edit') Toast("success", '수정이 완료되었습니다.');
         } else {
             Toast("error", '저장이 실패하였습니다. 확인부탁드립니다.')
         }
@@ -65,6 +76,9 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
         setModal({isOpen: true, type: type, data:null});
     }
 
+    const resetAll = () => {
+          reset(formValues => data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' });
+    }
     useEffect(() => {
         if(modal.type === 'user') {
             const { email, name} = modal.data;
@@ -107,13 +121,13 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
                     {type === "custContact" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="phoneNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("phoneNo")} defaultValue={phoneNo} />
+                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo")} defaultValue={phoneNo} />
                             {errors.phoneNo && <span className="text-red-500">This field is required</span>}
                         </div>}
                      {type === "sales" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("mobileNo")} defaultValue={mobileNo} />
+                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo")} defaultValue={mobileNo} />
                             {errors.mobileNo && <span className="text-red-500">This field is required</span>}
                         </div>}
                     <div className={`${styles.inputGroup}`}>
@@ -126,8 +140,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode}: CustomersAddPerFormP
                     {mode === 'edit' || mode === 'register' ?
                         <>
                             <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
-                            <Button type="button" skin={"gray"}>취소</Button>
-                            <Button type="button" skin={"gray"}>삭제</Button> 
+                            <Button type="button" skin={"gray"} onClick={resetAll}>취소</Button>
                         </>:<Button type="button" className={styles.submitBtn} onClick={()=> console.log("modify")} skin={"green"}>수정</Button>}
             </div>
         </form>

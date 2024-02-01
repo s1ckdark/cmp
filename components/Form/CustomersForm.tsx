@@ -15,7 +15,7 @@ import CustomersAddPerForm from './CustomersAddPerForm';
 import CustomersAddrForm from './CustomersAddrForm';
 import { IconSearch } from '@/public/svgs';
 import { modalAtom } from '@/states';
-import { addrAtom } from '@/states/data';
+import { addrAtom, customerStep } from '@/states/data';
 import Modal from '@/components/Modal';
 import { usePathname } from 'next/navigation';
 import lodash from 'lodash';
@@ -31,18 +31,19 @@ interface IaddMember {
 }
 const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     const [mounted, setMounted] = useState(false);
+    const [ formType, setFormType ] = useState(type);
+    const [step, setStep] = useRecoilState(customerStep);
     const [modal, setModal] = useRecoilState(modalAtom);
     const [addr, setAddr] = useRecoilState(addrAtom);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [ addMember, setAddMember ] = useState<IaddMember>({custContact: false, sales: false});
+    const [addMember, setAddMember] = useState<IaddMember>({ custContact: false, sales: false });
     const [regionTypeOptions, setRegionTypeOptions] = useState<any>([]);
     const [defaultRegionType, setDefaultRegionType] = useState<any>([]);
-    const [ member, setMember ] = useState<any>({memberNo: '', memberName: '', regionType: '', memberType: '일반', industry: '', businessRegNo: '', custCeo: '', custPhone: '', comment: ''});
+    const [member, setMember] = useState<any>({ memberNo: '', memberName: '', regionType: '', memberType: '일반', industry: '', businessRegNo: '', custCeo: '', custPhone: '', comment: '' });
     const pathname = usePathname();
     const { memberNo, memberName, regionType, memberType, industry, businessRegNo, custCeo, custPhone, comment } = member;
-    const [step, setStep]= useState<string>('');
 
-    const { control, register, handleSubmit, getValues, setValue, setError, formState: {errors} } = useForm({
+    const { control, register, handleSubmit, getValues, setValue, setError, formState: { errors } } = useForm({
         defaultValues: {
             memberNo: memberNo,
             memberName: memberName,
@@ -54,40 +55,37 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             custPhone: custPhone,
             comment: comment,
         }
-    });   
+    });
    
     const router = useRouter();
     const onSubmit = async (formData: any) => {
-        formData.memberNo = member.memberNo;
-        formData.memberName = member.memberName;
+        // formData.memberNo = member.memberNo;
+        // formData.memberName = member.memberName;
         
-        const response = type === 'register' ? await apiBe.put(`/customer`, formData): await apiBe.post(`/customer`, formData);
-        if (response.status === 201) {
+        const response = type === 'register' ? await apiBe.put(`/customer`, formData) : await apiBe.post(`/customer`, formData);
+        if (response.status === 201 || response.status === 200) {
             const { data } = response;
-            if (await addAddress(data.id, data.memberNo) === 201) {
-                Toast("success", '고객사 정보가 저장 되었습니다.');
-
-            } else {
-                Toast("error", '고객사 주소 저장에 실패하였습니다.')
-            }
+            // setMember(data);
+            setStep(1)
+            Toast("success", '고객사 정보가 저장 되었습니다.');
         } else {
             Toast("error", '고객사 정보 저장에 실패하였습니다.')
         }
     };
 
-    const addAddress = async (id: string, memberNo: string) => {
-        const data = {
-            ...addr,
-            id: id
-        }
+    // const addAddress = async (id: string, memberNo: string) => {
+    //     const data = {
+    //         ...addr,
+    //         id: id
+    //     }
 
         
-        const response = type ==='register' ? await apiBe.put(`/customer/${memberNo}/address`, data): await apiBe.post(`/customer/${memberNo}/address/`, data);
-        return response.status;
+    //     const response = type === 'register' ? await apiBe.put(`/customer/${memberNo}/address`, data) : await apiBe.post(`/customer/${memberNo}/address/`, data);
+    //     return response.status;
+    // }
+    const openModal = (type: string) => {
+        setModal({ isOpen: true, type: type, data: null });
     }
-    const openModal = (type:string) => {
-        setModal({isOpen: true, type: type,data:null});
-}
 
     const addMembers = (type: string) => {
         switch (type) {
@@ -102,7 +100,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         }
     }
     const editMode = () => {
-       router.push(`/customers/edit/${memberNo}`);
+        router.push(`/customers/edit/${memberNo}`);
     }
 
     const goBack = () => {
@@ -110,22 +108,31 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     }
 
     useEffect(() => {
+        const getMember = async (memberNo:string) => {
+            const response = await apiBe.get(`/customer/${memberNo}`);
+            const { data } = response;
+            if (response.status === 200 && data.memberNo === memberNo ) {
+               router.push(`/customers/edit/${memberNo}`)
+            }
+        }
         if (modal.data?.memberNo && modal.data?.memberName) {
-            setMember({...member, 'memberNo': modal.data?.memberNo, 'memberName': modal.data?.memberName})
+            setMember({ ...member, 'memberNo': modal.data?.memberNo, 'memberName': modal.data?.memberName })
             setValue('memberNo', modal.data.memberNo);
             setValue('memberName', modal.data.memberName)
+            getMember(modal.data.memberNo);
         }
     }, [modal]);
 
     useEffect(() => {
-        console.log(type);
         const memberNo = lodash.last(lodash.split(pathname, '/'))
+        console.log(type, memberNo);
         if (type === 'view' || type === 'edit') {
             const getMember = async () => {
                 const response = await apiBe.get(`/customer/${memberNo}`);
-                const { data } = response;
-                if (response.status === 200) {
+                if (response.status === 200 && data !== null) {
+                    const { data } = response;
                     setMember(data)
+                    setStep(4);
                     setValue('memberNo', data.memberNo);
                     setValue('memberName', data.memberName);
                     setValue('regionType', data.regionType);
@@ -136,9 +143,9 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                     setValue('custPhone', data.custPhone);
                     setValue('comment', data.comment);
                     
-                    if(data.custContact.length > 0 && data.sales.userId !== '')  setAddMember({ custContact: true, sales: true })
-                    if(data.sales.userId !== '' && data.custContact.length === 0) setAddMember({ ...addMember, sales: true })
-                    if(data.sales.userId === '' && data.custContact.length > 0) setAddMember({ ...addMember, custContact: true })
+                    if (data.custContact !== null && data.sales !== null) setAddMember({ custContact: true, sales: true })
+                    if (data.sales !== null && data.custContact === null) setAddMember({ ...addMember, sales: true })
+                    if (data.sales === null && data.custContact.length > 0) setAddMember({ ...addMember, custContact: true })
                 }
             }
             getMember()
@@ -184,8 +191,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                         <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 번호:</label>
                         <input readOnly={true} type="text" id="memberNo" {...register("memberNo")} defaultValue={memberNo} />
                         {errors.memberNo && <span className="text-red-500">This field is required</span>}
-                        {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch}  onClick={() => openModal('customer')} />:null}
-                            {errors.memberNo && <span className="text-red-500">This field is required</span>}
+                        {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('customer')} /> : null}
+                        {errors.memberNo && <span className="text-red-500">This field is required</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 이름:</label>
@@ -211,8 +218,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                                     {...field}
                                     options={regionTypeOptions}
                                     isDisabled={isDisabled}
-                                    menuPosition={'fixed'} 
-                                    value={regionTypeOptions.find((option:any) => option.value === field.value)} // Corrected this line
+                                    menuPosition={'fixed'}
+                                    value={regionTypeOptions.find((option: any) => option.value === field.value)} // Corrected this line
                                     onChange={(val) => field.onChange(val.value)}
                                 />
                             )}
@@ -247,16 +254,23 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                
            
                 <div className={`${styles.btnArea} mt-6 mx-auto`}>
-                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>등 록</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
+                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "수 정"}</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
                     <Button type='button' className={styles.btnBack} onClick={() => goBack} skin='gray'>취 소</Button>
-                        {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
+                    {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
                     {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}
                   
                 </div>
             </form>
-            {member.memberNo && <CustomersAddrForm type={"register"} memberNo={member.memberNo} mode={type} />}
-            {addMember.custContact && <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact && member.custContact.length !== 0 ? member.custContact[0]:null} mode={type} />}
-            {addMember.sales && <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null}  mode={type} />}
+            
+            {step > 0 && <div className={styles.address}>
+                {member.memberNo && <CustomersAddrForm type={"register"} memberNo={member.memberNo} mode={formType} data={member.address && member.address.length > 0 ? member.address[0] : null} />}
+            </div>}
+            {step > 1 && <div className={styles.custContact}>
+                 <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact && member.custContact.length !== 0 ? member.custContact[0] : null} mode={formType} />
+            </div>}
+            {step > 2 && <div className={styles.sales}>
+                <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null} mode={formType} />
+                </div>}
             </>
     );
 }

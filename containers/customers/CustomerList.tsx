@@ -1,5 +1,6 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import { Tables } from "@/components/Tables";
+
 const CustomerList = () => {
     return (
         <>

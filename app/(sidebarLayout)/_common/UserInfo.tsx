@@ -12,14 +12,14 @@ const UserInfo = ({isOpen}:{isOpen:boolean}) => {
     <>
       <div className={`${styles.userinfo} ${!isOpen ? styles.open:styles.close}`}>
         <div className={`${styles.container}`}>
-          <div className={`${styles.user_name} text-right px-2`}>
-            {username && <p className="mb-6">{username || ''}</p>}
+          <div className={`${styles.user_name} flex text-right px-2`}>
+            {username &&  <Link href="/mypage" className="user ml-4"> <p className="mb-6">{username || ''}</p></Link>}
+            <Link href="/landing" className="home ml-4"> <IconHome /> </Link>
           </div>
           
           <div className={styles.linkArea}>
-            <Link href="/admin" className="setting"><span> <IconSetting /></span></Link>
-            <Link href="/mypage" className="user px-3"> <IconUsers /> </Link>
-            <Link href="/landing" className="home"> <IconHome /> </Link>
+            {/* <Link href="/admin" className="setting"><span> <IconSetting /></span></Link> */}
+           {/* <IconUsers /> </Link> */}
           </div>
         </div>
       </div>

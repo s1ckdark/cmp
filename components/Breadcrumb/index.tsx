@@ -5,14 +5,14 @@ import { BreadcrumbProps } from '@/types';
 import { BreadcrumbArrow, BreadcrumbHome } from '@/public/svgs';
 import breadcrumbs from './breadcrumb.json';
 import { usePathname } from 'next/navigation';
+import { path } from 'd3';
 
 const Breadcrumb = () => {
     const pathname = usePathname();
-    const key:string = pathname.split('/').slice(0,4).join('/')
-    // if(pathname.includes('view') || pathname.includes('list')) {
-    //     key = pathname.split('/').slice(0, -1).join('/');
-    // }
-    
+    let key: string = pathname.split('/').slice(0, 4).join('/')
+    if(pathname.includes('/view/') || pathname.includes('/list/') || pathname.includes('/edit/')) {
+        key = pathname.split('/').slice(0, -1).join('/');
+    }
     const breadcrumbData = breadcrumbs[key as keyof typeof breadcrumbs];
     if (!breadcrumbData) {
         // Handle the case where no matching breadcrumb data is found
@@ -20,7 +20,6 @@ const Breadcrumb = () => {
     }
 
     const { title, breadcrumb } = breadcrumbData;
-
     return (
         <hgroup className="flex items-baseline">
             <h2 className="text-4xl font-extrabold dark:text-white">{title}</h2>

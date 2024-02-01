@@ -76,3 +76,8 @@ export const memberAtom = atom<any>({
     key: 'memberAtom',
     default: { memberNo: '', memberName: '' }
 });
+
+export const customerStep = atom<number>({
+    key: 'customerStep',
+    default: 0
+});

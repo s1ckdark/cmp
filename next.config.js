@@ -2,13 +2,9 @@ const path = require('path')
 const id = Math.random().toString(32).slice(2);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    serverActions: {
-      allowedOrigins: ["223.130.136.1:80", "localhost:3000"]
-    }
-  },
   output: 'standalone',
   reactStrictMode: false,
+  swcMinify: true,
   productionBrowserSourceMaps: false,
   async rewrites() {
     return [

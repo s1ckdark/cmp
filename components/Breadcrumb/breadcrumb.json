@@ -214,7 +214,7 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/customers", "label": "Customers" },
-            { "href": "/customers/customers/list/1", "label": "고객사" }
+            { "href": "/customers/list/1", "label": "고객사" }
         ]
     },
     "/customers/write":{
@@ -222,7 +222,15 @@
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/customers", "label": "Customers" },
-            { "href": "/customers/customers/write", "label": "고객사 등록" }
+            { "href": "/customers/write", "label": "고객사 등록" }
+        ]
+    },
+    "/customers/edit":{
+        "title": "고객사 수정",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/customers", "label": "Customers" },
+            { "href": "/customers/edit", "label": "고객사 수정" }
         ]
     }
 }

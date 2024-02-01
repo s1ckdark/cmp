@@ -6,7 +6,7 @@ import BarChart from '@/components/d3/BarChart';
 import DonutChart from '@/components/d3/DonutChart';
 import styles from "./InvoiceVisual.module.scss";
 import MonthBar from '@/components/MonthBar';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { visualAtom, dataListAtom } from '@/states/data';
 import { apiBe} from '@/services';
 import { useRouter } from 'next/navigation';
@@ -21,7 +21,7 @@ interface DemandItem {
     start: string;
     end: string;
 }
-const InvoiceVisual = ({ memberNo, targetMonth }:{memberNo:number, targetMonth:number}) => {
+const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMonth: number }) => {
     const [visual, setVisual] = useRecoilState(visualAtom);
     const [ data, setData ] = useRecoilState(dataListAtom) || null;
     const router = useRouter();

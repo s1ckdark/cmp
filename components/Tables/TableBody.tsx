@@ -1,12 +1,12 @@
 "use client";
-import styles from "./index.module.scss";
-import { TableBodyProps } from "@/types/data";
+
+import { useEffect } from "react";
 import Styles from "./TableBody.module.scss";
 import { useRouter } from "next/navigation";
 import { monthAtom, currentPageAtom } from "@/states";
-import { historyListAtom, historyToggleAtom } from "@/states/data";
+import { historyListAtom, historyToggleAtom, visualAtom } from "@/states/data";
 import { userInfoAtom } from "@/states/localStorage";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { History, IconOverview } from "@/public/svgs";
 import { addComma } from "@/utils/data";
 import Loading from "@/components/Loading";
@@ -133,11 +133,10 @@ export const TableBody = ({ rowType, data }: any) => {
             user: `/admin/user/view`,
             productGd: `/products/product/view/${props.id}`,
             productCategory: `/products/category/view/${props.id}`,
-            billingProduct: `/billing/product/list/${props.memberNo}/${targetMonth}`,
             role: `/admin/role/view/${props.id}`,
         };
 
-
+        if(typeUrl[rowType] === undefined) return;
         router.push(typeUrl[rowType]);
     };
 
@@ -180,7 +179,9 @@ export const TableBody = ({ rowType, data }: any) => {
         setHistoryToggle(true);
     };
 
+    const resetVisual = useResetRecoilState(visualAtom);
     const visual = (memberNo: string) => {
+        resetVisual();
         router.push(`/billing/invoice/visual/${memberNo}/${targetMonth}`);
     };
     const field = display[rowType];
