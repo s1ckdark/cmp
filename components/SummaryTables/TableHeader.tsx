@@ -9,7 +9,7 @@ interface TableHeaderData {
     perMonth?: string[];
     perWeek?: string[];
     perDay?: string[];
-    announce?: string[];
+    notice?: string[];
     support?: string[];
 }
   
@@ -24,7 +24,7 @@ export const TableHeader = ({ rowType }:any) => {
         "perWeek": ["요일", "비용(KRW)"],
         "top10bycust": ["월","고객","고객명","금액(KRW)"],
         "trendMonth": ["월", "매출(KRW)", "전월대비 증감액(KRW)","증감율(%)"],
-        "announce": ['번호', '제목', '등록일자'],
+        "notice": ['번호', '제목', '등록일자'],
         'support': ['번호', '제목', '고객사', '진행상태', '등록일자'],
     }
 

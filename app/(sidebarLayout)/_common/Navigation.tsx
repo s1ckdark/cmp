@@ -103,7 +103,7 @@ const Navigation = () => {
             "label": "공지사항",
             "icon": "IconNaviNotice",
             "children": [],
-            "link": "#"
+            "link": "/notice/list/1"
         },
         {
             "label": "빌링",
@@ -154,7 +154,7 @@ const Navigation = () => {
             "label": "지원",
             "icon": "IconNaviSupport",
             "children": [],
-            "link": "#",
+            "link": "/support/list/1",
         },
     ];    
     

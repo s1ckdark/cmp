@@ -1,0 +1,30 @@
+.downloader {
+    margin: 10px auto;
+    border: 1px solid #DEE1E7;
+    .fileList {
+        display: flex;
+        align-items: center;
+        height: 100%;
+        background-color: #F7F8FE;
+        .label {
+            width: 150px;
+            height: 100%;
+            font-size: 14px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .files {
+            background-color: #fff;
+            width: calc(100% - 150px);
+            .file {
+                width: 100%;
+                padding: 10px 15px;
+                border-bottom: 1px solid #DEE1E7;
+                border-left: 1px solid #DEE1E7;
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}

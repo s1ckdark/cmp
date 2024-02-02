@@ -101,4 +101,15 @@
             border-color: var(--color-gray-4);
         }
     }
+    &.submit {
+        color: var(--color-white);
+        background: #43B69A;
+        display: table-cell;
+        margin-right: 10px;
+    }
+    &.cancel {
+        color: var(--color-white);
+        background: #FF5A5F;
+        display: table-cell;
+    }
 }

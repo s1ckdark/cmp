@@ -232,5 +232,69 @@
             { "href": "/customers", "label": "Customers" },
             { "href": "/customers/edit", "label": "고객사 수정" }
         ]
-    }
+    },
+    "/notice/list": {
+        "title": "공지사항",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/notice", "label": "공지사항" },
+            { "href": "/notice/list", "label": "공지사항" }
+        ]
+    },
+    "/notice/view": {
+        "title": "공지사항",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/notice", "label": "공지사항" },
+            { "href": "/notice/view", "label": "공지사항 상세"}
+        ]
+    },
+    "/notice/write": {
+        "title": "공지사항",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/notice", "label": "공지사항" },
+            { "href": "/notice/write", "label": "공지사항 등록" }
+        ]
+    },
+    "/notice/edit": {
+        "title": "공지사항",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/notice", "label": "공지사항" },
+            { "href": "/notice/edit", "label": "공지사항 수정" }
+        ]
+    },
+    "/support/list": {
+        "title": "지원",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/support", "label": "지원" },
+            { "href": "/support/list", "label": "지원" }
+        ]
+    },
+    "/support/view": {
+        "title": "지원",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/support", "label": "지원" },
+            { "href": "/support/view", "label": "지원 상세" }
+        ]
+    },
+    "/support/write": {
+        "title": "지원",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/support", "label": "지원" },
+            { "href": "/support/write", "label": "지원 작성" }
+        ]
+    },
+    "/support/edit": {
+        "title": "지원",
+        "breadcrumb": [
+            { "href": "/", "label": "Home" },
+            { "href": "/support", "label": "지원" },
+            { "href": "/support/edit", "label": "지원 수정" }
+        ]
+    }      
 }

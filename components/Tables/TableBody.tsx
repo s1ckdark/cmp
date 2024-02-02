@@ -114,6 +114,26 @@ export const TableBody = ({ rowType, data }: any) => {
             "ipAddress",
             "clientInfo",
             "regDt"
+        ],
+        notice: [
+            "idx",
+            "subject",
+            "content",
+            "regName",
+            "files",
+            "regDt"
+        ],
+        support: [
+            "idx",
+            "memberNo",
+            "memberName",
+            "subject",
+            "typeName",   
+            "chargeName",
+            "salesName",
+            "regName",
+            "regDt",
+            "statusName",
         ]
     };
 
@@ -134,6 +154,8 @@ export const TableBody = ({ rowType, data }: any) => {
             productGd: `/products/product/view/${props.id}`,
             productCategory: `/products/category/view/${props.id}`,
             role: `/admin/role/view/${props.id}`,
+            notice: `/notice/view/${props.id}`,
+            support: `/support/view/${props.id}`,
         };
 
         if(typeUrl[rowType] === undefined) return;
@@ -169,6 +191,11 @@ export const TableBody = ({ rowType, data }: any) => {
                     )
                 );
                 break;
+            case "files":
+                return (
+                    data['content']['uploadedFiles'].length > 0 ? true : false
+                )
+            
             default:
                 return data?.data;
         }
@@ -231,6 +258,13 @@ export const TableBody = ({ rowType, data }: any) => {
                         onClick={() => visual(item.memberNo)}
                     >
                         {item.discountRate}%
+                    </td>
+                );
+                break;
+            case "files":
+                content = (
+                    <td key={key + "-" + keyIndex} onClick={() => view(item)}>
+                        {item.uploadedFiles.length > 0 ? "O" : "X"}
                     </td>
                 );
                 break;

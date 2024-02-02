@@ -1,0 +1,54 @@
+.noticeDetailView {
+    max-width: 1280px;
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #DEE1E7;
+    padding: 50px;
+}
+.title {
+    h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-align: center;
+        padding: 15px 0;
+    }
+}
+.info {
+    display:flex;
+    justify-content: flex-start;
+    border: 1px solid #DEE1E7;
+    & > div {
+        display: flex;
+        align-items: center;
+        
+        label {
+            background-color: #F7F8FE;
+            font-size:14px;
+            padding: 10px 25px;
+            border-right: 1px solid #DEE1E7;
+        }
+        .value {
+            border-right: 1px solid #DEE1E7;
+            padding: 10px 25px;
+            font-size:14px;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+.toastViewer {
+    margin-top: 20px;
+    border: 1px solid #DEE1E7;
+    padding: 20px;
+    .toastViewerTitle {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .toastViewerContent {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}

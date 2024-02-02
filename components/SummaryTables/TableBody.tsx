@@ -22,7 +22,7 @@ export const TableBody = ({rowType, data}:any) => {
         "perWeek": ["x", "y"],
         "trendMonth": ["x", "y", "z", "a"],
         "top10bycust": ["rank", "memberNo", "memberName", "totalDemandAmount"],
-        "announce": ['idx', 'title', 'regDt'],
+        "notice": ['idx', 'title', 'regDt'],
         "support": ['idx', 'title', 'memberName', 'status', 'regDt'],
     }
     

@@ -35,7 +35,8 @@ interface ComplexHeader {
     contracts?: any[];
     invoiceUsage?: ComplexHeader[];
     invoiceList?: ComplexHeader[];
-    customerPiC?: any[];
+      customerPiC?: any[];
+    notice: any[];
   }
   interface TypesMap {
     [key:string]: string[] | ComplexHeader[];
@@ -47,15 +48,14 @@ interface ComplexHeader {
 
 export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
     const types: TypesMap = {
-        "announceOverview": ['번호', '제목', '등록일자'],
-        "announce": ['번호', '제목', '유형', '등록자', '첨부파일', '등록일자'],
+        "noticeOverview": ['번호', '제목', '등록일자'],
         "per_month" : ['월','매출','전월대비 증감액(KRW)','증감율(%)'],  //수정(컬럼 2개 추가됨)
         "supportOverview": ['번호', '제목', '고객사', '진행상태', '등록일자'],
         "top10":[
                 { label: '전체 고객사',
                 subHeaders: ['월', '고객ID', '고객명', '금액(KRW)']}
             ], //전체고객사 추가
-        "support": ['지원번호', '고객사번호', '고객사명', '계약번호(ERP)', '제목', '지원유형', '지원담당자명', '고객사담당자명', '등록자', '등록일시', '상태'],
+        "support": ['지원번호', '고객사번호', '고객사명', '제목', '지원유형', '지원담당자명', '고객사담당자명', '등록자', '등록일시', '상태'],
         "billingProduct":['고객번호','고객명','구분','상품명','상품상세분류','상품가격기준','정식단가(KRW)','노출단가(KRW)','할인율(%)','등록자','등록일시'], //추가
         "billingProductDetail":['상품ID','상품명','상품분류','상품상세분류','상품가격기준','정식단가','노출단가','수량','할인율(%)','납부예상금액','청구단위','서비스 시작일시','서비스 종료일시','빌링ID','코멘트'], //추가
 				"invoiceUsage": [
@@ -106,6 +106,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
         "productCategory": ['상품분류', '상품상세분류','상품상세분류기준','등록일시', '등록자'],
         "customers": ['고객사번호', '고객사명', '고객유형', '사업자번호', '담당영업', '등록자', '등록일시'], 
         "contract": ['고객사번호', '고객사명', '계약번호(ERP)', '계약명', '계약유형', '계약금액', '계약상태', '계약시작일', '계약종료일'],
+        "notice": ['번호', '제목', '유형', '등록자', '첨부파일', '등록일자'],
         
     }
 

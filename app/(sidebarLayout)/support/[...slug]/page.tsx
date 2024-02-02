@@ -1,43 +1,38 @@
-'use client';
-import ViewPage from './view';
-import ListPage from './list';
-import EditPage from './edit';
-import { useRouter } from 'next/navigation';
+"use client";
+import SupportView from "./view";
+import SupportList from "./list";
+import SupportWrite from "./write";
+import SupportEdit from "./edit";
 
-const SupportPage = ({ params }:any) => {
-  const { slug } = params;
-  const router = useRouter();
-  const type = slug[0];
-  const id = slug[1];
-  // Render different components based on the slug value
-  const renderPage = () => {
-    switch (type) {
-      case 'view':
-        return <ViewPage />;
-      case 'list':
-        return <ListPage />;
-      case 'edit':
-        return <EditPage />;
-      default:
-        // Redirect to a 404 page or display a not found message
-        // You can also use router.push('/404') to redirect to a custom 404 page
-        return <p>Page not found.</p>;
+const supportPage = async ({ params }: any) => {
+    const { slug } = params;
+    const pageType = slug[0];
+    let pageNumber = 1,
+    id = "";
+    if (pageType === "list") {
+        // slug.length === 1 ? redirect('./list/1') :  pageNumber = slug[1];
+        pageNumber = slug[1];
+    } else {
+        id = slug[1];
+       
     }
-  };
-
-  return (
-    <div>
-      <h1>{type} - {id}</h1>
-      {renderPage()}
-    </div>
-  );
+    switch (pageType) {
+        case "list":
+            return <SupportList />
+            break;
+        case "view":
+            return <SupportView />
+            break;
+        case "write":
+            return <SupportWrite />
+            break;
+        case "edit":
+            return <SupportEdit />
+            break;
+        default:
+            return <SupportList />
+            break;
+    }
 };
 
-// export async function generateStaticParams() {
-//   const posts = await fetch('https://.../posts').then((res) => res.json())
-
-//   return posts.map((post) => ({
-//     slug: post.slug,
-//   }))
-// }
-export default SupportPage;
+export default supportPage;

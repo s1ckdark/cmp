@@ -30,17 +30,18 @@ export const Tables = ({ rowType }: TablesProps) => {
     const router = useRouter();
     const path = usePathname();
     
+    console.log(targetMonth);
     useEffect(() => {
         const { pageNumber }: any = pathSpliter(path);
         const endpoint:any = {
             invoice: {
                 url: "/invoice/search",
-                params: { targetMonth, page: pageNumber },
+                params: { targetMonth: targetMonth, page: pageNumber },
                 key: "content",
             },
             billingProduct: {
                 url: "/product/gdbilling",
-                params: { targetMonth, page: pageNumber },
+                params: { target_month: targetMonth, page: pageNumber },
                 key: "content",
             },
             productCategory: {
@@ -75,6 +76,16 @@ export const Tables = ({ rowType }: TablesProps) => {
                 url: "/user/logging",
                 params: { page: pageNumber },
                 key: "content",
+            },
+            notice: {
+                url: "/notice",
+                params: { page: pageNumber },
+                key: "content"
+            },
+            support: {
+                url: "/supportboard/board",
+                params: { page: pageNumber },
+                key: "content"
             }
         };
 
@@ -113,6 +124,8 @@ export const Tables = ({ rowType }: TablesProps) => {
         menu: "/admin/menu",
         role: "/admin/role",
         log: "/admin/log",
+        notice: "/notice",
+        support: "/support"
     };
     
     const write = () => {

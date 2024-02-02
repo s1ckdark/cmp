@@ -3,8 +3,19 @@ import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
 
+// Define the structure of a retry queue item
+interface RetryQueueItem {
+  resolve: (value?: any) => void;
+  reject: (error?: any) => void;
+  config: AxiosRequestConfig;
+}
+
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
+// Create a list to hold the request queue
+const refreshAndRetryQueue: RetryQueueItem[] = [];
+// Flag to prevent multiple token refresh requests
+let isRefreshing = false;
 
 export const fetchClient = async (
     url: string,

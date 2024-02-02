@@ -6,7 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { monthAtom, geneMonthDateAtom } from '@/states';
 import styles from './index.module.scss';
 import { Tables } from '@/components/SummaryTables';
-const announce = [
+const notice = [
     {
       "idx": "134",
       "title": "2023년 하반기 서버 긴급 정검 안내 공지",
@@ -57,13 +57,13 @@ const LandingPage = () => {
                 <h1 className={styles.currentMonth}><label htmlFor="term">이용 기간</label>{geneMonthDate.firstDayOfMonth} - {geneMonthDate.relevantDate}</h1>
             </div>
             <Summary header={false} />
-            <div className={`${styles.announce} ${styles.boxSection}`}>
+            <div className={`${styles.notice} ${styles.boxSection}`}>
                 <div className={styles.inner}>
                     <div className={styles.label}>
                         <h2>공지사항</h2>
                     </div>
-                    <div className={styles.announceTable}>
-                    <Tables rowType={'announce'} data={announce}/>
+                    <div className={styles.noticeTable}>
+                    <Tables rowType={'notice'} data={notice}/>
                     </div>
                 </div>
             </div>

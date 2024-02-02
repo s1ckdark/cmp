@@ -1,9 +1,9 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import { Tables } from "@/components/SummaryTables";
-import CountUpAnimation from '@/components/d3/CountUpAnimation';
-import LineChart from '@/components/d3/LineChart';
-import DonutChart from '@/components/d3/DonutChart';
+import CountUpAnimation from '@/components/D3/CountUpAnimation';
+import LineChart from '@/components/D3/LineChart';
+import DonutChart from '@/components/D3/DonutChart';
 import styles from "./index.module.scss";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { visualAtom, dataListAtom } from '@/states/data';

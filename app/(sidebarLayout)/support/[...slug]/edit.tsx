@@ -28,7 +28,7 @@ const EditPage = () => {
             }
             toast.success('포스트를 작성했습니다.', {
                 autoClose: 2000,
-            });
+            }); 
 
             router.replace('/support');
         } catch (error) {

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
 const AnnouncePage = () => {
-    redirect('/announce/list');
+    redirect('/notice/list/1');
 }
 export default AnnouncePage;

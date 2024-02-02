@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Tables } from "@/components/SummaryTables";
-import CountUpAnimation from '@/components/d3/CountUpAnimation';
-import BarChart from '@/components/d3/BarChart';
-import DonutChart from '@/components/d3/DonutChart';
+import CountUpAnimation from '@/components/D3/CountUpAnimation';
+import BarChart from '@/components/D3/BarChart';
+import DonutChart from '@/components/D3/DonutChart';
 import styles from "./InvoiceVisual.module.scss";
 import MonthBar from '@/components/MonthBar';
 import { useRecoilState, useResetRecoilState } from 'recoil';

@@ -9,14 +9,3 @@ const { persistAtom } = recoilPersist({
     storage: sessionStorage
 });
 
-interface IUserInfoAtom {
-    [key: string]: any;
-    default: User;
-}
-
-
-export const recoil: RecoilState<IUserInfoAtom> = atom({
-    key: "userInfo",
-    default: null,
-    effects_UNSTABLE: [persistAtom]
-})
