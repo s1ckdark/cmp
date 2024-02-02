@@ -56,10 +56,10 @@ export const searchAtom = atom<any>({
 });
 
 
-// export const userInfoAtom = atom<any>({
-//     key: 'userInfoAtom',
-//     default: null
-// });
+export const userInfoAtom = atom<any>({
+    key: 'userInfoAtom',
+    default: null
+});
 
 export const addrAtom = atom<IaddrData>({
     key: 'addrAtom',

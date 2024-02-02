@@ -21,7 +21,7 @@ const FileDownloader = ({ data }: any) => {
         <div className={style.downloader}>
             <div className={style.fileList}>
                 <div className={style.label}>
-                    <label>첨부파일</label>
+                    <label htmlFor="files">첨부파일</label>
                 </div>
                 <div className={style.files}>
                     {data && data.map((file: any, index: number) => {
