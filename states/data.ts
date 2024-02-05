@@ -82,13 +82,10 @@ export const customerStep = atom<number>({
     default: 0
 });
 
-interface IFileUpload {
-    fileId: string;
-    clientSession: string;
-}
-export const fileUploadAtom = atom<IFileUpload>({
+
+export const fileUploadAtom = atom<any>({
     key: 'fileIploadAtom',
-    default: { fileId: '', clientSession: '' }
+    default: []
 });
 
 export const clientSessionAtom = atom<string>({

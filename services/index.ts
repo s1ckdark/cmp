@@ -2,6 +2,8 @@ import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders, AxiosRequestConf
 import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
+import axiosRetry from 'axios-retry';
+import { useRouter } from "next/navigation";
 
 // Define the structure of a retry queue item
 interface RetryQueueItem {
@@ -9,6 +11,7 @@ interface RetryQueueItem {
   reject: (error?: any) => void;
   config: AxiosRequestConfig;
 }
+
 
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
@@ -95,6 +98,7 @@ export const apiFe = axios.create({
     timeout: 30000,
     withCredentials: true,
 });
+axiosRetry(apiBe, { retries: 3 });
 
 apiBe.interceptors.request.use((config) => {
 
@@ -129,7 +133,7 @@ const regenerateTokens = async () => {
 
 apiBe.interceptors.response.use(
     async (response) => {
-        // const originalRequest: AxiosRequestConfig = response.config;
+        const originalRequest: AxiosRequestConfig = response.config;
         if (response.status === 200 || response.status === 201) {
             console.log("response", response.data.status, response);
           
@@ -182,8 +186,13 @@ apiBe.interceptors.response.use(
             //     });
                 return await regenerateTokens().then((token) => {
                     response.config.headers.Authorization = `Bearer ${token}`;
-                    return axios.request(response.config);
-                });
+                    // return axios.request(response.config);
+                    return axiosRetry(axios, {
+                        retries: 3,
+                        retryCondition: (response) => {
+                            return response.status === 200;
+                        }}
+)});
             } 
             return Promise.reject(response);  
         }

@@ -99,6 +99,10 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
     //     if(mode === "edit" || mode === "view") getAddr(memberNo);
     //     if(mode === "view") setIsDisabled(true);
     // }, [memberNo]);
+    useEffect(() => {
+        if (mode === "view") setIsDisabled(true);
+    
+    }, [type])
 
 
     return (
@@ -107,18 +111,18 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
                 <div className="columns-4 gap-12">
                 <div className={styles.inputGroup}>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">주소지명</label>
-                        <input type="text" id="name" {...registerAddr("name")} defaultValue={name} />
+                        <input readOnly={isDisabled} type="text" id="name" {...registerAddr("name")} defaultValue={name} />
                     {/* {errorsAddr.name && <span className="text-red-500">This field is required</span>} */}
                 </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호:</label>
-                        <input type="text" id="zipcode" {...registerAddr("zipcode")} defaultValue={zipcode} />
+                        <input readOnly={true} type="text" id="zipcode" {...registerAddr("zipcode")} defaultValue={zipcode} />
                         {mode === 'edit' || mode === 'register' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('address')} /> : null}
                         {/* {errorsAddr.zipcode && <span className="text-red-500">This field is required</span>} */}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소:</label>
-                        <input readOnly={isDisabled} type="text" id="addr" {...registerAddr("addr")} defaultValue={addr} />
+                        <input readOnly={true} type="text" id="addr" {...registerAddr("addr")} defaultValue={addr} />
                         {/* {errorsAddr.addr && <span className="text-red-500">This field is required</span>} */}
                     </div>
                     <div className={styles.inputGroup}>

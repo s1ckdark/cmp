@@ -1,52 +1,51 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from "react-hook-form";
 import { Toast } from '@/components/Toast';
-import style from './index.module.scss';
-import { v4 as uuidv4 } from 'uuid';
+import style from './FileUploader.module.scss';
 import { apiBe } from '@/services';
-import lodash from 'lodash';
+import lodash, { set } from 'lodash';
 import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
-import { fileUploadAtom } from '@/states/data';
+import { clientSessionAtom, fileUploadAtom } from '@/states/data';
 interface IFileProps {
-    file: string;
-    clientSession: string;
+    file: {};
+    clientSession: any;
 }
 
-const FileUploader = ({ type }: any) => {
+const FileUploader = ({ uuid }: any) => {
+    console.log(uuid);
+    const [fileUpload, setFileUpload] = useRecoilState(fileUploadAtom);
     const [fileList, setFileList] = React.useState<IFileProps[]>([]);
     const [uploadedFile, setUploadedFile] = useRecoilState(fileUploadAtom);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+        defaultValues: {
+            file: {},
+            clientSession: uuid
+        }
+    });
     const onSubmit = async (data: object) => {
-        console.log(uuidv4(), data);
-        const temp = lodash.cloneDeep(fileList);
-        // temp['clientSession'] = uuid();
-        // try {
-        //     const formData = new FormData();
-        //     const file = data.images[0];
-        //     formData.append('file', file);
-        //     const response = await fetch('/file/upload', {
-        //         method: 'POST',
-        //         body: formData
-        //     });
-        //     const result = await response.json();
-        //     console.log(result);
-        //     Toast("success", '파일을 업로드했습니다.');
-        // } catch (error) {
-        //     console.log(error);
-        //     Toast("error", `${error}` || '다시 시도해주세요.');
-        // }
-        // const url = "/file/upload";
-        // const response = await apiBe.post(url, data);
-        // console.log(response);
-        // if (response.status === 200) {
-        //     const { data } = response;
-        //     Toast("success", '파일을 업로드했습니다.');
-        // } else {
-        //     Toast("error", '다시 시도해주세요.');
-        // }
-
+        console.log(data);
+        let tmp:any = {
+            file: (data as any).file[0],
+            clientSession: uuid
+        }
+        console.log(tmp);
+        const url = "/file/upload";
+        const response = await apiBe.post(url, tmp,{
+            headers: {
+                "Content-Type": "multipart/form-data",
+            }
+        }
+        );
+        if(response.status === 200) {
+            const { data } = response;
+            setFileList([...fileList, data]);
+            setFileUpload([...fileUpload, data.id])
+            Toast("success", '파일을 업로드했습니다.');
+        } else {
+            Toast("error", '다시 시도해주세요.');
+        }
     }
     
     const delFile = (id: string) => {
@@ -57,15 +56,24 @@ const FileUploader = ({ type }: any) => {
     const cancel = () => {
         setFileList([]);
     }
+    const selectFile = () => {
+        const target = document.querySelector('input[type="file"]') as HTMLInputElement;
+        console.log(target);
+        if (target) {
+            target.click();
+        }
+    }
 
     return (
         <div className={style.fileUploader}>
                 <div className={style.selector}>
                     <div className={style.inputGroup}>
-                        <label htmlFor="file">첨부 파일</label>
-                        <input type="file" className={style.fileInput} accept="image/*"  {...register("images")} />
+                    <label htmlFor="file">첨부 파일</label>
+                    <input type="file" className={style.fileInput} accept="*"  {...register("file")} />
+                    
                     </div>
-                    <div className={style.btnArea}>
+                <div className={style.btnArea}>
+                        <Button type="button" skin='submit' onClick={selectFile}>파일 선택</Button>
                         <Button type="button" onClick={handleSubmit(onSubmit)} skin='submit'>파일 업로드</Button>
                         <Button type="button" onClick={cancel} skin='cancel'>취소</Button>
                     </div>

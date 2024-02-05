@@ -254,8 +254,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                
            
                 <div className={`${styles.btnArea} mt-6 mx-auto`}>
-                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "수 정"}</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
-                    <Button type='button' className={styles.btnBack} onClick={() => goBack} skin='gray'>취 소</Button>
+                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
+                    <Button type='button' className={styles.btnBack} onClick={goBack} skin='gray'>취 소</Button>
                     {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
                     {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}
                   

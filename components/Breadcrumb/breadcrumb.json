@@ -177,19 +177,19 @@
         ]
     },
     "/admin/role/list": {
-        "title": "권한 관리",
+        "title": "롤 관리",
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/admin", "label": "Admin" },
-            { "href": "/admin/role/list/1", "label": "권한" }
+            { "href": "/admin/role/list/1", "label": "롤" }
         ]
     },
     "/admin/role/write": {
-        "title": "권한 등록",
+        "title": "롤 등록",
         "breadcrumb": [
             { "href": "/", "label": "Home" },
             { "href": "/admin", "label": "Admin" },
-            { "href": "/admin/role/write", "label": "권한 등록" }
+            { "href": "/admin/role/write", "label": "롤 등록" }
         ]
     },
     "/mypage/view": {

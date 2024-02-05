@@ -153,7 +153,7 @@ export const TableBody = ({ rowType, data }: any) => {
             user: `/admin/user/view`,
             productGd: `/products/product/view/${props.id}`,
             productCategory: `/products/category/view/${props.id}`,
-            role: `/admin/role/view/${props.id}`,
+            // role: `/admin/role/view/${props.id}`,
             notice: `/notice/view/${props.id}`,
             support: `/support/view/${props.id}`,
         };

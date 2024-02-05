@@ -8,13 +8,15 @@ const FileDownloader = ({ data }: any) => {
     console.log(data);
     const goDownload = async (objectName: string, fileName: string) => {
         console.log(objectName, fileName);
-        // const url = "/file/download";
-        // const data = {
-        //     "objectName": objectName,
-        //     "fileName": fileName
-        // }
-        // const response = await apiBe.post(url, data);
-
+        const url = "/file/download";
+        const data = {
+            "objectName": objectName,
+            "fileName": fileName
+        }
+        const response = await apiBe.post(url, data);
+        if(response.status === 200) {
+           Toast("success", "파일을 다운로드합니다.");
+        }
     }
 
     return (
@@ -27,7 +29,7 @@ const FileDownloader = ({ data }: any) => {
                     {data && data.map((file: any, index: number) => {
                         return (
                             <div key={index} className={style.file}>
-                                <p onClick={()=>goDownload(file.objectName, file.fileName)}>{file.originName}</p>
+                                <p onClick={()=>goDownload(file.objectName, file.originName)}>{file.originName}</p>
                             </div>
                         )
                     })}
