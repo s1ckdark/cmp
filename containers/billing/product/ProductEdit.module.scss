@@ -10,8 +10,8 @@
     }
     .btnArea {
         display: flex;
-        justify-content: center;
-        margin: 50px auto;
+        justify-content: flex-end;
+        margin-bottom: 15px;
         align-items: center;
         .btn {
             width: 100px;
@@ -223,8 +223,8 @@
 }
 .btnArea {
     display: flex;
-    justify-content: flex-end;
-    margin: 30px auto;
+    justify-content: center;
+    margin: 50px auto;
     align-items: center;
     .btn {
         width: 100px;

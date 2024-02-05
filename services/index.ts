@@ -3,6 +3,7 @@ import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from "next/navigation";
+import { parseJwt } from "@/utils/jwtHelper";
 
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
@@ -87,13 +88,23 @@ export const apiFe = axios.create({
 });
 
 
-apiBe.interceptors.request.use((config: any) => {
+apiBe.interceptors.request.use(async (config: any) => {
+    console.log("apiBe config :", config);
+    const cookie = parseCookies();
+    const { accessToken, refreshToken } = cookie;
+    console.log(accessToken);
     if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+        if (parseJwt(accessToken)) {
+            config.headers.Authorization = `Bearer 1111111`;
+        } else {
+            await regenerateTokens().then((token) => {
+                config.headers.Authorization = `Bearer ${token}`;
+            })
+        }
     }
-    config.headers["Cache-Control"] = "public";
     // config.headers['Pragma'] = 'no-store';
     // config.headers['Expires'] = '0';
+    config.headers["Cache-Control"] = "public";
     console.log("apiBe config :", config);
     return config;
 }, (error) => {
@@ -121,11 +132,11 @@ const regenerateTokens = async () => {
 
 apiBe.interceptors.response.use(
     async (response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200 || response.status === 201) {
-            console.log("response", response.data.status, response);
+            // console.log("response", response.data.status, response);
             if (response.data.status === 200 || response.data.status === 201) {
-                 console.log("response",response.data.status, response);
+                //  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
             }
             else if (response.data.status === 401) {
@@ -157,7 +168,7 @@ apiBe.interceptors.response.use(
                                 },
                             }),
                         );
-                    } else if (error.response.data.message === "Full authentication is required to access this resource"){
+                    } else if (error.response.data.message === "Full authentication is required to access this resource") {
                         window.dispatchEvent(
                             new CustomEvent("axiosError", {
                                 detail: {
@@ -176,9 +187,8 @@ apiBe.interceptors.response.use(
                                 },
                             }),
                         );
-                        console.log()
                     }
-                    return Promise.reject(error);
+                    return error.response.data;
                 case 403:
                     window.dispatchEvent(
                         new CustomEvent("axiosError", {
@@ -188,6 +198,15 @@ apiBe.interceptors.response.use(
                         }),
                     );
                     return new Promise(() => { });
+                case 404:
+                    window.dispatchEvent(
+                        new CustomEvent("axiosError", {
+                            detail: {
+                                message: "Not Found",
+                            },
+                        }),
+                    );
+                    return error.response.data;
                 case 409:
                     window.dispatchEvent(
                         new CustomEvent("axiosError", {
@@ -196,8 +215,7 @@ apiBe.interceptors.response.use(
                             },
                         }),
                     );
-                    // return Promise.reject(error);
-                    return new Promise(() => {});
+                    return error.response.data;
                 default:
                     return Promise.reject(error);
             }
@@ -210,15 +228,3 @@ apiBe.interceptors.response.use(
 export const isAxiosError = (err: unknown | AxiosError): err is AxiosError => {
     return axios.isAxiosError(err);
 };
-
-/** DPreview는 axios만 막는다. */
-export const fakeUserAgent =
-    "Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1";
-
-export const revalidatePathApi = (path: string) =>
-    apiFe(`/revalidate/path?path=${path}`);
-
-export const revalidateTagApi = (tag: string) =>
-    apiFe(`/revalidate/tag?tag=${tag}`);
-
-export const batchUpdateApi = () => apiBe<Comment[]>("/test");

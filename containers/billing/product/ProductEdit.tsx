@@ -1,11 +1,11 @@
 'use client';
 import Breadcrumb from '@/components/Breadcrumb';
-import React, {useEffect, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import { apiBe } from '@/services';
 import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
 import { dataViewAtom} from '@/states/data';
-import Styles from './ProductWrite.module.scss';
+import Styles from './ProductEdit.module.scss';
 import { useForm, Controller } from "react-hook-form";
 import { Toast } from '@/components/Toast';
 import { IconSearch, IconCalendar } from '@/public/svgs';
@@ -14,6 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
 import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
+import { useRouter, usePathname } from 'next/navigation';
 
 interface form {
     "memberNo": string;
@@ -66,19 +67,34 @@ interface IMSP {
 }
 
 
-const ProductWrite = () => {
+const ProductEdit = () => {
     const [form, setForm] = useState<any>({});
+    const [data, setData ] = useState<any>({});
     const [regProd, setRegProd] = useState<boolean>(false);
     const [prodSw, setProdSw] = useState<ISW[]>([]);
     const [prodMsp, setProdMsp] = useState<IMSP[]>([]);
-    const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm();
+    const { memberName, memberType, target_start_date, target_end_date, target_month } = form;
+ 
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
-    const [targetMonth, setTargetMonth] = useState<string>('');
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
     const [prodList, setProdList] = useState<any>([]);
-   
+    const pathname = usePathname();
+    const router = useRouter();
+    const [memberNo, setMemberNo] = useState<string>(pathname.split('/')[4]);
+    const [targetMonth, setTargetMonth ] = useState<string>(pathname.split('/')[5]);
+    const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm({
+        defaultValues: {
+            memberNo: memberNo,
+            memberName: memberName,
+            memberType: memberType,
+            target_start_date: target_start_date,
+            target_end_date: target_end_date,
+            target_month: targetMonth
+        }
+    })
+
     const onSubmit = async (data: any) => {
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
@@ -92,20 +108,14 @@ const ProductWrite = () => {
         const insertUrl = { url: '/product/gdbilling', method: 'put' };
         const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
         const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
-        try {
-    const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
-    if (chkResponse.status === 200 && chkResponse.data) {
-        Toast("success", '저장된 데이터를 가져옵니다.');
-        setForm(chkResponse.data);
-        setRegProd(true);
-    } else {
-        throw new Error('No data found'); // 데이터가 없으면 에러를 발생시켜 catch 블록으로 넘어갑니다.
-    }
-} catch (error:any) {
-    if (error.response && error.response.status === 404) {
-        // 404 에러 처리
-        try {
+        const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
+        if (chkResponse.status === 200 && chkResponse.data) {
+            Toast("success", '저장된 데이터를 가져옵니다.');
+            setForm(chkResponse.data);
+            setRegProd(true);
+        } else {
             const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
+            console.log(chkPrevMonth.url, chkPrevMonthResponse);
             if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
                 Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
                 const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
@@ -116,28 +126,22 @@ const ProductWrite = () => {
                         setForm(updateData.data[0]);
                         setRegProd(true);
                     }
+                    
                 }
             } else {
-                // 이전 달 데이터가 없으면 새 데이터 삽입
-                const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
-                if (insertResponse.status === 200) {
-                    Toast("success", '저장되었습니다.');
-                    setForm(insertResponse.data);
-                    setRegProd(true);
+                try {
+                    const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
+                    if (insertResponse.status === 200) {
+                        Toast("success", '저장되었습니다.');
+                        setForm(insertResponse.data);
+                        setRegProd(true);
+                    }
+                } catch (error: any) {
+                    console.log(error);
+                    Toast('error', error.response.data.message);
                 }
             }
-        } catch (innerError:any) {
-            // 내부 API 호출에서 발생한 에러 처리
-            console.log(innerError);
-            Toast('error', innerError.response ? innerError.response.data.message : 'An error occurred');
         }
-    } else {
-        // 404 외 다른 에러 처리
-        console.log(error);
-        Toast('error', error.response ? error.response.data.message : 'An error occurred');
-    }
-}
-
     }
     const reload = async () => {
         const data = getValues();
@@ -161,7 +165,7 @@ const ProductWrite = () => {
     const writeProd = async(type: string) => {
         const response = await apiBe.put(`/product/gdbilling/product/${type}`, addField);
         const result = response.data;
-        if (response.status === 200 || response.status === 201) {
+    if (response.status === 200 || response.status === 201) {
             Toast("success", '저장되었습니다.', () => reload());
             setAddField({});
                 // setForm(result);
@@ -169,7 +173,6 @@ const ProductWrite = () => {
             // 409 상태 코드 처리
             Toast("error", '데이터가 이미 존재합니다.');
         }
-
         // let tmp = addField;
         // let tmpSw = prodSw;
         // let tmpMsp = prodMsp;
@@ -183,6 +186,15 @@ const ProductWrite = () => {
         // }
         // setForm(tmpForm);
         // setAddField({});
+    }
+    const updateProdSw = () => {
+        console.log(prodSw);
+        const url = '/product/gdbilling/product/sw';
+
+    }
+
+    const updateProdMsp = () => {
+        console.log(prodMsp);
     }
 
     const addProd = (idx:number) => {
@@ -217,8 +229,8 @@ const ProductWrite = () => {
     const deleteProd = async (billingId: string, prodId: string, prodType: string) => {
         const response = await apiBe.delete(`/product/gdbilling/product`, { data: { billingId, prodId, prodType } });
         if (response.status === 200) {
-            Toast("success", '삭제되었습니다.', ()=> reload());
-          
+            Toast("success", '삭제되었습니다.',()=>reload());
+
         }
     }
 
@@ -226,8 +238,8 @@ const ProductWrite = () => {
         const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
-        setAddField({});
         const response = await apiBe(url);
+        setAddField({});
         if (response.status === 200 || response.status === 201) {
                 const result = response.data;
                 let html = '';
@@ -396,6 +408,20 @@ const ProductWrite = () => {
             }
         }
     }
+    const goBack = () => {
+        router.back();
+    }
+    useEffect(() => {
+        console.log(targetMonth, memberNo);
+        const fetchData = async () => {
+            const response = await apiBe.get(`/product/gdbilling/${memberNo}/${targetMonth}`);
+            if (response.status === 200) {
+                setForm(response.data);
+                setRegProd(true);
+            }
+        }
+        fetchData();
+    },[memberNo, targetMonth])
     return (
         <>
             <Breadcrumb />
@@ -407,19 +433,19 @@ const ProductWrite = () => {
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("memberName")} onClick={() => openModal('member')} />
+                                    <input type="text" {...register("memberName")} onClick={() => openModal('member')} defaultValue={memberName} />
                                     <IconSearch />
                                 </div>
                                 {errors.memberName && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
-                                <input type="text" {...register("memberNo")} />
+                                <input type="text" {...register("memberNo")} defaultValue={memberNo} />
                             {errors.memberNo && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
-                                <input type="text" {...register("memberType")} />
+                                <input type="text" {...register("memberType")} defaultValue={memberType} />
                                 {errors.memberType && <span className={Styles.error}>this field is required</span>}
                             </div>
                         </div>
@@ -432,10 +458,11 @@ const ProductWrite = () => {
                             <div className={Styles.search}>
                                 <Controller
                                     name="target_month"
-                                    control={control}
+                                        control={control}
+                                        defaultValue={targetMonth}
                                     render={({ field: { onChange, value } }) => (
                                     <DatePicker
-                                        selected={value}
+                                        selected={dayjs(value).toDate()}
                                         showMonthYearPicker
                                         onChange={(date:any) => {
                                             onChange(date);
@@ -458,8 +485,7 @@ const ProductWrite = () => {
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_start_date")} />
-                                    {/* <IconCalendar /> */}
+                                    <input type="text" {...register("target_start_date")} defaultValue={target_start_date} />
                                 </div>
                             {errors.target_start_date && <span className={Styles.error}>this field is required</span>}
                             </div>
@@ -467,8 +493,7 @@ const ProductWrite = () => {
                         <div className={Styles.inputGroup}>
                                 <label htmlFor="target_end_date">상품종료일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_end_date")} />  
-                                    {/* <IconCalendar /> */}
+                                    <input type="text" {...register("target_end_date")} defaultValue={target_end_date} />  
                                 </div>
                             {errors.target_end_date && <span className={Styles.error}>this field is required</span>}
                         </div>
@@ -476,7 +501,7 @@ const ProductWrite = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
+                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goBack}>취소</Button>
                     </div>
                 </form>    
                 {regProd &&
@@ -507,10 +532,6 @@ const ProductWrite = () => {
                                     <RenderProdSw data={form.sw} view={true} />
                                 </tbody>
                             </table>
-                            {/* <div className={Styles.btnArea}>
-                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={() => updateProdSw} skin={"green"}>저장</Button>
-                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                            </div> */}
                         </div>
                         <div className={Styles.inputSection}>
                             <h1>상품정보 MSP</h1>
@@ -537,10 +558,6 @@ const ProductWrite = () => {
                                 <RenderProdMsp data={form.msp} view={true} />
                                 </tbody>
                             </table>
-                            {/* <div className={Styles.btnArea}>
-                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} onClick={() => updateProdMsp} skin={"green"}>저장</Button>
-                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                            </div> */}
                         </div>
                     </>}
                     {/* <div className={Styles.btnArea}>
@@ -637,4 +654,4 @@ const ProductWrite = () => {
     )
 }
 
-export default ProductWrite;
+export default ProductEdit;

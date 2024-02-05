@@ -152,6 +152,7 @@ export const TableBody = ({ rowType, data }: any) => {
             customers: `/customers/view/${props.memberNo}`,
             user: `/admin/user/view`,
             productGd: `/products/product/view/${props.id}`,
+            billingProduct: `/billing/product/view/${props.memberNo}/${targetMonth}`,
             productCategory: `/products/category/view/${props.id}`,
             // role: `/admin/role/view/${props.id}`,
             notice: `/notice/view/${props.id}`,

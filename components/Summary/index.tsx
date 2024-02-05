@@ -15,6 +15,7 @@ import { monthAtom } from '@/states';
 import Loading from '@/components/Loading';
 import { generateDates } from '@/utils/date';
 import lodash from 'lodash';
+import { getCookie } from '@/utils/cookie';
 interface visualType {
     top10bycust: any;
     trendMonth: any;
@@ -22,7 +23,7 @@ interface visualType {
     diffMonth: any;
 }
 // const InvoiceVisual: React.FC<Props> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
-const Summary = ({header}:{header: boolean} = { header: true }) => {
+const Summary = ({ header }: { header: boolean } = { header: true }) => {
     const month= useRecoilValue(monthAtom);
     const [visual, setVisual] = useState<visualType>({
         top10bycust: null,

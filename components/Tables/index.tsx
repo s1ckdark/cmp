@@ -30,7 +30,6 @@ export const Tables = ({ rowType }: TablesProps) => {
     const router = useRouter();
     const path = usePathname();
     
-    console.log(targetMonth);
     useEffect(() => {
         const { pageNumber }: any = pathSpliter(path);
         const endpoint:any = {
