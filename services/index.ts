@@ -101,8 +101,6 @@ export const apiFe = axios.create({
 
 
 apiBe.interceptors.request.use((config: any) => {
-    const cookie = parseCookies();
-    const { accessToken, refreshToken } = cookie;
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
         config.headers["Cache-Control"] = "public";
@@ -122,9 +120,9 @@ const regenerateTokens = async () => {
         );
         if (response.data.status === 200) {
             const { accessToken, refreshToken } = response.data.data;
-            setCookie(null, 'accessToken', accessToken, { maxAge: 11 * 60 });
+            setCookie(null, 'accessToken', accessToken, { maxAge: 10 * 60 }); 
             setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24 }); // 30 days
-            // console.log("new accessToken", accessToken);
+            console.log("new accessToken", accessToken);
             return accessToken;
         }
     } catch (error) {
@@ -135,10 +133,10 @@ const regenerateTokens = async () => {
 
 apiBe.interceptors.response.use(
     async (response) => {
+        console.log(response);
         const originalRequest: AxiosRequestConfig = response.config;
         if (response.status === 200 || response.status === 201) {
-            console.log("response", response.data.status, response);
-          
+            // console.log("response", response.data.status, response);
             if (response.data.status === 200 || response.data.status === 201) {
                  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
@@ -189,19 +187,13 @@ apiBe.interceptors.response.use(
                 return await regenerateTokens().then((token) => {
                     response.config.headers.Authorization = `Bearer ${token}`;
                     return axios.request(response.config);
-                    // return axiosRetry(axios, {
-                    //     retries: 3,
-                    //     retryCondition: (response) => {
-                    //         return response.status === 200;
-                    //     }}
-                    // )});
                 })
             } 
             return Promise.reject(response);  
         }
     },
     (error) => {
-        // console.log("error :", error.response);
+        console.log("error :", error.response);
         if (error.response) {
             switch (error.response.status) {
                 case 401:

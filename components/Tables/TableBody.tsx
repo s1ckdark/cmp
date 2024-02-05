@@ -52,7 +52,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "stdPrice",
             "regName",
             "regDt",
-            "history",
+            // "history",
         ],
         customers: [
             "memberNo",
@@ -70,7 +70,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "privileges",
             "regName",
             "regDt",
-            "lastLogDt",
+            // "lastLogDt",
         ],
         billingProduct: [
             "memberNo",

@@ -13,9 +13,12 @@ const ProductsView = () => {
     const pathname = usePathname();
     const router = useRouter();
     const id = lodash.last(pathname.split('/'));
-    console.log(data);
     const product = lodash.find(data?.data, {id});
-    console.log('product', id, product);
+
+    const goEdit = () => {
+        router.push(`/products/edit/${id}`);
+
+    }
     if(!product) return <Loading />
     const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
     return (
@@ -51,7 +54,7 @@ const ProductsView = () => {
                         <p>{comment}</p>
                     </div>
                     <div className={Styles.btnArea}>
-                        <Button type="submit" className={`${Styles.submitBtn} ${Styles.btn}`} skin={"green"}>수정</Button>
+                        <Button type="button" className={`${Styles.submitBtn} ${Styles.btn}`} skin={"green"} onClick={goEdit}>수정</Button>
                         <Button type="button" className={`${Styles.backBtn} ${Styles.btn}`}  onClick={()=> router.back()} skin={"back"}>돌아가기</Button>
                     </div>
             </div>

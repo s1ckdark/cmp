@@ -22,10 +22,12 @@ interface IRegistrationFormProps {
 const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const [mounted, setMounted] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [ myData, setMyData] = useState<IRegistrationForm>({ username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: 'false', isActivated: "true", regId: '', regName: '', regDt: '' });
-    const { username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = myData; 
+    const [ myData, setMyData] = useState<IRegistrationForm>({ id:'',username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: 'false', isActivated: "true", regId: '', regName: '', regDt: '' });
+    const { id, username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data ? data: myData; 
+  
     const { control, handleSubmit, getValues, register, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
+            id:id,
             username: userFullName,
             userType: userType,
             privileges: privileges,
@@ -54,7 +56,6 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const router = useRouter();
 
     const onSubmit = async (data: any) => {
-        console.log(data);
         if (getValues('privileges').includes('admin')) {
             setValue('isAdmin', "true");
         }
@@ -128,6 +129,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
 
 
     const closeModal = () => {
+    
         const modal: any = document.querySelector("#modal");
         const innerModal = modal.querySelector(styles.innerModal);
         const searchBtn = modal.querySelector('#searchBtn');
@@ -209,24 +211,24 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     }
 
     const passwordChange = async() => {
-        const newPassword:any = document.querySelector('.modalPassword');
-        const confirmPassword:any = document.querySelector('.modalComfirmPassword');
+        const newPassword:any = (document.querySelector('.modalPassword') as HTMLInputElement)?.value;
+        const confirmPassword: any = (document.querySelector('.modalComfirmPassword') as HTMLInputElement)?.value;
         if (newPassword && confirmPassword) {
             if (newPassword.value === confirmPassword.value) {
                 const data = {
-                    newPassword: newPassword.value,
-                    newPasswordConfirm: confirmPassword.value
+                    newPassword: newPassword,
+                    newPasswordConfirm: confirmPassword
                 }
-                const url = `/user/changePassword/${username}`;
+                const url = `/user/changePassword/${id}`;
                 const response = await apiBe.post(url, data);
                 if (response.status === 200 || response.status === 201) {
-                    Toast("success", '비밀번호가 변경되었습니다.');
-                    closeModal();
+                    Toast("success", '비밀번호가 변경되었습니다.', ()=> pwCloseModal());
+  
                 } else {
-                    Toast("error", '비밀번호 변경에 실패하였습니다.');
+                    Toast("error", '비밀번호 변경에 실패하였습니다.',()=> pwCloseModal());
                 }
             } else {
-                Toast("warning", '비밀번호가 일치하지 않습니다.');
+                Toast("warning", '비밀번호가 일치하지 않습니다.',()=> pwCloseModal());
             }
         }
     }
@@ -497,7 +499,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                             <Button type='button' onClick={() => openModal('member')} skin={"gray"}>회사 검색</Button>
                         </div> : null}
                 </div>
-                </div>
+            </div>
             
             <div className={`${styles.btnArea} mt-6 mx-auto`}>
                     {type === 'view' && <Button type='button'

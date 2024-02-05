@@ -32,6 +32,7 @@ export interface loginForm {
 }
 
 export interface IRegistrationForm {
+    id?: string;
     username: string;
     userFullName: string;
     userType: string;

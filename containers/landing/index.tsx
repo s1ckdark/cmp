@@ -57,7 +57,7 @@ const LandingPage = () => {
                 <h1 className={styles.currentMonth}><label htmlFor="term">이용 기간</label>{geneMonthDate.firstDayOfMonth} - {geneMonthDate.relevantDate}</h1>
             </div>
             <Summary header={false} />
-            <div className={`${styles.notice} ${styles.boxSection}`}>
+            {/* <div className={`${styles.notice} ${styles.boxSection}`}>
                 <div className={styles.inner}>
                     <div className={styles.label}>
                         <h2>공지사항</h2>
@@ -76,7 +76,7 @@ const LandingPage = () => {
                     <Tables rowType={'support'} data={support}/>
                     </div>
                 </div>
-            </div>
+            </div> */}
          </>
     )
 }

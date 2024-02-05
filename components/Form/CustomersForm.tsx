@@ -18,7 +18,7 @@ import { modalAtom } from '@/states';
 import { addrAtom, customerStep } from '@/states/data';
 import Modal from '@/components/Modal';
 import { usePathname } from 'next/navigation';
-import lodash from 'lodash';
+import lodash, { set } from 'lodash';
 
 interface ICustomersFormProps {
     data?: ICustomersForm;
@@ -106,6 +106,9 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     const goBack = () => {
         router.back();
     }
+    const goList = () => {
+        router.push('/customers/list/1');
+    }
 
     useEffect(() => {
         const getMember = async (memberNo:string) => {
@@ -126,28 +129,28 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     useEffect(() => {
         const memberNo = lodash.last(lodash.split(pathname, '/'))
         console.log(type, memberNo);
-        if (type === 'view' || type === 'edit') {
-            const getMember = async () => {
-                const response = await apiBe.get(`/customer/${memberNo}`);
-                if (response.status === 200 && data !== null) {
-                    const { data } = response;
-                    setMember(data)
-                    setStep(4);
-                    setValue('memberNo', data.memberNo);
-                    setValue('memberName', data.memberName);
-                    setValue('regionType', data.regionType);
-                    setValue('memberType', data.memberType);
-                    setValue('industry', data.industry);
-                    setValue('businessRegNo', data.businessRegNo);
-                    setValue('custCeo', data.custCeo);
-                    setValue('custPhone', data.custPhone);
-                    setValue('comment', data.comment);
-                    
-                    if (data.custContact !== null && data.sales !== null) setAddMember({ custContact: true, sales: true })
-                    if (data.sales !== null && data.custContact === null) setAddMember({ ...addMember, sales: true })
-                    if (data.sales === null && data.custContact.length > 0) setAddMember({ ...addMember, custContact: true })
-                }
+        const getMember = async () => {
+            const response = await apiBe.get(`/customer/${memberNo}`);
+            if (response.status === 200 && data !== null) {
+                const { data } = response;
+                setMember(data)
+                setStep(4);
+                setValue('memberNo', data.memberNo);
+                setValue('memberName', data.memberName);
+                setValue('regionType', data.regionType);
+                setValue('memberType', data.memberType);
+                setValue('industry', data.industry);
+                setValue('businessRegNo', data.businessRegNo);
+                setValue('custCeo', data.custCeo);
+                setValue('custPhone', data.custPhone);
+                setValue('comment', data.comment);
+                
+                if (data.custContact !== null && data.sales !== null) setAddMember({ custContact: true, sales: true })
+                if (data.sales !== null && data.custContact === null) setAddMember({ ...addMember, sales: true })
+                if (data.sales === null && data.custContact !== null) setAddMember({ ...addMember, custContact: true })
             }
+        }
+        if (type === 'view' || type === 'edit') {
             getMember()
         }
 
@@ -173,6 +176,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             setIsDisabled(true);
         }
         if (type === 'register') {
+            setStep(0);
             const addr = async () => {
                 const response = await apiBe.get(`/customer/${memberNo}/address`);
             }
@@ -255,7 +259,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
            
                 <div className={`${styles.btnArea} mt-6 mx-auto`}>
                     {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
-                    <Button type='button' className={styles.btnBack} onClick={goBack} skin='gray'>취 소</Button>
+                    <Button type='button' className={styles.btnBack} onClick={goList} skin='gray'>취 소</Button>
                     {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
                     {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}
                   

@@ -30,7 +30,7 @@ const MonthBar = () => {
 
         // Format the previous month as "YYYYMM"
         const previousMonth = year.toString() + month.toString().padStart(2, "0");
-        console.log("prev month", prevMonth);
+        // console.log("prev month", prevMonth);
         setMonth(previousMonth);
     };
 
@@ -52,7 +52,7 @@ const MonthBar = () => {
         // Format the previous month as "YYYYMM"
         const nextMonth = year.toString() + month.toString().padStart(2, "0");
         
-        console.log("next month", nextMonth);
+        // console.log("next month", nextMonth);
         setMonth(nextMonth);
     };
     
