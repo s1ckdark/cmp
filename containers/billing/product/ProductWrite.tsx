@@ -215,6 +215,7 @@ const ProductWrite = () => {
         setAddField({});
     }
     const deleteProd = async (billingId: string, prodId: string, prodType: string) => {
+
         const response = await apiBe.delete(`/product/gdbilling/product`, { data: { billingId, prodId, prodType } });
         if (response.status === 200) {
             Toast("success", '삭제되었습니다.', ()=> reload());
@@ -245,7 +246,7 @@ const ProductWrite = () => {
     const RenderProdSw = ({ data, view }:any) => {
         return data && data.map((item: ISW, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => deleteProd(form.id, item.prodId, "SW")}>&times;</span></td>
+                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "SW")}>&times;</span></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
@@ -264,7 +265,7 @@ const ProductWrite = () => {
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => deleteProd(form.id, item.prodId, "MSP")}>&times;</span></td>
+                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "MSP")}>&times;</span></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>

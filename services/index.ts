@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders, AxiosRequestConfig } from "axios";
 import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
-import { parseCookies, setCookie } from 'nookies';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { useRouter } from "next/navigation";
 import { parseJwt } from "@/utils/jwtHelper";
 
@@ -91,6 +91,7 @@ export const apiFe = axios.create({
 apiBe.interceptors.request.use(async (config: any) => {
     const cookie = parseCookies();
     const { accessToken, refreshToken } = cookie;
+    console.log(accessToken);
     if (accessToken) {
         if (parseJwt(accessToken)) {
             config.headers.Authorization = `Bearer ${accessToken}`;
@@ -117,6 +118,8 @@ const regenerateTokens = async () => {
         );
         if (response.data.status === 200) {
             const { accessToken, refreshToken } = response.data.data;
+            destroyCookie(null, 'accessToken');
+            destroyCookie(null, 'refreshToken');
             setCookie(null, 'accessToken', accessToken, { maxAge: 10 * 60, path:'/' }); 
             setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24, path:'/' }); // 30 days
             console.log("new accessToken", accessToken);

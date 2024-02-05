@@ -15,7 +15,7 @@ import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
 import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
 import { useRouter, usePathname } from 'next/navigation';
-
+import Confirm from '@/components/Confirm';
 interface form {
     "memberNo": string;
     "memberName": string;
@@ -73,6 +73,7 @@ const ProductEdit = () => {
     const [regProd, setRegProd] = useState<boolean>(false);
     const [prodSw, setProdSw] = useState<ISW[]>([]);
     const [prodMsp, setProdMsp] = useState<IMSP[]>([]);
+    const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
     const { memberName, memberType, target_start_date, target_end_date, target_month } = form;
  
     const [startDate, setStartDate] = useState<string>('');
@@ -149,8 +150,8 @@ const ProductEdit = () => {
         const response = await apiBe.get(`/product/gdbilling/${data.memberNo}/${target_month}`);
         const result = response.data;
         if (response.status === 200 || response.status === 201) {
-            setForm(result);
             closeModal();
+            setForm(result);
         }
     }
     const handleChange = (e: any) => {
@@ -215,10 +216,11 @@ const ProductEdit = () => {
             memberpricediscountamount: 0,
             memberpromisediscountadddamount: 0,
             billingUnit: "KRW",
-            service_start_date: dayjs(startDate).format('YYYY-MM-DD'),
-            service_end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            service_start_date: dayjs(form.target_start_date).format('YYYY-MM-DD'),
+            service_end_date: dayjs(form.target_end_date).format('YYYY-MM-DD'),
             comment:''
         }
+        console.log(fieldValue);
         setProdList([]);
         setAddField(fieldValue);
     };
@@ -257,7 +259,9 @@ const ProductEdit = () => {
     const RenderProdSw = ({ data, view }:any) => {
         return data && data.map((item: ISW, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => deleteProd(form.id, item.prodId, "SW")}>&times;</span></td>
+                 
+                {/* <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "SW")}>&times;</span></td> */}
+                <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
@@ -276,7 +280,7 @@ const ProductEdit = () => {
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => deleteProd(form.id, item.prodId, "MSP")}>&times;</span></td>
+                  <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
@@ -459,7 +463,6 @@ const ProductEdit = () => {
                                 <Controller
                                     name="target_month"
                                         control={control}
-                                        defaultValue={targetMonth}
                                     render={({ field: { onChange, value } }) => (
                                     <DatePicker
                                         selected={dayjs(value).toDate()}
@@ -650,6 +653,7 @@ const ProductEdit = () => {
                     </div>
                 </div>
             </div>
+           
         </>
     )
 }
