@@ -39,15 +39,15 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
         const targetUrl = (arg:string) => {
             return `/billing/total/${arg}/${month}`;
         }
+        const fetchData = async(url:string) => {
+            const response = await apiBe.get(url);
+            if(response.status === 200) return response.data;
+        }
         
         const getAllData = async(urls:string[]) => {
             return Promise.all(urls.map(fetchData));
         }
     
-        const fetchData = async(url:string) => {
-            const response = await apiBe.get(url);
-            if(response.status === 200) return response.data;
-        }
 
         const getOverview = (data:any) => {
             const result = data.reduce((acc:any, cur:any) => {
@@ -76,15 +76,15 @@ const Summary = ({header}:{header: boolean} = { header: true }) => {
         }
        
         const fetching = () => {
-        getAllData([targetUrl('top10bycust'), targetUrl('monthly'), targetUrl('month')]).then((res:any) => {
-            const [top10bycust, monthly, diffMonth] = res;
-            setVisual({
-                ...visual,
-                diffMonth: diffMonth,
-                trendMonth: getPerMonthData(monthly),
-                top10bycust: top10bycust.top10,
-                donutChart: getDonutChart(top10bycust),
-            })
+            getAllData([targetUrl('top10bycust'), targetUrl('monthly'), targetUrl('month')]).then((res: any) => {
+                    const [top10bycust, monthly, diffMonth] = res;
+                    setVisual({
+                        ...visual,
+                        diffMonth: diffMonth,
+                        trendMonth: monthly ? getPerMonthData(monthly) : null,
+                        top10bycust: top10bycust.top10,
+                        donutChart: top10bycust ? getDonutChart(top10bycust) : null
+                    })
         });
     }
     fetching();

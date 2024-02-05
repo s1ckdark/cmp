@@ -75,7 +75,7 @@ export const fetcher = async (url: string) => {
 export const apiBe = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BE_URL}`,
     timeout: 30000,
-    withCredentials: true,
+    withCredentials: true
 });
 
 /**
@@ -98,22 +98,24 @@ export const apiFe = axios.create({
     timeout: 30000,
     withCredentials: true,
 });
-axiosRetry(apiBe, { retries: 3 });
 
-apiBe.interceptors.request.use((config) => {
 
+apiBe.interceptors.request.use((config: any) => {
+    const cookie = parseCookies();
+    const { accessToken, refreshToken } = cookie;
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
+        config.headers["Cache-Control"] = "public";
+        // config.headers['Pragma'] = 'no-store';
+        // config.headers['Expires'] = '0';
+        console.log("apiBe config :", config);
+        return config;
     }
-    config.headers["Cache-Control"] = "public";
-    // config.headers['Pragma'] = 'no-store';
-    // config.headers['Expires'] = '0';
-    console.log("apiBe config :", config);
-    return config;
 });
 
 const regenerateTokens = async () => {
     try {
+        
         const {refreshToken} = cookie;
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BE_URL}/auth/access-token`, 
             {refreshToken: refreshToken}
@@ -186,13 +188,14 @@ apiBe.interceptors.response.use(
             //     });
                 return await regenerateTokens().then((token) => {
                     response.config.headers.Authorization = `Bearer ${token}`;
-                    // return axios.request(response.config);
-                    return axiosRetry(axios, {
-                        retries: 3,
-                        retryCondition: (response) => {
-                            return response.status === 200;
-                        }}
-)});
+                    return axios.request(response.config);
+                    // return axiosRetry(axios, {
+                    //     retries: 3,
+                    //     retryCondition: (response) => {
+                    //         return response.status === 200;
+                    //     }}
+                    // )});
+                })
             } 
             return Promise.reject(response);  
         }
