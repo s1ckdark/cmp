@@ -89,13 +89,11 @@ export const apiFe = axios.create({
 
 
 apiBe.interceptors.request.use(async (config: any) => {
-    console.log("apiBe config :", config);
     const cookie = parseCookies();
     const { accessToken, refreshToken } = cookie;
-    console.log(accessToken);
     if (accessToken) {
         if (parseJwt(accessToken)) {
-            config.headers.Authorization = `Bearer 1111111`;
+            config.headers.Authorization = `Bearer ${accessToken}`;
         } else {
             await regenerateTokens().then((token) => {
                 config.headers.Authorization = `Bearer ${token}`;
