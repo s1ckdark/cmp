@@ -90,12 +90,12 @@ export const apiFe = axios.create({
 apiBe.interceptors.request.use((config: any) => {
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
-        config.headers["Cache-Control"] = "public";
-        // config.headers['Pragma'] = 'no-store';
-        // config.headers['Expires'] = '0';
-        console.log("apiBe config :", config);
-        return config;
     }
+    config.headers["Cache-Control"] = "public";
+    // config.headers['Pragma'] = 'no-store';
+    // config.headers['Expires'] = '0';
+    console.log("apiBe config :", config);
+    return config;
 }, (error) => {
     console.log("apiBe error :", error);
 });
@@ -144,8 +144,8 @@ apiBe.interceptors.response.use(
             return Promise.reject(response);  
         }
     },
-    (error) => {
-        console.log("error :", error.response);
+    async(error) => {
+        console.log("error :", error);
         if (error.response) {
             switch (error.response.status) {
                 case 401:

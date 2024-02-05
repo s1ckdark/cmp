@@ -9,6 +9,7 @@ import { customerStep } from '@/states/data';
 import { apiBe } from '@/services';
 import { Toast } from '@/components/Toast';
 import { set } from 'lodash';
+import { useRouter } from 'next/navigation';
 interface formProps {
     id?: string;
     userId?: string;
@@ -44,6 +45,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
             comment: comment
         }
     });
+    const router = useRouter();
 
     const onTitle = (type: string) => {
         switch (type) {
@@ -65,7 +67,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         url = fixedType === 'edit' && type === 'custContact' ? url + '/' + formData.id : url;
         const response = fixedType === 'register' ? await apiBe.put(url, formData):await apiBe.post(url, formData);
         if (response.status === 200 || response.status === 201) {
-            if (mode === 'register') Toast("success", '저장이 완료되었습니다.', () => setStep(type === 'custContact' ? 3 : 4));
+            if (mode === 'register') Toast("success", '저장이 완료되었습니다.', () => type === 'custContact' ? setStep(3) : router.push('/customers/list/1'));
             if (mode === 'edit') Toast("success", '수정이 완료되었습니다.');
         } else {
             Toast("error", '저장이 실패하였습니다. 확인부탁드립니다.')
@@ -80,8 +82,8 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
           reset(formValues => data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' });
     }
     useEffect(() => {
-        if(modal.type === 'user') {
-            const { email, name} = modal.data;
+        if(modal.type === 'user' && modal.data !== null) {
+            const { email, name} = modal?.data;
             setValue('userId', email);
             setValue('name', name);
         }
