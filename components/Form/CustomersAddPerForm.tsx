@@ -61,7 +61,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         let fixedType = mode;
         if (data === null && mode === 'edit') { fixedType = 'register' }
     
-        let url = type === 'custContact' ? '/customer/' + memberNo + '/contact' : '/customer/' + memberNo + '/sales';
+        let url = type === 'custContact' ? '/customer/' + memberNo + '/contacts' : '/customer/' + memberNo + '/sales';
         url = fixedType === 'edit' && type === 'custContact' ? url + '/' + formData.id : url;
         const response = fixedType === 'register' ? await apiBe.put(url, formData):await apiBe.post(url, formData);
         if (response.status === 200 || response.status === 201) {

@@ -4,20 +4,8 @@ import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from "next/navigation";
 
-// Define the structure of a retry queue item
-interface RetryQueueItem {
-  resolve: (value?: any) => void;
-  reject: (error?: any) => void;
-  config: AxiosRequestConfig;
-}
-
-
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
-// Create a list to hold the request queue
-const refreshAndRetryQueue: RetryQueueItem[] = [];
-// Flag to prevent multiple token refresh requests
-let isRefreshing = false;
 
 export const fetchClient = async (
     url: string,
@@ -108,19 +96,20 @@ apiBe.interceptors.request.use((config: any) => {
         console.log("apiBe config :", config);
         return config;
     }
+}, (error) => {
+    console.log("apiBe error :", error);
 });
 
 const regenerateTokens = async () => {
     try {
-        
         const {refreshToken} = cookie;
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BE_URL}/auth/access-token`, 
             {refreshToken: refreshToken}
         );
         if (response.data.status === 200) {
             const { accessToken, refreshToken } = response.data.data;
-            setCookie(null, 'accessToken', accessToken, { maxAge: 10 * 60 }); 
-            setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24 }); // 30 days
+            setCookie(null, 'accessToken', accessToken, { maxAge: 10 * 60, path:'/' }); 
+            setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24, path:'/' }); // 30 days
             console.log("new accessToken", accessToken);
             return accessToken;
         }
@@ -133,9 +122,8 @@ const regenerateTokens = async () => {
 apiBe.interceptors.response.use(
     async (response) => {
         console.log(response);
-        const originalRequest: AxiosRequestConfig = response.config;
         if (response.status === 200 || response.status === 201) {
-            // console.log("response", response.data.status, response);
+            console.log("response", response.data.status, response);
             if (response.data.status === 200 || response.data.status === 201) {
                  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
@@ -148,41 +136,6 @@ apiBe.interceptors.response.use(
                         },
                     }),
                 );
-            // if (!isRefreshing) {
-            //         isRefreshing = true;
-            //         try {
-            //         // Refresh the access token
-            //         const newAccessToken = await regenerateTokens();
-                    
-            //         // Update the request headers with the new access token
-            //         response.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
-                    
-            //         // Retry all requests in the queue with the new token
-            //         refreshAndRetryQueue.forEach(({ config, resolve, reject }) => {
-            //             axios
-            //             .request(config)
-            //             .then((response) => resolve(response))
-            //             .catch((err) => reject(err));
-            //         });
-
-            //         // Clear the queue
-            //         refreshAndRetryQueue.length = 0;
-
-            //         // Retry the original request
-            //         return axios(originalRequest);
-            //         } catch (refreshError) {
-            //         // Handle token refresh error
-            //         // You can clear all storage and redirect the user to the login page
-            //         throw refreshError;
-            //         } finally {
-            //         isRefreshing = false;
-            //         }
-            //     }
-
-            //     // Add the original request to the queue
-            //     return new Promise<void>((resolve, reject) => {
-            //         refreshAndRetryQueue.push({ config: originalRequest, resolve, reject });
-            //     });
                 return await regenerateTokens().then((token) => {
                     response.config.headers.Authorization = `Bearer ${token}`;
                     return axios.request(response.config);

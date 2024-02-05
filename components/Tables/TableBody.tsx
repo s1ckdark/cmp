@@ -5,7 +5,7 @@ import Styles from "./TableBody.module.scss";
 import { useRouter } from "next/navigation";
 import { monthAtom, currentPageAtom } from "@/states";
 import { historyListAtom, historyToggleAtom, visualAtom } from "@/states/data";
-import { userInfoAtom } from "@/states/localStorage";
+import { userInfoPerAtom } from "@/states/localStorage";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { History, IconOverview } from "@/public/svgs";
 import { addComma } from "@/utils/data";
@@ -17,7 +17,7 @@ interface TypesMap {
 
 export const TableBody = ({ rowType, data }: any) => {
     // const [viewData, setViewData] = useRecoilState(dataViewAtom) || null;
-    const [userInfo, setUserInfo] = useRecoilState(userInfoAtom);
+    const [userInfo, setUserInfo] = useRecoilState(userInfoPerAtom);
     const pageNumber = useRecoilValue(currentPageAtom);
     const [history, setHistory] = useRecoilState(historyListAtom || null);
     const totalItems: any = data?.totalItems;
@@ -50,7 +50,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "prodType",
             "prodDesc",
             "stdPrice",
-            "regName",
+            "regId",
             "regDt",
             // "history",
         ],

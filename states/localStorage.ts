@@ -50,8 +50,8 @@ export const userProfileAtom = atom({
 });
 
 
-export const userInfoAtom = atom<any>({
-  key: 'userInfoAtom',
+export const userInfoPerAtom = atom<any>({
+  key: 'userInfoPer',
   default: null,
   effects_UNSTABLE: [persistAtom]
 });

@@ -148,6 +148,9 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                 if (data.custContact !== null && data.sales !== null) setAddMember({ custContact: true, sales: true })
                 if (data.sales !== null && data.custContact === null) setAddMember({ ...addMember, sales: true })
                 if (data.sales === null && data.custContact !== null) setAddMember({ ...addMember, custContact: true })
+            } else if(response.status === 404){
+                setStep(0);
+                setValue('memberNo', memberNo);
             }
         }
         if (type === 'view' || type === 'edit') {
