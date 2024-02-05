@@ -2,7 +2,6 @@ import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders, AxiosRequestConf
 import { FetchProps } from "@/types/data";
 import { getSession } from "next-auth/react";
 import { parseCookies, setCookie } from 'nookies';
-import axiosRetry from 'axios-retry';
 import { useRouter } from "next/navigation";
 
 // Define the structure of a retry queue item
