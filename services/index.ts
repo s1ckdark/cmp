@@ -107,6 +107,7 @@ apiBe.interceptors.request.use((config) => {
     console.log("apiBe config :", config);
     return config;
 });
+
 const regenerateTokens = async () => {
     try {
         const {refreshToken} = cookie;
@@ -117,7 +118,7 @@ const regenerateTokens = async () => {
             const { accessToken, refreshToken } = response.data.data;
             setCookie(null, 'accessToken', accessToken, { maxAge: 11 * 60 });
             setCookie(null, 'refreshToken', refreshToken, { maxAge: 30 * 60 * 60 * 24 }); // 30 days
-            console.log("new accessToken", accessToken);
+            // console.log("new accessToken", accessToken);
             return accessToken;
         }
     } catch (error) {
@@ -125,8 +126,10 @@ const regenerateTokens = async () => {
     }
 }
 
+
 apiBe.interceptors.response.use(
-    (response) => {
+    async (response) => {
+        // const originalRequest: AxiosRequestConfig = response.config;
         if (response.status === 200 || response.status === 201) {
             console.log("response", response.data.status, response);
           
@@ -142,11 +145,47 @@ apiBe.interceptors.response.use(
                         },
                     }),
                 );
-                return regenerateTokens().then((token) => {
+            // if (!isRefreshing) {
+            //         isRefreshing = true;
+            //         try {
+            //         // Refresh the access token
+            //         const newAccessToken = await regenerateTokens();
+                    
+            //         // Update the request headers with the new access token
+            //         response.config.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    
+            //         // Retry all requests in the queue with the new token
+            //         refreshAndRetryQueue.forEach(({ config, resolve, reject }) => {
+            //             axios
+            //             .request(config)
+            //             .then((response) => resolve(response))
+            //             .catch((err) => reject(err));
+            //         });
+
+            //         // Clear the queue
+            //         refreshAndRetryQueue.length = 0;
+
+            //         // Retry the original request
+            //         return axios(originalRequest);
+            //         } catch (refreshError) {
+            //         // Handle token refresh error
+            //         // You can clear all storage and redirect the user to the login page
+            //         throw refreshError;
+            //         } finally {
+            //         isRefreshing = false;
+            //         }
+            //     }
+
+            //     // Add the original request to the queue
+            //     return new Promise<void>((resolve, reject) => {
+            //         refreshAndRetryQueue.push({ config: originalRequest, resolve, reject });
+            //     });
+                return await regenerateTokens().then((token) => {
                     response.config.headers.Authorization = `Bearer ${token}`;
                     return axios.request(response.config);
                 });
             } 
+            return Promise.reject(response);  
         }
     },
     (error) => {

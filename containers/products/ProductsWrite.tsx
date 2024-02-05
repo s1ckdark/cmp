@@ -33,7 +33,7 @@ const ProductsWrite = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
     const router = useRouter();
     
-    const onSubmit: SubmitHandler<FormValues> = (data) => {
+    const onSubmit: SubmitHandler<FormValues> = async(data) => {
         console.log(data);
         let tmp:object = {};
         const addData = {
@@ -46,13 +46,12 @@ const ProductsWrite = () => {
         const url = `/product/product`;
         Object.assign(tmp, data, addData)
 
-        apiBe.put(url, tmp).then((res) => {
-            if(res.status === 201) {
+        const response = await apiBe.put(url, tmp);
+        if (response.status === 201 || response.status === 200) {
                 Toast('success','저장되었습니다.', ()=> router.back())
-
-            }    
-        })
+        }    
     }
+    
     return (
         <>
         <Breadcrumb />

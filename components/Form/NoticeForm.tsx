@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { isEmptyObject } from '@/utils/data';
 import { TablesProps } from '@/types/data';
@@ -9,13 +9,19 @@ import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/Toast';
 import style from './NoticeForm.module.scss'
 import { FileUploader } from '@/components/Files';
+import { useRecoilState } from 'recoil';
+import { fileUploadAtom } from '@/states/data';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
 
 const NoticeForm = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const [ uploadedFile, setUploadedFile ] = useRecoilState(fileUploadAtom);
     const router = useRouter();
     const ref = useRef<any>(null);
+
 
     const onSubmit = async (data: object) => {
         try {
@@ -35,6 +41,9 @@ const NoticeForm = () => {
 
     const data = {};
     const row: any[] = isEmptyObject(data) ? [] : [data];
+    useEffect(() => {
+        
+    })
     return (
         <div className="container">
             <form onSubmit={handleSubmit(onSubmit)}>

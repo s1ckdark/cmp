@@ -106,6 +106,12 @@ const Navigation = () => {
             "link": "/notice/list/1"
         },
         {
+            "label": "고객사",
+            "icon": "IconNaviClient",
+            "children": [],
+            "link": "/customers/list/1",
+        },
+        {
             "label": "빌링",
             "icon": "IconNaviBill",
             "link": "#",
@@ -144,12 +150,7 @@ const Navigation = () => {
             ],
             "link": "#",
         },
-        {
-            "label": "고객사",
-            "icon": "IconNaviClient",
-            "children": [],
-            "link": "/customers/list/1",
-        },
+
         {
             "label": "지원",
             "icon": "IconNaviSupport",

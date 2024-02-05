@@ -22,9 +22,9 @@ interface IRegistrationFormProps {
 const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const [mounted, setMounted] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [ myData, setMyData] = useState<IRegistrationForm>({ username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: '', isActivated: '', regId: '', regName: '', regDt: '' });
+    const [ myData, setMyData] = useState<IRegistrationForm>({ username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: 'false', isActivated: "true", regId: '', regName: '', regDt: '' });
     const { username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = myData; 
-    const { control, handleSubmit, getValues, setValue, setError, formState: {errors} } = useForm({
+    const { control, handleSubmit, getValues, register, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
             username: userFullName,
             userType: userType,
@@ -49,26 +49,41 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     });
     const [privilegeOptions, setPrivilegeOptions] = useState<any[]>([]);
     const [defaultPrivilegeOptions, setDefaultPrivilegeOptions] = useState<any[]>([]);
-    
+    const [ passwordChecker, setPasswordChecker ] = useState(false);
    
     const router = useRouter();
 
-    const onSubmit = async(data: any) => {
+    const onSubmit = async (data: any) => {
+        console.log(data);
+        if (getValues('privileges').includes('admin')) {
+            setValue('isAdmin', "true");
+        }
+        if (passwordChecker === false && type === 'register') {
+            Toast("warning", '비밀번호를 확인해주세요.');
+            return false;
+        }
         let url = '', method = '';
-        if (type === 'register' && !passwordCheck()) { url = '/user'; method = 'put'; } 
+        if (type === 'register' && passwordChecker) { url = '/user'; method = 'put'; } 
         else if (type === 'edit') { url = `/user/${username}`; method = 'post'; }
         else { return false;}
         
-        console.log(data);
+        console.log(url);
         const response = await apiBe(url, { method, data: data });
+        if (response.status === 200 || response.status === 201) {
+            const result = response.data;
+            if (result) {
+                Toast("success", '등록되었습니다.');
+                router.push('/admin/user/list/1');
+            }
+        }
     };
 
     const passwordCheck = () => {
-        const password: any = document.querySelector('[name="password"]');
-        const newPassword: any = document.querySelector('[name="confirmPassword"]');
+        const password: any = (document.querySelector('[name="password"]') as HTMLInputElement)?.value || null;
+        const newPassword: any = (document.querySelector('[name="confirmPassword"]') as HTMLInputElement)?.value || null;
         const status = password === newPassword ? true : false;
         if(!status) Toast("warning", '비밀번호가 일치하지 않습니다.')
-        return status;
+        setPasswordChecker(true);
     }
 
     const openModal = (type: string) => {
@@ -271,10 +286,12 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             const response = await apiBe('/role');
             if (response.status === 200 || response.status === 201) {
                 const result = response.data;
+                let tmp :any = []
                 if (result) {
                     result.map((item: any) => {
-                        privilegeOptions.push({ value: item.name, label: item.name });
+                       tmp.push({ value: item.name, label: item.name });
                     })
+                    setPrivilegeOptions(tmp);
                     const defaultPrivileges = privilegeOptions.filter(option => privileges.includes(option.value));
                     console.log(defaultPrivileges);
                     setDefaultPrivilegeOptions(defaultPrivileges);
@@ -352,7 +369,9 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                                 onChange={(val) => field.onChange(val.map((item) => item.value))}
                             />
                         )}
-                    />
+                        />
+                        <input type='hidden' {...register('isActivated')} defaultValue={isActivated} />
+                        <input type='hidden' {...register('isAdmin')} defaultValue={isAdmin} />
                     {errors.privileges && <span className="text-red-500">This field is required</span>}
                 </div>
                 </div>
@@ -378,7 +397,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <div className={`${styles.btnArea} ${styles.btnPasswordCheck}`}>
                         <Button type='button'
                             className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
-                            skin='gray'>검증
+                                    onClick={() => passwordCheck()} skin='gray'>{passwordChecker ? "검증완료" : "검증"}
                         </Button>
                     </div>
                             </div>:
@@ -428,7 +447,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="zipcode"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="zipcode" {...field} required defaultValue={zipcode}/>}
+                            render={({ field }) => <input readOnly={true} type="text" id="zipcode" {...field} required defaultValue={zipcode}/>}
                         />
                         </div>
                         <div className={styles.address}>
@@ -436,7 +455,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="addr"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="addr" {...field} required defaultValue={addr} />}
+                            render={({ field }) => <input readOnly={true} type="text" id="addr" {...field} required defaultValue={addr} />}
                         />
                         {errors.addr && <span className="text-red-500">This field is required</span>}
                     </div>
@@ -461,7 +480,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="memberNo"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberNo" {...field} defaultValue={memberNo}/>}
+                            render={({ field }) => <input readOnly={true} type="text" id="memberNo" {...field} defaultValue={memberNo}/>}
                             />
                             {errors.memberNo && <span className="text-red-500">This field is required</span>}
                     </div>
@@ -470,7 +489,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         <Controller
                             name="memberName"
                             control={control}
-                            render={({ field }) => <input readOnly={isDisabled} type="text" id="memberName" {...field} defaultValue={memberName} />}
+                            render={({ field }) => <input readOnly={true} type="text" id="memberName" {...field} defaultValue={memberName} />}
                             />
                             {errors.memberName && <span className="text-red-500">This field is required</span>}
                     </div>
@@ -489,7 +508,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                         skin='green'>수 정</Button>: null}
                     {type === 'register' ? <Button type='submit'
                         className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
-                        skin='green'>등 록</Button> : null}
+                        onClick={handleSubmit(onSubmit)} skin='green'>등 록</Button> : null}
                     <Button type='button' className={styles.btnBack} onClick={() => router.back()} skin={'gray'}>{type === 'register' || type === 'edit' ? "취소" : "목록"}</Button>
             </div>
             </form >

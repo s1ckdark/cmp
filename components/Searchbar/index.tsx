@@ -71,6 +71,9 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       },
       billingProduct: {
         url:  `/product/gdbilling`
+      },
+      user: {
+        url: `/user`
       }
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params});
@@ -98,6 +101,10 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
         page: pageNumber || 1,
         memberName: keyword,
         targetMonth: month
+      },
+      "user": {
+        page: pageNumber || 1,
+        username: keyword
       }
     }
     fetching(rowType, params[rowType]);

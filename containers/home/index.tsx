@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { ArgosLogoLrg } from '@/public/svgs';
 import styles from './index.module.scss';
-import { getServerSession } from "next-auth";
 
 export default function Home() {
     return (

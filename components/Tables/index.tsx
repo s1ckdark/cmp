@@ -52,7 +52,7 @@ export const Tables = ({ rowType }: TablesProps) => {
             productGd: {
                 url: "/product/product",
                 params: { page: pageNumber },
-                key: "products",
+                key: "content",
             },
             customers: {
                 url: "/customer",

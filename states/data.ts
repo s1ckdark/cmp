@@ -81,3 +81,28 @@ export const customerStep = atom<number>({
     key: 'customerStep',
     default: 0
 });
+
+interface IFileUpload {
+    fileId: string;
+    clientSession: string;
+}
+export const fileUploadAtom = atom<IFileUpload>({
+    key: 'fileIploadAtom',
+    default: { fileId: '', clientSession: '' }
+});
+
+export const clientSessionAtom = atom<string>({
+    key: 'clientSessionAtom',
+    default: ''
+});
+
+interface IProdType {
+    id: string;
+    prodType: string;
+    prodDetailType: string;
+    prodDetailTypeStd: string;
+}
+export const prodTypeAtom = atom<IProdType>({
+    key: 'prodTypeAtom',
+    default: { id: '', prodType: '',  prodDetailType: '', prodDetailTypeStd: '' }
+});

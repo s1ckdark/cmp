@@ -6,6 +6,7 @@ import { FileDownloader } from '@/components/Files';
 import { apiBe } from '@/services';
 import style from './NoticeDetailView.module.scss';
 import Loading from '@/components/Loading';
+import Button from '@/components/Button';
 
 const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), { ssr: false });
 
@@ -37,19 +38,19 @@ const NoticeDetailView = ({ id }: any) => {
             </div>
             <div className={style.info}>
                 <div className={style.index}>
-                    <label>번호</label>
+                    <label htmlFor="index">번호</label>
                     <div className={style.value}>{data.index}</div>
                 </div>
                 <div className={style.noticeType}>
-                    <label>유형</label>
+                    <label htmlFor="noticeType">유형</label>
                     <div className={style.value}>{data.noticeType}</div>
                 </div>
                 <div className={style.writer}>
-                    <label>작성자</label>
+                    <label htmlFor="regName">작성자</label>
                     <div className={style.value}>{data.regName}</div>
                 </div>
                 <div className={style.date}>
-                    <label>작성일</label>
+                    <label htmlFor="regDt">작성일</label>
                     <div className={style.value}>{data.regDt}</div>
                 </div>
             </div>
@@ -58,7 +59,11 @@ const NoticeDetailView = ({ id }: any) => {
                     content={data.content}
                     editorRef={ref} />
             </div>
-            {data.uploadedFiles && data.uploadedFiles.length > 0 ? <FileDownloader data={data.uploadedFiles} />: null}
+            {data.uploadedFiles && data.uploadedFiles.length > 0 ? <FileDownloader data={data.uploadedFiles} /> : null}
+            <div className={style.btnArea}>
+                <Button onClick={() => router.push(`/notice/edit/${id}`)} skin="submit">수정</Button>
+                <Button onClick={() => router.back()} skin="cancel">목록</Button>
+            </div>
         </div>
     );
 }

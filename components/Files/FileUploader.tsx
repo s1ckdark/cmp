@@ -7,7 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { apiBe } from '@/services';
 import lodash from 'lodash';
 import Button from '@/components/Button';
-
+import { useRecoilState } from 'recoil';
+import { fileUploadAtom } from '@/states/data';
 interface IFileProps {
     file: string;
     clientSession: string;
@@ -15,10 +16,12 @@ interface IFileProps {
 
 const FileUploader = ({ type }: any) => {
     const [fileList, setFileList] = React.useState<IFileProps[]>([]);
+    const [uploadedFile, setUploadedFile] = useRecoilState(fileUploadAtom);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
     const onSubmit = async (data: object) => {
         console.log(uuidv4(), data);
-        // data['clientSession'] = uuid();
+        const temp = lodash.cloneDeep(fileList);
+        // temp['clientSession'] = uuid();
         // try {
         //     const formData = new FormData();
         //     const file = data.images[0];
@@ -51,6 +54,10 @@ const FileUploader = ({ type }: any) => {
         setFileList(newFileList);
     }
 
+    const cancel = () => {
+        setFileList([]);
+    }
+
     return (
         <div className={style.fileUploader}>
                 <div className={style.selector}>
@@ -60,7 +67,7 @@ const FileUploader = ({ type }: any) => {
                     </div>
                     <div className={style.btnArea}>
                         <Button type="button" onClick={handleSubmit(onSubmit)} skin='submit'>파일 업로드</Button>
-                        <Button type="button" onClick={handleSubmit(onSubmit)} skin='cancel'>파일 업로드</Button>
+                        <Button type="button" onClick={cancel} skin='cancel'>취소</Button>
                     </div>
                 </div>
             {fileList && fileList.map((file: any, index: number) => {

@@ -17,3 +17,5 @@ export const pathSpliter = (path: string) => {
     const pathArr = path.split('/');
     return { pageNumber: Number(pathArr[pathArr.length - 1]) }
 }
+
+
