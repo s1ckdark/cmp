@@ -12,7 +12,9 @@ import { apiBe} from '@/services';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
 import Breadcrumb from '@/components/Breadcrumb';
-import {generateDates} from '@/utils/date';
+import { generateDates } from '@/utils/date';
+import { useRecoilValue } from 'recoil';
+import { monthAtom } from '@/states';
 interface DemandItem {
     rank: number;
     demandType: string;
@@ -22,12 +24,14 @@ interface DemandItem {
     end: string;
 }
 const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMonth: number }) => {
+    const [ target_month, setTarget_month ] = useRecoilState(monthAtom);
     const [visual, setVisual] = useRecoilState(visualAtom);
     const [ data, setData ] = useRecoilState(dataListAtom) || null;
     const router = useRouter();
     useEffect(() => {
+        
         const targetUrl = (arg:string) => {
-            return `/billing/naver_summary/${arg}/${targetMonth}/${memberNo}`;
+            return `/billing/naver_summary/${arg}/${target_month}/${memberNo}`;
         }
         
         const getAllData = async(urls:string[]) => {
@@ -108,7 +112,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
                 perDay: getDailyData(daily),
             })
         });
-    }, [memberNo, targetMonth])
+    }, [memberNo, target_month])
 
     if(!visual) return <Loading />
     const { month, mainservice, donutChart, perMonth, perWeek, perDay } = visual;
@@ -117,7 +121,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
         <>
         <Breadcrumb />
         <div className={styles.btnArea}>
-            <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${targetMonth}`)}>상세이용내역</button>
+            {/* <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.push(`/billing/invoice/view/${memberNo}/${targetMonth}`)}>상세이용내역</button> */}
             <button className={`${styles.btn} ${styles.backBtn}`} onClick={()=> router.back()}>닫기</button>
         </div>
         <div className={`${styles.container} min-h-screen`}>

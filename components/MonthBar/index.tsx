@@ -31,7 +31,7 @@ const MonthBar = () => {
         // Format the previous month as "YYYYMM"
         const previousMonth = year.toString() + month.toString().padStart(2, "0");
         // console.log("prev month", prevMonth);
-        setMonth(previousMonth);
+        Toast("info", "데이터를 조회중입니다.", () => setMonth(previousMonth));
     };
 
     const nextMonth = (inputMonth: string) => {
@@ -53,7 +53,8 @@ const MonthBar = () => {
         const nextMonth = year.toString() + month.toString().padStart(2, "0");
         
         // console.log("next month", nextMonth);
-        setMonth(nextMonth);
+        
+        Toast("info", "데이터를 조회중입니다.",()=>setMonth(nextMonth));
     };
     
     return (

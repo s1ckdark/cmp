@@ -1,0 +1,13 @@
+.table {
+    background-color: #fff;
+    &.withSearchbar {
+        & > div {
+            padding: 20px 50px 10px;
+        }
+        & > div {
+            &:nth-child(2) {
+                padding: 0 50px 0 50px;
+            }
+        }
+    }
+}

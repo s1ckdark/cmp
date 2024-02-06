@@ -21,7 +21,9 @@ import History from './history.svg';
 import IconOverview from './overview.svg'
 import IconSearch from './search.svg';
 import IconCalendar from './calendar.svg';
+import IconLogout from './logout.svg';
 export {
+    IconLogout,
     IconCalendar,
     IconSearch,
     IconOverview,

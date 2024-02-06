@@ -68,6 +68,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "userFullName",
             "userType",
             "privileges",
+            "activated",
             "regName",
             "regDt",
             // "lastLogDt",
@@ -196,7 +197,6 @@ export const TableBody = ({ rowType, data }: any) => {
                 return (
                     data['content']['uploadedFiles'].length > 0 ? true : false
                 )
-            
             default:
                 return data?.data;
         }
@@ -210,7 +210,7 @@ export const TableBody = ({ rowType, data }: any) => {
     const resetVisual = useResetRecoilState(visualAtom);
     const visual = (memberNo: string) => {
         resetVisual();
-        router.push(`/billing/invoice/visual/${memberNo}/${targetMonth}`);
+        router.push(`/billing/invoice/visual/${memberNo}`);
     };
     const field = display[rowType];
 
@@ -266,6 +266,13 @@ export const TableBody = ({ rowType, data }: any) => {
                 content = (
                     <td key={key + "-" + keyIndex} onClick={() => view(item)}>
                         {item.uploadedFiles.length > 0 ? "O" : "X"}
+                    </td>
+                );
+                break;
+            case "activated":
+                content = (
+                    <td key={key + "-" + keyIndex} onClick={() => view(item)}>
+                        {item.activated ? "O" : "X"}
                     </td>
                 );
                 break;

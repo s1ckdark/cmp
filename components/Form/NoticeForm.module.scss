@@ -52,6 +52,15 @@
         }
     }
 }
+.inputGroup {
+    textarea {
+        width: 100%;
+        padding: 50px;
+        min-height: 400px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+}
 .btnArea {
     display: flex;
     justify-content: center;

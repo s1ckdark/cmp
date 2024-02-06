@@ -37,12 +37,11 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
     const path = usePathname();
     
     useEffect(() => {
-        const accessToken = getCookie('accessToken');
         const targetUrl = (arg:string) => {
             return `/billing/total/${arg}/${month}`;
         }
         const fetchData = async(url:string) => {
-            const response = await apiBe.get(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+            const response = await apiBe.get(url);
             if(response.status === 200) return response.data;
         }
         

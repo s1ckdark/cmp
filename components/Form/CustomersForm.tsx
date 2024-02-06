@@ -1,14 +1,13 @@
 'use client';
-import React from 'react';
+import React, { use } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { apiBe } from '@/services';
 import styles from './CustomersForm.module.scss';
 import Button from '@/components/Button';
 import { Toast } from '@/components/Toast';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Select, { defaultTheme } from 'react-select';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import Loading from '@/components/Loading';
 import { ICustomersForm } from '@/types/form';
 import CustomersAddPerForm from './CustomersAddPerForm';
@@ -17,7 +16,7 @@ import { IconSearch } from '@/public/svgs';
 import { modalAtom } from '@/states';
 import { addrAtom, customerStep } from '@/states/data';
 import Modal from '@/components/Modal';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import lodash, { set } from 'lodash';
 
 interface ICustomersFormProps {
@@ -56,8 +55,9 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             comment: comment,
         }
     });
-   
+    console.log(modal);
     const router = useRouter();
+
     const onSubmit = async (formData: any) => {
         // formData.memberNo = member.memberNo;
         // formData.memberName = member.memberName;
@@ -69,7 +69,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             if(type === 'register' ) setStep(1)
             Toast("success", '고객사 정보가 저장 되었습니다.');
         } else {
-            Toast("error", '고객사 정보 저장에 실패하였습니다.')
+            Toast("error", '이미 고객사 정보가 존재합니다.')
         }
     };
 
@@ -127,8 +127,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
     }, [modal]);
 
     useEffect(() => {
+        setModal({isOpen: false, type: '', data: null});
         const memberNo = lodash.last(lodash.split(pathname, '/'))
-        console.log(type, memberNo);
         const getMember = async () => {
             const response = await apiBe.get(`/customer/${memberNo}`);
             if (response.status === 200 && data !== null) {
@@ -196,20 +196,20 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                 <div className="columns-3 gap-36">
                     <div className={`${styles.memberNo} ${styles.inputGroup}`}>
                         <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 번호:</label>
-                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo")} defaultValue={memberNo} />
-                        {errors.memberNo && <span className="text-red-500">This field is required</span>}
-                        {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('customer')} /> : null}
-                        {errors.memberNo && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo", { required: true })} defaultValue={memberNo}  />
+                        {errors.memberNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                        {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch}  onClick={() => openModal('customer')}/> : null}
+                        {errors.memberNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 이름:</label>
-                        <input readOnly={true} type="text" id="memberName" {...register("memberName")} defaultValue={memberName} />
-                        {errors.memberName && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={true} type="text" id="memberName" {...register("memberName", { required: true })} defaultValue={memberName} />
+                        {errors.memberName && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberType" className="block text-sm font-medium text-gray-900 dark:text-black">고객유형:</label>
-                        <input readOnly={isDisabled} type="text" id="memberType" {...register("memberType")} defaultValue={memberType} />
-                        {errors.memberType && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="memberType" {...register("memberType", { required: true })} defaultValue={memberType} />
+                        {errors.memberType && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                 </div>
                 <div className="columns-3 gap-36">
@@ -231,29 +231,29 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                                 />
                             )}
                         />
-                        {errors.regionType && <span className="text-red-500">This field is required</span>}
+                        {errors.regionType && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="industry" className="block text-sm font-medium text-gray-900 dark:text-black">산업분류:</label>
-                        <input readOnly={isDisabled} type="text" id="industry" {...register("industry")} defaultValue={industry} />
-                        {errors.industry && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="industry" {...register("industry", { required: true })} defaultValue={industry} />
+                        {errors.industry && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="businessRegNo" className="block text-sm font-medium text-gray-900 dark:text-black">사업자번호:</label>
-                        <input readOnly={isDisabled} type="text" id="businessRegNo" {...register("businessRegNo")} defaultValue={businessRegNo} />
-                        {errors.businessRegNo && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="businessRegNo" {...register("businessRegNo", { required: true },)} defaultValue={businessRegNo} placeholder="XXX-XX-XXXXXX 양식으로 입력해주세요"/>
+                        {errors.businessRegNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                 </div>
                 <div className="columns-3 gap-36">
                     <div className={styles.inputGroup}>
                         <label htmlFor="custCeo" className="block text-sm font-medium text-gray-900 dark:text-black">대표:</label>
-                        <input readOnly={isDisabled} type="text" id="custCeo" {...register("custCeo")} defaultValue={custCeo} />
-                        {errors.custCeo && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="custCeo" {...register("custCeo", { required: true })} defaultValue={custCeo} />
+                        {errors.custCeo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="custPhone" className="block text-sm font-medium text-gray-900 dark:text-black">고객 연락처:</label>
-                        <input readOnly={isDisabled} type="text" id="custPhone" {...register("custPhone")} defaultValue={custPhone} />
-                        {errors.custPhone && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="custPhone" {...register("custPhone", { required: true })} defaultValue={custPhone} placeholder="010-1234-5678 양식으로 입력해주세요"/>
+                        {errors.custPhone && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                 </div>
             
@@ -261,7 +261,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                
            
                 <div className={`${styles.btnArea} mt-6 mx-auto`}>
-                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={() => editMode()} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
+                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={editMode} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
                     <Button type='button' className={styles.btnBack} onClick={goList} skin='gray'>취 소</Button>
                     {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
                     {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}

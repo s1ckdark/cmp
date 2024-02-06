@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 import { pathSpliter } from "@/utils/data";
 import { apiBe } from "@/services";
 import { Toast } from "@/components/Toast";
-import { monthAtom } from "@/states";
+import { monthAtom, modalAtom } from "@/states";
 
 interface dataProps {
     data: any;
@@ -24,6 +24,8 @@ interface dataProps {
 }
 export const Tables = ({ rowType }: TablesProps) => {
     useResetRecoilState(dataListAtom);
+    useResetRecoilState(modalAtom);
+    useRecoilState(monthAtom);
     const [data, setData] = useRecoilState(dataListAtom);
     const [ mounted, setMounted ] = useState(false);
     const targetMonth = useRecoilValue(monthAtom) || null;
@@ -154,13 +156,13 @@ export const Tables = ({ rowType }: TablesProps) => {
                 <div className={styles.scroller}>
                     <table className={styles[rowType]}>
                         <TableHeader rowType={rowType} />
-                        <TableBody rowType={rowType} data={data} />
+                        {data.data.length > 0 ? <TableBody rowType={rowType} data={data} />:<tbody><tr><td colSpan={10} className="text-center text-xl p-10">조회된 데이터가 없습니다.</td></tr></tbody>}
                     </table>
                 </div>
             </div>
 
             <div className={styles.btnArea}>
-                {data?.totalPages && (
+                {data.data.length > 0 && data.totalPages && (
                     <Pagination
                         count={data.totalPages}
                         page={data.currentPage}

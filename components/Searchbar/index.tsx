@@ -9,7 +9,8 @@ import { Toast } from '../Toast';
 import { apiBe } from '@/services';
 import { pathSpliter } from '@/utils/data';
 import { url } from 'inspector';
-
+import page from '@/app/page';
+import lodash from 'lodash';
 export interface SearchBarProps {
   placeholder: string
   onChange: (value: string) => void
@@ -33,26 +34,30 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
   const [ data, setData ] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
-  const { pageNumber }: any = pathSpliter(pathname);
+  const pageNumber : any = lodash.last(pathname.split('/'));
+
   const matching: any = {
     "/billing/invoice/list": {
       "placeholder": "업체명을 입력해주세요",
     },
     "/products/product/list": {
-      "placeholder": "업체명을 입력해주세요",
+      "placeholder": "상품명을 입력해주세요",
     },
     "/admin/log/list": {
-      "placeholder": "유저명을 입력해주세요",
+      "placeholder": "회원명을 입력해주세요",
     },
     "/admin/user/list": {
-      "placeholder": "유저명을 입력해주세요",
+      "placeholder": "회원명을 입력해주세요",
     },
     "/billing/product/list": {
+      "placeholder": "고객명을 입력해주세요",
+    },
+    "/customers/list": {
       "placeholder": "고객명을 입력해주세요",
     }
   }
   const init = () => {
-    const path = pathname.split('/').slice(0, 4).join('/');
+    const path = pathname.split('/').slice(0, -1).join('/');
     return matching[path].placeholder;
   }
   const onChange = (value: string) => {
@@ -74,6 +79,12 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       },
       user: {
         url: `/user`
+      },
+      customers: {
+        url: `/customer`
+      },
+      productGd: {
+        url: '/product/product'
       }
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params});
@@ -100,11 +111,19 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       "billingProduct": {
         page: pageNumber || 1,
         memberName: keyword,
-        targetMonth: month
+        target_month: month
       },
       "user": {
         page: pageNumber || 1,
         username: keyword
+      },
+      "customers": {
+        page: pageNumber - 1 || 0,
+        memberName: keyword
+      },
+      "productGd": {
+        page: pageNumber || 1,
+        prodName: keyword
       }
     }
     fetching(rowType, params[rowType]);

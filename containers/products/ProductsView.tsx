@@ -16,8 +16,11 @@ const ProductsView = () => {
     const product = lodash.find(data?.data, {id});
 
     const goEdit = () => {
-        router.push(`/products/edit/${id}`);
+        router.push(`/products/product/edit/${id}`);
 
+    }
+    const goBack = () => {
+        router.push('/products/product/list/1');
     }
     if(!product) return <Loading />
     const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
@@ -55,7 +58,7 @@ const ProductsView = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button type="button" className={`${Styles.submitBtn} ${Styles.btn}`} skin={"green"} onClick={goEdit}>수정</Button>
-                        <Button type="button" className={`${Styles.backBtn} ${Styles.btn}`}  onClick={()=> router.back()} skin={"back"}>돌아가기</Button>
+                        <Button type="button" className={`${Styles.backBtn} ${Styles.btn}`}  onClick={goBack} skin={"back"}>돌아가기</Button>
                     </div>
             </div>
         </>

@@ -20,25 +20,24 @@ interface InvoiceViewCtProps {
 }
 
 const InvoiceView = ({memberNo, targetMonth}:InvoiceViewCtProps) => {
-    const [ data, setData ] = useRecoilState(dataViewAtom);
+    const [ data, setData ] = useRecoilState<any>(dataViewAtom);
     const nextMonth = useRecoilValue(adjustedMonthSelector('next'));
     const currentMonth = useRecoilValue(adjustedMonthSelector('current'));
     const router = useRouter();
     const handlePdf = (id: string) => {
         const target = document.querySelector('#invoice');
+        const filename: any = data?.data?.memberName + '_' + targetMonth + '월_사용내역서';
         target?.classList.add(Styles.pdf);
         Toast('info', 'pdf 변환중입니다.')
-        PdfExport(id);
+        PdfExport(id,filename);
         target?.removeAttribute('class');
     };
 
     useEffect(() => {
         const fetching = async() => {
-            console.log(memberNo);
             const url = `/invoice/${memberNo}/${targetMonth}`;
             const response = await apiBe.get(url);
             if(response.status === 200) setData({data:response.data,memberNo:memberNo,targetMonth:targetMonth});
-            console.log(response.data);
         }
         fetching();
     }, [memberNo, targetMonth]);

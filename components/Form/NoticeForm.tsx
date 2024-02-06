@@ -14,7 +14,7 @@ import { fileUploadAtom } from '@/states/data';
 import { v4 as uuidv4 } from 'uuid';
 import lodash from 'lodash';
 import { apiBe } from '@/services';
-const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
+// const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
 
 interface INoticeFormProps {
     data?: any;
@@ -92,7 +92,8 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
                 <div className={style.inputGroupTitle}>
                     <div className={style.inputGroup}>
                         <label htmlFor="subject">제목</label>
-                        <input type="text" {...register('subject')} />
+                        <input type="text" {...register('subject', {required: true})} />
+                        {errors.subject && <span>제목을 입력해주세요.</span>}
                     </div>
                     <div className={style.inputGroupCheckbox}>
                         <label htmlFor="type">게시여부</label>
@@ -104,24 +105,25 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
                     <div className={style.inputGroupRadio}>
                         <div className={style.inputGroup}>
                             <label htmlFor="전체">
-                                <input type="radio" value="전체" {...register('noticeType')} />전체
+                                <input type="radio" value="전체" {...register('noticeType', {required:true})} />전체
                             </label>
                         </div>
                         <div className={style.inputGroup}>
                             <label htmlFor="시스템">
-                                <input type="radio" value="시스템" {...register('noticeType')} />시스템
+                                <input type="radio" value="시스템" {...register('noticeType', { required: true })} />시스템
                             </label>
                         </div>
                         <div className={style.inputGroup}>
                             <label htmlFor="영업">
-                                <input type="radio" value="영업" {...register('noticeType')} />영업
+                                <input type="radio" value="영업" {...register('noticeType', { required: true })}  />영업
                             </label>
                         </div>
                         <div className={style.inputGroup}>
                             <label htmlFor="기술">
-                                <input type="radio" value="기술" {...register('noticeType')} />기술
+                                <input type="radio" value="기술" {...register('noticeType', { required: true })}  />기술
                             </label>
                         </div>
+                        {errors.noticeType && <span>유형을 선택해주세요.</span>}
                         {/* <input type="hidden" {...register('fileids')} />
                         <input type="hidden" {...register('clientSession')} />
                         <input type='hidden' {...register('content')} /> */}
@@ -129,10 +131,7 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
                 </div>
                 <div className={style.inputGroup}>
                     <label htmlFor="content">내용</label>
-                    <ToastEditor
-                        content={content}
-                        editorRef={ref}
-                        />
+                   <textarea {...register('content', {minLength:10})}  />
                 </div>
                 <FileUploader uuid={uuid} data={data?.uploadedFiles} />
                 <div className={style.btnArea}>

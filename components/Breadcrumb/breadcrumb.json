@@ -526,7 +526,7 @@
             },
             {
                 "href": "#",
-                "label": "고객사 관리"
+                "label": "고객사"
             },
             {
                 "href": "/customers/list/1",
@@ -547,7 +547,7 @@
             },
             {
                 "href": "#",
-                "label": "고객사 관리"
+                "label": "고객사"
             },
             {
                 "href": "/customers/list/1",
@@ -571,7 +571,7 @@
                 "label": "Home"
             },
             {
-                "href": "/notice/list",
+                "href": "/notice/list/1",
                 "label": "공지사항"
             }
         ]
@@ -584,7 +584,7 @@
                 "label": "Home"
             },
             {
-                "href": "/notice/list",
+                "href": "/notice/list/1",
                 "label": "공지사항"
             },
             {
@@ -601,7 +601,7 @@
                 "label": "Home"
             },
             {
-                "href": "/notice/list",
+                "href": "/notice/list/1",
                 "label": "공지사항"
             },
             {
@@ -618,7 +618,7 @@
                 "label": "Home"
             },
             {
-                "href": "/notice/list",
+                "href": "/notice/list/1",
                 "label": "공지사항"
             },
             {
@@ -652,7 +652,7 @@
                 "label": "Home"
             },
             {
-                "href": "/support/list",
+                "href": "/support/list/1",
                 "label": "지원"
             },
             {
@@ -669,7 +669,7 @@
                 "label": "Home"
             },
             {
-                "href": "/support/list",
+                "href": "/support/list/1",
                 "label": "지원"
             },
             {
@@ -686,7 +686,7 @@
                 "label": "Home"
             },
             {
-                "href": "/support/list",
+                "href": "/support/list/1",
                 "label": "지원"
             },
             {

@@ -419,8 +419,8 @@ const ProductEdit = () => {
             }
         }
     }
-    const goBack = () => {
-        router.back();
+    const goList = () => {
+        router.push('/billing/product/list/1');
     }
     useEffect(() => {
         console.log(targetMonth, memberNo);
@@ -444,19 +444,19 @@ const ProductEdit = () => {
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("memberName")} onClick={() => openModal('member')} defaultValue={memberName} />
+                                    <input readOnly={true} type="text" {...register("memberName")} defaultValue={memberName} />
                                     <IconSearch />
                                 </div>
                                 {errors.memberName && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
-                                <input type="text" {...register("memberNo")} defaultValue={memberNo} />
+                                <input readOnly={true} type="text" {...register("memberNo")} defaultValue={memberNo} />
                             {errors.memberNo && <span className={Styles.error}>this field is required</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
-                                <input type="text" {...register("memberType")} defaultValue={memberType} />
+                                <input readOnly={true} type="text" {...register("memberType")} defaultValue={memberType} />
                                 {errors.memberType && <span className={Styles.error}>this field is required</span>}
                             </div>
                         </div>
@@ -495,7 +495,7 @@ const ProductEdit = () => {
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_start_date")} defaultValue={target_start_date} />
+                                    <input readOnly={true} type="text" {...register("target_start_date")} defaultValue={target_start_date} />
                                 </div>
                             {errors.target_start_date && <span className={Styles.error}>this field is required</span>}
                             </div>
@@ -503,7 +503,7 @@ const ProductEdit = () => {
                         <div className={Styles.inputGroup}>
                                 <label htmlFor="target_end_date">상품종료일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_end_date")} defaultValue={target_end_date} />  
+                                    <input readOnly={true} type="text" {...register("target_end_date")} defaultValue={target_end_date} />  
                                 </div>
                             {errors.target_end_date && <span className={Styles.error}>this field is required</span>}
                         </div>
@@ -511,7 +511,7 @@ const ProductEdit = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goBack}>취소</Button>
+                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>취소</Button>
                     </div>
                 </form>    
                 {regProd &&

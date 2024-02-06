@@ -15,6 +15,7 @@ import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
 import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
 import Confirm from '@/components/Confirm';
+import { useRouter } from 'next/navigation';
 interface form {
     "memberNo": string;
     "memberName": string;
@@ -80,6 +81,7 @@ const ProductWrite = () => {
     const [prodList, setProdList] = useState<any>([]);
     const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
+    const router = useRouter();
     const onSubmit = async (data: any) => {
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
@@ -408,6 +410,10 @@ const ProductWrite = () => {
             }
         }
     }
+
+    const goList = () => {
+        router.push('/billing/product/list/1');
+    }
     return (
         <>
             <Breadcrumb />
@@ -488,7 +494,7 @@ const ProductWrite = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
+                        <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>취소</Button>
                     </div>
                 </form>    
                 {regProd &&

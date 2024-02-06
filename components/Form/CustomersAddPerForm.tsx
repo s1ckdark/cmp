@@ -120,41 +120,40 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                 <div className="flex flex-wrap justify-start">
                     {type === "sales" && <div className={`${styles.inputGroup} ${styles.userId}`}>
                         <label htmlFor="userId" className="block text-sm font-medium text-gray-900 dark:text-black">담당자 ID:</label>
-                        <input readOnly={isDisabled} type="text" id="userId" {...register("userId")} defaultValue={userId} />
+                        <input readOnly={isDisabled} type="text" id="userId" {...register("userId", { required: true })} defaultValue={userId} />
                         <IconSearch className={styles.iconSearch} onClick={() => openModal('user')} />
-                        {errors.userId && <span className="text-red-500">This field is required</span>}
+                        {errors.userId && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>}
                     <div className={styles.inputGroup}>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">담당자명:</label>
-                        <input readOnly={isDisabled} type="text" id="name" {...register("name")} defaultValue={name} />
-                        {errors.name && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="name" {...register("name", { required: true })} defaultValue={name} />
+                        {errors.name && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">부서</label>
-                        <input readOnly={isDisabled} type="text" id='dept-sales' {...register("dept")} defaultValue={dept} />
-                        {errors.dept && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id='dept-sales' {...register("dept", { required: true })} defaultValue={dept} />
+                        {errors.dept && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={`${styles.inputGroup}`}>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-black">이메일:</label>
-                        <input readOnly={isDisabled} type="text" id="email" {...register("email")} defaultValue={email} />
-                        {errors.email && <span className="text-red-500">This field is required</span>}
+                        <input readOnly={isDisabled} type="text" id="email" {...register("email", { required: true })} defaultValue={email} />
+                        {errors.email && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     {type === "custContact" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="phoneNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo")} defaultValue={phoneNo} />
-                            {errors.phoneNo && <span className="text-red-500">This field is required</span>}
+                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo", { required: true })} defaultValue={phoneNo} placeholder="010-1234-5678 양삭으로 입력해주세요"/>
+                            {errors.phoneNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                      {type === "sales" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo")} defaultValue={mobileNo} />
-                            {errors.mobileNo && <span className="text-red-500">This field is required</span>}
+                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo", { required: true })} defaultValue={mobileNo} placeholder="010-1234-5678 양삭으로 입력해주세요" />
+                            {errors.mobileNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                     <div className={`${styles.inputGroup}`}>
                         <label htmlFor="comment" className="block text-sm font-medium text-gray-900 dark:text-black">코멘트:</label>
                         <input readOnly={isDisabled} type="text" id="comment" {...register("comment")} defaultValue={comment} />
-                        {errors.comment && <span className="text-red-500">This field is required</span>}
                     </div>
                 </div>
                 <div className={styles.btnArea}>

@@ -1,25 +1,45 @@
 import Link from "next/link";
 import styles from "./UserInfo.module.scss";
-import { IconSetting, IconHome, IconUsers } from '@/public/svgs';
+import { IconSetting, IconHome, IconUsers, IconLogout } from '@/public/svgs';
 import Loading from '@/components/Loading'
 import { parseCookies } from 'nookies';
+import { apiBePure } from '@/services';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { destroyCookie } from "nookies";
+import { Toast } from '@/components/Toast';
 
-const UserInfo = ({isOpen}:{isOpen:boolean}) => {
+const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
+  const { data:session }:any = useSession();
+  const router = useRouter();
   const cookie = parseCookies();
   const { username } = cookie;
+  const logout = async () => {
+    const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
+    if (response.status === 200) {
+      destroyCookie(null, 'accessToken');
+      destroyCookie(null, 'refreshToken');
+      destroyCookie(null, 'userId');
+      destroyCookie(null, 'username');
+      destroyCookie(null, 'next-auth.callback-url');
+      destroyCookie(null, 'next-auth.csrf-token');
+      destroyCookie(null, 'next-auth.session-token');
+      Toast("success", "로그아웃하였습니다", () => router.push('/'));
+    }
+  }
   if(!username) return <Loading/>
   return (
     <>
       <div className={`${styles.userinfo} ${!isOpen ? styles.open:styles.close}`}>
         <div className={`${styles.container}`}>
           <div className={`${styles.user_name} flex text-right px-2`}>
-            {username &&  <Link href="/mypage" className="user ml-4"> <p className="mb-6">{username || ''}</p></Link>}
-            <Link href="/landing" className="home ml-4"> <IconHome /> </Link>
+            {username &&  <Link href="/mypage" className="user ms-12"> <p className="mb-6">{username || ''}</p></Link>}
+           
           </div>
           
           <div className={styles.linkArea}>
-            {/* <Link href="/admin" className="setting"><span> <IconSetting /></span></Link> */}
-           {/* <IconUsers /> </Link> */}
+            <Link href="/landing" className="home ml-4"> <IconHome /></Link>
+            <span onClick={logout} className="logout"><IconLogout /></span>
           </div>
         </div>
       </div>

@@ -94,7 +94,7 @@ const ProductView = () => {
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
     const [prodList, setProdList] = useState<any>([]);
-   
+    const [isDisabled, setIsDisabled] = useState<boolean>(true);
     //billing id = objectId
     const RenderProdSw = ({ data, view }:any) => {
         return data.map((item: ISW, idx: number) => (
@@ -136,7 +136,7 @@ const ProductView = () => {
     }
 
     const goBack = () => {
-        router.back();
+        router.push('/billing/product/list/1');
     }
     
     useEffect(() => {
@@ -147,6 +147,7 @@ const ProductView = () => {
                 setDataView(response.data);
                 setForm(response.data);
                 setRegProd(true);
+                setIsDisabled(true);
             }
         }
         fetchData();
@@ -163,16 +164,16 @@ const ProductView = () => {
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("memberName")} defaultValue={memberName} />
+                                    <input readOnly={isDisabled} type="text" {...register("memberName")} defaultValue={memberName} />
                                 </div>                                                                                                                                                                                                                                                                                                                                                                  
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
-                                <input type="text" {...register("memberNo")} defaultValue={memberNo} />
+                                <input readOnly={isDisabled} type="text" {...register("memberNo")} defaultValue={memberNo} />
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
-                                <input type="text" {...register("memberType")} defaultValue={memberType} />
+                                <input readOnly={isDisabled} type="text" {...register("memberType")} defaultValue={memberType} />
                             </div>
                         </div>
                     </div>
@@ -182,20 +183,20 @@ const ProductView = () => {
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_month">청구년월</label>
                             <div className={Styles.search}>
-                             <input type="text" {...register("target_month")} defaultValue={targetMonth} />
+                             <input readOnly={isDisabled} type="text" {...register("target_month")} defaultValue={targetMonth} />
                             </div>
                         </div>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_start_date")} defaultValue={target_start_date} />
+                                    <input readOnly={isDisabled} type="text" {...register("target_start_date")} defaultValue={target_start_date} />
                                 </div>
                             </div>
                             
                         <div className={Styles.inputGroup}>
                                 <label htmlFor="target_end_date">상품종료일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_end_date")} defaultValue={target_end_date}/>  
+                                    <input readOnly={isDisabled} type="text" {...register("target_end_date")} defaultValue={target_end_date}/>  
                                 </div>
                         </div>
                     </div>

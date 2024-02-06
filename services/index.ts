@@ -115,10 +115,9 @@ apiBe.interceptors.request.use(async (config: any) => {
     const session: any = await getSession();
     const cookie = parseCookies();
     const { accessToken, refreshToken } = cookie;
-    console.log(accessToken);
     
     if (accessToken) {
-                    config.headers.Authorization = `Bearer ${accessToken}`;
+        config.headers.Authorization = `Bearer ${accessToken}`;
     } else if (session?.accessToken) {
         config.headers.Authorization = `Bearer ${session.accessToken}`;
     }
@@ -126,7 +125,7 @@ apiBe.interceptors.request.use(async (config: any) => {
     // config.headers['Pragma'] = 'no-store';
     // config.headers['Expires'] = '0';
     config.headers["Cache-Control"] = "public";
-    console.log("apiBe config :", config);
+    // console.log("apiBe config :", config);
     return config;
 }, (error) => {
     console.log("apiBe error :", error);

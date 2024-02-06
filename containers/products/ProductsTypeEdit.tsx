@@ -66,7 +66,7 @@ const ProductsTypeEdit = () => {
                   <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />사용SW</label>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />상용SW</label>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="MSP" />MSP</label>
                                 {errors.prodType && <span className={Styles.error}>{errors.prodType?.message || null}</span>}
                         </div>
@@ -75,11 +75,7 @@ const ProductsTypeEdit = () => {
                         <label htmlFor="prodDetailType">상품상세분류</label>
                         <input type="text" placeholder='상품상세분류를 입력하세요'
                             {...register("prodDetailType", {
-                                required: "해당 필드는 필수입니다.",
-                                minLength: {
-                                    value: 3,
-                                    message: "3글자 이상 입력해주세요."
-                                }
+                                required: "해당 필드는 필수입니다."
                             })} defaultValue={prodDetailType}/>
                         {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message || null}</span>}
                     </div>
@@ -87,11 +83,7 @@ const ProductsTypeEdit = () => {
                         <label htmlFor="prodDetailTypeStd">상품가격기준</label>
                         <input type="text" placeholder='상품가격기준을 입력하세요'
                             {...register("prodDetailTypeStd", {
-                                required: "해당 필드는 필수입니다.",
-                                minLength: {
-                                    value: 3,
-                                    message: "3글자 이상 입력해주세요."
-                                }
+                                required: "해당 필드는 필수입니다."
                             })}
                             defaultValue={prodDetailTypeStd}/>
                         {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message || null}</span>}

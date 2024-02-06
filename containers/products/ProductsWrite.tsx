@@ -52,6 +52,10 @@ const ProductsWrite = () => {
         }    
     }
     
+    const goBack = () => {
+        router.push('/products/product/list/1');
+    }
+    
     return (
         <>
         <Breadcrumb />
@@ -61,29 +65,23 @@ const ProductsWrite = () => {
                     <label htmlFor="prodName">상품명</label>
                     <input type="text" placeholder='상품명을 입력하세요' 
                     {...register("prodName", {
-                        required: "해당 필드는 필수입니다.", 
-                        minLength: {
-                            value: 3,
-                            message: "3글자 이상 입력해주세요."
-                        }
+                        required: "해당 필드는 필수입니다."
                     })} />
                     {errors.prodName && <span className={Styles.error}>{errors.prodName?.message}</span>}
                 </div>
-                <div className={Styles.inputGroup}>
-                    <label htmlFor="prodType">상품분류</label>
-                    <input type="radio" {...register("prodType")} value="SW"/>사용SW
-                    <input type="radio" {...register("prodType")} value="MSP" />MSP
-                    {errors.prodType && <span className={Styles.error}>{errors.prodType?.message}</span>}
-                </div>
+                    <div className={Styles.inputGroup}>
+                        <label htmlFor="type">상품분류</label>
+                        <div className={Styles.inputRadio}>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />사용SW</label>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="MSP" />MSP</label>
+                                {errors.prodType && <span className={Styles.error}>{errors.prodType?.message || null}</span>}
+                        </div>
+                    </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailType">상품상세분류</label>
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
                     {...register("prodDetailType", {
-                        required: "해당 필드는 필수입니다.", 
-                        minLength: {
-                            value: 3,
-                            message: "3글자 이상 입력해주세요."
-                        }
+                        required: "해당 필드는 필수입니다."
                     })} />
                     {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>}
                 </div>
@@ -91,11 +89,7 @@ const ProductsWrite = () => {
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
                     <input type="text" placeholder='상품가격기준을 입력하세요' 
                      {...register("prodDetailTypeStd", {
-                        required: "해당 필드는 필수입니다.", 
-                        minLength: {
-                            value: 3,
-                            message: "3글자 이상 입력해주세요."
-                        }
+                        required: "해당 필드는 필수입니다."
                     })} />
                     {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message}</span>}
                 </div>
@@ -103,11 +97,7 @@ const ProductsWrite = () => {
                     <label htmlFor="prodDesc">상품정보</label>
                     <input type="text" placeholder='상품가격기준을 입력하세요' 
                      {...register("prodDesc", {
-                        required: "해당 필드는 필수입니다.", 
-                        minLength: {
-                            value: 3,
-                            message: "3글자 이상 입력해주세요."
-                        }
+                        required: "해당 필드는 필수입니다."
                     })} />
                     {errors.prodDesc && <span className={Styles.error}>{errors.prodDesc?.message}</span>}
                 </div>
@@ -115,11 +105,7 @@ const ProductsWrite = () => {
                     <label htmlFor="stdPrice">정식단가</label>
                     <input type="text" placeholder='정식단가를 입력하세요' 
                      {...register("stdPrice", {
-                        required: "해당 필드는 필수입니다.", 
-                        minLength: {
-                            value: 3,
-                            message: "3글자 이상 입력해주세요."
-                        }
+                        required: "해당 필드는 필수입니다."
                     })} />
                     {errors.stdPrice && <span className={Styles.error}>{errors.stdPrice?.message}</span>}
                 </div>
@@ -130,8 +116,11 @@ const ProductsWrite = () => {
                      {...register("comment", {
                         required: false
                     })} />
+                    </div>
+                <div className={Styles.btnArea}>
+                        <Button type="submit" className={Styles.submitBtn} skin={"submit"}>저장</Button>
+                        <Button type="button" className={Styles.submitBtn} skin={"cancel"} onClick={goBack}>취소</Button>
                 </div>
-                <Button type="submit" className={Styles.submitBtn} skin={"green"}>저장</Button>
             </form>
         </div>
         </>

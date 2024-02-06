@@ -48,8 +48,8 @@ export interface IRegistrationForm {
     memberNo: string;
     memberName: string;
     salesName: string;
-    isAdmin: string;
-    isActivated: string;
+    admin: string;
+    activated: string;
     regId: string;
     regName: string;
     regDt: string;

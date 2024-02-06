@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
-export const PdfExport = async (id: string) => {
+export const PdfExport = async (id: string, filename:any) => {
     if (document) {
         html2canvas(document.querySelector(`#${id}`)!).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
@@ -22,7 +22,7 @@ export const PdfExport = async (id: string) => {
                 doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
             }
-            doc.save('Reports.pdf');
+            doc.save(filename+'.pdf');
         });
     }
 };

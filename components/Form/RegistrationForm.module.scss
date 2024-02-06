@@ -4,7 +4,8 @@
     &.edit, &.register {
     .inputGroup {
         width: 100%;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        position: relative;
         label {
             color: #2E322F;
             font-family: Pretendard;
@@ -24,18 +25,21 @@
         .password, .newPassword, .address, .addressDetail, .memberNo, .memberName, .zipcode  {
             width: 100%;
             margin-right: 15px;
+            margin-bottom: 20px;
+            position: relative;
         }
         .zipcode {
-            width: 200px;
+            width: 300px;
         }
         .btnArea {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin: 8px auto;
+            margin: 8px auto 28px;
             height: 36px;
             &.btnPasswordCheck {
                 width: 100px;
+               
             }
             &.btnAddrSearch {
                 width: 100px;
@@ -163,4 +167,12 @@
             margin: 30px auto 0;
         }
     }
+}
+.errorMsg {
+    position: absolute;
+    left:0;
+    bottom: -15px;
+    color: red;
+    font-size: 11px;
+    text-align: left;
 }
