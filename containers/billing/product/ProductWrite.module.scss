@@ -10,8 +10,8 @@
     }
     .btnArea {
         display: flex;
-        justify-content: center;
-        margin: 50px auto;
+        justify-content: flex-end;
+        margin-bottom: 15px;
         align-items: center;
         .btn {
             width: 100px;
@@ -143,6 +143,9 @@
                 font-weight: 500;
                 color: #2E322F;
             }
+                    input {
+                padding: 15px 10px;
+            }
         }
     }
     .msp {
@@ -211,6 +214,9 @@
             border: 1px solid #DEE1E7;
             background: #F7F8FE;
             position: relative;
+                    input {
+                padding: 15px 10px;
+            }
             span {
                 display: block;
                 padding: 0 10px;
@@ -223,8 +229,8 @@
 }
 .btnArea {
     display: flex;
-    justify-content: flex-end;
-    margin: 30px auto;
+    justify-content: center;
+    margin: 50px auto;
     align-items: center;
     .btn {
         width: 100px;
@@ -423,6 +429,7 @@
                                 input {
                                     width: 100%;
                                     border: 1px solid #DEE1E7;
+                                    padding: 15px 10px;
                                 }
                                 &:nth-child(1) {
                                     display:none;
@@ -519,7 +526,7 @@
                                     width: 150px;
                                 }
                                 &:nth-child(5) {
-                                    width:200px;
+                                    width:100px;
                                 }
                                 &:nth-child(6) {
                                     width:100px;
@@ -544,6 +551,7 @@
                                 input {
                                     width: 100%;
                                     border: 1px solid #DEE1E7;
+                                    padding: 15px 10px;
                                 }
                                 &:nth-child(1) {
                                     display:none;

@@ -134,9 +134,11 @@
         }
         td {
             border: 1px solid #DEE1E7;
-            background: #F7F8FE;
             position: relative;
-            
+            background: #F7F8FE;
+            input {
+                padding: 15px 10px;
+            }
             span {
                 display: block;
                 padding: 0 10px;
@@ -218,6 +220,9 @@
                 font-size: 20px;
                 font-weight: 500;
                 color: #2E322F;
+            }
+            input {
+                padding: 15px 10px;
             }
         }
     }

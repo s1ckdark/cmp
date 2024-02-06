@@ -208,7 +208,6 @@ const ProductView = () => {
                             <table className={Styles.sw}>
                                 <thead>
                                     <tr>
-                                        <th></th>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
                                         <th>상품상세분류</th>
@@ -232,7 +231,6 @@ const ProductView = () => {
                             <table className={Styles.msp}>
                                 <thead>
                                     <tr>
-                                        <th></th>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
                                         <th>상품상세분류</th>

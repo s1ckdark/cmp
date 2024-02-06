@@ -139,7 +139,7 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
                             <h2>월간 이용 추이</h2>
                         </div>
                         <div className={styles.lineChart}>
-                            <LineChart data={trendMonth} aspectRatio={16 / 5}  />
+                                    {trendMonth && <LineChart data={trendMonth} aspectRatio={16 / 5} />}
                         </div>
                         <div className={styles.trendMonthTable}>
                             <Tables rowType={"trendMonth"} data={trendMonth} />
@@ -166,7 +166,7 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
                                 <h2>서비스 세부사항</h2>
                             </div>
                             <div className="flex justify-center items-center">
-                                <DonutChart data={donutChart} title={"전체 서비스"} />
+                                    {donutChart && <DonutChart data={donutChart} title={"전체 서비스"} />}
                             </div>
                         </div> 
                     </div>

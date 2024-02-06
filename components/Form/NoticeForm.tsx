@@ -16,15 +16,21 @@ import lodash from 'lodash';
 import { apiBe } from '@/services';
 const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
 
-const NoticeForm = () => {
+interface INoticeFormProps {
+    data?: any;
+}
+
+const NoticeForm = ({ data }: INoticeFormProps) => {
+    const [notice, setNotice] = useState<any>(data || {});
+    const { subject, yn, noticeType, content, uploadedFiles, clientSession } = notice;
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         defaultValues: {
-            subject: '',
+            subject: subject,
             yn: true,
-            noticeType: '',
-            content: '',
-            fileIds:[],
-            clientSession: ''
+            noticeType: noticeType,
+            content: content,
+            fileIds: uploadedFiles,
+            clientSession: clientSession
         }
     });
     const [uploadedFile, setUploadedFile] = useRecoilState(fileUploadAtom);
@@ -57,7 +63,6 @@ const NoticeForm = () => {
         }
     }
 
-    const data = {};
     const row: any[] = isEmptyObject(data) ? [] : [data];
     const cancel = () => {
         router.back();
@@ -70,6 +75,17 @@ const NoticeForm = () => {
            setValue('fileIds', uploadedFile);
        }
     }, [uploadedFile]);
+
+    useEffect(() => {
+        if (data) {
+            setValue('subject', data.subject);
+            setValue('yn', data.yn);
+            setValue('noticeType', data.noticeType);
+            setValue('content', data.content);
+            setValue('fileIds', data.uploadedFiles);
+            setValue('clientSession', data.clientSession);
+        }
+    }, [data])
     return (
         <div className="container">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,11 +130,11 @@ const NoticeForm = () => {
                 <div className={style.inputGroup}>
                     <label htmlFor="content">내용</label>
                     <ToastEditor
-                        content=''
+                        content={content}
                         editorRef={ref}
                         />
                 </div>
-                <FileUploader uuid={uuid} />
+                <FileUploader uuid={uuid} data={data?.uploadedFiles} />
                 <div className={style.btnArea}>
                     <Button type="submit" skin="submit">등록</Button>
                     <Button type="button" skin="cancel" onClick={cancel}>취소</Button>

@@ -78,7 +78,8 @@ const ProductWrite = () => {
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
     const [prodList, setProdList] = useState<any>([]);
-    const [ confirmOpen, setConfirmOpen ] = useState<boolean>(false);
+    const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<string>('');
     const onSubmit = async (data: any) => {
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
@@ -163,7 +164,8 @@ const ProductWrite = () => {
         }
     }
 
-    const writeProd = async(type: string) => {
+    const writeProd = async (type: string) => {
+        
         const response = await apiBe.put(`/product/gdbilling/product/${type}`, addField);
         const result = response.data;
         if (response.status === 200 || response.status === 201) {
@@ -228,7 +230,11 @@ const ProductWrite = () => {
         }
     }
 
-    const productSearch = async(prodType:any, prodName:any) => {
+    const productSearch = async (prodType: any, prodName: any) => {
+        if (prodName === '') {
+            Toast("error", '상품명을 입력하세요.');
+            return;
+        }
         const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
@@ -310,7 +316,7 @@ const ProductWrite = () => {
         const modalBody = modal.querySelector('#modalBody');
         const modalResult = modal.querySelector('#modalResult');
         let inner = "";
-
+        setModalType(type);
         switch (type) {
             case "sw":
                 inner = "<input type='text' id='productInput' placeholder='상품명을 입력하세요.' /><button id='productSearchBtn'>상품 검색</button>";
@@ -525,10 +531,11 @@ const ProductWrite = () => {
                             </div>
                             <table className={Styles.msp}>
                                 <thead>
-                                    <tr>
+                      <tr>
                                         <th></th>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
+                                        <th>상품분류</th>
                                         <th>상품상세분류</th>
                                         <th>수량</th>
                                         <th>정식단가</th>
@@ -556,7 +563,7 @@ const ProductWrite = () => {
                 
             </div> 
            
-            <div id="modal" className={Styles.modal}>
+              <div id="modal" className={Styles.modal}>
                 <div id="modalContent" className={Styles.modalContent}>
                     <span className={Styles.closeBtn} onClick={()=> closeModal()}>&times;</span>
                     <div id="modalHeader" className={Styles.modalHeader}>
@@ -592,7 +599,7 @@ const ProductWrite = () => {
                         </table>
                     </div>}
                     <div id="modalBody" className={Styles.modalBody}>
-                        {addField && addField.prodId && <>
+                        {addField && addField.prodId && modalType === 'sw' && <>
                             <div className={Styles.addProd}>
                                 <table className={Styles.sw}>
                                     <thead>
@@ -629,8 +636,49 @@ const ProductWrite = () => {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className={Styles.btnArea}>
+                                          <div className={Styles.btnArea}>
                                 <Button className={`${Styles.btn} ${Styles.submitBtn}`} skin={"green"} onClick={()=> writeProd('sw')}>저장</Button>
+                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={() => addprodCancel()}>취소</Button>
+                            </div>
+                            </>
+                        }
+                        {addField && addField.prodId && modalType === 'msp' && <>
+                            <div className={Styles.addProd}>
+                                <table className={Styles.msp}>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>상품아이디</th>
+                                            <th>상품명</th>
+                                            <th>상품상세분류</th>
+                                            <th>수량</th>
+                                            <th>정식단가</th>
+                                            <th>할인율</th>
+                                            <th>납부예상금액</th>
+                                            <th>서비스 시작일시</th>
+                                            <th>서비스 종료일시</th>
+                                            <th>코멘트</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span>×</span></td>
+                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChange(e)} required/></td>
+                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChange(e)} required/></td>
+                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} /></td>
+                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChange(e)} /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} skin={"green"} onClick={()=> writeProd('msp')}>저장</Button>
                                 <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={() => addprodCancel()}>취소</Button>
                             </div>
                             </>

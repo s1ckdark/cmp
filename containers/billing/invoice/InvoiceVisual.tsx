@@ -168,7 +168,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
                                 <h2>서비스 세부사항</h2>
                             </div>
                             <div className="flex justify-center items-center">
-                                <DonutChart data={donutChart} title={"전체 서비스"} />
+                                    {donutChart && <DonutChart data={donutChart} title={"전체 서비스"} />}
                             </div>
                         </div> 
                     </div>
@@ -184,7 +184,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                     <div className={styles.left}>
-                         <BarChart data={perMonth} aspectRatio={7/3} />
+                                        {perMonth && <BarChart data={perMonth} aspectRatio={7 / 3} />}
                     </div>
                     <div className={styles.right}>
                         <Tables rowType={"perMonth"} data={perMonth} />
@@ -202,7 +202,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
                     </div>
                     <div className={`${styles.col2} ${styles.asymc} flex justify-center items-center`}>
                         <div className={styles.left}>
-                            <BarChart data={perWeek} aspectRatio={ 7/3 }/> 
+                                        {perWeek && <BarChart data={perWeek} aspectRatio={7 / 3} />}
                         </div>
                         <div className={styles.right}>
                             <Tables rowType={'perWeek'} data={perWeek} />
@@ -220,7 +220,7 @@ const InvoiceVisual = ({ memberNo, targetMonth }: { memberNo: number, targetMont
                         <h2>일간 이용 추이</h2>
                     </div>
                     <div className="flex justify-center items-center">
-                        <BarChart data={perDay} aspectRatio={ 7/3 }/> 
+                                    {perDay && <BarChart data={perDay} aspectRatio={7 / 3} />}
                     </div>
                 </div>
             </div>

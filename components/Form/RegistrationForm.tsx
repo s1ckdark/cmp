@@ -70,15 +70,17 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
         else if (type === 'edit') { url = `/user/${username}`; method = 'post'; }
         else { return false;}
         
-        console.log(url);
+
         const response = await apiBe(url, { method, data: data });
+        console.log(response.status);
         if (response.status === 200 || response.status === 201) {
-            const result = response.data;
-            if (result) {
-                Toast("success", '등록되었습니다.');
-                router.push('/admin/user/list/1');
-            }
+                Toast("success", '등록되었습니다.', ()=>router.push('/admin/user/list/1'));
+        } else if(response.status === 409) {
+            Toast("error", '이미 존재하는 ID입니다.');
+        } else {
+            Toast("error", '등록에 실패하였습니다.');
         }
+
     };
 
     const passwordCheck = () => {

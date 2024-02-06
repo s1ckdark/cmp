@@ -83,6 +83,7 @@ const ProductEdit = () => {
     const [prodList, setProdList] = useState<any>([]);
     const pathname = usePathname();
     const router = useRouter();
+    const [ modalType, setModalType ] = useState<string>('');
     const [memberNo, setMemberNo] = useState<string>(pathname.split('/')[4]);
     const [targetMonth, setTargetMonth ] = useState<string>(pathname.split('/')[5]);
     const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm({
@@ -163,7 +164,8 @@ const ProductEdit = () => {
         }
     }
 
-    const writeProd = async(type: string) => {
+    const writeProd = async (type: string) => {
+        if(addField.expPrice === '' || addField.discountRate === '') Toast("error", '값을 입력하세요.'); 
         const response = await apiBe.put(`/product/gdbilling/product/${type}`, addField);
         const result = response.data;
     if (response.status === 200 || response.status === 201) {
@@ -236,7 +238,11 @@ const ProductEdit = () => {
         }
     }
 
-    const productSearch = async(prodType:any, prodName:any) => {
+    const productSearch = async (prodType: any, prodName: any) => {
+        if (prodName === '') {
+            Toast("error", '상품명을 입력하세요.');
+            return;
+        }
         const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
@@ -267,8 +273,8 @@ const ProductEdit = () => {
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
@@ -285,9 +291,9 @@ const ProductEdit = () => {
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
                 <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
                 <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
@@ -319,6 +325,7 @@ const ProductEdit = () => {
         const modalHeader = modal.querySelector('#modalHeader');
         const modalBody = modal.querySelector('#modalBody');
         const modalResult = modal.querySelector('#modalResult');
+        setModalType(type);
         let inner = "";
 
         switch (type) {
@@ -547,6 +554,7 @@ const ProductEdit = () => {
                                         <th></th>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
+                                        <th>상품분류</th>
                                         <th>상품상세분류</th>
                                         <th>수량</th>
                                         <th>정식단가</th>
@@ -606,7 +614,7 @@ const ProductEdit = () => {
                         </table>
                     </div>}
                     <div id="modalBody" className={Styles.modalBody}>
-                        {addField && addField.prodId && <>
+                        {addField && addField.prodId && modalType === 'sw' && <>
                             <div className={Styles.addProd}>
                                 <table className={Styles.sw}>
                                     <thead>
@@ -643,8 +651,49 @@ const ProductEdit = () => {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className={Styles.btnArea}>
+                                          <div className={Styles.btnArea}>
                                 <Button className={`${Styles.btn} ${Styles.submitBtn}`} skin={"green"} onClick={()=> writeProd('sw')}>저장</Button>
+                                <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={() => addprodCancel()}>취소</Button>
+                            </div>
+                            </>
+                        }
+                        {addField && addField.prodId && modalType === 'msp' && <>
+                            <div className={Styles.addProd}>
+                                <table className={Styles.msp}>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>상품아이디</th>
+                                            <th>상품명</th>
+                                            <th>상품상세분류</th>
+                                            <th>수량</th>
+                                            <th>정식단가</th>
+                                            <th>할인율</th>
+                                            <th>납부예상금액</th>
+                                            <th>서비스 시작일시</th>
+                                            <th>서비스 종료일시</th>
+                                            <th>코멘트</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span>×</span></td>
+                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChange(e)} required/></td>
+                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChange(e)} required/></td>
+                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} /></td>
+                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChange(e)} /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div className={Styles.btnArea}>
+                                <Button className={`${Styles.btn} ${Styles.submitBtn}`} skin={"green"} onClick={()=> writeProd('msp')}>저장</Button>
                                 <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={() => addprodCancel()}>취소</Button>
                             </div>
                             </>

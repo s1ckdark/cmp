@@ -13,10 +13,9 @@ interface IFileProps {
     clientSession: any;
 }
 
-const FileUploader = ({ uuid }: any) => {
-    console.log(uuid);
+const FileUploader = ({ uuid, data }: any) => {
     const [fileUpload, setFileUpload] = useRecoilState(fileUploadAtom);
-    const [fileList, setFileList] = React.useState<IFileProps[]>([]);
+    const [fileList, setFileList] = React.useState<IFileProps[]>(data || []);
     const [uploadedFile, setUploadedFile] = useRecoilState(fileUploadAtom);
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         defaultValues: {
@@ -63,7 +62,9 @@ const FileUploader = ({ uuid }: any) => {
             target.click();
         }
     }
-
+    useEffect(() => {
+        setFileList(data);
+    }, [data])
     return (
         <div className={style.fileUploader}>
                 <div className={style.selector}>
