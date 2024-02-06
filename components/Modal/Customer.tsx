@@ -29,10 +29,10 @@ const Customer = () => {
 
     const onSearch = async() => {
         const url = '/common/code/msp-customer-search';
-        // if (keyword === '') {
-        //     Toast("error", '검색어를 입력해주세요.');
-        //     return false;
-        // }
+        if (keyword === '') {
+            Toast("error", '검색어를 입력해주세요.');
+            return false;
+        }
         const response = await apiBe(url, { params: { memberName: keyword } });
         if (response.status === 200 || response.status === 201) {
             const { data }= response;

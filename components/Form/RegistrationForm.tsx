@@ -20,10 +20,14 @@ interface IRegistrationFormProps {
 }
 
 const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
+    console.log(data);
     const [mounted, setMounted] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [ myData, setMyData] = useState<IRegistrationForm>({ id:'',username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: 'false', isActivated: "true", regId: '', regName: '', regDt: '' });
-    const { id, username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data ? data: myData; 
+    const [privilegeOptions, setPrivilegeOptions] = useState<any[]>([]);
+    const [defaultPrivilegeOptions, setDefaultPrivilegeOptions] = useState<any[]>([]);
+    const [ passwordChecker, setPasswordChecker ] = useState(false);
+    const [ myData, setMyData] = useState<IRegistrationForm>(data || { id:'',username: '', userFullName: '', userType: '', privileges: [], password: '', confirmPassword: '', email: '', mobile: '', phone: '', addr: '', addrDetail: '', zipcode: '', memberNo: '', memberName: '', salesName: '', isAdmin: 'false', isActivated: "true", regId: '', regName: '', regDt: '' });
+    const { id, username, userFullName, userType, privileges, password, confirmPassword, email, mobile, phone, addr, addrDetail, zipcode, memberNo, memberName, salesName, isAdmin, isActivated, regId, regName, regDt } = data || {};
   
     const { control, handleSubmit, getValues, register, setValue, setError, formState: {errors} } = useForm({
         defaultValues: {
@@ -42,21 +46,19 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             memberNo: memberNo,
             memberName: memberName,
             salesName: salesName,
-            isAdmin: isAdmin,
-            isActivated: isActivated,
+            isAdmin: privileges?.includes('admin') ? "true" : "false",
+            isActivated: true,
             regId: regId,
             regName: regName,
             regDt: regDt
         }
     });
-    const [privilegeOptions, setPrivilegeOptions] = useState<any[]>([]);
-    const [defaultPrivilegeOptions, setDefaultPrivilegeOptions] = useState<any[]>([]);
-    const [ passwordChecker, setPasswordChecker ] = useState(false);
+
    
     const router = useRouter();
 
     const onSubmit = async (data: any) => {
-        if (getValues('privileges').includes('admin')) {
+        if (getValues('privileges')?.includes('admin')) {
             setValue('isAdmin', "true");
         }
         if (passwordChecker === false && type === 'register') {
@@ -129,7 +131,6 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
 
 
     const closeModal = () => {
-    
         const modal: any = document.querySelector("#modal");
         const innerModal = modal.querySelector(styles.innerModal);
         const searchBtn = modal.querySelector('#searchBtn');
@@ -265,7 +266,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     ]
 
     const editMode = () => {
-       router.push(`./edit`);
+       router.push(`/admin/user/edit/${email}`);
     }
 
     useEffect(() => {
@@ -294,7 +295,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                        tmp.push({ value: item.name, label: item.name });
                     })
                     setPrivilegeOptions(tmp);
-                    const defaultPrivileges = privilegeOptions.filter(option => privileges.includes(option.value));
+                    const defaultPrivileges = privilegeOptions.filter((option) => privileges?.includes(option.value));
                     console.log(defaultPrivileges);
                     setDefaultPrivilegeOptions(defaultPrivileges);
                 }
@@ -307,6 +308,9 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             if (type === 'view') {
                 setIsDisabled(true);
             }
+        if (type === 'register' || type === 'edit') {
+            setIsDisabled(false);
+        }
             setMounted(true);
         }, [type,data])
     
@@ -367,7 +371,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                                 options={privilegeOptions}
                                 isDisabled={isDisabled}
                                 isMulti
-                                value={privilegeOptions.filter((option:any) => field.value.includes(option.value))} // Corrected this line
+                                value={privilegeOptions.filter((option:any) => field.value?.includes(option.value))} // Fixed line
                                 onChange={(val) => field.onChange(val.map((item) => item.value))}
                             />
                         )}
@@ -503,7 +507,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             
             <div className={`${styles.btnArea} mt-6 mx-auto`}>
                     {type === 'view' && <Button type='button'
-                        onClick={() => editMode()}  className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+                        onClick={editMode}  className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
                         skin='green'>수 정</Button>}
                     {type === 'edit' ?  <Button type='submit'
                         className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'

@@ -14,7 +14,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
 import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
-
+import Confirm from '@/components/Confirm';
 interface form {
     "memberNo": string;
     "memberName": string;
@@ -78,7 +78,7 @@ const ProductWrite = () => {
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
     const [prodList, setProdList] = useState<any>([]);
-   
+    const [ confirmOpen, setConfirmOpen ] = useState<boolean>(false);
     const onSubmit = async (data: any) => {
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
@@ -93,49 +93,54 @@ const ProductWrite = () => {
         const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
         const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
         try {
-    const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
-    if (chkResponse.status === 200 && chkResponse.data) {
-        Toast("success", '저장된 데이터를 가져옵니다.');
-        setForm(chkResponse.data);
-        setRegProd(true);
-    } else {
-        throw new Error('No data found'); // 데이터가 없으면 에러를 발생시켜 catch 블록으로 넘어갑니다.
-    }
-} catch (error:any) {
-    if (error.response && error.response.status === 404) {
-        // 404 에러 처리
-        try {
-            const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
-            if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
-                Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
-                const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
-                if (copyResponse.status === 200) {
-                    const updateData = await apiBe(getUrl.url, { method: getUrl.method });
-                    if (updateData.status === 200) {
-                        Toast("success", '로드 되었습니다.');
-                        setForm(updateData.data[0]);
+            const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
+            if (chkResponse.status === 200 || chkResponse.data) {
+                Toast("success", '저장된 데이터를 가져옵니다.');
+                setForm(chkResponse.data);
+                setRegProd(true);
+            } else {
+                throw new Error("no data"); // 데이터가 없으면 에러를 발생시켜 catch 블록으로 넘어갑니다.
+            }
+        }
+        catch (error: any) {
+            console.log(error);
+        // if (error.response && error.response.status === 404) {
+            // 404 에러 처리
+
+            try {
+                const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
+                if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
+                    Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
+                    const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
+                    if (copyResponse.status === 200) {
+                        const updateData = await apiBe(getUrl.url, { method: getUrl.method });
+                        if (updateData.status === 200) {
+                            Toast("success", '로드 되었습니다.');
+                            setForm(updateData.data[0]);
+                            setRegProd(true);
+                        }
+                    }
+                } else {
+                    // 이전 달 데이터가 없으면 새 데이터 삽입
+                    const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
+                    if (insertResponse.status === 201) {
+                        Toast("success", '저장되었습니다.');
+                        setForm(insertResponse.data);
                         setRegProd(true);
                     }
                 }
-            } else {
-                // 이전 달 데이터가 없으면 새 데이터 삽입
-                const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
-                if (insertResponse.status === 200) {
-                    Toast("success", '저장되었습니다.');
-                    setForm(insertResponse.data);
-                    setRegProd(true);
-                }
+            } catch (innerError: any) {
+                          
+                // 내부 API 호출에서 발생한 에러 처리
+                console.log(innerError);
+                Toast('error', innerError.response ? innerError.response.data.message : 'An error occurred');
             }
-        } catch (innerError:any) {
-            // 내부 API 호출에서 발생한 에러 처리
-            console.log(innerError);
-            Toast('error', innerError.response ? innerError.response.data.message : 'An error occurred');
-        }
-    } else {
-        // 404 외 다른 에러 처리
-        console.log(error);
-        Toast('error', error.response ? error.response.data.message : 'An error occurred');
-    }
+        // } else {
+        //     // 404 외 다른 에러 처리
+
+        //     console.log(error);
+        //     Toast('error', error.response ? error.response.data.message : 'An error occurred');
+        // }
 }
 
     }
@@ -246,7 +251,7 @@ const ProductWrite = () => {
     const RenderProdSw = ({ data, view }:any) => {
         return data && data.map((item: ISW, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "SW")}>&times;</span></td>
+                          <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
@@ -265,7 +270,7 @@ const ProductWrite = () => {
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
             <tr key={item.prodId || idx}>
-                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "MSP")}>&times;</span></td>
+                         <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td>
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>

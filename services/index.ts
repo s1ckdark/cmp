@@ -4,7 +4,8 @@ import { getSession } from "next-auth/react";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { useRouter } from "next/navigation";
 import { parseJwt } from "@/utils/jwtHelper";
-
+import { Router } from "next/router";
+import { Toast } from "@/components/Toast";
 const cookie = parseCookies();
 const { accessToken, refreshToken } = cookie;
 
@@ -88,27 +89,7 @@ export const apiFe = axios.create({
 });
 
 
-apiBe.interceptors.request.use(async (config: any) => {
-    const cookie = parseCookies();
-    const { accessToken, refreshToken } = cookie;
-    console.log(accessToken);
-    if (accessToken) {
-        if (parseJwt(accessToken)) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
-        } else {
-            await regenerateTokens().then((token) => {
-                config.headers.Authorization = `Bearer ${token}`;
-            })
-        }
-    }
-    // config.headers['Pragma'] = 'no-store';
-    // config.headers['Expires'] = '0';
-    config.headers["Cache-Control"] = "public";
-    console.log("apiBe config :", config);
-    return config;
-}, (error) => {
-    console.log("apiBe error :", error);
-});
+
 
 const regenerateTokens = async () => {
     try {
@@ -130,6 +111,26 @@ const regenerateTokens = async () => {
     }
 }
 
+apiBe.interceptors.request.use(async (config: any) => {
+    const session: any = await getSession();
+    const cookie = parseCookies();
+    const { accessToken, refreshToken } = cookie;
+    console.log(accessToken);
+    
+    if (accessToken) {
+                    config.headers.Authorization = `Bearer ${accessToken}`;
+    } else if (session?.accessToken) {
+        config.headers.Authorization = `Bearer ${session.accessToken}`;
+    }
+
+    // config.headers['Pragma'] = 'no-store';
+    // config.headers['Expires'] = '0';
+    config.headers["Cache-Control"] = "public";
+    console.log("apiBe config :", config);
+    return config;
+}, (error) => {
+    console.log("apiBe error :", error);
+});
 
 apiBe.interceptors.response.use(
     async (response) => {
@@ -148,10 +149,11 @@ apiBe.interceptors.response.use(
                         },
                     }),
                 );
-                return await regenerateTokens().then((token) => {
-                    response.config.headers.Authorization = `Bearer ${token}`;
-                    return axios.request(response.config);
-                })
+                Toast("error", "토큰이 만료 되었습니다", () => { location.href = '/signin' });
+                // return await regenerateTokens().then((token) => {
+                //     response.config.headers.Authorization = `Bearer ${token}`;
+                //     return axios.request(response.config);
+                // })
             } 
             return Promise.reject(response);  
         }
@@ -225,6 +227,9 @@ apiBe.interceptors.response.use(
         return Promise.reject(error);
     },
 );
+
+
+
 
 export const isAxiosError = (err: unknown | AxiosError): err is AxiosError => {
     return axios.isAxiosError(err);

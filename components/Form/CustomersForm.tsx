@@ -66,7 +66,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         if (response.status === 201 || response.status === 200) {
             const { data } = response;
             // setMember(data);
-            setStep(1)
+            if(type === 'register' ) setStep(1)
             Toast("success", '고객사 정보가 저장 되었습니다.');
         } else {
             Toast("error", '고객사 정보 저장에 실패하였습니다.')

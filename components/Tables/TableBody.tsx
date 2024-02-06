@@ -150,7 +150,7 @@ export const TableBody = ({ rowType, data }: any) => {
                 props.memberNo,
             ]}/${targetMonth}`,
             customers: `/customers/view/${props.memberNo}`,
-            user: `/admin/user/view`,
+            user: `/admin/user/view/${props.email}`,
             productGd: `/products/product/view/${props.id}`,
             billingProduct: `/billing/product/view/${props.memberNo}/${targetMonth}`,
             productCategory: `/products/category/view/${props.id}`,

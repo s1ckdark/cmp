@@ -23,19 +23,20 @@ interface formProps {
 interface CustomersAddPerFormProps {
     type: "sales" | "custContact"; 
     memberNo: string;
-    data?: formProps;
+    data?: any;
     mode?: "register" | "edit" | "view";
 }
 
 
 const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerFormProps) => {
+    const [ formData, setFormData ] = useState<formProps>({ id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' });
     const [isDisabled, setIsDisabled] = useState(false);
     const [ step, setStep ] = useRecoilState(customerStep);
     const [ modal, setModal ] = useRecoilState(modalAtom);
-    const { id, userId, name, dept, email, phoneNo, mobileNo, comment } = data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' };
+    const { id, userId, name, dept, email, phoneNo, mobileNo, comment } = data ? data: { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' };
     const { register, handleSubmit, control, setValue, reset, formState: { errors } } = useForm<formProps>({
         defaultValues: {
-            id:id,
+            id: data?.id,
             userId: userId,
             name: name,
             dept: dept,
@@ -64,7 +65,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         if (data === null && mode === 'edit') { fixedType = 'register' }
     
         let url = type === 'custContact' ? '/customer/' + memberNo + '/contacts' : '/customer/' + memberNo + '/sales';
-        url = fixedType === 'edit' && type === 'custContact' ? url + '/' + formData.id : url;
+        url = fixedType === 'edit' && type === 'custContact' ? '/customer/' + memberNo + '/contact' + '/' + formData.id : url;
         const response = fixedType === 'register' ? await apiBe.put(url, formData):await apiBe.post(url, formData);
         if (response.status === 200 || response.status === 201) {
             if (mode === 'register') Toast("success", '저장이 완료되었습니다.', () => type === 'custContact' ? setStep(3) : router.push('/customers/list/1'));
@@ -81,6 +82,9 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
     const resetAll = () => {
           reset(formValues => data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' });
     }
+    const goEdit = () => {
+        router.push(`/customers/edit/${memberNo}`);
+    }
     useEffect(() => {
         if(modal.type === 'user' && modal.data !== null) {
             const { email, name} = modal?.data;
@@ -90,9 +94,24 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
     },[modal.data])
 
     useEffect(() => {
-        if(mode === "view") setIsDisabled(true);
+        if (mode === "view") setIsDisabled(true);
+        setFormData(data);
     }, [])
 
+    useEffect(() => {
+        if (type === "custContact" && data !== null) {
+            setValue('id', data.id)
+        }
+        if(type === 'sales' && data !== null) {
+            setValue('userId', userId)
+        }
+        setValue('name', name);
+        setValue('dept', dept);
+        setValue('email', email);
+        setValue('phoneNo', phoneNo);
+        setValue('mobileNo', mobileNo);
+        setValue('comment', comment);
+    },[type, data])
     return (
         <>
         <form className={`${styles.addMember} ${styles[type]}`} onSubmit={handleSubmit(onSubmit)}>
@@ -143,7 +162,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                         <>
                             <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
                             <Button type="button" skin={"gray"} onClick={resetAll}>취소</Button>
-                        </>:<Button type="button" className={styles.submitBtn} onClick={()=> console.log("modify")} skin={"green"}>수정</Button>}
+                        </>:<Button type="button" className={styles.submitBtn} onClick={goEdit} skin={"green"}>수정</Button>}
             </div>
         </form>
         </>

@@ -3,52 +3,52 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions, User, Session } from "next-auth";
 import { cookies } from "next/headers";
 
-const beUrl = process.env.NEXT_BACKEND_URL+"/api";
+const beUrl = process.env.NEXT_PUBLIC_BE_URL;
 // const feUrl = process.env.NEXT_PUBLIC_FE_URL;
 
-// async function refreshAccessToken(token: any) {
-//     try {
-//         // Call your API to refresh the token
-//         const response = await fetch(`${beUrl}/auth/access-token`, {
-//             method: "POST",
-//             body: JSON.stringify({ refreshToken: token.refreshToken }),
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//         });
+async function refreshAccessToken(token: any) {
+    try {
+        // Call your API to refresh the token
+        const response = await fetch(`${beUrl}/auth/access-token`, {
+            method: "POST",
+            body: JSON.stringify({ refreshToken: token.refreshToken }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-//         const refreshedTokens = await response.json();
+        const refreshedTokens = await response.json();
 
-//         if (!response.ok) {
-//             throw refreshedTokens;
-//         }
+        if (!response.ok) {
+            throw refreshedTokens;
+        }
 
 
-//         cookies().set("accessToken", token.accessToken , {
-//             maxAge: 60 * 10, // 10 minutes
-//             path: "/",
-//             // httpOnly: true,
-//         });
-//         cookies().set("refreshToken", token.refreshToken , {
-//         maxAge: 30 * 24 * 60 * 60, // 30 days
-//         path: "/",
-//         // httpOnly: true,
-//         });
-//         console.log("set cookie complete");
-//         return {
-//             ...token,
-//             accessToken: refreshedTokens.data.accessToken,
-//             accessTokenExpires: Math.floor(Date.now() / 1000) + 60 * 10, // 10 minutes
-//             refreshToken: refreshedTokens.data.refreshToken, // if the refresh token was also refreshed
-//         };
-//     } catch (error) {
-//         console.error("Error refreshing access token: ", error);
-//         return {
-//             ...token,
-//             error: "Error refreshing access token",
-//         };
-//     }
-// }
+        cookies().set("accessToken", token.accessToken , {
+            maxAge: 60 * 10, // 10 minutes
+            path: "/",
+            // httpOnly: true,
+        });
+        cookies().set("refreshToken", token.refreshToken , {
+        maxAge: 30 * 24 * 60 * 60, // 30 days
+        path: "/",
+        // httpOnly: true,
+        });
+        console.log("set cookie complete");
+        return {
+            ...token,
+            accessToken: refreshedTokens.data.accessToken,
+            accessTokenExpires: Math.floor(Date.now() / 1000) + 60 * 10, // 10 minutes
+            refreshToken: refreshedTokens.data.refreshToken, // if the refresh token was also refreshed
+        };
+    } catch (error) {
+        console.error("Error refreshing access token: ", error);
+        return {
+            ...token,
+            error: "Error refreshing access token",
+        };
+    }
+}
 
 const authOptions: NextAuthOptions = {
     providers: [
@@ -57,8 +57,6 @@ const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
-                ipAddr: { label: "ipAddress", type: "text" },
-                client: { label: "clientInfo", type: "text" },
             },
             authorize: async (credentials) => {
                 try {
@@ -142,13 +140,13 @@ const authOptions: NextAuthOptions = {
             }
             // Check if the token needs to be refreshed
             // For example, if it's within 1 hour of expiring
-            // const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
-            // if (token.accessTokenExpires < shouldRefreshTime) {
-            //     // Refresh token logic
-            //     console.log("Refreshing token...");
-            //     const refreshedToken = await refreshAccessToken(token);
-            //     return refreshedToken;
-            // }
+            const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
+            if (token.accessTokenExpires < shouldRefreshTime) {
+                // Refresh token logic
+                console.log("Refreshing token...");
+                const refreshedToken = await refreshAccessToken(token);
+                return refreshedToken;
+            }
             return token;
         },
         async signIn({ user }) {

@@ -27,7 +27,11 @@ const Address = () => {
         })
     }
 
-    const onSearch = async() => {
+    const onSearch = async () => {
+        if (keyword === '') {
+            Toast("error", '검색어를 입력해주세요.');
+            return false;
+        }
         const url = `https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=10&keyword=${keyword}&confmKey=${process.env.NEXT_PUBLIC_JUSO_API_KEY}&resultType=json`;
         const response = await fetch(url);
         const { results} = await response.json();
