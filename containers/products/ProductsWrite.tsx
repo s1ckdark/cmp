@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Styles from './ProductsWrite.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -7,6 +7,9 @@ import { apiBe } from '@/services';
 import { getKRCurrrentTime } from '@/utils/date';
 import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/Toast';
+import { IconSearch } from '@/public/svgs';
+import { useRecoilState } from 'recoil';
+import { modalAtom } from '@/states';
 
 interface FormValues {
     prodType: string;
@@ -30,7 +33,8 @@ interface IForm {
 }
 
 const ProductsWrite = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>();
+    const [modal, setModal] = useRecoilState(modalAtom);
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>();
     const router = useRouter();
     
     const onSubmit: SubmitHandler<FormValues> = async(data) => {
@@ -56,6 +60,24 @@ const ProductsWrite = () => {
         router.push('/products/product/list/1');
     }
     
+    const openModal = (type: string) => {
+        setModal({ isOpen: true, type: type, data: null });
+    }
+    const prodTypeValue = watch('prodType');
+    useEffect(() => {
+        if (modal.type === 'prodType' && modal.data !== null) {
+            const { prodType, prodDetailType, prodDetailTypeStd } = modal.data;
+            setValue('prodType', prodType);
+            setValue('prodDetailType', prodDetailType);
+            setValue('prodDetailTypeStd', prodDetailTypeStd);
+        }
+    }, [modal])
+
+    useEffect(() => {
+        console.log("prodType change", prodTypeValue);
+        setModal({...modal, data: {prodType: prodTypeValue}})
+    },[prodTypeValue])
+
     return (
         <>
         <Breadcrumb />
@@ -82,7 +104,8 @@ const ProductsWrite = () => {
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
                     {...register("prodDetailType", {
                         required: "해당 필드는 필수입니다."
-                    })} />
+                    })} onClick={()=>openModal("prodType")}/>
+                    <IconSearch />
                     {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>

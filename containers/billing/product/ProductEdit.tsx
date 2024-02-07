@@ -163,6 +163,13 @@ const ProductEdit = () => {
             setAddField({ ...addField, [e.target.name]: e.target.value })
         }
     }
+    const handleChangeMSP = (e: any) => {
+        if (e.target.name === 'discountRate') {
+            setAddField({ ...addField, [e.target.name]: Number(e.target.value), estimateuseAmount: (Number(addField.stdPrice) * Number(addField.qty)) * (100 -  Number(e.target.value)) / 100 });
+        } else if(e.target.name === 'qty'){
+            setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: (Number(addField.stdPrice) * e.target.value) * (100 - (Number(addField.discountRate)) / 100) });
+        } 
+    }
 
     const writeProd = async (type: string) => {
         if(addField.expPrice === '' || addField.discountRate === '') Toast("error", '값을 입력하세요.'); 
@@ -230,8 +237,13 @@ const ProductEdit = () => {
     const addprodCancel = () => {
         setAddField({});
     }
-    const deleteProd = async (billingId: string, prodId: string, prodType: string) => {
-        const response = await apiBe.delete(`/product/gdbilling/product`, { data: { billingId, prodId, prodType } });
+    const deleteProd = async(billingId: string, prodId: string, prodType:string) => {
+        const data:any = {
+            billingId: billingId,
+            prodId: prodId,
+            prodType: prodType
+        }
+        const response = await apiBe.delete(`/product/gdbilling/product`, { data });
         if (response.status === 200) {
             Toast("success", '삭제되었습니다.',()=>reload());
 
@@ -262,38 +274,39 @@ const ProductEdit = () => {
 
 
     //billing id = objectId
-    const RenderProdSw = ({ data, view }:any) => {
+    const RenderProdSw = ({ data, view }: any) => {
         return data && data.map((item: ISW, idx: number) => (
-            <tr key={item.prodId || idx}>
+            <tr key={item.prodId}>
                  
-                {/* <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId, "SW")}>&times;</span></td> */}
-                <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td>
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
-                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"SW")}>&times;</span></td>
+                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteSWProd(form.id, item.prodId)} /></td> */}
+                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChangeMSP(e)} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChangeMSP(e)} readOnly={view} required/></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChangeMSP(e)} readOnly={view} required/></td>
+                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
             </tr>
         ))
     }
 
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
-            <tr key={item.prodId || idx}>
-                  <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td>
+            <tr key={item.prodId}>
+                 <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"MSP")}>&times;</span></td>
+                  {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteMSPProd(form.id, item.prodId)} /></td> */}
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
                 <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
+                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
                 <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
@@ -556,9 +569,9 @@ const ProductEdit = () => {
                                         <th>상품명</th>
                                         <th>상품분류</th>
                                         <th>상품상세분류</th>
-                                        <th>수량</th>
                                         <th>정식단가</th>
                                         <th>할인율</th>
+                                        <th>수량</th>
                                         <th>납부예상금액</th>
                                         <th>서비스 시작일시</th>
                                         <th>서비스 종료일시</th>
@@ -666,9 +679,9 @@ const ProductEdit = () => {
                                             <th>상품아이디</th>
                                             <th>상품명</th>
                                             <th>상품상세분류</th>
-                                            <th>수량</th>
                                             <th>정식단가</th>
                                             <th>할인율</th>
+                                            <th>수량</th>
                                             <th>납부예상금액</th>
                                             <th>서비스 시작일시</th>
                                             <th>서비스 종료일시</th>
@@ -678,16 +691,16 @@ const ProductEdit = () => {
                                     <tbody>
                                         <tr>
                                             <td><span>×</span></td>
-                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChange(e)} required/></td>
-                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChange(e)} required/></td>
+                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChangeMSP(e)} required/></td>
+                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChangeMSP(e)} required/></td>
                                             <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} /></td>
-                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChangeMSP(e)} /></td>
                                         </tr>
                                     </tbody>
                                 </table>

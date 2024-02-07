@@ -33,13 +33,15 @@ const Customer = () => {
             Toast("error", '검색어를 입력해주세요.');
             return false;
         }
-        const response = await apiBe(url, { params: { memberName: keyword } });
-        if (response.status === 200 || response.status === 201) {
-            const { data }= response;
-            if (data.length === 0) {
-                Toast("error", '회사명이 존재하지 않습니다.');
-            } else {
-                setData(data);
+        if (keyword.length > 2) {
+            const response = await apiBe(url, { params: { memberName: keyword } });
+            if (response.status === 200 || response.status === 201) {
+                const { data } = response;
+                if (data.length === 0) {
+                    Toast("error", '회사명이 존재하지 않습니다.');
+                } else {
+                    setData(data);
+                }
             }
         }
     }

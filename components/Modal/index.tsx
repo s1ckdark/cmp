@@ -8,6 +8,8 @@ import { modalProps } from '@/types';
 import Customer from '@/components/Modal/Customer';
 import Address from '@/components/Modal/Address';
 import User from '@/components/Modal/User';
+import ProdType from '@/components/Modal/ProductType';
+
 const Modal = () => {
     const [modal, setModal] = useRecoilState<modalProps>(modalAtom);
     const { isOpen, type } = modal;
@@ -25,18 +27,28 @@ const Modal = () => {
         switch (type) {
             case "address":
                 return "주소지 정보";
+                break;
             case "sales":
                 return "담당 영업 정보";
+                break;
             case "contact":
                 return "고객사 담당자 정보";
+                break;
             case "member":
                 return "회사 정보";
+                break;
             case "user":
                 return "사용자 정보";
+                break;
             case "customer":
                 return "고객사 정보";
+                break;
+            case "prodType":
+                return "상품분류 정보";
+                break;
             default:
                 return "담당자";
+                break;
         }
     }
 
@@ -44,10 +56,16 @@ const Modal = () => {
         switch (type) {
             case "customer":
                 return <Customer />;
+                break;
             case "address":
                 return <Address />;
+                break;
             case "user":
                 return <User />;
+                break;
+            case "prodType":
+                return <ProdType />;
+                break;
             default:
                 return;
         }

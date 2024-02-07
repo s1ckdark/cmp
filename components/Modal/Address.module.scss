@@ -10,3 +10,46 @@
         }
     }
 }
+
+.addressList {
+    height: 350px;
+    overflow-y:scroll;
+    table {
+        width: 100%;
+        thead {
+            background-color: #F5F6F7;
+            border : 1px solid #DEE1E7;
+            th {
+                padding: 10px 15px;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
+                color: #2E322F;
+                text-align: center;
+                &:nth-child(1) {
+                    width:30%;
+                }
+                &:nth-child(2) {
+                    width: 70%;
+
+                }
+            }
+        }
+        tbody {
+            tr {
+                border : 1px solid #DEE1E7;
+                &:hover {
+                    background-color: #F5F6F7;
+                }
+        td {
+            padding: 10px 15px;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            color: #2E322F;
+            text-align: center;
+        }
+    }
+}
+}
+}

@@ -224,7 +224,7 @@ const ProductWrite = () => {
         setAddField({});
     }
     const deleteProd = async (billingId: string, prodId: string, prodType: string) => {
-
+        console.log(billingId, prodId, prodType);
         const response = await apiBe.delete(`/product/gdbilling/product`, { data: { billingId, prodId, prodType } });
         if (response.status === 200) {
             Toast("success", '삭제되었습니다.', ()=> reload());

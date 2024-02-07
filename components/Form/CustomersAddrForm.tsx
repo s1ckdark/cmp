@@ -22,6 +22,7 @@ interface ICustomersAddrForm {
 
 
 const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) => {
+    console.log(data,mode);
     const [step, setStep] = useRecoilState(customerStep);
     // const [ addrData, setAddrData ] = useState<IaddrData | null>(data); // addrData[0
     const [modal, setModal] = useRecoilState(modalAtom);
@@ -39,9 +40,8 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
     });
     const router = useRouter();
     const onSubmitAddr = async (data: any) => {
-        console.log(mode);
-        const url = mode === 'register' ? '/customer/' + memberNo + '/address' : '/customer/' + memberNo + '/address/' + id;
-        const response = mode === 'register' ? await apiBe.put(url, data):await apiBe.post(url, data);
+        const url = (mode === 'edit' && id === '') || mode ==='reigster' ? '/customer/' + memberNo + '/address' : '/customer/' + memberNo + '/address/' + id;
+        const response = (mode === 'edit' && id === '') || mode ==='reigster' ? await apiBe.put(url, data):await apiBe.post(url, data);
         if (response.status === 200 || response.status === 201) {   
             if (mode === 'register') { Toast("success", '저장이 완료되었습니다.', () => setStep(2)) } else { Toast("success", '수정이 완료되었습니다.',()=>router.push('/customers/list/1')) }
         } else {
@@ -132,7 +132,7 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
                         {/* {errorsAddr.addrDetail && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>} */}
                     </div>
                 </div>
-                <Button type="submit" skin={"green"}>저장</Button>
+                {mode !== 'view' && <Button type="submit" skin={"green"}>저장</Button>}
             </form>
         </>
     )

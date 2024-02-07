@@ -49,11 +49,23 @@ const Address = () => {
                 <Button onClick={onSearch} skin={"green"}>검색</Button>
             </div>
             <div className={styles.addressList}>
-                {data.length > 0 && data.map((item: any) => (
-                    <div className={styles.addressItem} key={item.memberNo} onClick={()=> pickup(item.zipNo, item.roadAddrPart1)}>
-                        <div className={styles.addressRow} data-zipcode={item.zipNo} data-addr={item.roadAddrPart1} data-addrDetail={item.jibunAddr}>{item.roadAddrPart1}</div>
-                    </div>
-                ))}
+                <table>
+                    <thead>
+                    <tr>
+                        <th>우편번호</th>
+                        <th>도로명주소</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data.length > 0 && data.map((item: any) => (
+                            <tr className={styles.addressItem} key={item.memberNo} onClick={() => pickup(item.zipNo, item.roadAddrPart1)} data-zipcode={item.zipNo} data-addr={item.roadAddrPart1} data-addrDetail={item.jibunAddr}>
+                                <td className={styles.zipcode} >{item.zipNo}</td>
+                                <td className={styles.addressRow} >{item.roadAddrPart1}</td>
+                            </tr>
+                        ))}
+
+                    </tbody>
+                </table>
             </div>
         </div>
     )

@@ -161,7 +161,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                         <>
                             <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
                             <Button type="button" skin={"gray"} onClick={goList}>돌아가기</Button>
-                        </>:<Button type="button" className={styles.submitBtn} onClick={goEdit} skin={"green"}>수정</Button>}
+                        </> : null}
             </div>
         </form>
         </>

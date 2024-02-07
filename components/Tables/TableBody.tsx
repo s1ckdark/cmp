@@ -60,8 +60,8 @@ export const TableBody = ({ rowType, data }: any) => {
             "memberName",
             "regionType",
             "businessRegNo",
-            "customerContacts",
-            "salesContacts",
+            "sales.name",
+            "regName",
             "regDt"
         ],
         user: [
