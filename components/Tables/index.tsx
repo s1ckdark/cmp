@@ -95,13 +95,15 @@ export const Tables = ({ rowType }: TablesProps) => {
             const { params } = data.mode === "search" ? data : endpoint[rowType];
             console.log(data.mode, params);
             const response = await apiBe.get(endpoint[rowType]['url'], { params });
+            
             if (response.status === 200 || response.status === 201) {
                 setData({
                     ...data,
-                    data: response.data[endpoint[rowType]['key']],
+                    data: endpoint[rowType]['key'] !== undefined ? response.data[endpoint[rowType]['key']]:response.data,
                     totalPages: response.data.totalPages,
                     currentPage: pageNumber
                 });
+        
                 setMounted(true);
             } else {
                 Toast("error", "데이터를 불러오는데 실패하였습니다.");
@@ -161,6 +163,7 @@ export const Tables = ({ rowType }: TablesProps) => {
     };
     
     if (!data) return <Loading />;
+
     return mounted && (
         <>
             <div className={styles.tableContainer}>
