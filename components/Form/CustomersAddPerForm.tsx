@@ -141,15 +141,15 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                     </div>
                     {type === "custContact" &&
                         <div className={`${styles.inputGroup}`}>
-                            <label htmlFor="phoneNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo", { required: true })} defaultValue={phoneNo} placeholder="010-1234-5678 양식으로 입력해주세요"/>
-                            {errors.phoneNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                            <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
+                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("mobileNo", { required: true })} defaultValue={mobileNo} placeholder="010-1234-5678 양식으로 입력해주세요"/>
+                            {errors.mobileNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                      {type === "sales" &&
                         <div className={`${styles.inputGroup}`}>
-                            <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo", { required: true })} defaultValue={mobileNo} placeholder="010-1234-5678 양식으로 입력해주세요" />
-                            {errors.mobileNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                            <label htmlFor="phoneNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
+                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("phoneNo", { required: true })} defaultValue={phoneNo} placeholder="010-1234-5678 양식으로 입력해주세요" />
+                            {errors.phoneNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                     <div className={`${styles.inputGroup}`}>
                         <label htmlFor="comment" className="block text-sm font-medium text-gray-900 dark:text-black">코멘트:</label>

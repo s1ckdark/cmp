@@ -224,8 +224,8 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     const passwordChange = async() => {
         const newPassword:any = (document.querySelector('.modalPassword') as HTMLInputElement)?.value;
         const confirmPassword: any = (document.querySelector('.modalComfirmPassword') as HTMLInputElement)?.value;
-        if (newPassword && confirmPassword) {
-            if (newPassword.value === confirmPassword.value) {
+        if(newPassword.length >= 6 && confirmPassword.length >= 6) {
+            if (newPassword === confirmPassword) {
                 const data = {
                     newPassword: newPassword,
                     newPasswordConfirm: confirmPassword
@@ -241,6 +241,8 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             } else {
                 Toast("warning", '비밀번호가 일치하지 않습니다.',()=> pwCloseModal());
             }
+        } else {
+            Toast("warning", '비밀번호는 6자리 이상으로 입력해주세요.')
         }
     }
 
@@ -369,10 +371,10 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 <Controller
                     name="username"
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ required: true, minLength: 2}}
                     render={({ field }) => <input readOnly={isDisabled} type="text" id="username" {...field} defaultValue={userFullName} />}
                 />
-                {errors.username && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
+                {errors.username && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다. 2자 이상으로 등록해주세요</span>}
             </div>
             <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div className={`${styles.inputGroup}`}>
@@ -450,19 +452,22 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 type === 'edit' ? <div className="flex items-end">
                     <div className={styles.password}>
                     <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호<span className={styles.required}></span></label>
-                    <Controller
-                    rules={{ required: true }}
+                    {/* <Controller
                         name="password"
                         control={control}
                         render={({ field }) => <input readOnly={true} type="password" id="password" {...field} />}
-                    />
+                    /> */}
+                                 <Button type='button' onClick={() => passwordModal()}
+                                    className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
+                                    skin='gray'>비밀번호 수정
+                                </Button>
                 </div>
-                            <div className={`${styles.btnArea} ${styles.btnPasswordCheck}`}>
+                            {/* <div className={`${styles.btnArea} ${styles.btnPasswordCheck}`}>
                                 <Button type='button' onClick={() => passwordModal()}
                                     className='mx-auto px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'
                                     skin='gray'>비밀번호 수정
                                 </Button>
-                            </div>
+                            </div> */}
                         </div> : <></>
                         
             }

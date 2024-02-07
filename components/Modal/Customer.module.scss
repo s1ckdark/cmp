@@ -11,6 +11,8 @@
     }
     .customerList {
         margin: 30px auto;
+        height: 300px;
+        overflow-y: scroll;
         table {
             width: 100%;
             border-collapse: collapse;

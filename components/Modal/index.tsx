@@ -2,28 +2,41 @@
 import styles from './index.module.scss';
 import Button from '../Button';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { modalAtom } from '@/states/'; 
 import { modalProps } from '@/types';
 import Customer from '@/components/Modal/Customer';
 import Address from '@/components/Modal/Address';
 import User from '@/components/Modal/User';
 import ProdType from '@/components/Modal/ProductType';
+import Pagination from '@/components/Pagination';
+import { modalListAtom } from '@/states/modal';
+import { apiBe } from '@/services';
+import { Toast } from '@/components/Toast';
+import { set } from 'lodash';
 
 const Modal = () => {
     const [modal, setModal] = useRecoilState<modalProps>(modalAtom);
+    const [modalList, setModalList] = useRecoilState(modalListAtom);
     const { isOpen, type } = modal;
-
+    const { modalType, keyword, data, totalPages, currentPage } = modalList;
+    
     const onClose = () => {
         setModal({
             ...modal,
             isOpen: false,
             type: ''
         })
+        setModalList({
+            modalType:'',
+            keyword: '',
+            data: [],
+            totalPages: 0,
+            currentPage: 1
+        })
     }
 
     const onTitle = (type: string) => {
-        console.log(type);
         switch (type) {
             case "address":
                 return "주소지 정보";
@@ -71,7 +84,9 @@ const Modal = () => {
         }
     }
 
-
+    const onPageChange = (page: number) => {
+        setModalList({ ...modalList, currentPage: page });
+    }
     return (
         <>
         { isOpen && (

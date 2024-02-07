@@ -16,6 +16,7 @@ import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
 import { useRouter, usePathname } from 'next/navigation';
 import Confirm from '@/components/Confirm';
+import Pagination from  '@/components/Pagination';
 interface form {
     "memberNo": string;
     "memberName": string;
@@ -66,7 +67,13 @@ interface IMSP {
     "comment": string;
 }
 
-
+interface IProdList {
+    type: string;
+    prodName: string;
+    data: any[];
+    totalPages: number;
+    currentPage: number;
+}
 const ProductEdit = () => {
     const [form, setForm] = useState<any>({});
     const [data, setData ] = useState<any>({});
@@ -75,12 +82,12 @@ const ProductEdit = () => {
     const [prodMsp, setProdMsp] = useState<IMSP[]>([]);
     const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
     const { memberName, memberType, target_start_date, target_end_date, target_month } = form;
- 
+    const [ modalPageNumber, setModalPageNumber ] = useState<number>(1);
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
-    const [prodList, setProdList] = useState<any>([]);
+    const [prodList, setProdList] = useState<any>({type:'', prodName:'', data: [], totalPages: 0, currentPage:1})
     const pathname = usePathname();
     const router = useRouter();
     const [ modalType, setModalType ] = useState<string>('');
@@ -156,18 +163,23 @@ const ProductEdit = () => {
         }
     }
     const handleChange = (e: any) => {
+        let tmp;
         if (e.target.name === 'discountRate') {
-            let tmp = (100 - Number(e.target.value)) * addField.expPrice / 100;
+            tmp = (100 - Number(e.target.value)) * addField.expPrice / 100;
             setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: tmp });
         } else {
             setAddField({ ...addField, [e.target.name]: e.target.value })
         }
     }
     const handleChangeMSP = (e: any) => {
+        let tmp;
         if (e.target.name === 'discountRate') {
-            setAddField({ ...addField, [e.target.name]: Number(e.target.value), estimateuseAmount: (Number(addField.stdPrice) * Number(addField.qty)) * (100 -  Number(e.target.value)) / 100 });
-        } else if(e.target.name === 'qty'){
-            setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: (Number(addField.stdPrice) * e.target.value) * (100 - (Number(addField.discountRate)) / 100) });
+            console.log(Number(addField.stdPrice), Number(addField.qty), (Number(addField.stdPrice) * Number(addField.qty)));
+            tmp = (100 - Number(e.target.value)) / 100 * addField.stdPrice * addField.qty;
+            setAddField({ ...addField, [e.target.name]: Number(e.target.value), estimateuseAmount: tmp});
+        } else if (e.target.name === 'qty') {
+            tmp = (100 - addField.discountRate) / 100 * addField.stdPrice * Number(e.target.value)
+            setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: tmp });
         } 
     }
 
@@ -208,7 +220,7 @@ const ProductEdit = () => {
     }
 
     const addProd = (idx:number) => {
-        let tmp = prodList[idx];
+        let tmp = prodList['data'][idx];
         console.log(tmp);
         const fieldValue = {
             billingId: form.id,
@@ -230,7 +242,7 @@ const ProductEdit = () => {
             comment:''
         }
         console.log(fieldValue);
-        setProdList([]);
+        setProdList({type:'', prodName:'', data: [], totalPages: 0, currentPage:1});
         setAddField(fieldValue);
     };
 
@@ -250,12 +262,12 @@ const ProductEdit = () => {
         }
     }
 
-    const productSearch = async (prodType: any, prodName: any) => {
-        if (prodName === '') {
-            Toast("error", '상품명을 입력하세요.');
-            return;
-        }
-        const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
+    const productSearch = async (prodType: any, prodName: any, pageNumber:number) => {
+        // if (prodName === '') {
+        //     Toast("error", '상품명을 입력하세요.');
+        //     return;
+        // }
+        const url = `/product/product?prodType=${prodType}&prodName=${prodName}&page=${pageNumber}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
         const response = await apiBe(url);
@@ -263,15 +275,19 @@ const ProductEdit = () => {
         if (response.status === 200 || response.status === 201) {
                 const result = response.data;
                 let html = '';
-                let { content } = result;
+            let { content } = result;
                 if (content.length === 0) {
                     Toast("error", '상품명이 존재하지 않습니다.');
                 } else {
-                    setProdList(content);
+                    setProdList({type:prodType, prodName:prodName, data: content, totalPages: result.totalPages, currentPage:1});
                 }
         }
     }
 
+    const onModalPageChange = (pageNumber: number) => {
+        setModalPageNumber(pageNumber);
+        productSearch(prodList.type, prodList.prodName, pageNumber);
+    }
 
     //billing id = objectId
     const RenderProdSw = ({ data, view }: any) => {
@@ -280,17 +296,17 @@ const ProductEdit = () => {
                  
                 <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"SW")}>&times;</span></td>
                 {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteSWProd(form.id, item.prodId)} /></td> */}
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChangeMSP(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChangeMSP(e)} readOnly={view} required/></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChangeMSP(e)} readOnly={view} required/></td>
-                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChangeMSP(e)} readOnly={view}/></td>
+                <td><input type="text" name="prodId" value={item.prodId} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} readOnly={view}/></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} readOnly={view}/></td>
+                <td><input type="number" name="expPrice" value={item.expPrice} readOnly={view} required/></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} readOnly={view} required/></td>
+                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} readOnly={view}/></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} readOnly={view}/></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} readOnly={view}/></td>
+                <td><input type="text" name="comment" value={item.comment} readOnly={view}/></td>
             </tr>
         ))
     }
@@ -300,17 +316,17 @@ const ProductEdit = () => {
             <tr key={item.prodId}>
                  <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"MSP")}>&times;</span></td>
                   {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteMSPProd(form.id, item.prodId)} /></td> */}
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
-                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} required/></td>
+                <td><input type="text" name="prodId" value={item.prodId} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} readOnly={view} /></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} readOnly={view} /></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} readOnly={view} required/></td>
+                <td><input type="number" name="qty" value={item.qty} readOnly={view} required/></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} readOnly={view} /></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} readOnly={view} /></td>
+                <td><input type="text" name="comment" value={item.comment} readOnly={view} /></td>
             </tr>
         ))
 }
@@ -365,10 +381,10 @@ const ProductEdit = () => {
             if (searchBtn) {
                 switch (type) {
                     case "sw":
-                        productSearch('SW', searchInput.value);
+                        productSearch('SW', searchInput.value, 1);
                         break;
                     case "msp":
-                        productSearch('MSP', searchInput.value);
+                        productSearch('MSP', searchInput.value, 1);
                         break;
                     case "member":
                         memberSearch(searchInput.value);
@@ -524,7 +540,7 @@ const ProductEdit = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>취소</Button>
+                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>돌아가기</Button>
                     </div>
                 </form>    
                 {regProd &&
@@ -603,7 +619,7 @@ const ProductEdit = () => {
                             </div>
                         </div>
                     </div>
-                    {prodList.length > 0 && <div id="modalResult" className={Styles.modalResult}>
+                    {prodList['data'] && prodList['data'].length > 0 && <><div id="modalResult" className={Styles.modalResult}>
                         <table className={Styles.prodList}>
                             <thead>
                                 <tr>
@@ -613,7 +629,7 @@ const ProductEdit = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {prodList && prodList.map((item: any, idx:number) => {
+                                {prodList['data'] && prodList['data'].map((item: any, idx:number) => {
                                     return (
                                         <tr key={item.id} onClick={() => addProd(idx)}>
                                             <td>{item.prodName}</td>
@@ -625,7 +641,15 @@ const ProductEdit = () => {
                                 )}
                             </tbody>
                         </table>
-                    </div>}
+                    </div>
+                    {prodList.totalPages > 1 && (
+                    <Pagination
+                        count={prodList.totalPages}
+                        page={prodList.currentPage}
+                        onPageChange={onModalPageChange}
+                    />
+                )}
+                    </>}
                     <div id="modalBody" className={Styles.modalBody}>
                         {addField && addField.prodId && modalType === 'sw' && <>
                             <div className={Styles.addProd}>
@@ -649,22 +673,22 @@ const ProductEdit = () => {
                                     <tbody>
                                         <tr>
                                             <td><span>×</span></td>
-                                            <td><input type="text" name="prodId" onChange={(e)=>handleChange(e)} value={addField.prodId} /></td>
-                                            <td><input type="text" name="prodName" onChange={(e)=>handleChange(e)} value={addField.prodName} /></td>
-                                            <td><input type="text" name="prodDetailType" onChange={(e)=>handleChange(e)} value={addField.prodDetailType} /></td>
-                                            <td><input type="text" name="prodDetailTypeStd" onChange={(e)=>handleChange(e)} value={addField.prodDetailTypeStd} /></td>
-                                            <td><input type="number" name="stdPrice" onChange={(e)=>handleChange(e)} value={addField.stdPrice} /></td>
+                                            <td><input type="text" name="prodId" onChange={(e)=>handleChange(e)} value={addField.prodId} readOnly={true} /></td>
+                                            <td><input type="text" name="prodName" onChange={(e)=>handleChange(e)} value={addField.prodName} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailType" onChange={(e)=>handleChange(e)} value={addField.prodDetailType} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailTypeStd" onChange={(e)=>handleChange(e)} value={addField.prodDetailTypeStd} readOnly={true} /></td>
+                                            <td><input type="number" name="stdPrice" onChange={(e)=>handleChange(e)} value={addField.stdPrice} readOnly={true} /></td>
                                             <td><input type="number" name="expPrice" onChange={(e)=>handleChange(e)} value={addField.expPrice} /></td>
                                             <td><input type="number" name="discountRate" onChange={(e)=>handleChange(e)} value={addField.discountRate} /></td>
-                                            <td><input type="number" name="estimateuseAmount" onChange={(e)=>handleChange(e)} value={addField.estimateuseAmount} /></td>
-                                            <td><input type="text" name="service_start_date" onChange={(e)=>handleChange(e)} value={addField.service_start_date} /></td>
-                                            <td><input type="text" name="service_end_date" onChange={(e)=>handleChange(e)} value={addField.service_end_date} /></td>
+                                            <td><input type="number" name="estimateuseAmount" onChange={(e)=>handleChange(e)} value={addField.estimateuseAmount} readOnly={true} /></td>
+                                            <td><input type="text" name="service_start_date" onChange={(e)=>handleChange(e)} value={addField.service_start_date} readOnly={true}  /></td>
+                                            <td><input type="text" name="service_end_date" onChange={(e)=>handleChange(e)} value={addField.service_end_date} readOnly={true} /></td>
                                             <td><input type="text" name="comment" onChange={(e)=>handleChange(e)} value={addField.comment} /></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                                          <div className={Styles.btnArea}>
+                            <div className={Styles.btnArea}>
                                 <Button className={`${Styles.btn} ${Styles.submitBtn}`} skin={"green"} onClick={()=> writeProd('sw')}>저장</Button>
                                 <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={() => addprodCancel()}>취소</Button>
                             </div>
@@ -691,15 +715,15 @@ const ProductEdit = () => {
                                     <tbody>
                                         <tr>
                                             <td><span>×</span></td>
-                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChangeMSP(e)} /></td>
-                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChangeMSP(e)} /></td>
-                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChangeMSP(e)} /></td>
-                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChangeMSP(e)} readOnly={true}/></td>
+                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChangeMSP(e)} readOnly={true}/></td>
                                             <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChangeMSP(e)} required/></td>
                                             <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChangeMSP(e)} required/></td>
-                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} /></td>
-                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChangeMSP(e)} /></td>
-                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChangeMSP(e)} /></td>
+                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} readOnly={true} /></td>
+                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
                                             <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChangeMSP(e)} /></td>
                                         </tr>
                                     </tbody>

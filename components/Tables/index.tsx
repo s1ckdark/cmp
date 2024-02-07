@@ -27,13 +27,14 @@ export const Tables = ({ rowType }: TablesProps) => {
     useResetRecoilState(modalAtom);
     useRecoilState(monthAtom);
     const [data, setData] = useRecoilState(dataListAtom);
-    const [ mounted, setMounted ] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const targetMonth = useRecoilValue(monthAtom) || null;
     const router = useRouter();
     const path = usePathname();
     
-    useEffect(() => {
-        const { pageNumber }: any = pathSpliter(path);
+
+    useEffect(() =>{ 
+        const pageNumber: any = data.mode === 'search' ? data.currentPage : pathSpliter(path).pageNumber;
         const endpoint:any = {
             invoice: {
                 url: "/invoice/search",
@@ -91,13 +92,13 @@ export const Tables = ({ rowType }: TablesProps) => {
         };
 
         const fetching = async () => {
-            const response = await apiBe.get(endpoint[rowType]['url'], {
-                params: endpoint[rowType]['params']
-            });
-            console.log(response);
+            const { params } = data.mode === "search" ? data : endpoint[rowType];
+            console.log(data.mode, params);
+            const response = await apiBe.get(endpoint[rowType]['url'], { params });
             if (response.status === 200 || response.status === 201) {
                 setData({
-                    data: endpoint[rowType]['key'] !== undefined ? response.data[endpoint[rowType]['key']]:response.data,
+                    ...data,
+                    data: response.data[endpoint[rowType]['key']],
                     totalPages: response.data.totalPages,
                     currentPage: pageNumber
                 });
@@ -106,14 +107,24 @@ export const Tables = ({ rowType }: TablesProps) => {
                 Toast("error", "데이터를 불러오는데 실패하였습니다.");
             }
         };
-        fetching();
-    }, [path, rowType, targetMonth]);
+        fetching()
+    }, [path, rowType, targetMonth, data.currentPage, data.mode]);
 
     const onPageChange = (newPage: number) => {
-        router.push(`./${newPage}`);
+        if (data.mode === "search") {
+            setData({
+                ...data,
+                params: {
+                    ...data.params,
+                    page: newPage
+                },
+                currentPage: newPage
+            })
+        } else {
+            router.push(`./${newPage}`)
+        }
+        console.log(data)
     };
-    
-
 
     const pageUrl:any = {
         invoice: "/billing/invoice",

@@ -4,14 +4,12 @@ import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import { dataListAtom } from '@/states/data';
 import { monthAtom } from '@/states';
 import { IconSearch } from '@/public/svgs';
-import { Toast } from '../Toast';
+import { Toast } from '@/components/Toast';
 import { apiBe } from '@/services';
-import { pathSpliter } from '@/utils/data';
-import { url } from 'inspector';
-import page from '@/app/page';
 import lodash, { set } from 'lodash';
 import Button from '@/components/Button';
 import { useRouter, usePathname } from 'next/navigation';
+import page from '@/app/page';
 
 
 export interface SearchBarProps {
@@ -37,7 +35,6 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
   const [ data, setData ] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
-  const pageNumber : any = lodash.last(pathname.split('/'));
   const router = useRouter();
   const [reset, setReset] = useState<boolean>(false);
   const matching: any = {
@@ -79,21 +76,25 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
         key:'content'
       },
       billingProduct: {
-        url:  `/product/gdbilling`
+        url: `/product/gdbilling`,
+        key: 'content'
       },
       user: {
-        url: `/user`
+        url: `/user`,
+        key: 'content'
       },
       customers: {
-        url: `/customer`
+        url: `/customer`,
+        key: 'content'
       },
       productGd: {
-        url: '/product/product'
+        url: '/product/product',
+        key: 'content'
       }
     }
-    const response = await apiBe.get(endpoint[rowType].url, { params: params});
-    if (response.status === 200 && response.data.content !== null) {
-        setData({ data: response.data.content, totalPages: response.data.totalPages, currentPage: pageNumber});
+    const response = await apiBe.get(endpoint[rowType].url, { params: params });
+    if (response.status === 200 && response.data.totalElements > 0) {
+        setData({ mode:"search", params: params, data:  response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page});
     } else {
         Toast('error', '데이터를 불러오는데 실패하였습니다.');
     }
@@ -104,38 +105,42 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
     if(reset === false && keyword === '') Toast('info', '검색중입니다.');
     const params:any = {
       "invoice": {
-        page: pageNumber || 1,
+        page: 1,
         targetMonth: month,
         memberName: keyword
       },
       "log": {
-        page:  pageNumber || 1,
+        page:  1,
         userName: keyword
       },
       "billingProduct": {
-        page: pageNumber || 1,
+        page: 1,
         memberName: keyword,
-        target_month: month
+        target_month: month,
       },
       "user": {
-        page: pageNumber || 1,
-        username: keyword
+        page: 1,
+        username: keyword,
       },
       "customers": {
-        page: pageNumber || 1,
+        page: 1,
         memberName: keyword
       },
       "productGd": {
-        page: pageNumber || 1,
+        page: 1,
         prodName: keyword
       }
     }
     fetching(rowType, params[rowType]);
   };
 
+  const onPageChange = (page: number) => {
+    setData({ ...data, currentPage: page });
+  }
+  
   const searchReset = () => {
     setReset(true);
-    setKeyword('');
+    setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1 })
   }
   useEffect(() => {
     if (keyword === '' && reset === true) {

@@ -22,7 +22,6 @@ interface ICustomersAddrForm {
 
 
 const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) => {
-    console.log(data,mode);
     const [step, setStep] = useRecoilState(customerStep);
     // const [ addrData, setAddrData ] = useState<IaddrData | null>(data); // addrData[0
     const [modal, setModal] = useRecoilState(modalAtom);
@@ -40,8 +39,8 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
     });
     const router = useRouter();
     const onSubmitAddr = async (data: any) => {
-        const url = (mode === 'edit' && id === '') || mode ==='reigster' ? '/customer/' + memberNo + '/address' : '/customer/' + memberNo + '/address/' + id;
-        const response = (mode === 'edit' && id === '') || mode ==='reigster' ? await apiBe.put(url, data):await apiBe.post(url, data);
+        const url = id === '' ? '/customer/' + memberNo + '/address' : '/customer/' + memberNo + '/address/' + id;
+        const response = mode === 'edit' && id !== '' ? await apiBe.post(url, data) : await apiBe.put(url, data);
         if (response.status === 200 || response.status === 201) {   
             if (mode === 'register') { Toast("success", '저장이 완료되었습니다.', () => setStep(2)) } else { Toast("success", '수정이 완료되었습니다.',()=>router.push('/customers/list/1')) }
         } else {
@@ -117,13 +116,13 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
                 </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호:</label>
-                        <input readOnly={true} type="text" id="zipcode" {...registerAddr("zipcode", {required: true})} defaultValue={zipcode} />
+                        <input readOnly={true} type="text" id="zipcode" {...registerAddr("zipcode", {required: true})} defaultValue={zipcode}  onClick={() => openModal('address')} />
                         {mode === 'edit' || mode === 'register' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('address')} /> : null}
                         {errorsAddr.zipcode && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소:</label>
-                        <input readOnly={true} type="text" id="addr" {...registerAddr("addr", {required: true})} defaultValue={addr} />
+                        <input readOnly={true} type="text" id="addr" {...registerAddr("addr", {required: true})} defaultValue={addr}  onClick={() => openModal('address')} />
                         {errorsAddr.addr && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>

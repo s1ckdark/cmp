@@ -261,6 +261,10 @@
     background-color: rgba(0,0,0,0.5);
     &.open {
         display: block;
+        input[readonly] {
+            background-color: #F7F8FE;
+        
+        }
         .modalContent {
             z-index:999;
             .closeBtn {
@@ -324,19 +328,21 @@
                             }
                         }
                     }
+           
                 }
             }
             &.sw {
-                width: 90vw;
-                height: 500px;
+                width: calc(100vw - 100px);
+                height: 800px;
                 display: block;
                 position: fixed;
+                padding:50px;
+                // width: calc(100vw - 100px);
+                // height: 500px;
                 top: 50%;
                 left: 50%; 
                 transform: translate(-50%, -50%);
                 background-color: #fff;
-                width: calc(100vw - 100px);
-                height: 500px;
                 .modalHeader {
                     height: 100px;
                     display: flex;
@@ -525,26 +531,29 @@
                                 &:nth-child(2) {
                                     width: 150px;
                                 }
+                                &:nth-child(4) {
+                                    width:200px;
+                                }
                                 &:nth-child(5) {
                                     width:100px;
                                 }
                                 &:nth-child(6) {
-                                    width:100px;
+                                    width:80px;
                                 }
                                 &:nth-child(7) {
-                                    width:100px;
+                                    width:80px;
                                 }
                                 &:nth-child(8) {
-                                    width: 100px;
+                                    width: 120px;
                                 }
                                 &:nth-child(9) {
-                                    width: 100px;
+                                    width: 120px;
                                 }
                                 &:nth-child(10) {
                                     width: 120px;
                                 }
                                 &:nth-child(11) {
-                                    width: 120px;
+                                    width: 200px;
                                 }
                             }
                             td {
@@ -552,7 +561,8 @@
                                     width: 100%;
                                     border: 1px solid #DEE1E7;
                                     padding: 15px 10px;
-                                }
+                       
+                                                                }
                                 &:nth-child(1) {
                                     display:none;
                                 }
@@ -573,3 +583,4 @@
         }
     }
 }
+

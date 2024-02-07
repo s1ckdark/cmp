@@ -1,16 +1,18 @@
-import React from 'react';
-import Styles from './ProductsEdit.module.scss';
+import React, { useEffect } from 'react';
+import Styles from './ProductsWrite.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
 import { useForm, SubmitHandler,  } from 'react-hook-form';
 import { apiBe } from '@/services';
 import { getKRCurrrentTime } from '@/utils/date';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/Toast';
-import { useRecoilValue } from 'recoil';
+import { IconSearch } from '@/public/svgs';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { modalAtom } from '@/states';
 import { dataListAtom } from '@/states/data';
+import { usePathname } from 'next/navigation';
 import lodash from 'lodash';
-import Loading from '@/components/Loading';
 interface FormValues {
     prodType: string;
     prodDetailType: string;
@@ -37,9 +39,10 @@ const ProductEdit = () => {
     const pathname = usePathname();
     const router = useRouter();
     const id:any = lodash.last(pathname.split('/'));
-    const product = lodash.find(data?.data, {id});
+    const product = lodash.find(data?.data, { id });
+    const [modal, setModal] = useRecoilState(modalAtom);
     const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
-    const { register, handleSubmit, formState: { errors } } = useForm<FormValues>({
+    const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
             prodType: prodType,
             prodDetailType: prodDetailType,
@@ -58,11 +61,48 @@ const ProductEdit = () => {
                 Toast('success','저장되었습니다.', ()=> goBack())
         }    
     }
-    const goBack = () => {
+  const goBack = () => {
         router.push('/products/product/list/1');
     }
-    if(!product) return <Loading />
-   
+    
+    const openModal = (type: string) => {
+        if (getValues('prodType') === "SW" || getValues('prodType') === "MSP") {
+            setModal({ ...modal, isOpen: true, type: type });
+        } else {
+            Toast('error', '상품분류를 선택해주세요.');
+        }
+    }
+    const prodTypeValue = watch('prodType');
+    useEffect(() => {
+        if (modal.type === 'prodType' && modal.data !== null) {
+            const { prodType, prodDetailType, prodDetailTypeStd } = modal.data;
+            setValue('prodType', prodType);
+            setValue('prodDetailType', prodDetailType);
+            setValue('prodDetailTypeStd', prodDetailTypeStd);
+        }
+    }, [modal])
+
+    useEffect(() => {
+        if (prodTypeValue !== prodType) {
+            setModal({ ...modal, data: { prodDetailType: '', prodDetailTypeStd: '', prodType: prodTypeValue } })
+            setValue('prodDetailType', '');
+            setValue('prodDetailTypeStd', '');
+            setValue('prodDesc', '');
+            setValue('stdPrice', 0);
+            setValue('comment', '')
+        }
+    },[prodTypeValue])
+
+    useEffect(() => {
+        setValue('prodName', prodName);
+        setValue('prodDetailType', prodDetailType);
+        setValue('prodDetailTypeStd', prodDetailTypeStd);
+        setValue('prodDesc', prodDesc);
+        setValue('stdPrice', stdPrice);
+        setValue('comment', comment)
+    }, [product])
+    
+  
     return (
         <>
         <Breadcrumb />
@@ -74,47 +114,44 @@ const ProductEdit = () => {
                     {...register("prodName", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodName && <span className={`${Styles.error} text-red-500`}>{errors.prodName?.message}</span>}
+                    {errors.prodName && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
-                 <div className={Styles.inputGroup}>
+                    <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />상용SW</label>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="MSP" />MSP</label>
-                                {errors.prodType && <span className={`${Styles.error} text-red-500`}>{errors.prodType?.message || null}</span>}
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType", {required: true})} value="SW" />상용SW</label>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType", { required: true })} value="MSP" />MSP</label>
+                                {errors.prodType && <span className={`${Styles.errorMsg} text-red-500`}>필수 선택 사항입니다</span>}
                         </div>
                     </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailType">상품상세분류</label>
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
-                    {...register("prodDetailType", {
-                        required: "해당 필드는 필수입니다."
-                    })} />
-                    {errors.prodDetailType && <span className={`${Styles.error} text-red-500`}>{errors.prodDetailType?.message}</span>}
+                            {...register("prodDetailType", { required: true })} readOnly={true}  onClick={()=>openModal("prodType")}/>
+                    <IconSearch />
+                    {errors.prodDetailType && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
-                    <input type="text" placeholder='상품가격기준을 입력하세요' 
-                     {...register("prodDetailTypeStd", {
-                        required: "해당 필드는 필수입니다."
-                    })} />
-                    {errors.prodDetailTypeStd && <span className={`${Styles.error} text-red-500`}>{errors.prodDetailTypeStd?.message}</span>}
+                        <input type="text" placeholder='상품가격기준을 입력하세요'
+                            {...register("prodDetailTypeStd", { required: true })} readOnly={true} />
+                    {errors.prodDetailTypeStd && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
                     <input type="text" placeholder='상품가격기준을 입력하세요' 
                      {...register("prodDesc", {
-                        required: "해당 필드는 필수입니다."
+                        required: true
                     })} />
-                    {errors.prodDesc && <span className={`${Styles.error} text-red-500`}>{errors.prodDesc?.message}</span>}
+                    {errors.prodDesc && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
                     <input type="text" placeholder='정식단가를 입력하세요' 
                      {...register("stdPrice", {
-                        required: "해당 필드는 필수입니다."
+                        required: true
                     })} />
-                    {errors.stdPrice && <span className={`${Styles.error} text-red-500`}>{errors.stdPrice?.message}</span>}
+                    {errors.stdPrice && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>
@@ -123,7 +160,7 @@ const ProductEdit = () => {
                      {...register("comment", {
                         required: false
                     })} />
-                </div>
+                    </div>
                 <div className={Styles.btnArea}>
                         <Button type="submit" className={Styles.submitBtn} skin={"submit"}>저장</Button>
                         <Button type="button" className={Styles.submitBtn} skin={"cancel"} onClick={goBack}>취소</Button>

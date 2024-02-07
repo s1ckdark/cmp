@@ -51,7 +51,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "prodType",
             "prodDetailType",
             "stdPrice",
-            "regId",
+            "regName",
             "regDt",
             // "history",
         ],

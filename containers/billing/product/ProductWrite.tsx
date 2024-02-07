@@ -116,13 +116,10 @@ const ProductWrite = () => {
                     Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
                     const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
                     if (copyResponse.status === 200) {
-                        const updateData = await apiBe(getUrl.url, { method: getUrl.method });
-                        if (updateData.status === 200) {
                             Toast("success", '로드 되었습니다.');
-                            setForm(updateData.data[0]);
+                            setForm(copyResponse.data);
                             setRegProd(true);
                         }
-                    }
                 } else {
                     // 이전 달 데이터가 없으면 새 데이터 삽입
                     const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
@@ -233,10 +230,10 @@ const ProductWrite = () => {
     }
 
     const productSearch = async (prodType: any, prodName: any) => {
-        if (prodName === '') {
-            Toast("error", '상품명을 입력하세요.');
-            return;
-        }
+        // if (prodName === '') {
+        //     Toast("error", '상품명을 입력하세요.');
+        //     return;
+        // }
         const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
@@ -259,7 +256,8 @@ const ProductWrite = () => {
     const RenderProdSw = ({ data, view }:any) => {
         return data && data.map((item: ISW, idx: number) => (
             <tr key={item.prodId || idx}>
-                          <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td>
+                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"SW")}>&times;</span></td>
+                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td> */}
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
@@ -278,7 +276,8 @@ const ProductWrite = () => {
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
             <tr key={item.prodId || idx}>
-                         <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td>
+                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"MSP")}>&times;</span></td>
+                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td> */}
                 <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
@@ -494,7 +493,7 @@ const ProductWrite = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>취소</Button>
+                        <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>돌아가기</Button>
                     </div>
                 </form>    
                 {regProd &&
@@ -522,7 +521,7 @@ const ProductWrite = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <RenderProdSw data={form.sw} view={true} />
+                               <RenderProdSw data={form.sw} view={true} />
                                 </tbody>
                             </table>
                             {/* <div className={Styles.btnArea}>

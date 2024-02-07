@@ -34,7 +34,7 @@ interface IForm {
 
 const ProductsWrite = () => {
     const [modal, setModal] = useRecoilState(modalAtom);
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>();
+    const { register, handleSubmit, watch, getValues, setValue, formState: { errors } } = useForm<FormValues>();
     const router = useRouter();
     
     const onSubmit: SubmitHandler<FormValues> = async(data) => {
@@ -61,7 +61,11 @@ const ProductsWrite = () => {
     }
     
     const openModal = (type: string) => {
-        setModal({ isOpen: true, type: type, data: null });
+        if (getValues('prodType') === "SW" || getValues('prodType') === "MSP") {
+            setModal({ ...modal, isOpen: true, type: type });
+        } else {
+            Toast('error', '상품분류를 선택해주세요.');
+        }
     }
     const prodTypeValue = watch('prodType');
     useEffect(() => {
@@ -74,8 +78,12 @@ const ProductsWrite = () => {
     }, [modal])
 
     useEffect(() => {
-        console.log("prodType change", prodTypeValue);
-        setModal({...modal, data: {prodType: prodTypeValue}})
+        setModal({ ...modal, data: { prodDetailType: '', prodDetailTypeStd: '', prodType: prodTypeValue } })
+        setValue('prodDetailType', '');
+        setValue('prodDetailTypeStd', '');
+        setValue('prodDesc', '');
+        setValue('stdPrice', 0);
+        setValue('comment', '')
     },[prodTypeValue])
 
     return (
@@ -89,48 +97,44 @@ const ProductsWrite = () => {
                     {...register("prodName", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodName && <span className={Styles.error}>{errors.prodName?.message}</span>}
+                    {errors.prodName && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                     <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />사용SW</label>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="MSP" />MSP</label>
-                                {errors.prodType && <span className={Styles.error}>{errors.prodType?.message || null}</span>}
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType", {required: true})} value="SW" />상용SW</label>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType", { required: true })} value="MSP" />MSP</label>
+                                {errors.prodType && <span className={`${Styles.errorMsg} text-red-500`}>필수 선택 사항입니다</span>}
                         </div>
                     </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailType">상품상세분류</label>
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
-                    {...register("prodDetailType", {
-                        required: "해당 필드는 필수입니다."
-                    })} onClick={()=>openModal("prodType")}/>
+                            {...register("prodDetailType", { required: true })} readOnly={true}  onClick={()=>openModal("prodType")}/>
                     <IconSearch />
-                    {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>}
+                    {errors.prodDetailType && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
-                    <input type="text" placeholder='상품가격기준을 입력하세요' 
-                     {...register("prodDetailTypeStd", {
-                        required: "해당 필드는 필수입니다."
-                    })} />
-                    {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message}</span>}
+                        <input type="text" placeholder='상품가격기준을 입력하세요'
+                            {...register("prodDetailTypeStd", { required: true })} readOnly={true} />
+                    {errors.prodDetailTypeStd && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
                     <input type="text" placeholder='상품가격기준을 입력하세요' 
                      {...register("prodDesc", {
-                        required: "해당 필드는 필수입니다."
+                        required: true
                     })} />
-                    {errors.prodDesc && <span className={Styles.error}>{errors.prodDesc?.message}</span>}
+                    {errors.prodDesc && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
                     <input type="text" placeholder='정식단가를 입력하세요' 
                      {...register("stdPrice", {
-                        required: "해당 필드는 필수입니다."
+                        required: true
                     })} />
-                    {errors.stdPrice && <span className={Styles.error}>{errors.stdPrice?.message}</span>}
+                    {errors.stdPrice && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>

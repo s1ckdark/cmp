@@ -21,6 +21,8 @@ interface dataViewType {
 }
 
 interface dataListType {
+    params?: any;
+    mode?: string;
     currentPage: number;
     totalPages: number;
     data: any[];
@@ -30,9 +32,9 @@ export const dataViewAtom = atom<dataViewType | null>({
     default: {data:[], memberNo:'', targetMonth:''}
 });
 
-export const dataListAtom = atom<dataListType | null>({
+export const dataListAtom = atom<dataListType>({
     key: 'dataListAtom',
-    default: {data:[], totalPages:0,currentPage:1}
+    default: { mode:'',params: {}, data:[], totalPages:0,currentPage:1}
 });
 
 export const visualAtom = atom<any | null>({
