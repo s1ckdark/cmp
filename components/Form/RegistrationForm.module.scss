@@ -99,7 +99,7 @@
 
 .modal {
     width: 600px;
-    height: 300px;
+    height: 400px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -109,6 +109,13 @@
     display: none;
     &.open {
         display: block !important;
+    }
+    &.address {
+       .resultArea {
+           height: 230px;
+           overflow-y: scroll;
+        
+       }
     }
     .closeBtn {
         position: absolute;
@@ -138,9 +145,42 @@
             }
         }
         .resultArea {
-            & > div {
-                margin: 10px 0 5px;
+             margin: 30px auto;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+
+            thead {
+                background-color: #F5F6F7;
+                border : 1px solid #DEE1E7;
+                th {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    color: #2E322F;
+                    text-align: center;
+                    width: 50%;
+                }
             }
+            tbody {
+                tr {
+                    border : 1px solid #DEE1E7;
+                    &:hover {
+                        background-color: #F5F6F7;
+                    }
+                    td {
+                        padding: 10px 15px;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        color: #2E322F;
+                        text-align: center;
+                    }
+                }
+            }
+        }
         }
     }
     &.passwordModal {
@@ -167,6 +207,48 @@
             margin: 30px auto 0;
         }
     }
+}
+.address {
+     table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+
+            thead {
+                background-color: #F5F6F7;
+                border : 1px solid #DEE1E7;
+                th {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    color: #2E322F;
+                    text-align: center;
+                    &:nth-child(1) {
+                        width: 30% !important;
+                    }
+                    &:nth-child(2) {
+                        width: 70% !important;
+                    }
+            }
+            tbody {
+                tr {
+                    border : 1px solid #DEE1E7;
+                    &:hover {
+                        background-color: #F5F6F7;
+                    }
+                    td {
+                        padding: 10px 15px;
+                        font-size: 14px;
+                        font-style: normal;
+                        font-weight: 400;
+                        color: #2E322F;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        }
 }
 .errorMsg {
     position: absolute;

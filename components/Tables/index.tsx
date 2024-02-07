@@ -57,7 +57,7 @@ export const Tables = ({ rowType }: TablesProps) => {
             },
             customers: {
                 url: "/customer",
-                params: { page: pageNumber - 1 },
+                params: { page: pageNumber },
                 key: "content",
             },
             user: {

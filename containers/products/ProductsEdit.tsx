@@ -74,14 +74,14 @@ const ProductEdit = () => {
                     {...register("prodName", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodName && <span className={Styles.error}>{errors.prodName?.message}</span>}
+                    {errors.prodName && <span className={`${Styles.error} text-red-500`}>{errors.prodName?.message}</span>}
                 </div>
                  <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
-                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />사용SW</label>
+                            <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="SW" />상용SW</label>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType")} value="MSP" />MSP</label>
-                                {errors.prodType && <span className={Styles.error}>{errors.prodType?.message || null}</span>}
+                                {errors.prodType && <span className={`${Styles.error} text-red-500`}>{errors.prodType?.message || null}</span>}
                         </div>
                     </div>
                 <div className={Styles.inputGroup}>
@@ -90,7 +90,7 @@ const ProductEdit = () => {
                     {...register("prodDetailType", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message}</span>}
+                    {errors.prodDetailType && <span className={`${Styles.error} text-red-500`}>{errors.prodDetailType?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
@@ -98,7 +98,7 @@ const ProductEdit = () => {
                      {...register("prodDetailTypeStd", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message}</span>}
+                    {errors.prodDetailTypeStd && <span className={`${Styles.error} text-red-500`}>{errors.prodDetailTypeStd?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
@@ -106,7 +106,7 @@ const ProductEdit = () => {
                      {...register("prodDesc", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodDesc && <span className={Styles.error}>{errors.prodDesc?.message}</span>}
+                    {errors.prodDesc && <span className={`${Styles.error} text-red-500`}>{errors.prodDesc?.message}</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
@@ -114,7 +114,7 @@ const ProductEdit = () => {
                      {...register("stdPrice", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.stdPrice && <span className={Styles.error}>{errors.stdPrice?.message}</span>}
+                    {errors.stdPrice && <span className={`${Styles.error} text-red-500`}>{errors.stdPrice?.message}</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>

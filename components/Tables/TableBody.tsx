@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { History, IconOverview } from "@/public/svgs";
 import { addComma } from "@/utils/data";
 import Loading from "@/components/Loading";
+import dayjs from "dayjs";
 
 interface TypesMap {
     [key: string]: string[];
@@ -48,7 +49,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "idx",
             "prodName",
             "prodType",
-            "prodDesc",
+            "prodDetailType",
             "stdPrice",
             "regId",
             "regDt",
@@ -275,6 +276,13 @@ export const TableBody = ({ rowType, data }: any) => {
                         {item.activated ? "O" : "X"}
                     </td>
                 );
+                break;
+            case "regDt":
+                content = (
+                    <td key={key + "-" + keyIndex} onClick={() => view(item)}>
+                        {dayjs(item.regDt).format("YYYY-MM-DD HH:mm")}
+                    </td>
+                )
                 break;
             default:
                 content = (

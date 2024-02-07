@@ -55,7 +55,6 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
             comment: comment,
         }
     });
-    console.log(modal);
     const router = useRouter();
 
     const onSubmit = async (formData: any) => {
@@ -66,8 +65,8 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         if (response.status === 201 || response.status === 200) {
             const { data } = response;
             // setMember(data);
-            if(type === 'register' ) setStep(1)
-            Toast("success", '고객사 정보가 저장 되었습니다.');
+            if(type === 'register') Toast("success", '고객사 정보가 저장 되었습니다.', ()=> setStep(1));
+            if(type === 'edit') Toast("success", '고객사 정보가 저장 되었습니다.', ()=>goList());
         } else {
             Toast("error", '이미 고객사 정보가 존재합니다.')
         }

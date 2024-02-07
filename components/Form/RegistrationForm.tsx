@@ -13,6 +13,7 @@ import { useRecoilState } from 'recoil';
 import Loading from '@/components/Loading';
 import { IRegistrationForm } from '@/types/form';
 import { set } from 'lodash';
+import Pagination from '@/components/Pagination';
 
 
 interface IRegistrationFormProps {
@@ -47,7 +48,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             memberName: memberName,
             salesName: salesName,
             isAdmin: privileges?.includes('admin') ? "true" : "false",
-            isActivated: activated,
+            isActivated: "true",
             regId: regId,
             regName: regName,
             regDt: regDt
@@ -66,7 +67,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             return false;
         }
         let url = '', method = '';
-        if (type === 'register' && passwordChecker) { url = '/user'; method = 'put'; } 
+        if (type === 'register' && passwordChecker) { url = '/user'; method = 'put';setValue('isActivated', 'true') } 
         else if (type === 'edit') { url = `/user/${username}`; method = 'post'; }
         else { return false;}
         
@@ -112,10 +113,11 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             break;
         default:
             inner = "<p>알 수 없는 검색 유형입니다.</p>"; // "Unknown search type"
+            break;
     }
 
     if (modal) {
-        modal.classList.add(styles.open);
+        modal.classList.add(styles.open, styles[type]);
         innerSearch.innerHTML = inner;
 
         const searchBtn = type === "address" ? modal.querySelector('#addressSearchBtn') : modal.querySelector('#memberSearchBtn');
@@ -148,7 +150,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
         if (modal) {
             search.innerHTML = '';
             result.innerHTML = '';
-            modal.classList.remove(styles.open);
+            modal.classList.remove(styles.open, styles.address, styles.member);
             // searchBtn.removeEventListener('click', () => { });
         }
     }
@@ -167,14 +169,14 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     }
     const addAddr = (zipcode: string, addr: string) => {
         closeModal();
-        setValue('zipcode', zipcode);
-        setValue('addr', addr);
+        setValue('zipcode', zipcode,  { shouldValidate: true });
+        setValue('addr', addr, { shouldValidate: true });
     }
 
     const addMemberNo = (memberNo: string, memberName: string) => {
         closeModal();
-        setValue('memberNo', memberNo);
-        setValue('memberName', memberName);
+        setValue('memberNo', memberNo,  { shouldValidate: true });
+        setValue('memberName', memberName,  { shouldValidate: true });
     }
 
     const memberSearch = async (value: string) => {
@@ -188,7 +190,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 Toast("error", '회사명이 존재하지 않습니다.');
             } else {
                 content = customers.map((item: any) => {
-                    return `<div data-memberno="${item.memberNo}" data-membername="${item.memberName}"><p>${item.memberNo}</p><p>${item.memberName}</p></div>`;
+                    return `<tr data-memberno="${item.memberNo}" data-membername="${item.memberName}"><td>${item.memberNo}</td><td>${item.memberName}</td></tr>`;
                 }).join('');
             }
 
@@ -196,10 +198,9 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             if (modal) {
                 modal.classList.add(styles.open);
                 const resultArea: any = modal.querySelector('#searchResult');
-                resultArea.innerHTML = content;
-
+                resultArea.innerHTML = '<table><thead><tr><th>회사번호</th><th>회사명</th></tr></thead><tbody>' + content + '</tbody></table>';
                 // Attach click event listeners to the dynamically created div elements
-                const divElements = resultArea.querySelectorAll('div');
+                const divElements = resultArea.querySelectorAll('tr');
                 divElements.forEach((div:any) => {
                     const getMemberNo = div.getAttribute('data-memberno');
                     const getMemberName = div.getAttribute('data-membername');
@@ -244,17 +245,18 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     }
 
     const addrSearch = async (value: string) => {
-        const url = `https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=10&keyword=${value}&confmKey=${process.env.NEXT_PUBLIC_JUSO_API_KEY}&resultType=json`;
+        const url = `https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=30&keyword=${value}&confmKey=${process.env.NEXT_PUBLIC_JUSO_API_KEY}&resultType=json`;
         const response = await fetch(url);
         const { results} = await response.json();
         if (results.juso != null) {
-            let content = results.juso.map((item: any) => {
-                return `<div data-zipcode="${item.zipNo}" data-addr="${item.roadAddrPart1}" data-addrDetail="${item.jibunAddr}">${item.roadAddrPart1}</div>`
-            })
+            let content = results.juso.map((item:any) => {
+                return `<tr data-zipcode="${item.zipNo}" data-addr="${item.roadAddrPart1}" data-addrDetail="${item.jibunAddr}"><td>${item.zipNo}</td><td>${item.roadAddrPart1}</td></tr>`;
+            }).join('');
+      
             const resultArea = document.querySelector('#searchResult');
             if (resultArea) {
-                resultArea.innerHTML = content;
-                const divElements = resultArea.querySelectorAll('div');
+                resultArea.innerHTML = "<table><thead><th>우편번호</th><th>주소1</th></thead><tbody>" + content + "</tbody></table>";
+                const divElements = resultArea.querySelectorAll('tbody tr');
                 divElements.forEach((div:any) => {
                     const zipcode = div.getAttribute('data-zipcode');
                     const addr = div.getAttribute('data-addr');
@@ -315,7 +317,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             setValue('memberNo', data.memberNo);
             setValue('memberName', data.memberName);
             setValue('salesName', data.salesName);
-            setValue('isActivated', data.activated);
+            setValue('isActivated', "true");
         }
         const getPrivilegeOptions = async () => {
             const response = await apiBe('/role');
@@ -353,17 +355,17 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
         <>
         <form className={`${styles.template} ${styles[type]}`} onSubmit={handleSubmit(onSubmit)}>
             <div className={`${styles.inputGroup}`}>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-black">회원ID:</label>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-900 dark:text-black">회원ID<span className={styles.required}></span></label>
                 <Controller
                     name="email"
                         control={control}
                         rules={{ required: true }}
-                    render={({ field }) => <input readOnly={isDisabled} type="text" id="email" {...field} defaultValue={email} />}
+                    render={({ field }) => <input readOnly={isDisabled} type="text" id="email" {...field} defaultValue={email} placeholder='이메일 양식으로 입력해주세요.'/>}
                 />
                 {errors.email && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
             </div>
             <div className={`${styles.inputGroup}`}>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-900 dark:text-black">회원명:</label>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-900 dark:text-black">회원명<span className={styles.required}></span></label>
                 <Controller
                     name="username"
                     control={control}
@@ -374,7 +376,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             </div>
             <div className="grid gap-6 mb-6 md:grid-cols-2">
                 <div className={`${styles.inputGroup}`}>
-                    <label htmlFor="userType" className="block text-sm font-medium text-gray-900 dark:text-black">회원유형:</label>
+                    <label htmlFor="userType" className="block text-sm font-medium text-gray-900 dark:text-black">회원유형<span className={styles.required}></span></label>
                     <Controller
                         name="userType"
                         control={control}
@@ -393,7 +395,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                     {errors.userType && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
                 </div>
                 <div className={`${styles.inputGroup}`}>
-                    <label htmlFor="privileges" className="block text-sm font-medium text-gray-900 dark:text-black">권한:</label>
+                    <label htmlFor="privileges" className="block text-sm font-medium text-gray-900 dark:text-black">권한<span className={styles.required}></span></label>
                     <Controller
                         name="privileges"
                         control={control}
@@ -418,24 +420,24 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                     {type === 'register' ?  
                 <div className="flex items-end">
                         <div className={styles.password}>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호:</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호<span className={styles.required}></span></label>
                         <Controller
                                     rules={{ required: true, minLength: 6 }}
                             name="password"
                             control={control}
                             render={({ field }) => <input readOnly={isDisabled} type="password" id="password" {...field}  defaultValue={password}  />}
                                 />
-                                 {errors.password && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>} 
+                                 {errors.password && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다. 6자리 이상으로 입력해주세요</span>} 
                     </div>
                     <div className={styles.password}>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호 확인:</label>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호 확인<span className={styles.required}></span></label>
                         <Controller
                                   rules={{ required: true, minLength: 6 }}
                             name="confirmPassword"
                             control={control}
                                     render={({ field }) => <input readOnly={isDisabled} type="password" id="confirmPassword" {...field}   />}
                             />
-                                 {errors.confirmPassword && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>} 
+                                 {errors.confirmPassword && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다. 6자리 이상으로 입력해주세요</span>} 
                     </div>
                         <div className={`${styles.btnArea} ${styles.btnPasswordCheck}`}>
                                 <Button type='button'
@@ -447,7 +449,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                             </div>:
                 type === 'edit' ? <div className="flex items-end">
                     <div className={styles.password}>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호:</label>
+                    <label htmlFor="password" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호<span className={styles.required}></span></label>
                     <Controller
                     rules={{ required: true }}
                         name="password"
@@ -467,7 +469,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                
             </div>
             <div className={`${styles.inputGroup}`}>
-                <label htmlFor="mobile" className="block text-sm font-medium text-gray-900 dark:text-black">전화:</label>
+                <label htmlFor="mobile" className="block text-sm font-medium text-gray-900 dark:text-black">전화<span className={styles.required}></span></label>
                 <Controller
                 rules={{ required: true }}
                     name="mobile"
@@ -477,7 +479,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 {errors.mobile && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
             </div>
             <div className={`${styles.inputGroup}`}>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-900 dark:text-black">유선전화:</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-900 dark:text-black">유선전화<span className={styles.required}></span></label>
                     <Controller
                         rules={{required: false}}
                     name="phone"
@@ -490,27 +492,27 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             <div className={`${styles.inputGroup}`}>
                 <div className="flex items-end">
                         <div className={styles.zipcode}>
-                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호:</label>
+                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호<span className={styles.required}></span></label>
                         <Controller
                         rules={{ required: true }}
                             name="zipcode"
                             control={control}
-                            render={({ field }) => <input readOnly={true} type="text" id="zipcode" {...field} defaultValue={zipcode}/>}
+                            render={({ field }) => <input readOnly={true} type="text" id="zipcode" {...field} defaultValue={zipcode} onClick={() => openModal('address')}/>}
                             />
                              {errors.zipcode && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
                         </div>
                         <div className={styles.address}>
-                        <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소:</label>
+                        <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소<span className={styles.required}></span></label>
                         <Controller
                         rules={{ required: true }}
                             name="addr"
                             control={control}
-                            render={({ field }) => <input readOnly={true} type="text" id="addr" {...field} defaultValue={addr} />}
+                            render={({ field }) => <input readOnly={true} type="text" id="addr" {...field} defaultValue={addr} onClick={() => openModal('address')}/>}
                         />
                         {errors.addr && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
                     </div>
                         <div className={styles.addressDetail}>
-                        <label htmlFor="addrDetail" className="block text-sm font-medium text-gray-900 dark:text-black">상세 주소:</label>
+                        <label htmlFor="addrDetail" className="block text-sm font-medium text-gray-900 dark:text-black">상세 주소<span className={styles.required}></span></label>
                         <Controller
                             name="addrDetail"
                             control={control}
@@ -525,22 +527,22 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
             <div className={`${styles.inputGroup}`}>
                 <div className="flex items-end">
                     <div className={styles.memberNo}>
-                        <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">회사번호:</label>
+                        <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">회사번호<span className={styles.required}></span></label>
                         <Controller
                         rules={{ required: true }}
                             name="memberNo"
                             control={control}
-                            render={({ field }) => <input readOnly={true} type="text" id="memberNo" {...field} defaultValue={memberNo}/>}
+                            render={({ field }) => <input readOnly={true} type="text" id="memberNo" {...field} defaultValue={memberNo} onClick={() => openModal('member')} />}
                             />
                             {errors.memberNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
                     </div>
                         <div className={styles.memberName}>
-                        <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">회사이름:</label>
+                        <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">회사이름<span className={styles.required}></span></label>
                         <Controller
                         rules={{ required: true }}
                             name="memberName"
                             control={control}
-                            render={({ field }) => <input readOnly={true} type="text" id="memberName" {...field} defaultValue={memberName} />}
+                            render={({ field }) => <input readOnly={true} type="text" id="memberName" {...field} defaultValue={memberName} onClick={() => openModal('member')} />}
                             />
                             {errors.memberName && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목입니다</span>}
                     </div>
@@ -576,11 +578,11 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
                 <span className={styles.closeBtn} onClick={() => pwCloseModal()}>&times;</span>
                 <div className={styles.innerModal}>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호:</label>
+                        <label htmlFor="newPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호<span className={styles.required}></span></label>
                         <input readOnly={isDisabled} name="newPassword" type="password" className="modalPassword" />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호 확인:</label>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900 dark:text-black">비밀번호 확인<span className={styles.required}></span></label>
                         <input readOnly={isDisabled} name="confirmPassword"  type="password" className="modalComfirmPassword" /> 
                     </div>
                     <div className={styles.btnArea}>

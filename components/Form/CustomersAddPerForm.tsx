@@ -69,7 +69,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         const response = fixedType === 'register' ? await apiBe.put(url, formData):await apiBe.post(url, formData);
         if (response.status === 200 || response.status === 201) {
             if (mode === 'register') Toast("success", '저장이 완료되었습니다.', () => type === 'custContact' ? setStep(3) : router.push('/customers/list/1'));
-            if (mode === 'edit') Toast("success", '수정이 완료되었습니다.');
+            if (mode === 'edit') Toast("success", '수정이 완료되었습니다.',()=>router.push('/customers/list/1'));
         } else {
             Toast("error", '저장이 실패하였습니다. 확인부탁드립니다.')
         }
@@ -79,8 +79,8 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         setModal({isOpen: true, type: type, data:null});
     }
 
-    const resetAll = () => {
-          reset(formValues => data ? data : { id:'', userId: '', name: '', dept: '', email: '', phoneNo: '', mobileNo:'', comment: '' });
+    const goList = () => {
+        router.push('/customers/list/1')
     }
     const goEdit = () => {
         router.push(`/customers/edit/${memberNo}`);
@@ -142,13 +142,13 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                     {type === "custContact" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="phoneNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo", { required: true })} defaultValue={phoneNo} placeholder="010-1234-5678 양삭으로 입력해주세요"/>
+                            <input readOnly={isDisabled} type="text" id="phoneNo" {...register("mobileNo", { required: true })} defaultValue={phoneNo} placeholder="010-1234-5678 양식으로 입력해주세요"/>
                             {errors.phoneNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                      {type === "sales" &&
                         <div className={`${styles.inputGroup}`}>
                             <label htmlFor="mobileNo" className="block text-sm font-medium text-gray-900 dark:text-black">연락처:</label>
-                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo", { required: true })} defaultValue={mobileNo} placeholder="010-1234-5678 양삭으로 입력해주세요" />
+                            <input readOnly={isDisabled} type="text" id="mobileNo" {...register("phoneNo", { required: true })} defaultValue={mobileNo} placeholder="010-1234-5678 양식으로 입력해주세요" />
                             {errors.mobileNo && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
                         </div>}
                     <div className={`${styles.inputGroup}`}>
@@ -160,7 +160,7 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                     {mode === 'edit' || mode === 'register' ?
                         <>
                             <Button type="button" className={styles.submitBtn} onClick={handleSubmit(onSubmit)} skin={"green"}>저장</Button>
-                            <Button type="button" skin={"gray"} onClick={resetAll}>취소</Button>
+                            <Button type="button" skin={"gray"} onClick={goList}>돌아가기</Button>
                         </>:<Button type="button" className={styles.submitBtn} onClick={goEdit} skin={"green"}>수정</Button>}
             </div>
         </form>

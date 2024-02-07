@@ -56,22 +56,24 @@ const RoleForm = ({ data, type }: IRoleFormProps) => {
         <>
             <form className={`${styles.template}`} onSubmit={handleSubmit(onSubmit)}>
                     <div className={`${styles.inputGroup}`}>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">롤 이름:</label>
-                        <Controller
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">롤 이름<span className={styles.required}></span></label>
+                    <Controller
+                        rules={{ required: true }}
                             name="name"
                             control={control}
-                            render={({ field }) => <input type="text" id="name" {...field} required defaultValue={name} />}
+                            render={({ field }) => <input type="text" id="name" {...field} defaultValue={name} />}
                         />
-                        {errors.name && <span className="text-red-500">This field is required</span>}
+                        {errors.name && <span className="text-red-500">필수 입력 항목입니다</span>}
                     </div>
                     <div className={`${styles.inputGroup}`}>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-900 dark:text-black">롤 설명</label>
-                        <Controller
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-900 dark:text-black">롤 설명<span className={styles.required}></span></label>
+                    <Controller
+                            rules={{ required: true }}
                             name="description"
                             control={control}
-                            render={({ field }) => <input type="text" id="description" {...field} required defaultValue={description} />}
+                            render={({ field }) => <input type="text" id="description" {...field} defaultValue={description} />}
                         />
-                        {errors.description && <span className="text-red-500">This field is required</span>}
+                        {errors.description && <span className="text-red-500">필수 입력 항목입니다</span>}
                     </div>
                 <div className={`${styles.btnArea} mt-6 mx-auto`}>
                 <Button type='submit'

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import Styles from './index.module.scss';
-import { usePathname } from 'next/navigation';
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
 import { dataListAtom } from '@/states/data';
 import { monthAtom } from '@/states';
@@ -10,7 +9,11 @@ import { apiBe } from '@/services';
 import { pathSpliter } from '@/utils/data';
 import { url } from 'inspector';
 import page from '@/app/page';
-import lodash from 'lodash';
+import lodash, { set } from 'lodash';
+import Button from '@/components/Button';
+import { useRouter, usePathname } from 'next/navigation';
+
+
 export interface SearchBarProps {
   placeholder: string
   onChange: (value: string) => void
@@ -35,7 +38,8 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
   const pageNumber : any = lodash.last(pathname.split('/'));
-
+  const router = useRouter();
+  const [reset, setReset] = useState<boolean>(false);
   const matching: any = {
     "/billing/invoice/list": {
       "placeholder": "업체명을 입력해주세요",
@@ -96,8 +100,8 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
 };
 
 
-  const onSearch = async() => {
-    Toast('info', '검색중입니다.');
+  const onSearch = async () => {
+    if(reset === false && keyword === '') Toast('info', '검색중입니다.');
     const params:any = {
       "invoice": {
         page: pageNumber || 1,
@@ -118,7 +122,7 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
         username: keyword
       },
       "customers": {
-        page: pageNumber - 1 || 0,
+        page: pageNumber || 1,
         memberName: keyword
       },
       "productGd": {
@@ -129,10 +133,20 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
     fetching(rowType, params[rowType]);
   };
 
+  const searchReset = () => {
+    setReset(true);
+    setKeyword('');
+  }
+  useEffect(() => {
+    if (keyword === '' && reset === true) {
+       onSearch();
+    }
+    setReset(false);
+  }, [reset]);
 
   return (
     <div className={Styles.searchBar}>
-      {/* <Button type="button" onClick={searchAll} skin={"green"} className={Styles.searchAllBtn}>전체</Button> */}
+      <Button type="button" skin={"green"} onClick={searchReset} className={Styles.searchAllBtn}>검색초기화</Button>
       <div className={Styles.inputGroup}>
         <input
           type="text"

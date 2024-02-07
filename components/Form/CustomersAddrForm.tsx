@@ -12,6 +12,7 @@ import { Toast } from '@/components/Toast';
 import { customerStep } from '@/states/data';
 import { IaddrData } from '@/types/data';
 import { set } from 'lodash';
+import { useRouter } from 'next/navigation';
 interface ICustomersAddrForm {
     type: string;
     memberNo: string;
@@ -36,13 +37,13 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
             addrDetail: addrDetail
         }
     });
-
+    const router = useRouter();
     const onSubmitAddr = async (data: any) => {
         console.log(mode);
         const url = mode === 'register' ? '/customer/' + memberNo + '/address' : '/customer/' + memberNo + '/address/' + id;
         const response = mode === 'register' ? await apiBe.put(url, data):await apiBe.post(url, data);
         if (response.status === 200 || response.status === 201) {   
-            if (mode === 'register') { Toast("success", '저장이 완료되었습니다.', () => setStep(2)) } else { Toast("success", '수정이 완료되었습니다.') }
+            if (mode === 'register') { Toast("success", '저장이 완료되었습니다.', () => setStep(2)) } else { Toast("success", '수정이 완료되었습니다.',()=>router.push('/customers/list/1')) }
         } else {
             Toast("error", '저장이 실패하였습니다. 확인부탁드립니다.')
         }
