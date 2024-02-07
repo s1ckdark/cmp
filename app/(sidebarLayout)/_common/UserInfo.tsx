@@ -6,14 +6,17 @@ import { parseCookies } from 'nookies';
 import { apiBePure } from '@/services';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { destroyCookie } from "nookies";
+import { destroyCookie, setCookie } from "nookies";
 import { Toast } from '@/components/Toast';
+
 
 const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
   const { data:session }:any = useSession();
   const router = useRouter();
   const cookie = parseCookies();
   const { username } = cookie;
+  const name = username ? username : session?.user.username;
+  if (name && username === undefined) setCookie(null, 'username', name, { maxAge: 2 * 60 * 60, path: '/' });
   const logout = async () => {
     const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
     if (response.status === 200) {
@@ -27,13 +30,13 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
       Toast("success", "로그아웃하였습니다", () => router.push('/'));
     }
   }
-  if(!username) return <Loading/>
+  if(!name) return <Loading/>
   return (
     <>
       <div className={`${styles.userinfo} ${!isOpen ? styles.open:styles.close}`}>
         <div className={`${styles.container}`}>
           <div className={`${styles.user_name} flex text-right px-2`}>
-            {username &&  <Link href="/mypage" className="user ms-12"> <p className="mb-6">{username || ''}</p></Link>}
+            {name &&  <Link href="/mypage" className="user ms-12"> <p className="mb-6">{name}</p></Link>}
            
           </div>
           

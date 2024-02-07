@@ -110,25 +110,25 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
             <form className={styles.addressForm} onSubmit={handleSubmitAddr(onSubmitAddr)}>
                 <div className="columns-4 gap-12">
                 <div className={styles.inputGroup}>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">주소지명</label>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-900 dark:text-black">주소지명<span className={styles.required}></span></label>
                         <input readOnly={isDisabled} type="text" id="name" {...registerAddr("name", {required: true})} defaultValue={name} />
-                    {errorsAddr.name && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                    {errorsAddr.name && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                 </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호:</label>
+                        <label htmlFor="zipcode" className="block text-sm font-medium text-gray-900 dark:text-black">우편 번호<span className={styles.required}></span></label>
                         <input readOnly={true} type="text" id="zipcode" {...registerAddr("zipcode", {required: true})} defaultValue={zipcode}  onClick={() => openModal('address')} />
                         {mode === 'edit' || mode === 'register' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('address')} /> : null}
-                        {errorsAddr.zipcode && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                        {errorsAddr.zipcode && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소:</label>
+                        <label htmlFor="addr" className="block text-sm font-medium text-gray-900 dark:text-black">주소<span className={styles.required}></span></label>
                         <input readOnly={true} type="text" id="addr" {...registerAddr("addr", {required: true})} defaultValue={addr}  onClick={() => openModal('address')} />
-                        {errorsAddr.addr && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>}
+                        {errorsAddr.addr && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                     </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="addrDetail" className="block text-sm font-medium text-gray-900 dark:text-black">상세 주소:</label>
-                        <input readOnly={isDisabled} type="text" id="addrDetail" {...registerAddr("addrDetail")} defaultValue={addrDetail} />
-                        {/* {errorsAddr.addrDetail && <span className={`${styles.errorMsg} text-red-500`}>필수 입력 항목 입니다</span>} */}
+                        <label htmlFor="addrDetail" className="block text-sm font-medium text-gray-900 dark:text-black">상세 주소<span className={styles.required}></span></label>
+                        <input readOnly={isDisabled} type="text" id="addrDetail" {...registerAddr("addrDetail", { required: true})} defaultValue={addrDetail} />
+                        {errorsAddr.addrDetail && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                     </div>
                 </div>
                 {mode !== 'view' && <Button type="submit" skin={"green"}>저장</Button>}

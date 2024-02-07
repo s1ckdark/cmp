@@ -30,3 +30,21 @@
         }
     }
 }
+
+.errorMsg {
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    color: #43B69A;
+    font-size: 11px;
+    margin: 5px 0 0;
+}
+
+.required {
+    margin-left: 5px;
+    &:after {
+        content: '*';
+        color: #43B69A;
+
+    }
+}

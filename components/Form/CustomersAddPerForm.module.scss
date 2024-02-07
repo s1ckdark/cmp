@@ -9,8 +9,9 @@
     }
     .inputGroup {
         width: 30%;
+        position: relative;
         &:nth-child(3n - 1) {
-            margin: 0 5%;
+            margin: 0 5% 10px;
         }
         margin-bottom: 10px;
         label {
@@ -50,5 +51,23 @@
             width: 100px;
             margin-right: 10px;
         }
+    }
+}
+
+.errorMsg {
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+     color: #43B69A;
+    font-size: 11px;
+    margin: 5px 0 0;
+}
+
+.required {
+    margin-left: 5px;
+    &:after {
+        content: '*';
+        color: #43B69A;
+
     }
 }
