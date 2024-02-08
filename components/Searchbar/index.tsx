@@ -30,11 +30,12 @@ interface boxProps {
   placeholder: string
   wording?: string
 }
-const Searchbar = ({ rowType }:{rowType:string}) => {
+const Searchbar = ({ rowType }: { rowType: string }) => {
   const month = useRecoilValue(monthAtom);
-  const [ data, setData ] = useRecoilState(dataListAtom) || null;
+  const [data, setData] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
+  const path = pathname.split('/').slice(0, -1).join('/');
   const router = useRouter();
   const [reset, setReset] = useState<boolean>(false);
   const matching: any = {
@@ -58,14 +59,14 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
     }
   }
   const init = () => {
-    const path = pathname.split('/').slice(0, -1).join('/');
+    
     return matching[path].placeholder;
   }
   const onChange = (value: string) => {
     setKeyword(value);
   }
   
-  const fetching = async (rowType:string, params:any) => {
+  const fetching = async (rowType: string, params: any) => {
     const endpoint: any = {
       invoice: {
         url: `/invoice/search`,
@@ -73,7 +74,7 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
       },
       log: {
         url: `/user/logging`,
-        key:'content'
+        key: 'content'
       },
       billingProduct: {
         url: `/product/gdbilling`,
@@ -94,23 +95,23 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params });
     if (response.status === 200 && response.data.totalElements > 0) {
-        setData({ mode:"search", params: params, data:  response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page});
+      setData({ mode: "search", params: params, data: response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page });
     } else {
-        Toast('error', '데이터를 불러오는데 실패하였습니다.');
+      Toast('error', '검색 결과가 없습니다');
     }
-};
+  };
 
 
   const onSearch = async () => {
-    if(reset === false && keyword === '') Toast('info', '검색중입니다.');
-    const params:any = {
+    if (reset === false && keyword === '') Toast('info', '검색중입니다.');
+    const params: any = {
       "invoice": {
         page: 1,
         targetMonth: month,
         memberName: keyword
       },
       "log": {
-        page:  1,
+        page: 1,
         userName: keyword
       },
       "billingProduct": {
@@ -139,14 +140,19 @@ const Searchbar = ({ rowType }:{rowType:string}) => {
   }
   
   const searchReset = () => {
+    if (data.mode === 'search') {
+      setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1 })
+    setKeyword('');
     setReset(true);
-    setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1 })
-  }
+    router.push(`${path}/1`);
+  } 
+}
+
   useEffect(() => {
-    if (keyword === '' && reset === true) {
-       onSearch();
-    }
-    setReset(false);
+    // if (keyword === '' && reset === true) {
+    //    onSearch();
+    // }
+    // setReset(false);
   }, [reset]);
 
   return (

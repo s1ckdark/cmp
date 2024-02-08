@@ -43,6 +43,7 @@ const EditPage = () => {
     const row: any[] = isEmptyObject(data) ? [] : [data];
     return (
         <div className="container">
+            
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" {...register('title')} />
                 {/* <ToastEditor

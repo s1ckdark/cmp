@@ -75,8 +75,8 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
         }
     }
 
-    const openModal = (type:string) => {
-        setModal({isOpen: true, type: type, data:null});
+    const openModal = (type: string) => {
+        mode !== 'view' && setModal({isOpen: true, type: type, data:null});
     }
 
     const goList = () => {
@@ -120,8 +120,8 @@ const CustomersAddPerForm = ({ type, memberNo, data, mode }: CustomersAddPerForm
                 <div className="flex flex-wrap justify-start">
                     {type === "sales" && <div className={`${styles.inputGroup} ${styles.userId}`}>
                         <label htmlFor="userId" className="block text-sm font-medium text-gray-900 dark:text-black">담당자 ID<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="userId" {...register("userId", { required: true })} defaultValue={userId} />
-                        <IconSearch className={styles.iconSearch} onClick={() => openModal('user')} />
+                        <input readOnly={isDisabled} type="text" id="userId" {...register("userId", { required: true })} defaultValue={userId} onClick={() => openModal('user')}/>
+                        {mode !== 'view' ? <IconSearch className={styles.iconSearch} onClick={() => openModal('user')} /> : null}
                         {errors.userId && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                     </div>}
                     <div className={styles.inputGroup}>

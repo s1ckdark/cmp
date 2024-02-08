@@ -106,7 +106,7 @@ export const Tables = ({ rowType }: TablesProps) => {
         
                 setMounted(true);
             } else {
-                Toast("error", "데이터를 불러오는데 실패하였습니다.");
+                Toast("error", "검색 결과가 없습니다");
             }
         };
         fetching()

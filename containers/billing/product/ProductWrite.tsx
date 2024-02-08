@@ -1,6 +1,6 @@
 'use client';
 import Breadcrumb from '@/components/Breadcrumb';
-import React, {useEffect, useState} from 'react';
+import React, {use, useEffect, useState} from 'react';
 import { apiBe } from '@/services';
 import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
@@ -14,8 +14,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getMonth, getLastDayOfMonth, generateDates } from '@/utils/date';
 import dayjs from 'dayjs';
 import Lodash, { add } from 'lodash';
+import { useRouter, usePathname } from 'next/navigation';
 import Confirm from '@/components/Confirm';
-import { useRouter } from 'next/navigation';
+import Pagination from  '@/components/Pagination';
 interface form {
     "memberNo": string;
     "memberName": string;
@@ -66,22 +67,43 @@ interface IMSP {
     "comment": string;
 }
 
-
+interface IProdList {
+    type: string;
+    prodName: string;
+    data: any[];
+    totalPages: number;
+    currentPage: number;
+}
 const ProductWrite = () => {
     const [form, setForm] = useState<any>({});
+    const [data, setData ] = useState<any>({});
     const [regProd, setRegProd] = useState<boolean>(false);
     const [prodSw, setProdSw] = useState<ISW[]>([]);
     const [prodMsp, setProdMsp] = useState<IMSP[]>([]);
-    const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm();
+    const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
+    const { memberName, memberType, target_start_date, target_end_date, target_month } = form;
+    const [ modalPageNumber, setModalPageNumber ] = useState<number>(1);
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
-    const [targetMonth, setTargetMonth] = useState<string>('');
     const [addField, setAddField] = useState<any>({});
     const [addFieldType, setAddFieldType] = useState<string>('');
-    const [prodList, setProdList] = useState<any>([]);
-    const [confirmOpen, setConfirmOpen] = useState<boolean>(false);
-    const [modalType, setModalType] = useState<string>('');
+    const [prodList, setProdList] = useState<any>({type:'', prodName:'', data: [], totalPages: 0, currentPage:1})
+    const pathname = usePathname();
     const router = useRouter();
+    const [ modalType, setModalType ] = useState<string>('');
+    const [memberNo, setMemberNo] = useState<string>(pathname.split('/')[4]);
+    const [targetMonth, setTargetMonth ] = useState<string>(pathname.split('/')[5]);
+    const { register, handleSubmit, getValues, setValue, control, formState: { errors } } = useForm({
+        defaultValues: {
+            memberNo: memberNo,
+            memberName: memberName,
+            memberType: memberType,
+            target_start_date: target_start_date,
+            target_end_date: target_end_date,
+            target_month: targetMonth
+        }
+    })
+
     const onSubmit = async (data: any) => {
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
@@ -95,54 +117,36 @@ const ProductWrite = () => {
         const insertUrl = { url: '/product/gdbilling', method: 'put' };
         const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
         const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
-        try {
-            const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
-            if (chkResponse.status === 200 || chkResponse.data) {
-                Toast("success", '저장된 데이터를 가져옵니다.');
-                setForm(chkResponse.data);
-                setRegProd(true);
+        const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
+        if (chkResponse.status === 200 && chkResponse.data) {
+            Toast("success", '저장된 데이터를 가져옵니다.');
+            setForm(chkResponse.data);
+            setRegProd(true);
+        } else {
+            const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
+            console.log(chkPrevMonth.url, chkPrevMonthResponse);
+            if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
+                Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
+                const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
+                if (copyResponse.status === 200) {
+                        Toast("success", '로드 되었습니다.');
+                        setForm(copyResponse.data);
+                        setRegProd(true);
+                }
             } else {
-                throw new Error("no data"); // 데이터가 없으면 에러를 발생시켜 catch 블록으로 넘어갑니다.
-            }
-        }
-        catch (error: any) {
-            console.log(error);
-        // if (error.response && error.response.status === 404) {
-            // 404 에러 처리
-
-            try {
-                const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
-                if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
-                    Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
-                    const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
-                    if (copyResponse.status === 200) {
-                            Toast("success", '로드 되었습니다.');
-                            setForm(copyResponse.data);
-                            setRegProd(true);
-                        }
-                } else {
-                    // 이전 달 데이터가 없으면 새 데이터 삽입
+                try {
                     const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
                     if (insertResponse.status === 201) {
                         Toast("success", '저장되었습니다.');
                         setForm(insertResponse.data);
                         setRegProd(true);
                     }
+                } catch (error: any) {
+                    console.log(error);
+                    Toast('error', error.response.data.message);
                 }
-            } catch (innerError: any) {
-                          
-                // 내부 API 호출에서 발생한 에러 처리
-                console.log(innerError);
-                Toast('error', innerError.response ? innerError.response.data.message : 'An error occurred');
             }
-        // } else {
-        //     // 404 외 다른 에러 처리
-
-        //     console.log(error);
-        //     Toast('error', error.response ? error.response.data.message : 'An error occurred');
-        // }
-}
-
+        }
     }
     const reload = async () => {
         const data = getValues();
@@ -150,26 +154,39 @@ const ProductWrite = () => {
         const response = await apiBe.get(`/product/gdbilling/${data.memberNo}/${target_month}`);
         const result = response.data;
         if (response.status === 200 || response.status === 201) {
-            setForm(result);
             closeModal();
+            setForm(result);
         }
     }
     const handleChange = (e: any) => {
+        let tmp;
         if (e.target.name === 'discountRate') {
-            let tmp = (100 - Number(e.target.value)) * addField.expPrice / 100;
+            tmp = (100 - Number(e.target.value)) * addField.expPrice / 100;
             setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: tmp });
         } else {
             setAddField({ ...addField, [e.target.name]: e.target.value })
         }
     }
+    const handleChangeMSP = (e: any) => {
+        let tmp;
+        if (e.target.name === 'discountRate') {
+            console.log(Number(addField.stdPrice), Number(addField.qty), (Number(addField.stdPrice) * Number(addField.qty)));
+            tmp = (100 - Number(e.target.value)) / 100 * addField.stdPrice * addField.qty;
+            setAddField({ ...addField, [e.target.name]: Number(e.target.value), estimateuseAmount: tmp});
+        } else if (e.target.name === 'qty') {
+            tmp = (100 - addField.discountRate) / 100 * addField.stdPrice * Number(e.target.value)
+            setAddField({ ...addField, [e.target.name]: e.target.value, estimateuseAmount: tmp });
+        } 
+    }
 
     const writeProd = async (type: string) => {
-        
+        if(addField.expPrice === '' || addField.discountRate === '') Toast("error", '값을 입력하세요.'); 
         const response = await apiBe.put(`/product/gdbilling/product/${type}`, addField);
         const result = response.data;
         if (response.status === 200 || response.status === 201) {
-            Toast("success", '저장되었습니다.', () => reload());
+            closeModal();
             setAddField({});
+            Toast("success", '저장되었습니다.', () => reload());
                 // setForm(result);
         } else if (response.status === 409) {
             // 409 상태 코드 처리
@@ -190,9 +207,18 @@ const ProductWrite = () => {
         // setForm(tmpForm);
         // setAddField({});
     }
+    const updateProdSw = () => {
+        console.log(prodSw);
+        const url = '/product/gdbilling/product/sw';
+
+    }
+
+    const updateProdMsp = () => {
+        console.log(prodMsp);
+    }
 
     const addProd = (idx:number) => {
-        let tmp = prodList[idx];
+        let tmp = prodList['data'][idx];
         console.log(tmp);
         const fieldValue = {
             billingId: form.id,
@@ -209,86 +235,96 @@ const ProductWrite = () => {
             memberpricediscountamount: 0,
             memberpromisediscountadddamount: 0,
             billingUnit: "KRW",
-            service_start_date: dayjs(startDate).format('YYYY-MM-DD'),
-            service_end_date: dayjs(endDate).format('YYYY-MM-DD'),
+            service_start_date: dayjs(form.target_start_date).format('YYYY-MM-DD'),
+            service_end_date: dayjs(form.target_end_date).format('YYYY-MM-DD'),
             comment:''
         }
-        setProdList([]);
+        console.log(fieldValue);
+        setProdList({type:'', prodName:'', data: [], totalPages: 0, currentPage:1});
         setAddField(fieldValue);
     };
 
     const addprodCancel = () => {
         setAddField({});
     }
-    const deleteProd = async (billingId: string, prodId: string, prodType: string) => {
-        console.log(billingId, prodId, prodType);
-        const response = await apiBe.delete(`/product/gdbilling/product`, { data: { billingId, prodId, prodType } });
+    const deleteProd = async(billingId: string, prodId: string, prodType:string) => {
+        const data:any = {
+            billingId: billingId,
+            prodId: prodId,
+            prodType: prodType
+        }
+        const response = await apiBe.delete(`/product/gdbilling/product`, { data });
         if (response.status === 200) {
             Toast("success", '삭제되었습니다.', ()=> reload());
           
         }
     }
 
-    const productSearch = async (prodType: any, prodName: any) => {
+    const productSearch = async (prodType: any, prodName: any, pageNumber:number) => {
         // if (prodName === '') {
         //     Toast("error", '상품명을 입력하세요.');
         //     return;
         // }
-        const url = `/product/product?prodType=${prodType}&prodName=${prodName}`;
+        const url = `/product/product?prodType=${prodType}&prodName=${prodName}&page=${pageNumber}`;
         const modalBody = document.querySelector("#prodModal #modalBody");
         const modalResult = document.querySelector("#prodModal #modalResult");
-        setAddField({});
         const response = await apiBe(url);
+        setAddField({});
         if (response.status === 200 || response.status === 201) {
                 const result = response.data;
                 let html = '';
-                let { content } = result;
+            let { content } = result;
                 if (content.length === 0) {
                     Toast("error", '상품명이 존재하지 않습니다.');
                 } else {
-                    setProdList(content);
+                    setProdList({type:prodType, prodName:prodName, data: content, totalPages: result.totalPages, currentPage:1});
                 }
         }
     }
 
+    const onModalPageChange = (pageNumber: number) => {
+        setModalPageNumber(pageNumber);
+        productSearch(prodList.type, prodList.prodName, pageNumber);
+    }
 
     //billing id = objectId
     const RenderProdSw = ({ data, view }:any) => {
         return data && data.map((item: ISW, idx: number) => (
-            <tr key={item.prodId || idx}>
+            <tr key={item.prodId}>
+                 
                 <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"SW")}>&times;</span></td>
-                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "SW")} /></td> */}
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="expPrice" value={item.expPrice} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view}/></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view}/></td>
+                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteSWProd(form.id, item.prodId)} /></td> */}
+                <td><input type="text" name="prodId" value={item.prodId} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} readOnly={view}/></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} readOnly={view}/></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} readOnly={view}/></td>
+                <td><input type="number" name="expPrice" value={item.expPrice} readOnly={view} required/></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} readOnly={view} required/></td>
+                <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} readOnly={view}/></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} readOnly={view}/></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} readOnly={view}/></td>
+                <td><input type="text" name="comment" value={item.comment} readOnly={view}/></td>
             </tr>
         ))
     }
 
     const RenderProdMsp = ({ data, view }:any) => {
         return data && data.map((item: IMSP, idx: number) => (
-            <tr key={item.prodId || idx}>
-                <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"MSP")}>&times;</span></td>
-                {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteProd(form.id, item.prodId, "MSP")} /></td> */}
-                <td><input type="text" name="prodId" value={item.prodId} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodName" value={item.prodName} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodDetailType" value={item.prodDetailType} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="qty" value={item.qty} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="stdPrice" value={item.stdPrice} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="number" name="discountRate" value={item.discountRate} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+            <tr key={item.prodId}>
+                 <td><span onClick={() => window.confirm("삭제하시겠습니까?") && deleteProd(form.id, item.prodId,"MSP")}>&times;</span></td>
+                  {/* <td><span onClick={() => setConfirmOpen(true)}>&times;</span><Confirm open={confirmOpen} onClose={()=>setConfirmOpen(false)} title="삭제" content="삭제 하시겠습니까?" onConfirm={()=>deleteMSPProd(form.id, item.prodId)} /></td> */}
+                <td><input type="text" name="prodId" value={item.prodId} readOnly={view} /></td>
+                <td><input type="text" name="prodName" value={item.prodName} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailType" value={item.prodDetailType} readOnly={view} /></td>
+                <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} readOnly={view} /></td>
+                <td><input type="number" name="stdPrice" value={item.stdPrice} readOnly={view} /></td>
+                <td><input type="number" name="discountRate" value={item.discountRate} readOnly={view} required/></td>
+                <td><input type="number" name="qty" value={item.qty} readOnly={view} required/></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
-                <td><input type="text" name="service_start_date" value={item.service_start_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="service_end_date" value={item.service_end_date} onChange={(e) => handleChange(e)} readOnly={view} /></td>
-                <td><input type="text" name="comment" value={item.comment} onChange={(e) => handleChange(e)} readOnly={view} /></td>
+                <td><input type="text" name="service_start_date" value={item.service_start_date} readOnly={view} /></td>
+                <td><input type="text" name="service_end_date" value={item.service_end_date} readOnly={view} /></td>
+                <td><input type="text" name="comment" value={item.comment} readOnly={view} /></td>
             </tr>
         ))
 }
@@ -316,8 +352,9 @@ const ProductWrite = () => {
         const modalHeader = modal.querySelector('#modalHeader');
         const modalBody = modal.querySelector('#modalBody');
         const modalResult = modal.querySelector('#modalResult');
-        let inner = "";
         setModalType(type);
+        let inner = "";
+
         switch (type) {
             case "sw":
                 inner = "<input type='text' id='productInput' placeholder='상품명을 입력하세요.' /><button id='productSearchBtn'>상품 검색</button>";
@@ -342,10 +379,10 @@ const ProductWrite = () => {
             if (searchBtn) {
                 switch (type) {
                     case "sw":
-                        productSearch('SW', searchInput.value);
+                        productSearch('SW', searchInput.value, 1);
                         break;
                     case "msp":
-                        productSearch('MSP', searchInput.value);
+                        productSearch('MSP', searchInput.value, 1);
                         break;
                     case "member":
                         memberSearch(searchInput.value);
@@ -409,10 +446,10 @@ const ProductWrite = () => {
             }
         }
     }
-
     const goList = () => {
         router.push('/billing/product/list/1');
     }
+
     return (
         <>
             <Breadcrumb />
@@ -424,20 +461,20 @@ const ProductWrite = () => {
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberName">고객명</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("memberName")} onClick={() => openModal('member')} />
-                                    <IconSearch />
+                                    <input type="text" {...register("memberName", { required: true})} onClick={() => openModal('member')} />
+                                    <IconSearch onClick={() => openModal('member')} /> 
                                 </div>
-                                {errors.memberName && <span className={Styles.error}>this field is required</span>}
+                                {errors.memberName && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
-                                <input type="text" {...register("memberNo")} />
-                            {errors.memberNo && <span className={Styles.error}>this field is required</span>}
+                                <input readOnly={true} type="text" {...register("memberNo", { required: true})} defaultValue={memberNo} />
+                            {errors.memberNo && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
-                                <input type="text" {...register("memberType")} />
-                                {errors.memberType && <span className={Styles.error}>this field is required</span>}
+                                <input readOnly={true} type="text" {...register("memberType", { required: true})} defaultValue={memberType} />
+                                {errors.memberType && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                         </div>
                     </div>
@@ -450,44 +487,53 @@ const ProductWrite = () => {
                                 <Controller
                                     name="target_month"
                                     control={control}
+                                    rules={{required: true}}
                                     render={({ field: { onChange, value } }) => (
                                     <DatePicker
-                                        selected={value}
+                                        selected={value ? new Date(value) : null}
                                         showMonthYearPicker
                                         onChange={(date:any) => {
                                             onChange(date);
-                                            setStartDate(dayjs(date).startOf('month').format('YYYY-MM-DD'));
-                                            setEndDate(dayjs(date).endOf('month').format('YYYY-MM-DD'))
-                                            setTargetMonth(dayjs(date).format('YYYYMM').toString());
-                                            setValue("target_start_date", dayjs(date).startOf('month').format('YYYY-MM-DD'));
-                                            setValue("target_end_date", dayjs(date).endOf('month').format('YYYY-MM-DD'))
+                                            if(date) {
+                                                setStartDate(dayjs(date).startOf('month').format('YYYY-MM-DD'));
+                                                setEndDate(dayjs(date).endOf('month').format('YYYY-MM-DD'))
+                                                setTargetMonth(dayjs(date).format('YYYYMM').toString());
+                                                setValue("target_start_date", dayjs(date).startOf('month').format('YYYY-MM-DD'));
+                                                setValue("target_end_date", dayjs(date).endOf('month').format('YYYY-MM-DD'))
+                                            } else {
+                                                setStartDate('');
+                                                setEndDate('')
+                                                setTargetMonth('');
+                                                setValue("target_start_date", '');
+                                                setValue("target_end_date", '')
+                                            }
                                         }}   
                                         dateFormat="yyyy/MM"
-                                            isClearable
+                                        isClearable
                                         popperProps={{ strategy: "fixed" }}
                                     />
                                     )}
                                 /> 
-                                <IconCalendar /> 
+                                {/* <IconCalendar />  */}
                             </div>
-                            {errors.target_month && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_month && <span className={Styles.errorMsgMsg}>필수 입력 항목입니다</span>}
                         </div>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_start_date")} />
+                                    <input type="text" {...register("target_start_date", { required: true })} />
                                     {/* <IconCalendar /> */}
                                 </div>
-                            {errors.target_start_date && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_start_date && <span className={Styles.errorMsgMsg}>필수 입력 항목입니다</span>}
                             </div>
                             
                         <div className={Styles.inputGroup}>
                                 <label htmlFor="target_end_date">상품종료일</label>
                                 <div className={Styles.search}>
-                                    <input type="text" {...register("target_end_date")} />  
+                                    <input type="text" {...register("target_end_date", { required: true })} />  
                                     {/* <IconCalendar /> */}
                                 </div>
-                            {errors.target_end_date && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_end_date && <span className={Styles.errorMsgMsg}>필수 입력 항목입니다</span>}
                         </div>
                     </div>
                     </div>
@@ -542,9 +588,9 @@ const ProductWrite = () => {
                                         <th>상품명</th>
                                         <th>상품분류</th>
                                         <th>상품상세분류</th>
-                                        <th>수량</th>
                                         <th>정식단가</th>
                                         <th>할인율</th>
+                                        <th>수량</th>
                                         <th>납부예상금액</th>
                                         <th>서비스 시작일시</th>
                                         <th>서비스 종료일시</th>
@@ -580,7 +626,7 @@ const ProductWrite = () => {
                             </div>
                         </div>
                     </div>
-                    {prodList.length > 0 && <div id="modalResult" className={Styles.modalResult}>
+                    {prodList['data'] && prodList['data'].length > 0 && <><div id="modalResult" className={Styles.modalResult}>
                         <table className={Styles.prodList}>
                             <thead>
                                 <tr>
@@ -590,7 +636,7 @@ const ProductWrite = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {prodList && prodList.map((item: any, idx:number) => {
+                                {prodList['data'] && prodList['data'].map((item: any, idx:number) => {
                                     return (
                                         <tr key={item.id} onClick={() => addProd(idx)}>
                                             <td>{item.prodName}</td>
@@ -602,7 +648,15 @@ const ProductWrite = () => {
                                 )}
                             </tbody>
                         </table>
-                    </div>}
+                    </div>
+                    {prodList.totalPages > 1 && (
+                    <Pagination
+                        count={prodList.totalPages}
+                        page={prodList.currentPage}
+                        onPageChange={onModalPageChange}
+                    />
+                )}
+                    </>}
                     <div id="modalBody" className={Styles.modalBody}>
                         {addField && addField.prodId && modalType === 'sw' && <>
                             <div className={Styles.addProd}>
@@ -626,16 +680,16 @@ const ProductWrite = () => {
                                     <tbody>
                                         <tr>
                                             <td><span>×</span></td>
-                                            <td><input type="text" name="prodId" onChange={(e)=>handleChange(e)} value={addField.prodId} /></td>
-                                            <td><input type="text" name="prodName" onChange={(e)=>handleChange(e)} value={addField.prodName} /></td>
-                                            <td><input type="text" name="prodDetailType" onChange={(e)=>handleChange(e)} value={addField.prodDetailType} /></td>
-                                            <td><input type="text" name="prodDetailTypeStd" onChange={(e)=>handleChange(e)} value={addField.prodDetailTypeStd} /></td>
-                                            <td><input type="number" name="stdPrice" onChange={(e)=>handleChange(e)} value={addField.stdPrice} /></td>
+                                            <td><input type="text" name="prodId" onChange={(e)=>handleChange(e)} value={addField.prodId} readOnly={true} /></td>
+                                            <td><input type="text" name="prodName" onChange={(e)=>handleChange(e)} value={addField.prodName} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailType" onChange={(e)=>handleChange(e)} value={addField.prodDetailType} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailTypeStd" onChange={(e)=>handleChange(e)} value={addField.prodDetailTypeStd} readOnly={true} /></td>
+                                            <td><input type="number" name="stdPrice" onChange={(e)=>handleChange(e)} value={addField.stdPrice} readOnly={true} /></td>
                                             <td><input type="number" name="expPrice" onChange={(e)=>handleChange(e)} value={addField.expPrice} /></td>
                                             <td><input type="number" name="discountRate" onChange={(e)=>handleChange(e)} value={addField.discountRate} /></td>
-                                            <td><input type="number" name="estimateuseAmount" onChange={(e)=>handleChange(e)} value={addField.estimateuseAmount} /></td>
-                                            <td><input type="text" name="service_start_date" onChange={(e)=>handleChange(e)} value={addField.service_start_date} /></td>
-                                            <td><input type="text" name="service_end_date" onChange={(e)=>handleChange(e)} value={addField.service_end_date} /></td>
+                                            <td><input type="number" name="estimateuseAmount" onChange={(e)=>handleChange(e)} value={addField.estimateuseAmount} readOnly={true} /></td>
+                                            <td><input type="text" name="service_start_date" onChange={(e)=>handleChange(e)} value={addField.service_start_date} readOnly={true}  /></td>
+                                            <td><input type="text" name="service_end_date" onChange={(e)=>handleChange(e)} value={addField.service_end_date} readOnly={true} /></td>
                                             <td><input type="text" name="comment" onChange={(e)=>handleChange(e)} value={addField.comment} /></td>
                                         </tr>
                                     </tbody>
@@ -656,9 +710,9 @@ const ProductWrite = () => {
                                             <th>상품아이디</th>
                                             <th>상품명</th>
                                             <th>상품상세분류</th>
-                                            <th>수량</th>
                                             <th>정식단가</th>
                                             <th>할인율</th>
+                                            <th>수량</th>
                                             <th>납부예상금액</th>
                                             <th>서비스 시작일시</th>
                                             <th>서비스 종료일시</th>
@@ -668,16 +722,16 @@ const ProductWrite = () => {
                                     <tbody>
                                         <tr>
                                             <td><span>×</span></td>
-                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChange(e)} required/></td>
-                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChange(e)} required/></td>
-                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} /></td>
-                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChange(e)} /></td>
-                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChange(e)} /></td>
+                                            <td><input type="text" name="prodId" value={addField.prodId} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="prodName" value={addField.prodName} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="prodDetailType" value={addField.prodDetailType} onChange={(e) => handleChangeMSP(e)} readOnly={true}/></td>
+                                            <td><input type="number" name="stdPrice" value={addField.stdPrice} onChange={(e) => handleChangeMSP(e)} readOnly={true}/></td>
+                                            <td><input type="number" name="discountRate" value={addField.discountRate} onChange={(e) => handleChangeMSP(e)} required/></td>
+                                            <td><input type="number" name="qty" value={addField.qty} onChange={(e) => handleChangeMSP(e)} required/></td>
+                                            <td><input type="number" name="estimateUseAmount" value={addField.estimateuseAmount} readOnly={true} /></td>
+                                            <td><input type="text" name="service_start_date" value={addField.service_start_date} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="service_end_date" value={addField.service_end_date} onChange={(e) => handleChangeMSP(e)} readOnly={true} /></td>
+                                            <td><input type="text" name="comment" value={addField.comment} onChange={(e) => handleChangeMSP(e)} /></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -692,6 +746,7 @@ const ProductWrite = () => {
                     </div>
                 </div>
             </div>
+           
         </>
     )
 }

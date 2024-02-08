@@ -8,9 +8,11 @@ import { getKRCurrrentTime } from '@/utils/date';
 import { useRouter } from 'next/navigation';
 import { Toast } from '@/components/Toast';
 import { IconSearch } from '@/public/svgs';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { modalAtom } from '@/states';
-
+import { dataListAtom } from '@/states/data';
+import { usePathname } from 'next/navigation';
+import lodash from 'lodash';
 interface FormValues {
     prodType: string;
     prodDetailType: string;
@@ -32,31 +34,43 @@ interface IForm {
     formState: any;
 }
 
-const ProductsWrite = () => {
-    const [modal, setModal] = useRecoilState(modalAtom);
-    const { register, handleSubmit, watch, getValues, setValue, formState: { errors } } = useForm<FormValues>();
+const ProductWrite = () => {
+    const data = useRecoilValue(dataListAtom);
+    const pathname = usePathname();
     const router = useRouter();
-    
-    const onSubmit: SubmitHandler<FormValues> = async(data) => {
-        console.log(data);
-        let tmp:object = {};
-        const addData = {
-            billingIsUsed: true,
-            prodIsUsed: true,
-            prodEndDt: getKRCurrrentTime(),
-            regDt: getKRCurrrentTime()
+    const id:any = lodash.last(pathname.split('/'));
+    const [modal, setModal] = useRecoilState(modalAtom);
+    const product = {
+        prodName: '',
+        prodType: '',
+        prodDetailType: '',
+        prodDetailTypeStd: '',
+        prodDesc: '',
+        stdPrice: 0,
+        expPrice: 0,
+        comment: ''
+    }
+    const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
+    const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm<FormValues>({
+        defaultValues: {
+            prodType: prodType,
+            prodDetailType: prodDetailType,
+            prodDetailTypeStd: prodDetailTypeStd,
+            prodName: prodName,
+            stdPrice: stdPrice,
+            prodDesc: prodDesc,
+            comment: comment
         }
+    });
 
-        const url = `/product/product`;
-        Object.assign(tmp, data, addData)
-
-        const response = await apiBe.put(url, tmp);
+    const onSubmit: SubmitHandler<FormValues> = async(data) => {
+        const url:any = `/product/product`;
+        const response = await apiBe.put(url, data);
         if (response.status === 201 || response.status === 200) {
-                Toast('success','저장되었습니다.', ()=> router.back())
+                Toast('success','저장되었습니다.', ()=> goBack())
         }    
     }
-    
-    const goBack = () => {
+  const goBack = () => {
         router.push('/products/product/list/1');
     }
     
@@ -78,14 +92,18 @@ const ProductsWrite = () => {
     }, [modal])
 
     useEffect(() => {
-        setModal({ ...modal, data: { prodDetailType: '', prodDetailTypeStd: '', prodType: prodTypeValue } })
-        setValue('prodDetailType', '');
-        setValue('prodDetailTypeStd', '');
-        setValue('prodDesc', '');
-        setValue('stdPrice', 0);
-        setValue('comment', '')
+        if (prodTypeValue !== prodType) {
+            setModal({ ...modal, data: { prodDetailType: '', prodDetailTypeStd: '', prodType: prodTypeValue } })
+            setValue('prodDetailType', '');
+            setValue('prodDetailTypeStd', '');
+            setValue('prodDesc', '');
+            setValue('stdPrice', 0);
+            setValue('comment', '')
+        }
     },[prodTypeValue])
 
+    
+  
     return (
         <>
         <Breadcrumb />
@@ -97,14 +115,14 @@ const ProductsWrite = () => {
                     {...register("prodName", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodName && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodName && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                     <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType", {required: true})} value="SW" />상용SW</label>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType", { required: true })} value="MSP" />MSP</label>
-                                {errors.prodType && <span className={`${Styles.errorMsg} text-red-500`}>필수 선택 사항입니다</span>}
+                                {errors.prodType && <span className={Styles.errorMsg}>필수 선택 사항입니다</span>}
                         </div>
                     </div>
                 <div className={Styles.inputGroup}>
@@ -112,21 +130,21 @@ const ProductsWrite = () => {
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
                             {...register("prodDetailType", { required: true })} readOnly={true}  onClick={()=>openModal("prodType")}/>
                     <IconSearch />
-                    {errors.prodDetailType && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDetailType && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
                         <input type="text" placeholder='상품가격기준을 입력하세요'
                             {...register("prodDetailTypeStd", { required: true })} readOnly={true} />
-                    {errors.prodDetailTypeStd && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDetailTypeStd && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
-                    <input type="text" placeholder='상품가격기준을 입력하세요' 
+                    <input type="text" placeholder='상품 정보를 입력하세요' 
                      {...register("prodDesc", {
                         required: true
                     })} />
-                    {errors.prodDesc && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDesc && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
@@ -134,7 +152,7 @@ const ProductsWrite = () => {
                      {...register("stdPrice", {
                         required: true
                     })} />
-                    {errors.stdPrice && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.stdPrice && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>
@@ -153,4 +171,4 @@ const ProductsWrite = () => {
         </>
     )
     }
-export default ProductsWrite;
+export default ProductWrite;

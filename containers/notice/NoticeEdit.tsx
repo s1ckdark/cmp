@@ -24,7 +24,7 @@ const NoticeEdit = () => {
     return (
         <>
             <Breadcrumb />
-            <NoticeForm data={data} />
+            <NoticeForm data={data} type="edit" />
         </>
     );
 }

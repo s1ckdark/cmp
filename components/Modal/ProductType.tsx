@@ -31,6 +31,13 @@ const ProductType = () => {
                 prodDetailTypeStd: prodDetailTypeStd
             },
         })
+        setData({
+            modalType:'',
+            keyword: '',
+            data: [],
+            totalPages: 0,
+            currentPage: 1
+        })
     }
 
     const onSearch = async() => {
@@ -66,7 +73,7 @@ const ProductType = () => {
                         {data.data.length > 0 ? data.data.map((item: any, index:number) => (
                             <tr className={styles.prodTypeItem} key={`${item.prodType}-${item.prodDetailType}-${index}`} onClick={() => pickup(item.prodType, item.prodDetailType, item.prodDetailTypeStd)}>
                                 <td className={styles.prodType}>{item.prodType}</td>
-                                <td className={styles.prodDetailType}>{item.memberNo}</td>
+                                <td className={styles.prodDetailType}>{item.prodDetailType}</td>
                                 <td className={styles.prodTypeStd}>{item.prodDetailTypeStd}</td>
                             </tr>
                         )):<tr><td colSpan={3}>검색 결과가 없습니다.</td></tr>}

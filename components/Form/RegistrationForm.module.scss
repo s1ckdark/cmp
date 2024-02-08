@@ -117,6 +117,12 @@
         
        }
     }
+    &.member {
+        .resultArea {
+           height: 230px;
+           overflow-y: scroll;
+       }
+    }
     .closeBtn {
         position: absolute;
         top: 10px;
@@ -146,6 +152,7 @@
         }
         .resultArea {
              margin: 30px auto;
+
         table {
             width: 100%;
             border-collapse: collapse;

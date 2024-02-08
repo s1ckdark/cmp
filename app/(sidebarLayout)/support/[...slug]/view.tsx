@@ -22,6 +22,7 @@ const ViewPage = () => {
     const row: any[] = isEmptyObject(data) ? [] : [data];
     return (
         <div className="container">
+               <h1>작업 중입니다.</h1>
             {/* <ToastViewer
                 // content={content || ''}
                 content={''}

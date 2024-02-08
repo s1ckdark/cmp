@@ -6,7 +6,7 @@ const NoticeWrite = () => {
     return (
         <>
             <Breadcrumb />
-            <NoticeForm />
+            <NoticeForm type="register" />
         </>
     );
 }

@@ -195,7 +195,7 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
                 <div className="columns-3 gap-36">
                     <div className={`${styles.memberNo} ${styles.inputGroup}`}>
                         <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 번호<span className={styles.required}></span></label>
-                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo", { required: true })} defaultValue={memberNo}  />
+                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo", { required: true })} defaultValue={memberNo} onClick={() => { if(type === 'edit' || type === 'register') openModal('customer')}}/>
                         {errors.memberNo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
                         {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch}  onClick={() => openModal('customer')}/> : null}
                         {errors.memberNo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}

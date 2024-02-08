@@ -1,4 +1,4 @@
-.user {
+.member {
     .searchInput {
         input {
             width: calc(100% - 110px);
@@ -9,7 +9,7 @@
             box-sizing: border-box;
         }
     }
-    .userList {
+    .memberList {
         margin: 30px auto;
         height: 320px;
         overflow-y: scroll;

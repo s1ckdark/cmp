@@ -129,13 +129,9 @@ const ProductEdit = () => {
                 Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
                 const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
                 if (copyResponse.status === 200) {
-                    const updateData = await apiBe(getUrl.url, { method: getUrl.method });
-                    if (updateData.status === 200) {
                         Toast("success", '로드 되었습니다.');
-                        setForm(updateData.data[0]);
+                        setForm(copyResponse.data);
                         setRegProd(true);
-                    }
-                    
                 }
             } else {
                 try {
@@ -187,9 +183,10 @@ const ProductEdit = () => {
         if(addField.expPrice === '' || addField.discountRate === '') Toast("error", '값을 입력하세요.'); 
         const response = await apiBe.put(`/product/gdbilling/product/${type}`, addField);
         const result = response.data;
-    if (response.status === 200 || response.status === 201) {
-            Toast("success", '저장되었습니다.', () => reload());
+        if (response.status === 200 || response.status === 201) {
+            closeModal();
             setAddField({});
+            Toast("success", '저장되었습니다.', () => reload());
                 // setForm(result);
         } else if (response.status === 409) {
             // 409 상태 코드 처리

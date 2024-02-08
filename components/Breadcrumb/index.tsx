@@ -10,9 +10,17 @@ import { path } from 'd3';
 const Breadcrumb = () => {
     const pathname = usePathname();
     let key: string = pathname.split('/').slice(0, 4).join('/')
-    if(pathname.includes('/view/') || pathname.includes('/list/') || pathname.includes('/edit/')) {
+    if (pathname.includes('/view/') || pathname.includes('/list/') || pathname.includes('/edit/')) {
         key = pathname.split('/').slice(0, -1).join('/');
     }
+    if (pathname.includes('/billing/product/view')) {
+        key = '/billing/product/view';
+    }
+    if (pathname.includes('/billing/product/edit')) {
+        key = '/billing/product/edit';
+    }
+    
+    console.log(key);
     const breadcrumbData = breadcrumbs[key as keyof typeof breadcrumbs];
     if (!breadcrumbData) {
         // Handle the case where no matching breadcrumb data is found
@@ -29,7 +37,7 @@ const Breadcrumb = () => {
                         breadcrumb.map((item, index) => (
                             <li className="inline-flex items-center" key={item.href}>
                                 {index !== 0 ? <BreadcrumbArrow /> : <BreadcrumbHome />}
-                                <Link href={item.href} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">{item.label}</Link>
+                                {item.href === '#' ? <span className="text-sm font-medium text-gray-700 dark:text-gray-400">{item.label}</span> :  <Link href={item.href} className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">{item.label}</Link>}
                             </li>
                         ))
                     }

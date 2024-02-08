@@ -119,7 +119,7 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
                     <div className={`${styles.right} ${styles.boxSection} currentMonth flex items-center justify-center`}>
                         <div className={styles.inner}>
                             <div className={styles.label}>
-                                <h2>당월 네이버 전체매출<span>{Math.round(diffMonth.trend.growth_rate)}&#37;</span></h2>
+                                <h2>금월 네이버 전체매출<span>{Math.round(diffMonth.trend.growth_rate)}&#37;</span></h2>
                             </div>
                             <div className={styles.countup}>
                                 <label htmlFor="totalDemandAmount">전체고객사</label>

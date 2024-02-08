@@ -14,14 +14,15 @@ import { fileUploadAtom } from '@/states/data';
 import { v4 as uuidv4 } from 'uuid';
 import lodash from 'lodash';
 import { apiBe } from '@/services';
-// const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
+const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
 
 interface INoticeFormProps {
     data?: any;
+    type: string;
 }
 
-const NoticeForm = ({ data }: INoticeFormProps) => {
-    const [notice, setNotice] = useState<any>(data || {});
+const NoticeForm = ({ data, type }: INoticeFormProps) => {
+    const [ notice, setNotice] = useState<any>(data || {});
     const { subject, yn, noticeType, content, uploadedFiles, clientSession } = notice;
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         defaultValues: {
@@ -40,7 +41,6 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
 
 
     const onSubmit = async (data: object) => {
-        console.log(data);
         let tmp:any = lodash.cloneDeep(data);
         try {
             const editorIns = ref?.current?.getInstance();
@@ -48,15 +48,24 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
             if (contentMark?.length === 0) {
                 throw new Error('내용을 입력해주세요.');
             }
+            let fileIds:any[] = [];
+            if (uploadedFiles.length > 0) {
+                uploadedFiles.map((item: any) => {
+                    fileIds.push(item.id);
+                });
+            }
+            
             tmp['content'] = contentMark;
             tmp['clientSession'] = uuid;
+            tmp['fileIds'] = fileIds;
+            console.log(tmp);
             const url = "/notice";
-            const response = await apiBe.put(url, tmp);
-            if (response.status === 200) {
-                Toast("success", '포스트를 작성했습니다.', () => router.push('/notice/list/1'));
-            } else {
-                Toast("error", '다시 시도해주세요.');
-            }
+            // const response = type === 'register' ? await apiBe.put(url, tmp):await apiBe.post(url, tmp);
+            // if (response.status === 200 || response.status === 201) {
+            //     Toast("success", '포스트를 작성했습니다.', () => router.push('/notice/list/1'));
+            // } else {
+            //     Toast("error", '다시 시도해주세요.');
+            // }
         } catch (error) {
             console.log(error);
             Toast("error", `${error}` || '다시 시도해주세요.');
@@ -131,7 +140,10 @@ const NoticeForm = ({ data }: INoticeFormProps) => {
                 </div>
                 <div className={style.inputGroup}>
                     <label htmlFor="content">내용</label>
-                   <textarea {...register('content', {minLength:10})}  />
+                    {/* <textarea {...register('content', { minLength: 10 })} /> */}
+                    <ToastEditor
+                        content={data.content}
+                        editorRef={ref} />
                 </div>
                 <FileUploader uuid={uuid} data={data?.uploadedFiles} />
                 <div className={style.btnArea}>

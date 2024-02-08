@@ -114,14 +114,14 @@ const ProductEdit = () => {
                     {...register("prodName", {
                         required: "해당 필드는 필수입니다."
                     })} />
-                    {errors.prodName && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodName && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                     <div className={Styles.inputGroup}>
                         <label htmlFor="type">상품분류</label>
                         <div className={Styles.inputRadio}>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType", {required: true})} value="SW" />상용SW</label>
                             <label htmlFor="prodType"><input type="radio" {...register("prodType", { required: true })} value="MSP" />MSP</label>
-                                {errors.prodType && <span className={`${Styles.errorMsg} text-red-500`}>필수 선택 사항입니다</span>}
+                                {errors.prodType && <span className={Styles.errorMsg}>필수 선택 사항입니다</span>}
                         </div>
                     </div>
                 <div className={Styles.inputGroup}>
@@ -129,21 +129,21 @@ const ProductEdit = () => {
                     <input type="text" placeholder='상품상세분류를 입력하세요' 
                             {...register("prodDetailType", { required: true })} readOnly={true}  onClick={()=>openModal("prodType")}/>
                     <IconSearch />
-                    {errors.prodDetailType && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDetailType && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDetailTypeStd">상품가격기준</label>
                         <input type="text" placeholder='상품가격기준을 입력하세요'
                             {...register("prodDetailTypeStd", { required: true })} readOnly={true} />
-                    {errors.prodDetailTypeStd && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDetailTypeStd && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="prodDesc">상품정보</label>
-                    <input type="text" placeholder='상품가격기준을 입력하세요' 
+                    <input type="text" placeholder='상품 정보를 입력하세요' 
                      {...register("prodDesc", {
                         required: true
                     })} />
-                    {errors.prodDesc && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.prodDesc && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
                 <div className={Styles.inputGroup}>
                     <label htmlFor="stdPrice">정식단가</label>
@@ -151,7 +151,7 @@ const ProductEdit = () => {
                      {...register("stdPrice", {
                         required: true
                     })} />
-                    {errors.stdPrice && <span className={`${Styles.errorMsg} text-red-500`}>필수 입력 항목입니다.</span>}
+                    {errors.stdPrice && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                 </div>
 
                 <div className={Styles.inputGroup}>
