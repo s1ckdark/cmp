@@ -67,7 +67,7 @@ const ProductEdit = () => {
     
     const openModal = (type: string) => {
         if (getValues('prodType') === "SW" || getValues('prodType') === "MSP") {
-            setModal({ ...modal, isOpen: true, type: type });
+            setModal({ ...modal, isOpen: true, type: type,data:{...modal.data, prodType:getValues('prodType')} });
         } else {
             Toast('error', '상품분류를 선택해주세요.');
         }
@@ -95,6 +95,7 @@ const ProductEdit = () => {
 
     useEffect(() => {
         setValue('prodName', prodName);
+        setValue('prodType', prodType);
         setValue('prodDetailType', prodDetailType);
         setValue('prodDetailTypeStd', prodDetailTypeStd);
         setValue('prodDesc', prodDesc);

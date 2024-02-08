@@ -112,6 +112,9 @@ export const Tables = ({ rowType }: TablesProps) => {
         fetching()
     }, [path, rowType, targetMonth, data.currentPage, data.mode]);
 
+    useEffect(() => {
+        setData({...data, currentPage: 1})
+    },[])
     const onPageChange = (newPage: number) => {
         if (data.mode === "search") {
             setData({

@@ -3,6 +3,7 @@
     padding: 50px;
 .inputGroup {
     margin-bottom: 30px;
+    position: relative;
     label {
         margin-bottom: 10px;
         font-size: 14px;
@@ -29,7 +30,11 @@
         background: #F7F8FE;
         padding: 20px;
     }
-
+    svg {
+        position: absolute;
+        right:20px;
+        top: 50%;
+    }
 }
 
 .btnArea {
@@ -52,12 +57,4 @@
         }
     }
 }
-}
-
-.errorMsg {
-    color: #43B69A;
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 10px;
-    text-align: center;
 }

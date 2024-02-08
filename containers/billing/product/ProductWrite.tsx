@@ -588,6 +588,7 @@ const ProductWrite = () => {
                                         <th>상품명</th>
                                         <th>상품분류</th>
                                         <th>상품상세분류</th>
+                                        <th>상품가격기준</th>
                                         <th>정식단가</th>
                                         <th>할인율</th>
                                         <th>수량</th>

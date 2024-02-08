@@ -20,7 +20,6 @@ const Breadcrumb = () => {
         key = '/billing/product/edit';
     }
     
-    console.log(key);
     const breadcrumbData = breadcrumbs[key as keyof typeof breadcrumbs];
     if (!breadcrumbData) {
         // Handle the case where no matching breadcrumb data is found
