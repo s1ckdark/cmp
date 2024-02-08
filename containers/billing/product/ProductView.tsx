@@ -121,9 +121,9 @@ const ProductView = () => {
                 <td><input type="text" name="prodName" value={item.prodName} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailType" value={item.prodDetailType} readOnly={view} /></td>
                 <td><input type="text" name="prodDetailTypeStd" value={item.prodDetailTypeStd} readOnly={view} /></td>
-                <td><input type="number" name="qty" value={item.qty} readOnly={view} /></td>
                 <td><input type="number" name="stdPrice" value={item.stdPrice} readOnly={view} /></td>
                 <td><input type="number" name="discountRate" value={item.discountRate} readOnly={view} /></td>
+                <td><input type="number" name="qty" value={item.qty} readOnly={view} /></td>
                 <td><input type="number" name="estimateUseAmount" value={item.estimateuseAmount} /></td>
                 <td><input type="text" name="service_start_date" value={item.service_start_date} readOnly={view} /></td>
                 <td><input type="text" name="service_end_date" value={item.service_end_date} readOnly={view} /></td>
@@ -234,11 +234,11 @@ const ProductView = () => {
                                     <tr>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
-                                    <th>상품상세분류</th>
-                                     <th>상품가격기준</th>
-                                        <th>수량</th>
+                                        <th>상품상세분류</th>
+                                        <th>상품가격기준</th>
                                         <th>정식단가</th>
                                         <th>할인율</th>
+                                        <th>수량</th>
                                         <th>납부예상금액</th>
                                         <th>서비스 시작일시</th>
                                         <th>서비스 종료일시</th>

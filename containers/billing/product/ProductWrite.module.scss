@@ -284,10 +284,9 @@
                 width: 500px;
                 height: 500px;
                 .modalHeader {
-                    height: 100px;
                     display: flex;
                     justify-content: center;
-                    margin-top: 50px;
+                    margin: 50px auto 30px;
                     input {
                         width: 300px;
                         height: 30px;
@@ -308,7 +307,9 @@
                     }
                 }
                 .modalBody {
-                    padding: 50px; 
+                    padding: 0 50px 50px; 
+                    height: 350px;
+                    overflow-y:scroll;
                     table {
                         width: 100%;
                         tr {

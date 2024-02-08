@@ -421,7 +421,7 @@ const ProductWrite = () => {
             if (content.length === 0) {
                 Toast("error", '회사명이 존재하지 않습니다.');
             } else {
-                html = "<table><thead><tr><th>업체번호</th><th>고객유형</th></th></tr></thead><tbody>"
+                html = "<table><thead><tr><th>업체명</th><th>고객유형</th></th></tr></thead><tbody>"
                 html += content.map((item: any) => {
                     return `<tr data-memberno="${item.memberNo}" data-membername="${item.memberName}" data-memberType="${item.memberType}"><td>${item.memberName}</td><td>${item.memberType}</td></tr>`;
                 }).join('');
@@ -586,7 +586,6 @@ const ProductWrite = () => {
                                         <th></th>
                                         <th>상품아이디</th>
                                         <th>상품명</th>
-                                        <th>상품분류</th>
                                         <th>상품상세분류</th>
                                         <th>상품가격기준</th>
                                         <th>정식단가</th>

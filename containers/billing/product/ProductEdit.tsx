@@ -114,39 +114,38 @@ const ProductEdit = () => {
         tmp.target_end_date = target_end_date;
         const prevMonth = dayjs(target_month).subtract(1, 'month').format('YYYYMM');
         const chkPrevMonth = { url: `/product/gdbilling?memberNo=${data.memberNo}&target_month=${prevMonth}`, method: 'get' };
-        const insertUrl = { url: '/product/gdbilling', method: 'put' };
-        const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
-        const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
-        const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
-        if (chkResponse.status === 200 && chkResponse.data) {
-            Toast("success", '저장된 데이터를 가져옵니다.');
-            setForm(chkResponse.data);
-            setRegProd(true);
-        } else {
-            const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
-            console.log(chkPrevMonth.url, chkPrevMonthResponse);
-            if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
-                Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
-                const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
-                if (copyResponse.status === 200) {
-                        Toast("success", '로드 되었습니다.');
-                        setForm(copyResponse.data);
-                        setRegProd(true);
-                }
-            } else {
+        const updateUrl = { url: "/product/gdbilling", method: 'post' };
+        // const insertUrl = { url: '/product/gdbilling', method: 'put' };
+        // const copyUrl = { url: `/product/gdbilling/copy/${data.memberNo}/${prevMonth}/${target_month}`, method: 'post' };
+        // const getUrl = { url: `/product/gdbilling/${data.memberNo}/${data.target_month}`, method: 'get' };
+        // const chkResponse = await apiBe(getUrl.url, { method: getUrl.method });
+        // if (chkResponse.status === 200 && chkResponse.data) {
+        //     Toast("success", '저장된 데이터를 가져옵니다.');
+        //     setForm(chkResponse.data);
+        //     setRegProd(true);
+        // } else {
+        //     const chkPrevMonthResponse = await apiBe(chkPrevMonth.url, { method: chkPrevMonth.method });
+        //     console.log(chkPrevMonth.url, chkPrevMonthResponse);
+        //     if (chkPrevMonthResponse.status === 200 && chkPrevMonthResponse.data.content.length > 0) {
+        //         Toast("success", '이전달 청구가 존재합니다. 이전달 청구를 복사합니다.');
+        //         const copyResponse = await apiBe(copyUrl.url, { method: copyUrl.method });
+        //         if (copyResponse.status === 200) {
+        //                 Toast("success", '로드 되었습니다.');
+        //                 setForm(copyResponse.data);
+        //                 setRegProd(true);
+        //         }
+        //     } else {
                 try {
-                    const insertResponse = await apiBe(insertUrl.url, { method: insertUrl.method, data: tmp });
-                    if (insertResponse.status === 200) {
-                        Toast("success", '저장되었습니다.');
-                        setForm(insertResponse.data);
-                        setRegProd(true);
+                    const updateResponse = await apiBe.post(updateUrl.url, { method: updateUrl.method, data: tmp });
+                    if (updateResponse.status === 200) {
+                        Toast("success", '수정되었습니다.',()=>goList());
                     }
                 } catch (error: any) {
                     console.log(error);
                     Toast('error', error.response.data.message);
                 }
-            }
-        }
+            // }
+        // }
     }
     const reload = async () => {
         const data = getValues();
@@ -537,7 +536,7 @@ const ProductEdit = () => {
                     </div>
                     <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>돌아가기</Button>
+                        <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>돌아가기</Button>
                     </div>
                 </form>    
                 {regProd &&
