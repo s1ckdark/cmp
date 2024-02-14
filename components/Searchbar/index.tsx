@@ -95,7 +95,7 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params });
     if (response.status === 200 && response.data.totalElements > 0) {
-      setData({ mode: "search", params: params, data: response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page });
+      setData({ mode: "search", params: params, data: response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page, totalElements: response.data.totalElements });
     } else {
       Toast('error', '검색 결과가 없습니다');
     }
@@ -141,7 +141,7 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
   
   const searchReset = () => {
     if (data.mode === 'search') {
-      setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1 })
+      setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1, totalElements: 0})
     setKeyword('');
     setReset(true);
     router.push(`${path}/1`);
