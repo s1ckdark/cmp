@@ -5,7 +5,6 @@ import InvoiceVisual from "./visual";
 
 const invoicePage = ({ params }: any) => {
     const { slug } = params;
-    console.log(params);
     const pageType = slug[0];
     let pageNumber = 1,
         memberNo = "",

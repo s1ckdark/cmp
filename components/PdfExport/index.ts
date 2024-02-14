@@ -5,24 +5,25 @@ export const PdfExport = async (id: string, filename:any) => {
     if (document) {
         html2canvas(document.querySelector(`#${id}`)!).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 210;
-            const pageHeight = imgWidth * 1.414;
+            const pdf = new jsPDF('p', 'mm', 'A4');
+            const imgWidth = 195;
+            const margin = 10;
+            // const pageHeight = imgWidth * 1.414;
+            const pageHeight = 295;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             let heightLeft = imgHeight;
             heightLeft -= pageHeight;
-
             // eslint-disable-next-line new-cap
-            const doc = new jsPDF('p', 'mm', 'A4');
-            let position = 0;
-            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            let position = margin;
+            pdf.addImage(imgData, 'JPEG', margin, position, imgWidth, imgHeight);
 
-            while (heightLeft >= 20) {
+            while (heightLeft >= 0) {
                 position = heightLeft - imgHeight;
-                doc.addPage();
-                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                pdf.addPage();
+                pdf.addImage(imgData, 'JPEG', 0, position + 10, imgWidth, imgHeight);
                 heightLeft -= pageHeight;
             }
-            doc.save(filename+'.pdf');
+            pdf.save(filename+'.pdf');
         });
     }
 };

@@ -36,6 +36,7 @@
         align-items: center;
         justify-content: space-between;;
         .inputGroup {
+            position: relative;
             label {
                 margin-bottom: 10px;
                 font-size: 14px;
@@ -58,10 +59,21 @@
                 svg {
                     position: absolute;
                     top: 50%;
-                    right: 0;
+                    right: 0px;
                     transform: translate(-50%,-50%)
                 }
             }
+            .datesearch {
+                   position: relative;
+                svg {
+                    position: absolute;
+                    top: 50%;
+                    right: 0px;
+                    transform: translate(-50%,-50%)
+                }
+                button {display:none;}
+            }
+
         }
     }
     .sw {
@@ -584,3 +596,10 @@
     }
 }
 
+.errorMsg {
+    color: #43B69A;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 10px;
+    text-align: center;
+}

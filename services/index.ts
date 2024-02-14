@@ -133,14 +133,11 @@ apiBe.interceptors.request.use(async (config: any) => {
 
 apiBe.interceptors.response.use(
     async (response) => {
-        // console.log(response);
+        console.log("apiBe response :", response);
         if (response.status === 200 || response.status === 201) {
-            // console.log("response", response.data.status, response);
             if (response.data.status === 200 || response.data.status === 201) {
-                //  console.log("response",response.data.status, response);
                 return response.data // 2xx 범위일 때
-            }
-            else if (response.data.status === 401) {
+            } else if (response.data.status === 401) {
                 window.dispatchEvent(
                     new CustomEvent("axiosError", {
                         detail: {
@@ -153,7 +150,9 @@ apiBe.interceptors.response.use(
                 //     response.config.headers.Authorization = `Bearer ${token}`;
                 //     return axios.request(response.config);
                 // })
-            } 
+            } else if(response.data.size > 0 && response.data.type === "application/octet-stream"){
+                return response.data 
+            }
             return Promise.reject(response);  
         }
     },

@@ -7,17 +7,17 @@ import { apiBe } from '@/services';
 import lodash, { set } from 'lodash';
 import Button from '@/components/Button';
 import { useRecoilState } from 'recoil';
+import { FileDownloader } from '@/components/Files';
 import { clientSessionAtom, fileUploadAtom } from '@/states/data';
 interface IFileProps {
-    file: {};
+    file: any;
     clientSession: any;
 }
 
-const FileUploader = ({ uuid, data }: any) => {
-    const [fileUpload, setFileUpload] = useRecoilState(fileUploadAtom);
-    const [fileList, setFileList] = React.useState<IFileProps[]>(data || []);
-    const [uploadedFile, setUploadedFile] = useRecoilState(fileUploadAtom);
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+const FileUploader = ({ uuid, data, type, from}: any) => {
+    const [fileList, setFileList] = useRecoilState(fileUploadAtom);
+    const [ activeBtn, setActiveBtn ] = useState<boolean>(true);
+    const { register, handleSubmit, getValues, watch, setValue, formState: { errors } } = useForm({
         defaultValues: {
             file: {},
             clientSession: uuid
@@ -29,8 +29,9 @@ const FileUploader = ({ uuid, data }: any) => {
             file: (data as any).file[0],
             clientSession: uuid
         }
-        console.log(tmp);
+        // console.log(tmp);
         const url = "/file/upload";
+        Toast("info", "파일을 업로드 중입니다.")
         const response = await apiBe.post(url, tmp,{
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -38,60 +39,65 @@ const FileUploader = ({ uuid, data }: any) => {
         }
         );
         if(response.status === 200) {
-            const { data } = response;
-            setFileList([...fileList, data]);
-            setFileUpload([...fileUpload, data.id])
-            Toast("success", '파일을 업로드했습니다.');
+            const filedata = response.data;
+            console.log(filedata,fileList);
+            setFileList([...fileList, filedata]);
+            Toast("success", '파일 업로드가 완료되었습니다.');
         } else {
             Toast("error", '다시 시도해주세요.');
         }
     }
     
     const delFile = (id: string) => {
-        const newFileList = fileList.filter((file) => file.clientSession !== id);
+        const newFileList = fileList.filter((file:any) => file.clientSession !== id);
         setFileList(newFileList);
     }
 
     const cancel = () => {
         setFileList([]);
+        setValue('file', {});
     }
     const selectFile = () => {
-        const target = document.querySelector('input[type="file"]') as HTMLInputElement;
-        console.log(target);
+        const target:any= document.querySelector('input[type="file"]');
         if (target) {
             target.click();
         }
     }
+    const fileSelected:any = watch('file');
+    
     useEffect(() => {
-        setFileList(data);
+        if (fileSelected.length > 0) {
+            setActiveBtn(false);
+        } else {
+            setActiveBtn(true);
+        }
+    }, [fileSelected])
+    
+    const onChangeFile = (e: any) => {
+        const file = e.target.files[0];
+        setValue('file', file);
+        setActiveBtn(false);
+    }
+
+    useEffect(() => {
+        if(data && data.length > 0) setFileList(data);
     }, [data])
+
     return (
         <div className={style.fileUploader}>
-                <div className={style.selector}>
-                    <div className={style.inputGroup}>
+            <div className={style.fileSelector}>
+                <div className={style.inputGroup}>
                     <label htmlFor="file">첨부 파일</label>
                     <input type="file" className={style.fileInput} accept="*"  {...register("file")} />
-                    
-                    </div>
-                <div className={style.btnArea}>
-                        <Button type="button" skin='submit' onClick={selectFile}>파일 선택</Button>
-                        <Button type="button" onClick={handleSubmit(onSubmit)} skin='submit'>파일 업로드</Button>
-                        <Button type="button" onClick={cancel} skin='cancel'>취소</Button>
-                    </div>
+                    <p className={style.fileSelected}>{fileSelected && fileSelected.length > 0 ? fileSelected[0].name:null}</p>
                 </div>
-            {fileList && fileList.map((file: any, index: number) => {
-                return (
-                    <div key={index} className={style.preview}>
-                        <div className={style.previewItem}>
-                            <div className={style.previewItem}>
-                                <span onClick={() => delFile(file.id)}>&times;</span>
-                                <p>{file.originName}</p>
-                            </div>
-                        </div>
-                    </div>
-                )
-            })}
-
+                <div className={style.btnArea}>
+                    <Button type="button" skin='submit' onClick={selectFile}>파일 선택</Button>
+                    <Button type="button" onClick={handleSubmit(onSubmit)} skin='submit' disabled={activeBtn}>파일 업로드</Button>
+                    <Button type="button" onClick={cancel} skin='cancel'>취소</Button>
+                </div>
+            </div>
+            {fileList && fileList.length > 0 && <FileDownloader data={ fileList } type={ type } from={from} /> }
         </div>
     );
 }

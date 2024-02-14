@@ -73,6 +73,13 @@ const ProductEdit = () => {
         }
     }
     const prodTypeValue = watch('prodType');
+    const del = async (id:string) => {
+        const url:any = `/product/product/${id}`;
+        const response = await apiBe.delete(url);
+        if (response.status === 201 || response.status === 200) {
+            Toast('success', '삭제되었습니다.', () => router.push('/products/product/list/1'));
+        }
+    }
     useEffect(() => {
         if (modal.type === 'prodType' && modal.data !== null) {
             const { prodType, prodDetailType, prodDetailTypeStd } = modal.data;
@@ -103,7 +110,7 @@ const ProductEdit = () => {
         setValue('comment', comment)
     }, [product])
     
-  
+
     return (
         <>
         <Breadcrumb />
@@ -164,6 +171,7 @@ const ProductEdit = () => {
                     </div>
                 <div className={Styles.btnArea}>
                         <Button type="submit" className={Styles.submitBtn} skin={"submit"}>저장</Button>
+                        <Button type="button" className={Styles.delBtn} skin={"del"} onClick={()=>del(id)}>삭제</Button>
                         <Button type="button" className={Styles.submitBtn} skin={"cancel"} onClick={goBack}>취소</Button>
                 </div>
             </form>

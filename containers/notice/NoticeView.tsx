@@ -9,7 +9,7 @@ const NoticeView = () => {
     return (
         <>
             <Breadcrumb />
-            <NoticeDetailView id={noticeId} />
+            <NoticeDetailView id={noticeId} type="view" />
         </>
     );
 }

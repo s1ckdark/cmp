@@ -127,11 +127,14 @@ const CustomersAddrForm = ({ type, memberNo, mode, data }: ICustomersAddrForm) =
                     </div>
                     <div className={styles.inputGroup}>
                         <label htmlFor="addrDetail" className="block text-sm font-medium text-gray-900 dark:text-black">상세 주소<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="addrDetail" {...registerAddr("addrDetail", { required: true})} defaultValue={addrDetail} />
-                        {errorsAddr.addrDetail && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
+                        <input readOnly={isDisabled} type="text" id="addrDetail" {...registerAddr("addrDetail")} defaultValue={addrDetail} />
+                        {/* {errorsAddr.addrDetail && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>} */}
                     </div>
                 </div>
-                {mode !== 'view' && <Button type="submit" skin={"green"}>저장</Button>}
+                <div className={styles.btnArea}>
+                    {mode !== 'view' && <Button type="submit" skin={"submit"}>저장</Button>}
+                    {mode !== 'view' && <Button type="button" skin={"back"}>돌아가기</Button>}
+                </div>
             </form>
         </>
     )

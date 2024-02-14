@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Styles from './ProductsTypeEdit.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
@@ -33,9 +33,10 @@ const ProductsTypeEdit = () => {
     const product = useRecoilValue(prodTypeAtom);
     const router = useRouter();
     const pathname = usePathname();
+    const [ type, setType ] = useState(false);
     const prodid = lodash.last(pathname.split('/'));
     const { prodType, prodDetailType, prodDetailTypeStd } = product;
-    const { register, handleSubmit, watch, reset, getValues, setError, setFocus, formState: { errors } } = useForm(
+    const { register, handleSubmit, watch, reset, getValues, setValue, setError, setFocus, formState: { errors } } = useForm(
         {
             defaultValues: {
                 prodType: product?.prodType || '',
@@ -58,6 +59,22 @@ const ProductsTypeEdit = () => {
     const cancel = () => {
         router.push('/products/category/list/1');
     }
+    
+    const productType = watch('prodType');
+
+    useEffect(() => {
+        if(productType === 'SW') { setType(true) } else { setType(false);setValue('prodDetailTypeStd','') }
+    }, [productType]);
+
+    const del = async (prodid:string) => {
+        const url:any = "/product/producttype/"+prodid;
+        console.log(url);
+        const response = await apiBe.delete(url);
+        if (response.status === 201 || response.status === 200) {
+            Toast('success', '삭제되었습니다.', () => router.push('/products/category/list/1'));
+        }
+    }
+
     return (
         <>
             <Breadcrumb />
@@ -79,7 +96,7 @@ const ProductsTypeEdit = () => {
                             })} defaultValue={prodDetailType}/>
                         {errors.prodDetailType && <span className={Styles.error}>{errors.prodDetailType?.message || null}</span>}
                     </div>
-                    <div className={Styles.inputGroup}>
+                    {type && <div className={Styles.inputGroup}>
                         <label htmlFor="prodDetailTypeStd">상품가격기준</label>
                         <input type="text" placeholder='상품가격기준을 입력하세요'
                             {...register("prodDetailTypeStd", {
@@ -87,9 +104,10 @@ const ProductsTypeEdit = () => {
                             })}
                             defaultValue={prodDetailTypeStd}/>
                         {errors.prodDetailTypeStd && <span className={Styles.error}>{errors.prodDetailTypeStd?.message || null}</span>}
-                    </div>
+                    </div>}
                     <div className={Styles.btnArea}>
                         <Button type="submit" skin={"submit"}>저장</Button>
+                        <Button type="button" skin={"del"} onClick={() => del(prodid ?? '')}>삭제</Button>
                         <Button type="button" skin={"cancel"} onClick={cancel}>취소</Button>
                     </div>
                 </form>

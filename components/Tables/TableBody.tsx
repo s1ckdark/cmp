@@ -120,7 +120,7 @@ export const TableBody = ({ rowType, data }: any) => {
         notice: [
             "idx",
             "subject",
-            "content",
+            "noticeType",
             "regName",
             "files",
             "regDt"
@@ -225,7 +225,7 @@ export const TableBody = ({ rowType, data }: any) => {
             case "idx":
                 content = (
                     <td key={key + "-" + keyIndex} onClick={() => view(item)}>
-                        {data.totalItems ? data.totalItems:data.data.length - index - (pageNumber - 1) * 10}
+                        {data.totalElements && data.totalElements > 0 ? data.totalElements - index - (data.currentPage - 1 ) * 10:data.data.length - index - (pageNumber - 1) * 10}
                     </td>
                 );
                 break;

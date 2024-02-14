@@ -21,6 +21,7 @@ interface dataProps {
     data: any;
     totalPages: number;
     currentPage?: number;
+    totalElements?: number;
 }
 export const Tables = ({ rowType }: TablesProps) => {
     useResetRecoilState(dataListAtom);
@@ -93,7 +94,6 @@ export const Tables = ({ rowType }: TablesProps) => {
 
         const fetching = async () => {
             const { params } = data.mode === "search" ? data : endpoint[rowType];
-            console.log(data.mode, params);
             const response = await apiBe.get(endpoint[rowType]['url'], { params });
             
             if (response.status === 200 || response.status === 201) {
@@ -101,7 +101,8 @@ export const Tables = ({ rowType }: TablesProps) => {
                     ...data,
                     data: endpoint[rowType]['key'] !== undefined ? response.data[endpoint[rowType]['key']]:response.data,
                     totalPages: response.data.totalPages,
-                    currentPage: pageNumber
+                    currentPage: pageNumber,
+                    totalElements: response.data.totalElements,
                 });
         
                 setMounted(true);

@@ -105,10 +105,13 @@ const ProductEdit = () => {
     })
 
     const onSubmit = async (data: any) => {
+
         const target_start_date = dayjs(data.target_start_date).format('YYYYMMDD').toString();
         const target_end_date = dayjs(data.target_end_date).format('YYYYMMDD').toString();
         const target_month = dayjs(data.target_month).format('YYYYMM').toString();
         const tmp: form = data;
+        tmp.memberName = memberName;
+        tmp.memberType = memberType;
         tmp.target_month = target_month;
         tmp.target_start_date = target_start_date;
         tmp.target_end_date = target_end_date;
@@ -136,7 +139,7 @@ const ProductEdit = () => {
         //         }
         //     } else {
                 try {
-                    const updateResponse = await apiBe.post(updateUrl.url, { method: updateUrl.method, data: tmp });
+                    const updateResponse = await apiBe.post(updateUrl.url, tmp );
                     if (updateResponse.status === 200) {
                         Toast("success", '수정되었습니다.',()=>goList());
                     }
@@ -472,17 +475,17 @@ const ProductEdit = () => {
                                     <input readOnly={true} type="text" {...register("memberName")} defaultValue={memberName} />
                                     <IconSearch />
                                 </div>
-                                {errors.memberName && <span className={Styles.error}>this field is required</span>}
+                                {errors.memberName && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberNo">고객번호</label>
                                 <input readOnly={true} type="text" {...register("memberNo")} defaultValue={memberNo} />
-                            {errors.memberNo && <span className={Styles.error}>this field is required</span>}
+                            {errors.memberNo && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                             <div className={Styles.inputGroup}>
                                 <label htmlFor="memberType">고객유형</label>
                                 <input readOnly={true} type="text" {...register("memberType")} defaultValue={memberType} />
-                                {errors.memberType && <span className={Styles.error}>this field is required</span>}
+                                {errors.memberType && <span className={Styles.errorMsg}>필수 입력 항목입니다.</span>}
                             </div>
                         </div>
                     </div>
@@ -491,7 +494,7 @@ const ProductEdit = () => {
                         <div className={Styles['col-3']}>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_month">청구년월</label>
-                            <div className={Styles.search}>
+                           <div className={`${Styles.search} ${Styles.datesearch}`}>
                                 <Controller
                                     name="target_month"
                                         control={control}
@@ -515,14 +518,14 @@ const ProductEdit = () => {
                                 /> 
                                 <IconCalendar /> 
                             </div>
-                            {errors.target_month && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_month && <span className={Styles.errorMsg}>this field is required</span>}
                         </div>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_start_date">상품시작일</label>
                                 <div className={Styles.search}>
                                     <input readOnly={true} type="text" {...register("target_start_date")} defaultValue={target_start_date} />
                                 </div>
-                            {errors.target_start_date && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_start_date && <span className={Styles.errorMsg}>this field is required</span>}
                             </div>
                             
                         <div className={Styles.inputGroup}>
@@ -530,14 +533,14 @@ const ProductEdit = () => {
                                 <div className={Styles.search}>
                                     <input readOnly={true} type="text" {...register("target_end_date")} defaultValue={target_end_date} />  
                                 </div>
-                            {errors.target_end_date && <span className={Styles.error}>this field is required</span>}
+                            {errors.target_end_date && <span className={Styles.errorMsg}>this field is required</span>}
                         </div>
                     </div>
                     </div>
-                    <div className={Styles.btnArea}>
+                    {/* <div className={Styles.btnArea}>
                         <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
                         <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"} onClick={goList}>돌아가기</Button>
-                    </div>
+                    </div> */}
                 </form>    
                 {regProd &&
                     <>
@@ -596,11 +599,10 @@ const ProductEdit = () => {
                             </table>
                         </div>
                     </>}
-                    {/* <div className={Styles.btnArea}>
-                        <Button className={`${Styles.btn} ${Styles.submitBtn}`} type="submit" skin={"green"}>저장</Button>
-                        <Button className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"gray"}>취소</Button>
-                    </div> */}
-                
+                    <div className={Styles.btnArea}>
+                        <Button type="button" className={`${Styles.btn} ${Styles.submitBtn}`} skin={"submit"} onClick={goList}>돌아가기</Button>
+                        {/* <Button type="button" className={`${Styles.btn} ${Styles.cancelBtn}`} skin={"cancel"}>취소</Button> */}
+                    </div>
             </div> 
            
             <div id="modal" className={Styles.modal}>
@@ -620,7 +622,7 @@ const ProductEdit = () => {
                             <thead>
                                 <tr>
                                     <th>상품명</th>
-                                    <th>상품분류</th>
+                                    <th>상품상세분류</th>
                                     <th>상품설명</th>
                                 </tr>
                             </thead>
@@ -629,7 +631,7 @@ const ProductEdit = () => {
                                     return (
                                         <tr key={item.id} onClick={() => addProd(idx)}>
                                             <td>{item.prodName}</td>
-                                            <td>{item.prodType}</td>
+                                            <td>{item.prodDetailType}</td>
                                             <td>{item.prodDesc}</td>
                                         </tr>
                                     )

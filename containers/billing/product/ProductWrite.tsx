@@ -483,7 +483,7 @@ const ProductWrite = () => {
                         <div className={Styles['col-3']}>
                         <div className={Styles.inputGroup}>
                             <label htmlFor="target_month">청구년월</label>
-                            <div className={Styles.search}>
+                            <div className={`${Styles.search} ${Styles.datesearch}`}>
                                 <Controller
                                     name="target_month"
                                     control={control}
@@ -631,7 +631,7 @@ const ProductWrite = () => {
                             <thead>
                                 <tr>
                                     <th>상품명</th>
-                                    <th>상품분류</th>
+                                    <th>상품싱세분류</th>
                                     <th>상품설명</th>
                                 </tr>
                             </thead>
@@ -640,7 +640,7 @@ const ProductWrite = () => {
                                     return (
                                         <tr key={item.id} onClick={() => addProd(idx)}>
                                             <td>{item.prodName}</td>
-                                            <td>{item.prodType}</td>
+                                            <td>{item.prodDetailType}</td>
                                             <td>{item.prodDesc}</td>
                                         </tr>
                                     )

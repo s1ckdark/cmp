@@ -8,7 +8,7 @@ import style from './NoticeDetailView.module.scss';
 import Loading from '@/components/Loading';
 import Button from '@/components/Button';
 
-const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), { ssr: false });
+// const ToastViewer = dynamic(() => import('@/components/Board/ToastViewer'), { ssr: false });
 
 const NoticeDetailView = ({ id }: any) => {
 
@@ -37,10 +37,10 @@ const NoticeDetailView = ({ id }: any) => {
                 <h2>{data.subject}</h2>
             </div>
             <div className={style.info}>
-                <div className={style.index}>
+                {/* <div className={style.index}>
                     <label htmlFor="index">번호</label>
                     <div className={style.value}>{data.index}</div>
-                </div>
+                </div> */}
                 <div className={style.noticeType}>
                     <label htmlFor="noticeType">유형</label>
                     <div className={style.value}>{data.noticeType}</div>
@@ -49,17 +49,18 @@ const NoticeDetailView = ({ id }: any) => {
                     <label htmlFor="regName">작성자</label>
                     <div className={style.value}>{data.regName}</div>
                 </div>
-                <div className={style.date}>
+                <div className={style.regDate}>
                     <label htmlFor="regDt">작성일</label>
                     <div className={style.value}>{data.regDt}</div>
                 </div>
             </div>
-            <div className={style.toastViewer}>
-                <ToastViewer
+            <div className={style.textViewer}>
+                {/* <ToastViewer
                     content={data.content}
-                    editorRef={ref} />
+                    editorRef={ref} /> */}
+                    <textarea value={data.content} readOnly></textarea>
             </div>
-            {data.uploadedFiles && data.uploadedFiles.length > 0 ? <FileDownloader data={data.uploadedFiles} /> : null}
+            {data.uploadedFiles && <FileDownloader data={data.uploadedFiles} type="view"/>}
             <div className={style.btnArea}>
                 <Button onClick={() => router.push(`/notice/edit/${id}`)} skin="submit">수정</Button>
                 <Button onClick={() => router.back()} skin="cancel">목록</Button>

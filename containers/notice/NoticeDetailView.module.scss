@@ -1,8 +1,7 @@
 .noticeDetailView {
-    max-width: 1280px;
     margin: 0 auto;
     background-color: #fff;
-    border: 1px solid #DEE1E7;
+    // border: 1px solid #DEE1E7;
     padding: 50px;
 }
 .title {
@@ -18,19 +17,24 @@
     display:flex;
     justify-content: flex-start;
     border: 1px solid #DEE1E7;
+   .noticeType, .writer, .regDate {
+        width: 33.3%;
+    }
     & > div {
         display: flex;
         align-items: center;
-        
+        text-align: center;
         label {
+            width: 40%;
             background-color: #F7F8FE;
             font-size:14px;
-            padding: 10px 25px;
+            padding: 10px 15px;
             border-right: 1px solid #DEE1E7;
         }
         .value {
+            width: 60%;
             border-right: 1px solid #DEE1E7;
-            padding: 10px 25px;
+            padding: 10px 15px;
             font-size:14px;
         }
         &:last-child {
@@ -38,18 +42,14 @@
         }
     }
 }
-.toastViewer {
+.textViewer {
     margin-top: 20px;
     border: 1px solid #DEE1E7;
-    padding: 20px;
-    .toastViewerTitle {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-    .toastViewerContent {
-        font-size: 14px;
-        line-height: 1.5;
+    textarea {
+        padding: 20px;
+        width: 100%;
+        min-height: 400px;
+        height: auto;
     }
 }
 .btnArea {

@@ -107,8 +107,19 @@
         margin-right: 10px;
     }
     &.cancel {
+        color: var(--color-gray-4);
+        background-color: var(--color-white);
+        border: 1px solid var(--color-gray-9);
+
+        &:hover,
+        &:focus {
+            border-color: var(--color-gray-4);
+        }
+    }
+    &.del {
         color: var(--color-white);
         background: #FF5A5F;
         display: table-cell;
+        margin-right: 10px;
     }
 }

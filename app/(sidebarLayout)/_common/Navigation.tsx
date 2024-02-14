@@ -138,7 +138,7 @@ const Navigation = () => {
             "icon": "IconNaviProduct",
             "children": [
                 {
-                    "label": "전체",
+                    "label": "자사상품 전체",
                     "link": "/products/product/list/1",
                     "children": []
                 },
