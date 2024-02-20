@@ -1,3 +1,4 @@
+import lodash from 'lodash';
 
 export const isEmptyObject = (obj: object) => {
     if( obj === null || obj === undefined ) return true;
@@ -15,7 +16,12 @@ export const addComma = (num: number) => {
 
 export const pathSpliter = (path: string) => {
     const pathArr = path.split('/');
-    return { pageNumber: Number(pathArr[pathArr.length - 1]) }
+    // return { pageNumber: Number(lodash.last(pathArr)) }
+    return { targetMonth:pathArr[pathArr.length - 2] ,pageNumber: Number(lodash.last(pathArr)) }
 }
 
 
+export const filterUrl = (url: string, word:string) => {
+    const urlArr = url.split('/');
+    return urlArr.includes(word) ? true : false;
+}

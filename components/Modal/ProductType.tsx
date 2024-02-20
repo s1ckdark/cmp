@@ -11,7 +11,7 @@ import Pagination from '@/components/Pagination';
 
 const ProductType = () => {
     const [data, setData] = useRecoilState(modalListAtom);
-    const [ modal, setModal ] = useRecoilState(modalAtom);
+    const [modal, setModal ] = useRecoilState(modalAtom);
 
     const onChange = (e: any) => {
         setData({...data, keyword: e.target.value});

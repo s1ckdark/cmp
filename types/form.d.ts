@@ -55,7 +55,44 @@ export interface IRegistrationForm {
     regDt: string;
 }
 
+export interface ICustomersAddPerForm {
+    id?: string;
+    userId: string;
+    name: string;
+    dept: string;
+    email: string;
+    phoneNo: string;
+    mobileNo: string;
+    comment: string;
+
+}
+
+interface ICustomersAddrForm {
+    id?: string | undefined;
+    name: string;
+    zipcode: string;
+    addr: string;
+    addrDetail: string;
+    homepage: string;
+}
+interface ICustomersCustContactForm {
+    id?: string;
+    dept: string;
+    name: string;
+    mobileNo: string;
+    email: string;
+    comment: string;
+}
+interface ICustomersSalesForm {
+    dept: string;
+    userId: string;
+    name: string;
+    phoneNo: string;
+    email: string;
+    comment: string;
+}
 export interface ICustomersForm {
+  id: string;
   memberNo: string;
   memberName: string;
   regionType: string;
@@ -64,5 +101,8 @@ export interface ICustomersForm {
   businessRegNo: string;
   custCeo: string;
   custPhone: string;
-comment: string;
+  comment: string;
+  custContact: ICustomersCustContactForm[];
+  sales: ICustomersSalesForm;
+  address: ICustomersAddrForm[];
 }

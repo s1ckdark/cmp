@@ -2,14 +2,10 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import React, {useState, useEffect} from 'react';
 import { apiBe } from '@/services';
-import Button from '@/components/Button';
 import Styles from './UserView.module.scss';
 import { useRouter } from 'next/navigation';
-import { Toast } from '@/components/Toast';
 import RegistrationForm from '@/components/Form/RegistrationForm';
-import { usePathname, useParams } from 'next/navigation';
-import { useRecoilValue } from 'recoil';
-import { userInfoAtom } from '@/states/data';
+import { usePathname } from 'next/navigation';
 import lodash from 'lodash';
 interface UserViewCtProps {
     memberNo: string;
@@ -19,21 +15,21 @@ interface UserViewCtProps {
 const UserView = () => {
     const router = useRouter();
     const path = usePathname();
-    const memberId = lodash.last(path.split('/'));
+    const id = lodash.last(path.split('/'));
     const [userInfo, setUserInfo] = useState<any>(null);
     useEffect(() => {
         const getUserInfo = async () => {
-            const url = `/user?email=${memberId}`;
+            const url = `/user/${id}`
             const response = await apiBe(url);
             if (response.status === 200) {
-                const { content } = response.data;
-                setUserInfo(content[0]);
+                const { data } = response;
+                setUserInfo(data);
             } else {
                 console.log('error');
             }
         }
         getUserInfo();
-    }, [memberId])
+    }, [id])
     return (
         <>
             <Breadcrumb />

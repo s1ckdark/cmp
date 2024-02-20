@@ -5,15 +5,18 @@ import { useState } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { modalAtom } from '@/states/'; 
 import { modalProps } from '@/types';
-import Customer from '@/components/Modal/Customer';
-import Address from '@/components/Modal/Address';
-import User from '@/components/Modal/User';
-import ProdType from '@/components/Modal/ProductType';
 import Pagination from '@/components/Pagination';
 import { modalListAtom } from '@/states/modal';
 import { apiBe } from '@/services';
 import { Toast } from '@/components/Toast';
 import { set } from 'lodash';
+
+import Customer from '@/components/Modal/Customer';
+import Address from '@/components/Modal/Address';
+import User from '@/components/Modal/User';
+import ProdType from '@/components/Modal/ProductType';
+import Member from '@/components/Modal/Member';
+import Product from '@/components/Modal/Product';
 
 const Modal = () => {
     const [modal, setModal] = useRecoilState<modalProps>(modalAtom);
@@ -59,8 +62,11 @@ const Modal = () => {
             case "prodType":
                 return "상품분류 정보";
                 break;
+            case "product":
+                return "상품 정보";
+                break;
             default:
-                return "담당자";
+                return "undefined";
                 break;
         }
     }
@@ -76,10 +82,17 @@ const Modal = () => {
             case "user":
                 return <User />;
                 break;
+            case "member":
+                return <Member />;
+                break;
             case "prodType":
                 return <ProdType />;
                 break;
+            case "product":
+                return <Product />;
+                break;
             default:
+                return <p>undefiend Modal</p>;
                 return;
         }
     }

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import Styles from './ProductsWrite.module.scss';
+import React, { useEffect, useState } from 'react';
+import Styles from './ProductsEdit.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
-import { useForm, SubmitHandler,  } from 'react-hook-form';
+import { useForm, SubmitHandler  } from 'react-hook-form';
 import { apiBe } from '@/services';
 import { getKRCurrrentTime } from '@/utils/date';
 import { useRouter } from 'next/navigation';
@@ -38,10 +38,10 @@ const ProductEdit = () => {
     const data = useRecoilValue(dataListAtom);
     const pathname = usePathname();
     const router = useRouter();
-    const id:any = lodash.last(pathname.split('/'));
-    const product = lodash.find(data?.data, { id });
+    const prodId:any = lodash.last(pathname.split('/'));
+    const [ product, setProduct] = useState<any>(null);
     const [modal, setModal] = useRecoilState(modalAtom);
-    const { prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product;
+    const { id, prodName, prodType, prodDetailType, prodDetailTypeStd, prodDesc, stdPrice, expPrice, comment } = product || {};
     const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
             prodType: prodType,
@@ -53,6 +53,21 @@ const ProductEdit = () => {
             comment: comment
         }
     });
+
+    
+    useEffect(() => {
+        const getProductInfo = async () => {
+            const url = `/product/product/${prodId}`
+            const response = await apiBe(url);
+            if (response.status === 200) {
+                const { data } = response;
+                setProduct(data);
+            } else {
+                console.log('error');
+            }
+        }
+        getProductInfo();
+    }, [prodId])
 
     const onSubmit: SubmitHandler<FormValues> = async(data) => {
         const url:any = `/product/product/${id}`;

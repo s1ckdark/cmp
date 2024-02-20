@@ -1,0 +1,27 @@
+.btnArea {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    align-items: center;
+    button {
+        width: 100px;
+        height: 30px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #F0F3F2;
+        border: none;
+        cursor: pointer;
+        margin: 50px 0;
+        &.submitBtn {
+            background: #43B69A;
+            margin-right: 10px;
+        }
+        &.delBtn {
+            background: #E96C50;
+        }
+        &.cancelBtn {
+            background: #E96C50;
+        }
+    }
+}

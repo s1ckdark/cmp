@@ -12,11 +12,11 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";
 import { usePathname } from "next/navigation";
-import { pathSpliter } from "@/utils/data";
+import { pathSpliter, filterUrl } from "@/utils/data";
 import { apiBe } from "@/services";
 import { Toast } from "@/components/Toast";
 import { monthAtom, modalAtom } from "@/states";
-
+import lodash from "lodash";
 interface dataProps {
     data: any;
     totalPages: number;
@@ -24,18 +24,21 @@ interface dataProps {
     totalElements?: number;
 }
 export const Tables = ({ rowType }: TablesProps) => {
+    const resetState = useResetRecoilState(dataListAtom);
+    const resetModalState = useResetRecoilState(modalAtom);
     useResetRecoilState(dataListAtom);
     useResetRecoilState(modalAtom);
     useRecoilState(monthAtom);
     const [data, setData] = useRecoilState(dataListAtom);
     const [mounted, setMounted] = useState(false);
-    const targetMonth = useRecoilValue(monthAtom) || null;
     const router = useRouter();
     const path = usePathname();
     
 
     useEffect(() =>{ 
-        const pageNumber: any = data.mode === 'search' ? data.currentPage : pathSpliter(path).pageNumber;
+        const pathArr = path.split("/");
+        const targetMonth = pathArr.length === 6 ? pathArr[4]:null;
+        const pageNumber: any = data.mode === 'search' ? data.currentPage : Number(lodash.last(path.split("/")));
         const endpoint:any = {
             invoice: {
                 url: "/invoice/search",
@@ -111,11 +114,12 @@ export const Tables = ({ rowType }: TablesProps) => {
             }
         };
         fetching()
-    }, [path, rowType, targetMonth, data.currentPage, data.mode]);
-
+    }, [path, rowType, data.currentPage, data.mode]);
+    
     useEffect(() => {
         setData({...data, currentPage: 1})
     },[])
+
     const onPageChange = (newPage: number) => {
         if (data.mode === "search") {
             setData({
@@ -129,7 +133,6 @@ export const Tables = ({ rowType }: TablesProps) => {
         } else {
             router.push(`./${newPage}`)
         }
-        console.log(data)
     };
 
     const pageUrl:any = {

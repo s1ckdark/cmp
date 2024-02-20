@@ -151,7 +151,7 @@ apiBe.interceptors.response.use(
                 //     return axios.request(response.config);
                 // })
             } else if(response.data.size > 0 && response.data.type === "application/octet-stream"){
-                return response.data 
+                return response.data
             }
             return Promise.reject(response);  
         }

@@ -1,12 +1,3 @@
-  
- export type CustomerData = {
-    totalItems: number;
-    totalPages: number;
-    customers: Customer[];
-    currentPage: number;
-  };
-  
-
   interface CustomerContract {
     id: string;
     name: string | null;

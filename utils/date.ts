@@ -99,10 +99,7 @@ export const getMonth = (dateStr:string, operation:string) => {
 }
 
 export const getCurrentMonth = () => {
-    const year = dayjs().get('year')
-    const month = dayjs().add(1, 'month').format('MM');
-
-    return year + month;
+    return dayjs().format('YYYYMM');
 }
 
 export const getLastDayOfMonth = (date:Date) => {

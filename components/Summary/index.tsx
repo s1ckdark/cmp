@@ -22,9 +22,14 @@ interface visualType {
     donutChart: any;
     diffMonth: any;
 }
-// const InvoiceVisual: React.FC<Props> = ({ top10, billing, support, announce, dData1, dData2, lineChartData }) => {
-const Summary = ({ header }: { header: boolean } = { header: true }) => {
-    const month= useRecoilValue(monthAtom);
+
+interface ISummaryProps {
+    header: boolean;
+    month?: string;
+}
+
+const Summary = ({ header, month  }: ISummaryProps ) => {
+    console.log(month);
     const [visual, setVisual] = useState<visualType>({
         top10bycust: null,
         trendMonth: null,
@@ -35,10 +40,12 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
     const svgContainer = useRef<HTMLDivElement>(null);
     const router = useRouter();
     const path = usePathname();
+    const targetMonth:any = !month ? lodash.last(path.split("/")): month;
+    console.log(targetMonth);
     
     useEffect(() => {
         const targetUrl = (arg:string) => {
-            return `/billing/total/${arg}/${month}`;
+            return `/billing/total/${arg}/${targetMonth}`;
         }
         const fetchData = async(url:string) => {
             const response = await apiBe.get(url);
@@ -91,7 +98,7 @@ const Summary = ({ header }: { header: boolean } = { header: true }) => {
     fetching();
     }, [month])
 
-    if(!visual) return <Loading/>
+    if(!visual) return <Loading className="loadingPage"/>
 
     const { top10bycust,  trendMonth, donutChart, diffMonth} = visual;
     if(!top10bycust || !trendMonth || !donutChart || !diffMonth) return <Loading />

@@ -20,18 +20,3 @@ export const sessionAtom = atom({
     default: null,
   });
   
-  // Define atoms for signup state
-  export const signUpLoadingAtom = atom({
-    key: 'signUpLoading',
-    default: false,
-  });
-  
-export const signUpErrorAtom = atom<string | null>({
-    key: 'signUpError',
-    default: null,
-});
-  
-  export const resetSignUpErrorAtom = atom<string | null>({
-    key: 'resetSignUpError',
-    default: null,
-  });

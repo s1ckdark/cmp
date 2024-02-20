@@ -46,7 +46,9 @@
     }
     .navigationItem {
         width: 100%;
-       
+        .active {
+            color: #43B69A;
+        }
         .depth {
             width: 80%;
             margin: 0 auto;
@@ -60,6 +62,9 @@
                 position: relative;
                 display: flex;
                 &:hover {
+                    background-color: #43B69A;
+                }
+                &:active {
                     background-color: #43B69A;
                 }
                 

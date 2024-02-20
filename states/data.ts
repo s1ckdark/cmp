@@ -106,3 +106,11 @@ export const prodTypeAtom = atom<IProdType>({
     key: 'prodTypeAtom',
     default: { id: '', prodType: '',  prodDetailType: '', prodDetailTypeStd: '' }
 });
+
+interface ICustomerPageType {
+    pageType: 'register' | 'view' | 'edit';
+}
+export const pageTypeAtom = atom<string>({
+    key: 'pageTypeAtom',
+    default: ''
+});

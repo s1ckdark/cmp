@@ -1,19 +1,32 @@
-import React from  'react';
+import React, {useEffect,useState} from  'react';
 import Styles from './ProductsView.module.scss';
 import Button from '@/components/Button';
 import Breadcrumb from '@/components/Breadcrumb';
 import { usePathname, useRouter } from 'next/navigation'
-import { useRecoilValue } from 'recoil';
-import { dataListAtom } from '@/states/data';
 import lodash from 'lodash';
 import Loading from '@/components/Loading';
+import { apiBe } from '@/services';
 
 const ProductsView = () => {
-    const data = useRecoilValue(dataListAtom);
     const pathname = usePathname();
     const router = useRouter();
     const id = lodash.last(pathname.split('/'));
-    const product = lodash.find(data?.data, {id});
+    const [ product, setProduct] = useState<any>(null);
+    
+    useEffect(() => {
+        const getProductInfo = async () => {
+            const url = `/product/product/${id}`
+            const response = await apiBe(url);
+            if (response.status === 200) {
+                const { data } = response;
+                setProduct(data);
+            } else {
+                console.log('error');
+            }
+        }
+        getProductInfo();
+    }, [id])
+
 
     const goEdit = () => {
         router.push(`/products/product/edit/${id}`);

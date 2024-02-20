@@ -5,9 +5,9 @@
 
 .loading {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 80px;
   height: 80px;
   padding: 0 !important;

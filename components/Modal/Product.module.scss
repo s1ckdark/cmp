@@ -1,4 +1,4 @@
-.member {
+.product {
     .searchInput {
         input {
             width: calc(100% - 110px);
@@ -9,14 +9,13 @@
             box-sizing: border-box;
         }
     }
-    .memberList {
+    .productList {
         margin: 30px auto;
-        height: 320px;
-        overflow-y: scroll;
         table {
             width: 100%;
             border-collapse: collapse;
             border-spacing: 0;
+
             thead {
                 background-color: #F5F6F7;
                 border : 1px solid #DEE1E7;
@@ -27,10 +26,15 @@
                     font-weight: 700;
                     color: #2E322F;
                     text-align: center;
-                    &:first-child {
+                    &:nth-child(1) {
+                        width: 20%;
+                    }
+                    &:nth-child(2) {
                         width: 40%;
                     }
-                    width: 60%;
+                    &:nth-child(3) {
+                        width: 40%;
+                    }
                 }
             }
             tbody {

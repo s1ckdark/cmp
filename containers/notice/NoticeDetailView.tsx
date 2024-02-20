@@ -60,7 +60,7 @@ const NoticeDetailView = ({ id }: any) => {
                     editorRef={ref} /> */}
                     <textarea value={data.content} readOnly></textarea>
             </div>
-            {data.uploadedFiles && <FileDownloader data={data.uploadedFiles} type="view"/>}
+            {data.uploadedFiles && data.uploadedFiles.length > 0 && <FileDownloader data={data.uploadedFiles} type="view"/>}
             <div className={style.btnArea}>
                 <Button onClick={() => router.push(`/notice/edit/${id}`)} skin="submit">수정</Button>
                 <Button onClick={() => router.back()} skin="cancel">목록</Button>

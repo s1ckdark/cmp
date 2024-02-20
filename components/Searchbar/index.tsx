@@ -9,8 +9,7 @@ import { apiBe } from '@/services';
 import lodash, { set } from 'lodash';
 import Button from '@/components/Button';
 import { useRouter, usePathname } from 'next/navigation';
-import page from '@/app/page';
-
+import { pathSpliter, filterUrl } from '@/utils/data';
 
 export interface SearchBarProps {
   placeholder: string
@@ -31,36 +30,37 @@ interface boxProps {
   wording?: string
 }
 const Searchbar = ({ rowType }: { rowType: string }) => {
-  const month = useRecoilValue(monthAtom);
+  // const month = useRecoilValue(monthAtom);
   const [data, setData] = useRecoilState(dataListAtom) || null;
   const [keyword, setKeyword] = useState<string>("");
   const pathname = usePathname();
   const path = pathname.split('/').slice(0, -1).join('/');
+  const url = filterUrl(pathname, "list") ? pathname.split("/").slice(0, -2).join("/") : pathname.split('/').slice(0, -1).join('/');
+  const {targetMonth, pageNumber }:any = filterUrl(pathname, "list") ? pathSpliter(pathname): {pageNumber: lodash.last(pathname.split('/'))};
   const router = useRouter();
   const [reset, setReset] = useState<boolean>(false);
   const matching: any = {
-    "/billing/invoice/list": {
+    "invoice": {
       "placeholder": "업체명을 입력해주세요",
     },
-    "/products/product/list": {
+    "productGd": {
       "placeholder": "상품명을 입력해주세요",
     },
-    "/admin/log/list": {
+    "log": {
       "placeholder": "회원명을 입력해주세요",
     },
-    "/admin/user/list": {
+    "user": {
       "placeholder": "회원명을 입력해주세요",
     },
-    "/billing/product/list": {
+    "billingProduct": {
       "placeholder": "고객명을 입력해주세요",
     },
-    "/customers/list": {
+    "customers": {
       "placeholder": "고객명을 입력해주세요",
     }
   }
   const init = () => {
-    
-    return matching[path].placeholder;
+    return matching[rowType].placeholder;
   }
   const onChange = (value: string) => {
     setKeyword(value);
@@ -94,12 +94,12 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
       }
     }
     const response = await apiBe.get(endpoint[rowType].url, { params: params });
-    if (response.status === 200 && response.data.totalElements > 0) {
-      setData({ mode: "search", params: params, data: response.data[endpoint[rowType].key], totalPages: response.data.totalPages, currentPage: params.page, totalElements: response.data.totalElements });
-    } else {
-      Toast('error', '검색 결과가 없습니다');
-    }
-  };
+      if (response.status === 200 && response.data.totalElements > 0) {
+        setData({ mode: "search", params: params, data: response.data.content, totalPages: response.data.totalPages, currentPage: params.page, totalElements: response.data.totalElements });
+      } else {
+        Toast('error', '검색 결과가 없습니다');
+      }
+    };
 
 
   const onSearch = async () => {
@@ -107,7 +107,7 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
     const params: any = {
       "invoice": {
         page: 1,
-        targetMonth: month,
+        targetMonth: targetMonth,
         memberName: keyword
       },
       "log": {
@@ -117,7 +117,7 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
       "billingProduct": {
         page: 1,
         memberName: keyword,
-        target_month: month,
+        target_month: targetMonth,
       },
       "user": {
         page: 1,
@@ -141,19 +141,24 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
   
   const searchReset = () => {
     if (data.mode === 'search') {
-      setData({ mode: "init", data: [], params: null, totalPages: 0, currentPage: 1, totalElements: 0})
-    setKeyword('');
-    setReset(true);
-    router.push(`${path}/1`);
+      setData({ mode: "normal", data: [], params: null, totalPages: 0, currentPage: 1, totalElements: 0})
+      setKeyword('');
+      setReset(true);
+      router.push(`${path}/1`);
   } 
 }
+  const enterSubmit = (e:any) => {
+    if(e.key === 'Enter') {
+      onSearch();
+    }
+  }
 
-  useEffect(() => {
+  // useEffect(() => {
     // if (keyword === '' && reset === true) {
     //    onSearch();
     // }
     // setReset(false);
-  }, [reset]);
+  // }, [reset]);
 
   return (
     <div className={Styles.searchBar}>
@@ -164,6 +169,7 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
           placeholder={init()}
           value={keyword}
           onChange={(e) => onChange(e.target.value)}
+          onKeyDown={(e) => enterSubmit(e)}
           role="searchbox"
         />
         <span className={Styles.searchBtn} onClick={onSearch}><IconSearch /></span>

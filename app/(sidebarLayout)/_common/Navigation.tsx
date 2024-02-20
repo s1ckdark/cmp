@@ -1,17 +1,33 @@
 
 import Link from "next/link";
 import React,{ useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-
+import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
+import { dataListAtom } from "@/states/data";
+import { modalAtom } from "@/states";
 import { isOpenState } from "@/states";
 import { IconNaviBot, IconNaviBill, IconNaviClient, IconNaviNotice, IconNaviProduct, IconNaviSupport, IconSetting } from "@/public/svgs";
 
+import { usePathname, useRouter } from "next/navigation";
+import dayjs from "dayjs";
 import Styles from "./Navgiation.module.scss";
 
 const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
+    const pathname = usePathname();
+    const router = useRouter();
+    const [ data, setData ] = useRecoilState(dataListAtom);
     const [isDepthOpen, setIsDepthOpen] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(isOpenState);
     const hasChildren = item.children && item.children.length > 0;
+    const isActive = item.link === pathname;
+    const resetState = useResetRecoilState(dataListAtom);
+    const resetModalState = useResetRecoilState(modalAtom);
+    const handleClick = (e:any) => {
+        data.data.length > 0 ? resetState() : null;
+        if (item.link === pathname) {
+            e.preventDefault(); // Prevent the default navigation behavior
+            router.refresh() // Reload the current page
+        }
+    };
 
     useEffect(() => {
         // Automatically set isDepthOpen to false when isOpen is false
@@ -52,8 +68,8 @@ const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
     };
     const depthClass:string = `depth_${depthIndex}`;
     return (
-        <li className={ isDepthOpen ? `${Styles.navigationItem} ${Styles.open}`: `${Styles.navigationItem}`}>
-            <Link href={item.link} onClick={hasChildren ? toggle : undefined} className={`${Styles.depth} ${Styles[depthClass]}`}>
+        <li className={ isDepthOpen ? `${Styles.navigationItem} ${Styles.open} ${Styles.active}`: `${Styles.navigationItem}`}>
+            <Link href={item.link} onClick={hasChildren ? toggle : (e) => handleClick(e)} className={`${Styles.depth} ${Styles[depthClass]}`}>
                 <p className="flex justify-end">{item.label}</p>{item.icon && <span>{renderIcon(item.icon)}</span>} 
                 {/* {hasChildren ? (isDepthOpen ? '[-]' : '[+]') : ''} */}
             </Link>
@@ -71,6 +87,7 @@ const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
 
 const Navigation = () => {
     const isOpen = useRecoilValue(isOpenState);
+    const currentMonth = dayjs().format("YYYYMM");
     const navigationData = [
         {
             "label": "어드민",
@@ -119,17 +136,17 @@ const Navigation = () => {
                 {
                     "label": "전체요약",
                     "children": [],
-                    "link": "/billing/overview",
+                    "link": `/billing/overview/${currentMonth}`,
                 },
                 {
                     "label": "고객사 자사상품",
                     "children": [],
-                    "link": "/billing/product/list/1",
+                    "link": `/billing/product/list/${currentMonth}/1`,
                 },
                 {
                     "label": "전체 이용 내역",
                     "children": [],
-                    "link": "/billing/invoice/list/1",
+                    "link": `/billing/invoice/list/${currentMonth}/1`,
                 }
             ]
         },

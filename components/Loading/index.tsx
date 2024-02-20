@@ -10,7 +10,7 @@ interface Props {
 
 const Loading = ({ className }: Props) => {
     return (
-        <div className={cx(styles.loading, className)}>
+        <div className={cx(styles.loading, styles[className ?? ''])}>
             <p>Loading...</p>
         </div>
     );

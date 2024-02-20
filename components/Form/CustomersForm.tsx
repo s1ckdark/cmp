@@ -1,103 +1,96 @@
 'use client';
-import React, { use } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useEffect, useState, useCallback, }from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { apiBe } from '@/services';
 import styles from './CustomersForm.module.scss';
-import Button from '@/components/Button';
 import { Toast } from '@/components/Toast';
-import { useEffect, useState } from 'react';
-import Select, { defaultTheme } from 'react-select';
-import { useRecoilState, useResetRecoilState } from 'recoil';
-import Loading from '@/components/Loading';
+import { useRecoilState } from 'recoil';
 import { ICustomersForm } from '@/types/form';
+import { modalAtom } from '@/states';
+import { usePathname, useRouter } from 'next/navigation';
+import _ from 'lodash';
+
+import { pageTypeAtom } from '@/states/data';
+import Loading from '@/components/Loading';
+import Button from '@/components/Button';
+import CustomerAddForm from './CustomerAddForm';
 import CustomersAddPerForm from './CustomersAddPerForm';
 import CustomersAddrForm from './CustomersAddrForm';
-import { IconSearch } from '@/public/svgs';
-import { modalAtom } from '@/states';
-import { addrAtom, customerStep } from '@/states/data';
-import Modal from '@/components/Modal';
-import { usePathname, useRouter } from 'next/navigation';
-import lodash, { set } from 'lodash';
 
 interface ICustomersFormProps {
     data?: ICustomersForm;
     type: "register" | "edit" | "view";
 }
 
-interface IaddMember {
-    custContact: boolean;
-    sales: boolean;
-}
-const CustomersForm = ({ data, type }: ICustomersFormProps) => {
+// useFormContext 와 FormProvider로 component input type을 정의하고, submit하는 경우 값을 한번에 받아올 수 있게 작업한다.
+const CustomersForm = ({ type }: ICustomersFormProps) => {
     const [mounted, setMounted] = useState(false);
-    const [ formType, setFormType ] = useState(type);
-    const [step, setStep] = useRecoilState(customerStep);
-    const [modal, setModal] = useRecoilState(modalAtom);
-    const [addr, setAddr] = useRecoilState(addrAtom);
-    const [isDisabled, setIsDisabled] = useState(false);
-    const [addMember, setAddMember] = useState<IaddMember>({ custContact: false, sales: false });
+    const [modal, setModal] = useRecoilState(modalAtom);    
+    const [ pageType, setPageType ] = useRecoilState(pageTypeAtom);
     const [regionTypeOptions, setRegionTypeOptions] = useState<any>([]);
     const [defaultRegionType, setDefaultRegionType] = useState<any>([]);
-    const [member, setMember] = useState<any>({ memberNo: '', memberName: '', regionType: '', memberType: '일반', industry: '', businessRegNo: '', custCeo: '', custPhone: '', comment: '' });
+    const [member, setMember] = useState<any>({});
     const pathname = usePathname();
-    const { memberNo, memberName, regionType, memberType, industry, businessRegNo, custCeo, custPhone, comment } = member;
-
-    const { control, register, handleSubmit, getValues, setValue, setError, formState: { errors } } = useForm({
-        defaultValues: {
-            memberNo: memberNo,
-            memberName: memberName,
-            regionType: regionType,
-            memberType: memberType,
-            industry: industry,
-            businessRegNo: businessRegNo,
-            custCeo: custCeo,
-            custPhone: custPhone,
-            comment: comment,
-        }
+    const { memberNo, memberName, regionType, memberType, industry, businessRegNo, custCeo, custPhone, comment, custContact, address, sales } = member;
+    const methods = useForm({
+        defaultValues:{
+            "memberNo": memberNo,
+            "memberName": memberName,
+            "regionType": regionType,
+            "memberType": memberType,
+            "industry": industry,
+            "businessRegNo": businessRegNo,
+            "custCeo": custCeo,
+            "custPhone": custPhone,
+            "comment": comment,
+            "custContact": [
+              {
+                "dept": custContact && custContact[0] ? custContact[0].dept:"",
+                "name": custContact && custContact[0] ? custContact[0].name:"",
+                "mobileNo": custContact && custContact[0] ? custContact[0].mobileNo:"",
+                "email": custContact && custContact[0] ? custContact[0].email:"",
+                "comment": custContact && custContact[0] ? custContact[0].comment:""
+              }
+            ],
+            "address": [
+              {
+                "name": address && address[0] ? address[0].name:"",
+                "zipcode": address && address[0] ? address[0].zipcode:"",
+                "addr": address && address[0] ? address[0].addr:"",
+                "addrDetail": address && address[0] ? address[0].addrDetail:"",
+                "homepage": ""
+              }
+            ],
+            "sales": [
+                {
+              "dept": sales && sales[0] ? sales[0].dept:"",
+              "userId": sales && sales[0] ? sales[0].userId:"",
+              "name": sales && sales[0] ? sales[0].name:"",
+              "phoneNo": sales && sales[0] ? sales[0].phoneNo:"",
+              "email": sales && sales[0] ? sales[0].email:"",
+              "comment": sales && sales[0] ? sales[0].comment:"" 
+            }
+            ]
+          }
     });
+    const { control, register, handleSubmit, getValues, setValue, reset, formState: { errors } } = methods;
+    
     const router = useRouter();
 
     const onSubmit = async (formData: any) => {
-        // formData.memberNo = member.memberNo;
-        // formData.memberName = member.memberName;
-        
-        const response = type === 'register' ? await apiBe.put(`/customer`, formData) : await apiBe.post(`/customer`, formData);
+        let tmp = _.cloneDeep(formData);
+        tmp.sales = tmp.sales[0];
+       
+        const response = type === 'register' ? await apiBe.put(`/customer/c`, tmp) : await apiBe.post(`/customer/c`, tmp);
         if (response.status === 201 || response.status === 200) {
             const { data } = response;
-            // setMember(data);
-            if(type === 'register') Toast("success", '고객사 정보가 저장 되었습니다.', ()=> setStep(1));
-            if(type === 'edit') Toast("success", '고객사 정보가 저장 되었습니다.', ()=>goList());
+            if(type === 'register') Toast("success", '고객사 정보가 저장 되었습니다.', ()=> goList());
+            if(type === 'edit') Toast("success", '고객사 정보가 저장 되었습니다.', ()=> goList());
         } else {
             Toast("error", '이미 고객사 정보가 존재합니다.')
         }
     };
 
-    // const addAddress = async (id: string, memberNo: string) => {
-    //     const data = {
-    //         ...addr,
-    //         id: id
-    //     }
-
-        
-    //     const response = type === 'register' ? await apiBe.put(`/customer/${memberNo}/address`, data) : await apiBe.post(`/customer/${memberNo}/address/`, data);
-    //     return response.status;
-    // }
-    const openModal = (type: string) => {
-        setModal({ isOpen: true, type: type, data: null });
-    }
-
-    const addMembers = (type: string) => {
-        switch (type) {
-            case 'custContact':
-                setAddMember({ ...addMember, custContact: true });
-                break;
-            case 'sales':
-                setAddMember({ ...addMember, sales: true });
-                break;
-            default:
-                break;
-        }
-    }
     const editMode = () => {
         router.push(`/customers/edit/${memberNo}`);
     }
@@ -125,159 +118,55 @@ const CustomersForm = ({ data, type }: ICustomersFormProps) => {
         }
     }, [modal]);
 
+
+
     useEffect(() => {
         setModal({isOpen: false, type: '', data: null});
-        const memberNo = lodash.last(lodash.split(pathname, '/'))
+        const memberNo = _.last(_.split(pathname, '/'))
         const getMember = async () => {
             const response = await apiBe.get(`/customer/${memberNo}`);
-            if (response.status === 200 && data !== null) {
+            if (response.status === 200 && response.data !== null) {
                 const { data } = response;
-                setMember(data)
-                setStep(4);
-                setValue('memberNo', data.memberNo);
-                setValue('memberName', data.memberName);
-                setValue('regionType', data.regionType);
-                setValue('memberType', data.memberType);
-                setValue('industry', data.industry);
-                setValue('businessRegNo', data.businessRegNo);
-                setValue('custCeo', data.custCeo);
-                setValue('custPhone', data.custPhone);
-                setValue('comment', data.comment);
+                var tmp = _.cloneDeep(data);
+                tmp.sales = [tmp.sales];
+                setMember(tmp);
+                reset(tmp);
+
                 
-                if (data.custContact !== null && data.sales !== null) setAddMember({ custContact: true, sales: true })
-                if (data.sales !== null && data.custContact === null) setAddMember({ ...addMember, sales: true })
-                if (data.sales === null && data.custContact !== null) setAddMember({ ...addMember, custContact: true })
             } else if(response.status === 404){
-                setStep(0);
                 setValue('memberNo', memberNo);
             }
         }
         if (type === 'view' || type === 'edit') {
             getMember()
         }
-
-        const getRegionType = async () => {
-            let tmp: any = [];
-            const response = await apiBe.get('/common/code/regionType');
-            if (response.status === 200 || response.status === 201) {
-                const { regionType } = response.data;
-                if (regionType) {
-                    regionType.map((item: any) => {
-                        tmp.push({ value: item.key, label: item.value });
-                    })
-                    const defaultRegion = tmp.filter((option: any) => regionType.includes(option.value));
-                    setRegionTypeOptions(tmp);
-                    setDefaultRegionType(defaultRegion);
-                }
-            }
-        }
-        if (defaultRegionType.length === 0) {
-            getRegionType();
-        }
-        if (type === 'view') {
-            setIsDisabled(true);
-        }
-        if (type === 'register') {
-            setStep(0);
-            const addr = async () => {
-                const response = await apiBe.get(`/customer/${memberNo}/address`);
-            }
-        }
-
         setMounted(true);
     }, [type])
     
     if (mounted === false) return <Loading />
     return (
         <>
-            <form className={`${styles.customers} ${styles[type]}`} onSubmit={handleSubmit(onSubmit)}>
-                <h2 className={styles.sectionTitle}>고객사 정보</h2>
-                <div className="columns-3 gap-36">
-                    <div className={`${styles.memberNo} ${styles.inputGroup}`}>
-                        <label htmlFor="memberNo" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 번호<span className={styles.required}></span></label>
-                        <input readOnly={true} type="text" id="memberNo" {...register("memberNo", { required: true })} defaultValue={memberNo} onClick={() => { if(type === 'edit' || type === 'register') openModal('customer')}}/>
-                        {errors.memberNo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                        {type === 'edit' || type === 'register' ? <IconSearch className={styles.iconSearch}  onClick={() => openModal('customer')}/> : null}
-                        {errors.memberNo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
+            <FormProvider {...methods}>
+                <form className={`${styles.customers} ${styles[type]}`} onSubmit={methods.handleSubmit(onSubmit)}>
+                    <div className={styles.customer}>
+                        <CustomerAddForm data={member || null} pageType={type}/>
                     </div>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="memberName" className="block text-sm font-medium text-gray-900 dark:text-black">고객사 이름<span className={styles.required}></span></label>
-                        <input readOnly={true} type="text" id="memberName" {...register("memberName", { required: true })} defaultValue={memberName} />
-                        {errors.memberName && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
+                    <div className={styles.address}>
+                        <CustomersAddrForm  data={member.addr || null} pageType={type}/>
+                    </div> 
+                    <div className={styles.custContact}>
+                        <CustomersAddPerForm type={"custContact"} data={member.custContact || null} pageType={type}/>
+                    </div> 
+                    <div className={styles.sales}>
+                        <CustomersAddPerForm type={"sales"} data={member.sales || null} pageType={type}/>
+                    </div> 
+                    <div className={`${styles.btnArea} mt-6 mx-auto`}>
+                        {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={editMode} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
+                        <Button type='button' className={styles.btnBack} onClick={goList} skin='gray'>취 소</Button>
                     </div>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="memberType" className="block text-sm font-medium text-gray-900 dark:text-black">고객유형<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="memberType" {...register("memberType", { required: true })} defaultValue={memberType} />
-                        {errors.memberType && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                </div>
-                <div className="columns-3 gap-36">
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="regionType" className="block text-sm font-medium text-gray-900 dark:text-black">리전타입<span className={styles.required}></span></label>
-                        <Controller
-                            name="regionType"
-                            control={control}
-                            defaultValue={defaultRegionType} // Set the default options
-                            rules={{ required: true }}
-                            render={({ field }) => (
-                                <Select
-                                    {...field}
-                                    options={regionTypeOptions}
-                                    isDisabled={isDisabled}
-                                    menuPosition={'fixed'}
-                                    value={regionTypeOptions.find((option: any) => option.value === field.value)} // Corrected this line
-                                    onChange={(val) => field.onChange(val.value)}
-                                />
-                            )}
-                        />
-                        {errors.regionType && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="industry" className="block text-sm font-medium text-gray-900 dark:text-black">산업분류<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="industry" {...register("industry", { required: true })} defaultValue={industry} />
-                        {errors.industry && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="businessRegNo" className="block text-sm font-medium text-gray-900 dark:text-black">사업자번호<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="businessRegNo" {...register("businessRegNo", { required: true },)} defaultValue={businessRegNo} placeholder="XXX-XX-XXXXXX 양식으로 입력해주세요"/>
-                        {errors.businessRegNo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                </div>
-                <div className="columns-3 gap-36">
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="custCeo" className="block text-sm font-medium text-gray-900 dark:text-black">대표<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="custCeo" {...register("custCeo", { required: true })} defaultValue={custCeo} />
-                        {errors.custCeo && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="custPhone" className="block text-sm font-medium text-gray-900 dark:text-black">고객 연락처<span className={styles.required}></span></label>
-                        <input readOnly={isDisabled} type="text" id="custPhone" {...register("custPhone", { required: true })} defaultValue={custPhone} placeholder="010-1234-5678 양식으로 입력해주세요"/>
-                        {errors.custPhone && <span className={styles.errorMsg}>필수 입력 항목 입니다</span>}
-                    </div>
-                </div>
-            
-
-               
-           
-                <div className={`${styles.btnArea} mt-6 mx-auto`}>
-                    {type === 'register' || type === 'edit' ? <Button type='submit' className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>{type === 'register' ? "등 록" : "저 장"}</Button> : <Button type='button' onClick={editMode} className='px-3.5 py-2.5 text-sm font-bold text-white shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white' skin='green'>수 정</Button>}
-                    <Button type='button' className={styles.btnBack} onClick={goList} skin='gray'>취 소</Button>
-                    {!addMember.custContact && member.custContact && member.custContact.length !== 0 ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('custContact')} skin={'gray'}>고객사 담당자 추가</Button> : null}
-                    {!addMember.sales && member.sales && member.sales.userId !== '' ? <Button type='button' className={styles.btnAdd} onClick={() => addMembers('sales')} skin={'gray'}>고객 담당자 추가</Button> : null}
-                  
-                </div>
-            </form>
-            
-            {step > 0 && <div className={styles.address}>
-                {member.memberNo && <CustomersAddrForm type={"register"} memberNo={member.memberNo} mode={formType} data={member.address && member.address.length > 0 ? member.address[0] : null} />}
-            </div>}
-            {step > 1 && <div className={styles.custContact}>
-                 <CustomersAddPerForm type={"custContact"} memberNo={member.memberNo} data={member.custContact && member.custContact.length !== 0 ? member.custContact[0] : null} mode={formType} />
-            </div>}
-            {step > 2 && <div className={styles.sales}>
-                <CustomersAddPerForm type={"sales"} memberNo={member.memberNo} data={member.sales || null} mode={formType} />
-                </div>}
-            </>
+                </form>
+            </FormProvider>
+        </>
     );
 }
 

@@ -152,9 +152,9 @@ export const TableBody = ({ rowType, data }: any) => {
                 props.memberNo,
             ]}/${targetMonth}`,
             customers: `/customers/view/${props.memberNo}`,
-            user: `/admin/user/view/${props.email}`,
+            user: `/admin/user/view/${props.id}`,
             productGd: `/products/product/view/${props.id}`,
-            billingProduct: `/billing/product/view/${props.memberNo}/${targetMonth}`,
+            billingProduct: `/billing/product/view/${targetMonth}/${props.memberNo}`,
             productCategory: `/products/category/view/${props.id}`,
             // role: `/admin/role/view/${props.id}`,
             notice: `/notice/view/${props.id}`,
@@ -287,9 +287,7 @@ export const TableBody = ({ rowType, data }: any) => {
             default:
                 content = (
                     <td key={key + "-" + keyIndex} onClick={() => view(item)}>
-                        {typeof fieldValue !== "number"
-                            ? fieldValue
-                            : addComma(fieldValue)}
+                        {typeof fieldValue !== "number" ? fieldValue:addComma(fieldValue)}
                     </td>
                 );
                 break;

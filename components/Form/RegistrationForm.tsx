@@ -99,12 +99,13 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
         }
     }
 
-    const openModal = (type: string) => {
+    const openModal = (searchType: string) => {
+        if(type === 'view') return false;
     const modal: any = document.querySelector("#modal");
     const innerSearch = modal.querySelector('#searchInput');
     let inner = "";
 
-    switch (type) {
+    switch (searchType) {
         case "address":
             inner = "<input type='text' id='addressInput' placeholder='주소를 입력하세요.' /><button id='addressSearchBtn'>주소 검색</button>";
             break;
@@ -117,15 +118,15 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     }
 
     if (modal) {
-        modal.classList.add(styles.open, styles[type]);
+        modal.classList.add(styles.open, styles[searchType]);
         innerSearch.innerHTML = inner;
 
-        const searchBtn = type === "address" ? modal.querySelector('#addressSearchBtn') : modal.querySelector('#memberSearchBtn');
-        const searchInput = type === "address" ? modal.querySelector('#addressInput') : modal.querySelector('#memberInput');
+        const searchBtn = searchType === "address" ? modal.querySelector('#addressSearchBtn') : modal.querySelector('#memberSearchBtn');
+        const searchInput = searchType === "address" ? modal.querySelector('#addressInput') : modal.querySelector('#memberInput');
 
         searchBtn.addEventListener('click', () => {
             if (searchInput) {
-                switch (type) {
+                switch (searchType) {
                     case "address":
                         addrSearch(searchInput.value);
                         break;
@@ -279,7 +280,7 @@ const RegistrationForm = ({ data, type }: IRegistrationFormProps) => {
     ]
 
     const editMode = () => {
-       router.push(`/admin/user/edit/${email}`);
+       router.push(`/admin/user/edit/${id}`);
     }
 
     const isActivatedUser = async (activated: boolean) => {

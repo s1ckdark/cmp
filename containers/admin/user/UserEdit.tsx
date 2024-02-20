@@ -19,22 +19,22 @@ interface UserViewCtProps {
 const UserEdit = () => {
     const router = useRouter();
     const path = usePathname();
-    const memberId = lodash.last(path.split('/'));
+    const id = lodash.last(path.split('/'));
     const [userInfo, setUserInfo] = useState<any>(null);
     
     useEffect(() => {
         const getUserInfo = async () => {
-            const url = `/user?email=${memberId}`;
+            const url = `/user/${id}`
             const response = await apiBe(url);
             if (response.status === 200) {
-                const { content } = response.data;
-                setUserInfo(content[0]);
+                const { data } = response;
+                setUserInfo(data);
             } else {
                 console.log('error');
             }
         }
         getUserInfo();
-    }, [memberId])
+    }, [id])
     return (
         <>
             <Breadcrumb />

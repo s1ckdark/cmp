@@ -3,8 +3,8 @@ import jsPDF from 'jspdf';
 
 export const PdfExport = async (id: string, filename:any) => {
     if (document) {
-        html2canvas(document.querySelector(`#${id}`)!).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
+        html2canvas(document.querySelector(`#${id}`)!).then((canvas:any) => {
+            const imgData = canvas.toDataURL('image/jpeg', 0.9);
             const pdf = new jsPDF('p', 'mm', 'A4');
             const imgWidth = 195;
             const margin = 10;
