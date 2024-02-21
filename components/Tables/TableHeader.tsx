@@ -117,7 +117,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
     }
     
     const sortList:any = {
-        "user": ["userType", "email", "userName", "memberNo", "memberName", "salesName", "isAdmin", "isActivated"], // 회원관리 user
+        "user": ["userType", "email", "username", "memberNo", "memberName", "salesName", "isAdmin", "isActivated"], // 회원관리 user
         "customers": ["memberNo", "memberName", "memberType", "regName", "regDt"], // 고객사 관리 customer 
         "productCategory":["prodType", "prodTypeDetail", "prodDetailTypeStd", "regDt"], // 상품분류 관리 producttype
         "productGd": ["prodName", "prodType", "prodDetailType", "stdPrice", "regName", "regDt"], // 자사 상품 전체 product
@@ -142,7 +142,7 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
         '등록자': 'regName',
         '담당영업': 'salesName',
         '정식단가(KRW)':'stdPrice',
-        '회원명': 'userName',
+        '회원명': 'username',
         '회원유형': 'userType' 
     }
 

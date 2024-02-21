@@ -137,13 +137,13 @@ const authOptions: NextAuthOptions = {
             }
             // Check if the token needs to be refreshed
             // For example, if it's within 1 hour of expiring
-            // const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
-            // if (token.accessTokenExpires < shouldRefreshTime) {
-            //     // Refresh token logic
-            //     console.log("Refreshing token...");
-            //     const refreshedToken = await refreshAccessToken(token);
-            //     return refreshedToken;
-            // }
+            const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
+            if (token.accessTokenExpires < shouldRefreshTime) {
+                // Refresh token logic
+                console.log("Refreshing token...");
+                const refreshedToken = await refreshAccessToken(token);
+                return refreshedToken;
+            }
             return token;
         },
         async signIn({ user }) {

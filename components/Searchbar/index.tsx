@@ -134,15 +134,15 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
         prodName: keyword
       }
     }
-    fetching(rowType, params[rowType]);
+    // fetching(rowType, params[rowType]);
+    setData({ mode: "search", params: params[rowType], data: [], totalPages: 0, currentPage: 1, totalElements: 0})
+    router.push(`${path}/1`);
   };
 
-  const onPageChange = (page: number) => {
-    setData({ ...data, currentPage: page });
-  }
-  
+
   const searchReset = () => {
     if (data.mode === 'search') {
+      // setData({ mode: "normal", data: [], params: null, totalPages: 0, currentPage: 1, totalElements: 0})
       setData({ mode: "normal", data: [], params: null, totalPages: 0, currentPage: 1, totalElements: 0})
       setKeyword('');
       setReset(true);
@@ -154,7 +154,6 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
       onSearch();
     }
   }
-
 
   return (
     <div className={Styles.searchBar}>

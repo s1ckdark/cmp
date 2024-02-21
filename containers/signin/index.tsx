@@ -13,9 +13,9 @@ const Login = () => {
     const cookies = parseCookies();
     const router = useRouter();
     
-    useEffect(() => {
-        if(cookies.accessToken) router.push('/landing');
-    }, [cookies.accessToken]);
+    // useEffect(() => {
+    //     if(cookies.accessToken) router.push('/landing');
+    // }, [cookies.accessToken]);
     return (    
         <main className="flex items-center justify-center w-screen h-screen">
             <div className={`${styles.bgIntro} flex w-1/2 h-screen items-center justify-center`}></div>

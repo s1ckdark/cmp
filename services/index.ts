@@ -113,7 +113,6 @@ const regenerateTokens = async () => {
 
 apiBe.interceptors.request.use(async (config: any) => {
     const session: any = await getSession();
-    console.log(session);
     if(session){
     const cookie = parseCookies();
     const { accessToken, refreshToken } = cookie;

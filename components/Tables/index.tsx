@@ -25,11 +25,8 @@ interface dataProps {
 export const Tables = ({ rowType }: TablesProps) => {
     const resetState = useResetRecoilState(dataListAtom);
     const resetModalState = useResetRecoilState(modalAtom);
-    useResetRecoilState(dataListAtom);
-    useResetRecoilState(modalAtom);
-    useRecoilState(monthAtom);
-    const [data, setData] = useRecoilState(dataListAtom);
-    // const [data, setData] = useState({currentPage:1, totalPages:1, totalElements:1, data:[]});
+    const [resultData, setResultData] = useRecoilState(dataListAtom);
+    const [data, setData] = useState({mode:'normal', params:{},currentPage:1, totalPages:1, totalElements:1, data:[]});
     const [mounted, setMounted] = useState(false);
     const router = useRouter();
     const path = usePathname();
@@ -41,7 +38,10 @@ export const Tables = ({ rowType }: TablesProps) => {
         console.log(sort);
         const pathArr = path.split("/");
         const targetMonth = pathArr.length === 6 ? pathArr[4]:null;
-        const pageNumber: any = data.mode === 'search' ? data.currentPage : Number(lodash.last(path.split("/")));
+        // const pageNumber: any = data.mode === 'search' ? data.currentPage : Number(lodash.last(path.split("/")));
+        // const pageNumber: any = resultData.mode === 'search' && resultData.currentPage === 1 ? 1 : Number(lodash.last(path.split("/")));
+        const pageNumber: any = Number(lodash.last(path.split("/")));
+
         const endpoint:any = {
             invoice: {
                 url: "/invoice/search",
@@ -99,7 +99,8 @@ export const Tables = ({ rowType }: TablesProps) => {
         };
 
         const fetching = async () => {
-            let { params } = data.mode === "search" ? data : endpoint[rowType];
+            // let { params } = data.mode === "search" ? data : endpoint[rowType];
+            let { params } = resultData.mode === "search" ? resultData : endpoint[rowType];
             params = {...params, ...sort };
             const response = await apiBe.get(endpoint[rowType]['url'], { params });
             
@@ -111,14 +112,13 @@ export const Tables = ({ rowType }: TablesProps) => {
                     currentPage: pageNumber,
                     totalElements: response.data.totalElements,
                 });
-        
                 setMounted(true);
             } else {
                 Toast("error", "검색 결과가 없습니다");
             }
         };
         fetching()
-    }, [path, rowType, data.currentPage, data.mode, sort.sortField, sort.sortType]);
+    }, [path, rowType, data.currentPage, resultData, sort.sortField, sort.sortType]);
     
     useEffect(() => {
         setData({...data, currentPage: 1})

@@ -2,11 +2,11 @@
 import Link from "next/link";
 import React,{ useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
-import { dataListAtom } from "@/states/data";
+import { dataListAtom, keywordAtom } from "@/states/data";
 import { modalAtom } from "@/states";
 import { isOpenState } from "@/states";
 import { IconNaviBot, IconNaviBill, IconNaviClient, IconNaviNotice, IconNaviProduct, IconNaviSupport, IconSetting } from "@/public/svgs";
-
+import _ from "lodash";
 import { usePathname, useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import Styles from "./Navgiation.module.scss";
@@ -14,23 +14,25 @@ import Styles from "./Navgiation.module.scss";
 const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
     const pathname = usePathname();
     const router = useRouter();
-    const [ data, setData ] = useRecoilState(dataListAtom);
-    const [ modal, setModal ] = useRecoilState(modalAtom);
+    // const [ data, setData ] = useRecoilState(dataListAtom);
+    // const [ modal, setModal ] = useRecoilState(modalAtom);
     const [isDepthOpen, setIsDepthOpen] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(isOpenState);
     const hasChildren = item.children && item.children.length > 0;
     const isActive = item.link === pathname;
     const resetState = useResetRecoilState(dataListAtom);
     const resetModalState = useResetRecoilState(modalAtom);
+    const resetKeyword = useResetRecoilState(keywordAtom);
     const handleClick = (e:any) => {
-        // if(data.data.length > 0) { 
-        //     resetState();
-        //     resetModalState();
-        // }
-        if (item.link === pathname) {
             e.preventDefault(); // Prevent the default navigation behavior
-            router.refresh() // Reload the current page
-        }
+            resetKeyword();
+            resetState();
+            resetModalState();
+            if(_.includes(item.link, pathname)) {
+                // resetState();
+                // resetModalState();
+                router.push(pathname);
+            } else { router.push(item.link) }
     };
 
     useEffect(() => {
