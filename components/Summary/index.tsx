@@ -29,7 +29,6 @@ interface ISummaryProps {
 }
 
 const Summary = ({ header, month  }: ISummaryProps ) => {
-    console.log(month);
     const [visual, setVisual] = useState<visualType>({
         top10bycust: null,
         trendMonth: null,
@@ -41,7 +40,6 @@ const Summary = ({ header, month  }: ISummaryProps ) => {
     const router = useRouter();
     const path = usePathname();
     const targetMonth:any = !month ? lodash.last(path.split("/")): month;
-    console.log(targetMonth);
     
     useEffect(() => {
         const targetUrl = (arg:string) => {
@@ -69,7 +67,7 @@ const Summary = ({ header, month  }: ISummaryProps ) => {
             const { top10 } = data;
             return top10.map((item:any) => ({
                 // ...item,
-                name: item.memberName,
+                name: item.memberName !== null ? item.memberName : "null(미등록)",
                 // ratio: totalSum > 0 ? item.sum_Of_demandAmount / totalSum : 0,
                 value: item.totalDemandAmount
             }));
@@ -169,7 +167,7 @@ const Summary = ({ header, month  }: ISummaryProps ) => {
                     <div className={`${styles.right} ${styles.boxSection} period_sales flex items-center justify-center flex-wrap`}>
                         <div className={styles.inner}>
                             <div className={styles.label}>
-                                <h2>서비스 세부사항</h2>
+                                <h2 className="text-center">서비스 세부사항</h2>
                             </div>
                             <div className="flex justify-center items-center">
                                     {donutChart && <DonutChart data={donutChart} title={"전체 서비스"} />}

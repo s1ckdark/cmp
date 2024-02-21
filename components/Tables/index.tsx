@@ -8,10 +8,9 @@ import Pagination from "@/components/Pagination";
 import { useRecoilState, useResetRecoilState, useRecoilValue } from "recoil";
 // import { currentPageAtom } from "@/states";
 import { dataListAtom } from "@/states/data";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Button from "@/components/Button";
 import Loading from "@/components/Loading";
-import { usePathname } from "next/navigation";
 import { pathSpliter, filterUrl } from "@/utils/data";
 import { apiBe } from "@/services";
 import { Toast } from "@/components/Toast";
@@ -30,12 +29,16 @@ export const Tables = ({ rowType }: TablesProps) => {
     useResetRecoilState(modalAtom);
     useRecoilState(monthAtom);
     const [data, setData] = useRecoilState(dataListAtom);
+    // const [data, setData] = useState({currentPage:1, totalPages:1, totalElements:1, data:[]});
     const [mounted, setMounted] = useState(false);
     const router = useRouter();
     const path = usePathname();
-    
+    const searchParams = useSearchParams();
+    const sort = { sortField: searchParams.get('sort') || 'regDt', sortType: searchParams.get('direction') || 'desc' };
+   
 
     useEffect(() =>{ 
+        console.log(sort);
         const pathArr = path.split("/");
         const targetMonth = pathArr.length === 6 ? pathArr[4]:null;
         const pageNumber: any = data.mode === 'search' ? data.currentPage : Number(lodash.last(path.split("/")));
@@ -96,7 +99,8 @@ export const Tables = ({ rowType }: TablesProps) => {
         };
 
         const fetching = async () => {
-            const { params } = data.mode === "search" ? data : endpoint[rowType];
+            let { params } = data.mode === "search" ? data : endpoint[rowType];
+            params = {...params, ...sort };
             const response = await apiBe.get(endpoint[rowType]['url'], { params });
             
             if (response.status === 200 || response.status === 201) {
@@ -114,7 +118,7 @@ export const Tables = ({ rowType }: TablesProps) => {
             }
         };
         fetching()
-    }, [path, rowType, data.currentPage, data.mode]);
+    }, [path, rowType, data.currentPage, data.mode, sort.sortField, sort.sortType]);
     
     useEffect(() => {
         setData({...data, currentPage: 1})
@@ -131,7 +135,8 @@ export const Tables = ({ rowType }: TablesProps) => {
                 currentPage: newPage
             })
         } else {
-            router.push(`./${newPage}`)
+            const pageUrl = sort.sortField !=='' && sort.sortType !=='' ? `./${newPage}?sort=${sort.sortField}&direction=${sort.sortType}`:`./${newPage}`;
+            router.push(pageUrl)
         }
     };
 

@@ -77,7 +77,11 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .selectAll('li')
       .data(data)
       .enter()
-      .append('li');
+      .append('li')
+      .style('display', 'flex')
+      .style('width', '300px')
+      .style('justify-content', 'center')
+      .style('align-items', 'center')
 
     legend.append('span')
       .style('background-color', ((d:any, i:any) => color(d.name)))
@@ -86,9 +90,24 @@ const DonutChart: React.FC<{ data: Array<DonutChartProps>, title: string }> = ({
       .style('height', '1rem')
       .style('margin-right', '0.5rem')
 
-    legend.append('span')
-      .text((d) => `${d.name}: ${d.value.toLocaleString()}`);
-   
+      legend.append('p')
+      .style('display','flex')
+      .style('justify-content','space-between')
+      .style('width', '200px')
+      .attr('class', 'legend-item') // Optional: if you want to add a class to the paragraph
+      .each(function(d) {
+        d3.select(this).append('span')
+          .style('display','inline-block')
+          .style('width','120px')
+          .style('text-align','left')
+          .text(d.name);
+    
+        d3.select(this).append('span')
+          .style('display','inline-block')
+          .style('width','120px')
+          .style('text-align','right')
+          .text(d.value.toLocaleString());
+      });
     legend.style('margin-bottom', `5px`)
    }
     

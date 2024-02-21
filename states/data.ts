@@ -35,7 +35,7 @@ export const dataViewAtom = atom<dataViewType | null>({
 
 export const dataListAtom = atom<dataListType>({
     key: 'dataListAtom',
-    default: { mode:'',params: {}, data:[], totalPages:0,currentPage:1, totalElements:0}
+    default: { mode:'normal',params: {}, data:[], totalPages:0,currentPage:1, totalElements:0}
 });
 
 export const visualAtom = atom<any | null>({
@@ -112,5 +112,10 @@ interface ICustomerPageType {
 }
 export const pageTypeAtom = atom<string>({
     key: 'pageTypeAtom',
+    default: ''
+});
+
+export const keywordAtom = atom<string>({
+    key: 'keywordAtom',
     default: ''
 });

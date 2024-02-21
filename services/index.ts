@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestHeaders, AxiosRequestConfig } from "axios";
 import { FetchProps } from "@/types/data";
-import { getSession } from "next-auth/react";
+import { getSession, signOut } from "next-auth/react";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import { useRouter } from "next/navigation";
 import { parseJwt } from "@/utils/jwtHelper";
@@ -113,9 +113,11 @@ const regenerateTokens = async () => {
 
 apiBe.interceptors.request.use(async (config: any) => {
     const session: any = await getSession();
+    console.log(session);
+    if(session){
     const cookie = parseCookies();
     const { accessToken, refreshToken } = cookie;
-    
+    }
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     } else if (session?.accessToken) {
@@ -138,6 +140,7 @@ apiBe.interceptors.response.use(
             if (response.data.status === 200 || response.data.status === 201) {
                 return response.data // 2xx 범위일 때
             } else if (response.data.status === 401) {
+
                 window.dispatchEvent(
                     new CustomEvent("axiosError", {
                         detail: {
@@ -145,7 +148,9 @@ apiBe.interceptors.response.use(
                         },
                     }),
                 );
-                Toast("error", "토큰이 만료 되었습니다", () => { location.href = '/signin' });
+   
+                Toast("error", "토큰이 만료 되었습니다", ()=>location.href = '/signin');
+                
                 // return await regenerateTokens().then((token) => {
                 //     response.config.headers.Authorization = `Bearer ${token}`;
                 //     return axios.request(response.config);

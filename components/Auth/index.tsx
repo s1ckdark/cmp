@@ -1,30 +1,21 @@
+'use client';
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import Button from "@/components/Button";
 import styles from "./index.module.scss";
 import { Toast } from "@/components/Toast";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { getIpAddr, getUserAgent } from "@/utils";
-import { getKRCurrrentTime } from "@/utils/date";
-
-type FormData = {
-    email: string;
-    password: string;
-    ipAddr: string;
-    client: string;
-};
 
 const SignIn = () => {
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormData>();
+    } = useForm();
     const router = useRouter();
 
-
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit(async (data: any) => {
         const response = await signIn("credentials", {
             redirect: false,
             email: data.email,
@@ -33,9 +24,8 @@ const SignIn = () => {
             client: getUserAgent(),      
         });
         if (response?.ok) {
-            Toast("success", "로그인에 성공하였습니다.", () =>
-                router.push("/landing"),
-            );
+            router.push("/landing")
+            Toast("success", "로그인에 성공하였습니다.");
         } else if (response?.error) {
             Toast("error", "로그인에 실패하였습니다.");
         }

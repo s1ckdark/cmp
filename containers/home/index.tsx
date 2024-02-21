@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArgosLogoLrg } from '@/public/svgs';
 import styles from './index.module.scss';
 
-export default function Home() {
+const Home = () => {
     return (
         <main className={styles.bgIntro}>
             <div className="flex items-center justify-center w-screen h-screen flex-col">
@@ -16,3 +16,5 @@ export default function Home() {
         </main>
     )
 }
+
+export default Home;

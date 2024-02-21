@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-
 import { getMetaData } from '@/app/shareMetadata';
 
 export const metadata = getMetaData({

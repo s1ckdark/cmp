@@ -11,6 +11,7 @@ interface Props {
 }
 
 const RootLayout = async ({ children }: Props) => {
+
   return (
     <html lang="kr">
       <body>

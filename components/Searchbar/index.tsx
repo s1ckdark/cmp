@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Styles from './index.module.scss';
 import { useSetRecoilState, useRecoilValue, useRecoilState } from 'recoil';
-import { dataListAtom } from '@/states/data';
+import { dataListAtom, keywordAtom } from '@/states/data';
 import { monthAtom } from '@/states';
 import { IconSearch } from '@/public/svgs';
 import { Toast } from '@/components/Toast';
@@ -10,7 +10,7 @@ import lodash, { set } from 'lodash';
 import Button from '@/components/Button';
 import { useRouter, usePathname } from 'next/navigation';
 import { pathSpliter, filterUrl } from '@/utils/data';
-
+ 
 export interface SearchBarProps {
   placeholder: string
   onChange: (value: string) => void
@@ -32,7 +32,7 @@ interface boxProps {
 const Searchbar = ({ rowType }: { rowType: string }) => {
   // const month = useRecoilValue(monthAtom);
   const [data, setData] = useRecoilState(dataListAtom) || null;
-  const [keyword, setKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useRecoilState<string>(keywordAtom);
   const pathname = usePathname();
   const path = pathname.split('/').slice(0, -1).join('/');
   const url = filterUrl(pathname, "list") ? pathname.split("/").slice(0, -2).join("/") : pathname.split('/').slice(0, -1).join('/');
@@ -100,7 +100,9 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
         Toast('error', '검색 결과가 없습니다');
       }
     };
-
+  useEffect(() => {
+    if(data.mode !== 'search') setKeyword('')
+  },[data.mode])
 
   const onSearch = async () => {
     if (reset === false && keyword === '') Toast('info', '검색중입니다.');
@@ -153,12 +155,6 @@ const Searchbar = ({ rowType }: { rowType: string }) => {
     }
   }
 
-  // useEffect(() => {
-    // if (keyword === '' && reset === true) {
-    //    onSearch();
-    // }
-    // setReset(false);
-  // }, [reset]);
 
   return (
     <div className={Styles.searchBar}>

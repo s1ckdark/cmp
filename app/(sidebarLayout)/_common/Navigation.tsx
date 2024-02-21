@@ -15,6 +15,7 @@ const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
     const pathname = usePathname();
     const router = useRouter();
     const [ data, setData ] = useRecoilState(dataListAtom);
+    const [ modal, setModal ] = useRecoilState(modalAtom);
     const [isDepthOpen, setIsDepthOpen] = useState(false);
     const [isOpen, setIsOpen] = useRecoilState(isOpenState);
     const hasChildren = item.children && item.children.length > 0;
@@ -22,7 +23,10 @@ const NavItem = ({ item, depthIndex }:{item:any, depthIndex:number}) => {
     const resetState = useResetRecoilState(dataListAtom);
     const resetModalState = useResetRecoilState(modalAtom);
     const handleClick = (e:any) => {
-        data.data.length > 0 ? resetState() : null;
+        // if(data.data.length > 0) { 
+        //     resetState();
+        //     resetModalState();
+        // }
         if (item.link === pathname) {
             e.preventDefault(); // Prevent the default navigation behavior
             router.refresh() // Reload the current page

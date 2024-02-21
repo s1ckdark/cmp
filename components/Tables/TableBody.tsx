@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect } from "react";
 import Styles from "./TableBody.module.scss";
 import { useRouter } from "next/navigation";
 import { monthAtom, currentPageAtom } from "@/states";
@@ -23,9 +20,9 @@ export const TableBody = ({ rowType, data }: any) => {
     const [history, setHistory] = useRecoilState(historyListAtom || null);
     const totalItems: any = data?.totalItems;
     const targetMonth = useRecoilValue(monthAtom);
-    const [historyToggle, setHistoryToggle] =
-        useRecoilState<boolean>(historyToggleAtom);
+    const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
     const router = useRouter();
+
     const display: TypesMap = {
         invoice: [
             "overview",
@@ -82,7 +79,7 @@ export const TableBody = ({ rowType, data }: any) => {
             "prodDetailType",
             "prodDetailTypeStd",
             "stdPrice",
-            "expPrice",
+            "prod",
             "discountRate",
             "regName",
             "regDt",
@@ -122,7 +119,6 @@ export const TableBody = ({ rowType, data }: any) => {
             "subject",
             "noticeType",
             "regName",
-            "files",
             "regDt"
         ],
         support: [
@@ -215,6 +211,10 @@ export const TableBody = ({ rowType, data }: any) => {
     };
     const field = display[rowType];
 
+    const sortIcon = (key: string) => {
+
+    }
+
     const renderCell = (key: any, keyIndex: number, item: any, index:number) => {
         let content;
         const fieldValue = key
@@ -256,17 +256,17 @@ export const TableBody = ({ rowType, data }: any) => {
             case "discountRate":
                 content = (
                     <td
-                        key={key + "-" + keyIndex}
+                        key={key + "-" + keyIndex} 
                         onClick={() => visual(item.memberNo)}
                     >
                         {item.discountRate}%
                     </td>
                 );
                 break;
-            case "files":
+            case "subject":
                 content = (
-                    <td key={key + "-" + keyIndex} onClick={() => view(item)}>
-                        {item.uploadedFiles.length > 0 ? "O" : "X"}
+                    <td key={key + "-" + keyIndex} className="!text-left" onClick={() => view(item)}>
+                        {item.subject} {item.uploadedFiles && item.uploadedFiles.length > 0 ? "O" : "X"}
                     </td>
                 );
                 break;
@@ -284,12 +284,36 @@ export const TableBody = ({ rowType, data }: any) => {
                     </td>
                 )
                 break;
-            default:
+            case "memberName":
                 content = (
+                    <td key={key + "-" + keyIndex} className="!text-left" onClick={() => view(item)}>
+                        {item.memberName}
+                    </td>
+                );
+                break;
+            case "prodDetailType":
+                content = (
+                    <td key={key + "-" + keyIndex} className="!text-left" onClick={() => view(item)}>
+                        {item.prodDetailType}
+                    </td>
+                );
+                break;
+            case "prodDetailTypeStd":
+                content = (
+                    <td key={key + "-" + keyIndex} className="!text-left" onClick={() => view(item)}>
+                        {item.prodDetailTypeStd}
+                    </td>
+                );
+                break;
+            default:
+                content = typeof fieldValue !== "number" ? (
                     <td key={key + "-" + keyIndex} onClick={() => view(item)}>
                         {typeof fieldValue !== "number" ? fieldValue:addComma(fieldValue)}
                     </td>
-                );
+                ) : (<td key={key + "-" + keyIndex} className="!text-right" onClick={() => view(item)}>
+                {typeof fieldValue !== "number" ? fieldValue:addComma(fieldValue)}
+            </td>
+            );
                 break;
         }
 

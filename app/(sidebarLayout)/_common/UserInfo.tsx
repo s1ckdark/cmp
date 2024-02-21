@@ -5,10 +5,9 @@ import Loading from '@/components/Loading'
 import { parseCookies } from 'nookies';
 import { apiBePure } from '@/services';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { destroyCookie, setCookie } from "nookies";
 import { Toast } from '@/components/Toast';
-
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
   const { data:session }:any = useSession();
@@ -17,20 +16,27 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
   const { username } = cookie;
   const name = username ? username : session?.user.username;
   if (name && username === undefined) setCookie(null, 'username', name, { maxAge: 2 * 60 * 60, path: '/' });
+  
   const logout = async () => {
-    const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
-    if (response.status === 200) {
-      destroyCookie(null, 'accessToken');
-      destroyCookie(null, 'refreshToken');
-      destroyCookie(null, 'userId');
-      destroyCookie(null, 'username');
-      destroyCookie(null, 'next-auth.callback-url');
-      destroyCookie(null, 'next-auth.csrf-token');
-      destroyCookie(null, 'next-auth.session-token');
-      Toast("success", "로그아웃하였습니다", () => router.push('/'));
-    }
+    if(session !== null){
+      const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
+      if (response.status === 200) {
+        destroyCookie(null, 'accessToken');
+        destroyCookie(null, 'refreshToken');
+        destroyCookie(null, 'userId');
+        destroyCookie(null, 'username');
+        destroyCookie(null, 'next-auth.callback-url');
+        destroyCookie(null, 'next-auth.csrf-token');
+        destroyCookie(null, 'next-auth.session-token');
+        Toast("success", "로그아웃하였습니다",()=>signOut());
+        router.push('/signin');
+      }
+    } else {
+    signOut();
+    router.push('/signin');
   }
-  if(!name) return <Loading/>
+  }
+  if(!name) router.push('/signin');
   return (
     <>
       <div className={`${styles.userinfo} ${!isOpen ? styles.open:styles.close}`}>

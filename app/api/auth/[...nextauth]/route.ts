@@ -4,7 +4,6 @@ import type { NextAuthOptions, User, Session } from "next-auth";
 import { cookies } from "next/headers";
 
 const beUrl = process.env.NEXT_PUBLIC_BE_URL;
-// const feUrl = process.env.NEXT_PUBLIC_FE_URL;
 
 async function refreshAccessToken(token: any) {
     try {
@@ -23,7 +22,6 @@ async function refreshAccessToken(token: any) {
             throw refreshedTokens;
         }
 
-
         cookies().set("accessToken", token.accessToken , {
             maxAge: 60 * 10, // 10 minutes
             path: "/",
@@ -34,7 +32,6 @@ async function refreshAccessToken(token: any) {
         path: "/",
         // httpOnly: true,
         });
-        console.log("set cookie complete");
         return {
             ...token,
             accessToken: refreshedTokens.data.accessToken,
@@ -140,13 +137,13 @@ const authOptions: NextAuthOptions = {
             }
             // Check if the token needs to be refreshed
             // For example, if it's within 1 hour of expiring
-            const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
-            if (token.accessTokenExpires < shouldRefreshTime) {
-                // Refresh token logic
-                console.log("Refreshing token...");
-                const refreshedToken = await refreshAccessToken(token);
-                return refreshedToken;
-            }
+            // const shouldRefreshTime = Math.floor(Date.now() / 1000) + 10 * 60; // Current time in seconds + 9 minutes
+            // if (token.accessTokenExpires < shouldRefreshTime) {
+            //     // Refresh token logic
+            //     console.log("Refreshing token...");
+            //     const refreshedToken = await refreshAccessToken(token);
+            //     return refreshedToken;
+            // }
             return token;
         },
         async signIn({ user }) {
