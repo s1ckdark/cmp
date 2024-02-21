@@ -17,22 +17,21 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
   const name = username ? username : session?.user.username;
   if (name && username === undefined) setCookie(null, 'username', name, { maxAge: 2 * 60 * 60, path: '/' });
   
-  const logout = async () => {
+  const logout = async() => {
+    destroyCookie(null, 'accessToken',{ path: '/' });
+    destroyCookie(null, 'refreshToken',{ path: '/' });
+    destroyCookie(null, 'userId',{ path: '/' });
+    destroyCookie(null, 'username',{ path: '/' });
+    destroyCookie(null, 'next-auth.callback-url',{ path: '/' });
+    destroyCookie(null, 'next-auth.csrf-token',{ path: '/' });
+    destroyCookie(null, 'next-auth.session-token',{ path: '/' });
     if(session !== null){
       const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
       if (response.status === 200) {
-        destroyCookie(null, 'accessToken');
-        destroyCookie(null, 'refreshToken');
-        destroyCookie(null, 'userId');
-        destroyCookie(null, 'username');
-        destroyCookie(null, 'next-auth.callback-url');
-        destroyCookie(null, 'next-auth.csrf-token');
-        destroyCookie(null, 'next-auth.session-token');
-        Toast("success", "로그아웃하였습니다",()=>signOut());
-        router.push('/signin');
+        signOut()
+        Toast("success", "로그아웃하였습니다",()=>router.push('/signin'));
       }
     } else {
-    signOut();
     router.push('/signin');
   }
   }

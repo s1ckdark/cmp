@@ -161,7 +161,6 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
                     const fieldKey = isComplexHeader ? header.label : header;
                     const isSortable = sortList[rowType]?.includes(fieldKey) || sortList[rowType]?.includes(sortMapping[fieldKey]);
                     const isCurrentSortField = sortState.field === (sortMapping[fieldKey] || fieldKey);
-                    console.log(fieldKey, sortList[rowType]?.includes(fieldKey),   isCurrentSortField, isSortable)
                     return (
                         <th
                             key={index}
@@ -190,7 +189,6 @@ export const TableHeader: React.FC<TableHeaderProps> = ({ rowType }) => {
                     return header.subHeaders ? header.subHeaders.map((subHeader: string, index: number) => {
                         const isSortable = sortList[rowType]?.includes(subHeader) || sortList[rowType]?.includes(sortMapping[subHeader]);
                         const isCurrentSortField = sortState.field === (sortMapping[subHeader] || subHeader);
-                        console.log(isCurrentSortField);
                         return (
                             <th
                                 key={`${subHeader}-${index}`}
