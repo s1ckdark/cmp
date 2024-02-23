@@ -16,6 +16,7 @@ import { generateDates } from '@/utils/date';
 import { Toast } from '@/components/Toast';
 import Button from '@/components/Button';
 import _ from 'lodash';
+import { getCurrentMonth } from '@/utils/date';
 interface DemandItem {
   rank: number;
   demandType: string;
@@ -136,7 +137,7 @@ const InvoiceVisual = () => {
         <Button type="button" skin={'gray'} className="me-2" onClick={() => router.back()}>
           이전
         </Button>
-        <Button type="button" skin={'gray'} onClick={() => router.push('/billing/invoice/list/1')}>
+        <Button type="button" skin={'gray'} onClick={() => router.push(`/billing/invoice/list/${getCurrentMonth()}/1`)}>
           목록
         </Button>
       </div>
