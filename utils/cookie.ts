@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
-import { parseCookies } from 'nookies';
+import { cookies } from "next/headers";
+import { parseCookies } from "nookies";
 
 export const setCookie = (name: string, value: string, expDays: number) => {
     const date = new Date();
@@ -8,8 +8,8 @@ export const setCookie = (name: string, value: string, expDays: number) => {
     document.cookie = `${name}=${value}; ${expires}; path=/`;
 };
 
-export const getCookie = (name:string) => {
-    if (typeof window !== 'object') return;
+export const getCookie = (name: string) => {
+    if (typeof window !== "object") return;
     const cookie = parseCookies();
     return cookie[name];
 };
@@ -24,12 +24,18 @@ interface Cookie {
 }
 
 export const cookiesToString = (rawCookies: Cookie[]) => {
-    return rawCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; ');
+    return rawCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join("; ");
 };
 
 export const isTokenExpired = (token: string) => {
-    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    const expiry = JSON.parse(atob(token.split(".")[1])).exp;
     return expiry;
     // return (Math.floor((new Date()).getTime() / 1000)) >= expiry;
-  }
+};
 
+export const getCookies = () => {
+    const cookie = parseCookies();
+    if (cookie.auth === undefined) return;
+    const { auth } = cookie;
+    return JSON.parse(auth);
+};

@@ -23,8 +23,17 @@
                 padding: 10px 15px;
                 border-bottom: 1px solid #DEE1E7;
                 border-left: 1px solid #DEE1E7;
+                cursor: grab;
                 &:last-child {
                     border-bottom: none;
+                }
+                .downloadBtn {
+                    font-size: 11px;
+                    background-color: #43B69A;
+                    border-radius: 4px;
+                    padding: 5px 10px;
+                    color: #fff;
+                    cursor: pointer;
                 }
                 .delBtn {
                     font-size: 11px;

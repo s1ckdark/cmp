@@ -1,59 +1,57 @@
-import { NextRequest, NextResponse, NextFetchEvent } from 'next/server';
-import { cookies } from 'next/headers';
-import { all } from 'axios';
-import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse, NextFetchEvent } from "next/server";
+import { cookies } from "next/headers";
+import { all } from "axios";
+import { getServerSession } from "next-auth";
 import { getToken } from "next-auth/jwt";
 
 interface Cookie {
-  name: string;
-  value: string;
+    name: string;
+    value: string;
 }
 
 export const middleware = async (req: NextRequest, res: NextResponse, event: NextFetchEvent) => {
-  console.log("Middleware executing!");
-  const { pathname } = req.nextUrl;
-  console.log("pathname : ",pathname);
-  
-  // 미들웨어 쿠키
-  // const allCookies = req.cookies.getAll()
-  // console.log(allCookies)
-  // let accessToken = req.cookies.get("accessToken")?.value || "";
-  // console.log("accessToken in middleware :",cookies, accessToken);
+    const { pathname } = req.nextUrl;
+    console.log("middlewar - pathname : ", pathname);
 
-  //setting Headers
-  // const requestHeaders = new Headers(req.headers);
-  // requestHeaders.set("Authroization", "bearer "+accessToken);
+    // 미들웨어 쿠키
+    // const allCookies = req.cookies.getAll()
+    // console.log(allCookies)
+    // let accessToken = req.cookies.get("accessToken")?.value || "";
+    // console.log("accessToken in middleware :",cookies, accessToken);
 
+    //setting Headers
+    // const requestHeaders = new Headers(req.headers);
+    // requestHeaders.set("Authroization", "bearer "+accessToken);
 
-  // const {searchParams} = req.nextUrl;
-  // const callbackUrl = searchParams.get("callbackUrl");
-  
-  // const session = await getServerSession(authOptions);
-  // console.log("serverSession :",session);
-  // if(!session) return NextResponse.redirect("/signin");
-  // const accessToken = session?.accessToken;
-  // accessToken === undefined ? 
-  // console.log("pathname : ",pathname);
-  // const allCookies = request.cookies.getAll()
-  // if(pathname.includes('customer')) console.log(allCookies); 
-  // const accessToken: string | undefined = request.cookies.get('next-auth.session-token')?.value;
-  // if(accessToken) {
-  //   try {
-  //     const requestHeaders = new Headers(req.headers)
-  //     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
-  //     const newRequest: any = new Request(req, {
-  //       headers: requestHeaders,
-  //     });
-      
-  //   return NextResponse.next({
-  //       request: {
-  //         headers: requestHeaders,
-  //       }
-  //   });
-  //   } catch (error) {
-  //     console.log("expired");
-  //   }
-  // }
+    // const {searchParams} = req.nextUrl;
+    // const callbackUrl = searchParams.get("callbackUrl");
+
+    // const session = await getServerSession(authOptions);
+    // console.log("serverSession :",session);
+    // if(!session) return NextResponse.redirect("/signin");
+    // const accessToken = session?.accessToken;
+    // accessToken === undefined ?
+    // console.log("pathname : ",pathname);
+    // const allCookies = request.cookies.getAll()
+    // if(pathname.includes('customer')) console.log(allCookies);
+    // const accessToken: string | undefined = request.cookies.get('next-auth.session-token')?.value;
+    // if(accessToken) {
+    //   try {
+    //     const requestHeaders = new Headers(req.headers)
+    //     requestHeaders.set("Authorization", `Bearer ${accessToken}`);
+    //     const newRequest: any = new Request(req, {
+    //       headers: requestHeaders,
+    //     });
+
+    //   return NextResponse.next({
+    //       request: {
+    //         headers: requestHeaders,
+    //       }
+    //   });
+    //   } catch (error) {
+    //     console.log("expired");
+    //   }
+    // }
     // Retrieve existing headers
     // const headers = new Headers(request.headers);
 
@@ -67,10 +65,10 @@ export const middleware = async (req: NextRequest, res: NextResponse, event: Nex
     //     headers: headers
     // });
 
-// For all other requests, do nothing special
-console.log("Middleware executed!");
-return NextResponse.next();
-}
+    // For all other requests, do nothing special
+    // console.log("Middleware executed!");
+    return NextResponse.next();
+};
 
 // export default withAuth({
 //   callbacks: {
@@ -80,8 +78,7 @@ return NextResponse.next();
 //   },
 // })
 
-
 export const config = {
-  // matcher: ['/']
-  matcher: ["/apibe/:path*", "/apife/:path*"]
+    // matcher: ['/']
+    matcher: ["/apibe/:path*", "/apife/:path*"],
 };

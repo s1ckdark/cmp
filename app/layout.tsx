@@ -5,6 +5,7 @@ import Toastify from '@/components/Toast';
 import AuthProvider from './AuthProvider';
 import Loading from '@/components/Loading';
 import Modal from '@/components/Modal';
+import Confirm from '@/components/Confirm';
 interface Props {
   children: React.ReactNode;
   params: any;
@@ -20,6 +21,7 @@ const RootLayout = async ({ children }: Props) => {
             <AuthProvider>
               <Toastify />
               <Modal />
+              <Confirm />
               {children as ReactNode}
             </AuthProvider>
           </RecoilRootProvider>

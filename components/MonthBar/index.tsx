@@ -3,13 +3,12 @@ import { Toast } from "@/components/Toast";
 import { useRecoilState } from "recoil";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import { usePathname, useRouter,  useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
 import { BoxLeftArrow, BoxRightArrow } from "@/public/svgs";
 import _ from "lodash";
 import { filterUrl } from "@/utils/data";
 import { pathSpliter } from "@/utils/data";
-import { path } from "d3";
 
 interface MonthBarProps {
     targetMonth?: any;
@@ -19,37 +18,39 @@ interface MonthBarProps {
 const MonthBar = () => {
     const pathname = usePathname();
     const router = useRouter();
-    const {targetMonth, pageNumber }:MonthBarProps = filterUrl(pathname, "list") ? pathSpliter(pathname): {targetMonth: _.last(pathname.split('/')), pageNumber: null};
-    const url = filterUrl(pathname, "list") ? pathname.split("/").slice(0, -2).join("/") : pathname.split('/').slice(0, -1).join('/');
+    const { targetMonth, pageNumber }: MonthBarProps = filterUrl(pathname, "list") ? pathSpliter(pathname) : { targetMonth: _.last(pathname.split("/")), pageNumber: null };
+    const url = filterUrl(pathname, "list") ? pathname.split("/").slice(0, -2).join("/") : pathname.split("/").slice(0, -1).join("/");
     const getCurrentMonth = () => {
         return dayjs().format("YYYYMM");
     };
-    
+
     const prevMonth = (inputMonth: any) => {
         const previousMonth = dayjs(inputMonth).subtract(1, "month").format("YYYYMM");
         // if(filterUrl(pathname, "list")) router.push(`./1`)
-        Toast("info", "데이터를 조회중입니다.", ()=>targetUrl(previousMonth));
+        targetUrl(previousMonth);
     };
 
     const nextMonth = (inputMonth: any) => {
-        if (inputMonth === getCurrentMonth() && _.includes(pathname.split('/'),'invoice')) { Toast("warning", "이번달 이후의 데이터는 조회할 수 없습니다."); return; }
+        if (inputMonth === getCurrentMonth() && _.includes(pathname.split("/"), "invoice")) {
+            Toast("warning", "이번달 이후의 데이터는 조회할 수 없습니다.");
+            return;
+        }
         const nextMonth = dayjs(inputMonth).add(1, "month").format("YYYYMM");
-        Toast("info", "데이터를 조회중입니다.", ()=>targetUrl(nextMonth));
-    }
+        targetUrl(nextMonth);
+    };
 
-    const targetUrl = (month:any) => {
-        if(filterUrl(pathname, "list")) {
-            router.push(`${url}/${month}/${pageNumber}`);
-         } else { router.push(`${url}/${month}`);}
-    }
+    const targetUrl = (month: any) => {
+        if (filterUrl(pathname, "list")) {
+            router.push(`${url}/${month}/1`);
+        } else {
+            router.push(`${url}/${month}`);
+        }
+    };
 
     return (
         <div className={styles.monthBar}>
             <div className={styles.monthBarLeft}>
-                <button
-                    className={styles.monthBarLeftBtn}
-                    onClick={() => prevMonth(targetMonth)}
-                >
+                <button className={styles.monthBarLeftBtn} onClick={() => prevMonth(targetMonth)}>
                     <BoxLeftArrow /> <span>이전달</span>
                 </button>
             </div>
@@ -59,10 +60,7 @@ const MonthBar = () => {
                 </p>
             </div>
             <div className={styles.monthBarRight}>
-                <button
-                    className={styles.monthBarRightBtn}
-                    onClick={() => nextMonth(targetMonth)}
-                >
+                <button className={styles.monthBarRightBtn} onClick={() => nextMonth(targetMonth)}>
                     <span>다음달</span> <BoxRightArrow />
                 </button>
             </div>

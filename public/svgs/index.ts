@@ -22,7 +22,9 @@ import IconOverview from './overview.svg'
 import IconSearch from './search.svg';
 import IconCalendar from './calendar.svg';
 import IconLogout from './logout.svg';
+import IconAttachment from './attachment.svg';
 export {
+    IconAttachment,
     IconLogout,
     IconCalendar,
     IconSearch,

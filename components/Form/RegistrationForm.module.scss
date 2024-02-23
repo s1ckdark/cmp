@@ -1,89 +1,105 @@
 .template {
     max-width: 1280px;
-    margin:0 auto;
-    &.edit, &.register {
-    .inputGroup {
-        width: 100%;
-        margin-bottom: 20px;
-        position: relative;
-        label {
-            color: #2E322F;
-            font-family: Pretendard;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 700;
-        }
-
-        input {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
+    margin: 0 auto;
+    &.edit,
+    &.register {
+        .inputGroup {
             width: 100%;
-        }
-        .password, .newPassword, .address, .addressDetail, .memberNo, .memberName, .zipcode  {
-            width: 100%;
-            margin-right: 15px;
             margin-bottom: 20px;
             position: relative;
-        }
-        .zipcode {
-            width: 300px;
-        }
-        .btnArea {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin: 8px auto 28px;
-            height: 36px;
-            &.btnPasswordCheck {
-                width: 100px;
-               
+            label {
+                color: #2e322f;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
             }
-            &.btnAddrSearch {
-                width: 100px;
+
+            input {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 5px 10px;
+                margin: 8px 0;
+                box-sizing: border-box;
+                width: 100%;
             }
-            &.btnMemberSearch {
-                width: 100px;
+            .password,
+            .newPassword,
+            .address,
+            .addressDetail,
+            .memberNo,
+            .memberName,
+            .zipcode {
+                width: 100%;
+                margin-right: 15px;
+                margin-bottom: 20px;
+                position: relative;
+            }
+            .password {
+                button {
+                    margin-top: 10px;
+                    display: block;
+                }
+            }
+            .zipcode {
+                width: 300px;
+            }
+            .btnArea {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin: 8px auto 28px;
+                height: 36px;
+                &.btnPasswordCheck {
+                    width: 100px;
+                }
+                &.btnAddrSearch {
+                    width: 100px;
+                }
+                &.btnMemberSearch {
+                    width: 100px;
+                }
             }
         }
-    }
     }
     &.view {
-    .inputGroup {
-        width: 100%;
-        margin-bottom: 10px;
-        label {
-            color: #2E322F;
-            font-family: Pretendard;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 700;
-        }
-
-        input {
-            border: 1px solid hsl(0, 0%, 90%);
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin: 8px 0;
-            box-sizing: border-box;
+        .inputGroup {
             width: 100%;
-            &[readonly] {
-                background-color:hsl(0, 0%, 95%);
+            margin-bottom: 10px;
+            label {
+                color: #2e322f;
+                font-family: Pretendard;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
+            }
+
+            input {
+                border: 1px solid hsl(0, 0%, 90%);
+                border-radius: 4px;
+                padding: 5px 10px;
+                margin: 8px 0;
+                box-sizing: border-box;
+                width: 100%;
+                &[readonly] {
+                    background-color: hsl(0, 0%, 95%);
+                }
+            }
+            .password,
+            .newPassword,
+            .address,
+            .memberNo,
+            .zipcode {
+                width: 100%;
+                margin-right: 15px;
+            }
+            .memberName,
+            .addressDetail {
+                width: 100%;
+            }
+            .zipcode {
+                width: 200px;
             }
         }
-        .password, .newPassword, .address,  .memberNo, .zipcode  {
-            width: 100%;
-            margin-right: 15px;
-        }
-        .memberName, .addressDetail {
-            width: 100%;
-        }
-        .zipcode {
-            width: 200px;
-        }
-    }
     }
 }
 .btnArea {
@@ -95,7 +111,6 @@
         width: 100px;
     }
 }
-
 
 .modal {
     width: 600px;
@@ -111,17 +126,16 @@
         display: block !important;
     }
     &.address {
-       .resultArea {
-           height: 230px;
-           overflow-y: scroll;
-        
-       }
+        .resultArea {
+            height: 230px;
+            overflow-y: scroll;
+        }
     }
     &.member {
         .resultArea {
-           height: 230px;
-           overflow-y: scroll;
-       }
+            height: 230px;
+            overflow-y: scroll;
+        }
     }
     .closeBtn {
         position: absolute;
@@ -146,48 +160,48 @@
                 margin-left: 15px;
                 border: 1px solid #ccc;
                 height: 36px;
-                z-index:999;
+                z-index: 999;
                 cursor: pointer;
             }
         }
         .resultArea {
-             margin: 30px auto;
+            margin: 30px auto;
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
 
-            thead {
-                background-color: #F5F6F7;
-                border : 1px solid #DEE1E7;
-                th {
-                    padding: 10px 15px;
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: 700;
-                    color: #2E322F;
-                    text-align: center;
-                    width: 50%;
-                }
-            }
-            tbody {
-                tr {
-                    border : 1px solid #DEE1E7;
-                    &:hover {
-                        background-color: #F5F6F7;
-                    }
-                    td {
+                thead {
+                    background-color: #f5f6f7;
+                    border: 1px solid #dee1e7;
+                    th {
                         padding: 10px 15px;
                         font-size: 14px;
                         font-style: normal;
-                        font-weight: 400;
-                        color: #2E322F;
+                        font-weight: 700;
+                        color: #2e322f;
                         text-align: center;
+                        width: 50%;
+                    }
+                }
+                tbody {
+                    tr {
+                        border: 1px solid #dee1e7;
+                        &:hover {
+                            background-color: #f5f6f7;
+                        }
+                        td {
+                            padding: 10px 15px;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 400;
+                            color: #2e322f;
+                            text-align: center;
+                        }
                     }
                 }
             }
-        }
         }
     }
     &.passwordModal {
@@ -205,7 +219,7 @@
                 margin-left: 15px;
                 border: 1px solid #ccc;
                 height: 36px;
-                z-index:999;
+                z-index: 999;
                 cursor: pointer;
             }
         }
@@ -216,50 +230,50 @@
     }
 }
 .address {
-     table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
 
-            thead {
-                background-color: #F5F6F7;
-                border : 1px solid #DEE1E7;
-                th {
-                    padding: 10px 15px;
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: 700;
-                    color: #2E322F;
-                    text-align: center;
-                    &:nth-child(1) {
-                        width: 30% !important;
-                    }
-                    &:nth-child(2) {
-                        width: 70% !important;
-                    }
+        thead {
+            background-color: #f5f6f7;
+            border: 1px solid #dee1e7;
+            th {
+                padding: 10px 15px;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
+                color: #2e322f;
+                text-align: center;
+                &:nth-child(1) {
+                    width: 30% !important;
+                }
+                &:nth-child(2) {
+                    width: 70% !important;
+                }
             }
             tbody {
                 tr {
-                    border : 1px solid #DEE1E7;
+                    border: 1px solid #dee1e7;
                     &:hover {
-                        background-color: #F5F6F7;
+                        background-color: #f5f6f7;
                     }
                     td {
                         padding: 10px 15px;
                         font-size: 14px;
                         font-style: normal;
                         font-weight: 400;
-                        color: #2E322F;
+                        color: #2e322f;
                         text-align: center;
                     }
                 }
             }
         }
-        }
+    }
 }
 .errorMsg {
     position: absolute;
-    left:0;
+    left: 0;
     bottom: -15px;
     color: red;
     font-size: 11px;

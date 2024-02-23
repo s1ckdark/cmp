@@ -1,17 +1,11 @@
 'use client';
 import React, { useState, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { Tables } from '@/components/Tables';
-import { isEmptyObject } from '@/utils/data';
 import { TablesProps } from '@/types/data';
 import { useForm } from "react-hook-form";
 import Button from '@/components/Button';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-
-// const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), {
-//     ssr: false
-// });
 
 const EditPage = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -40,16 +34,11 @@ const EditPage = () => {
     }
 
     const data = {};
-    const row: any[] = isEmptyObject(data) ? [] : [data];
     return (
         <div className="container">
             
             <form onSubmit={handleSubmit(onSubmit)}>
                 <input type="text" {...register('title')} />
-                {/* <ToastEditor
-                    content=''
-                    editorRef={ref}
-                /> */}
                 <Button type="submit" skin="green">Submit</Button>
             </form>
         </div>

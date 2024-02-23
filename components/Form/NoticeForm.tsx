@@ -14,7 +14,7 @@ import { fileUploadAtom } from '@/states/data';
 import { v4 as uuidv4 } from 'uuid';
 import lodash from 'lodash';
 import { apiBe } from '@/services';
-// const ToastEditor = dynamic(() => import('@/components/Board/ToastEditor'), { ssr: false });
+import { confirmAtom } from '@/states/confirm';
 
 interface INoticeFormProps {
     data?: any;
@@ -24,7 +24,8 @@ interface INoticeFormProps {
 const NoticeForm = ({ data, type }: INoticeFormProps) => {
     const [ notice, setNotice] = useState<any>(data || {});
     const { id, subject, yn, noticeType, content, uploadedFiles, clientSession } = notice;
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+    const [ confirm, setConfirm ] = useRecoilState(confirmAtom);
+    const { register, handleSubmit, setValue, getValues, watch, formState: { errors } } = useForm({
         defaultValues: {
             id: data?.id,
             subject: subject,
@@ -43,6 +44,7 @@ const NoticeForm = ({ data, type }: INoticeFormProps) => {
 
     const onSubmit = async (formData: object) => {
         let tmp:any = lodash.cloneDeep(formData);
+
         try {
             if (type === 'edit') tmp['id'] = data.id;
             if (type === 'register') tmp['yn'] = true;
@@ -51,10 +53,11 @@ const NoticeForm = ({ data, type }: INoticeFormProps) => {
             console.log(type,tmp);
             const url = "/notice";
             const response = type === 'register' ? await apiBe.put(url, tmp):await apiBe.post(url, tmp);
+            const message = type === 'register' ? '공지사항이 저장되었습니다':'공지사항이 수정되었습니다';
             if (response.status === 200 || response.status === 201) {
-                Toast("success", '포스트를 작성했습니다.', () => router.push('/notice/list/1'));
+                Toast("success", message, () => router.push('/notice/list/1'));
             } else {
-                Toast("error", '다시 시도해주세요.');
+                Toast("error", '다시 시도해주세요');
             }
         } catch (error) {
             console.log(error);
@@ -66,6 +69,17 @@ const NoticeForm = ({ data, type }: INoticeFormProps) => {
     const cancel = () => {
         router.back();
     }
+    const toggleYN = () => {
+        const valueofYn = getValues('yn');
+        if(valueofYn) setValue('yn', !valueofYn);
+        onSubmit(getValues());
+    }
+
+    const confirmToggleYN = () => {
+        setConfirm({...confirm, open: true, title: "삭제", message: "삭제 하시겠습니까?", onConfirm: toggleYN});
+    }
+
+    const watchYn = watch('yn');
 
     useEffect(() => {
         setUuid(uuidv4());
@@ -108,10 +122,10 @@ const NoticeForm = ({ data, type }: INoticeFormProps) => {
                         <input type="hidden" {...register('id')} />
                         {errors.subject && <span>제목을 입력해주세요.</span>}
                     </div>
-                    {type === 'edit' && <div className={style.inputGroupCheckbox}>
+                    {/* {type === 'edit' && <div className={style.inputGroupCheckbox}>
                         <label htmlFor="type">게시여부</label>
                         <input type="checkbox" {...register('yn')} />
-                    </div>}
+                    </div>} */}
                 </div>
                 <div className={style.inputGroupType}>
                     <label htmlFor="noticeType">유형</label>
@@ -153,7 +167,8 @@ const NoticeForm = ({ data, type }: INoticeFormProps) => {
                 <FileUploader uuid={uuid} data={data?.uploadedFiles} type={type} from={"notice"} />
                 <div className={style.btnArea}>
                     <Button type="submit" skin="submit">{type === 'register' ? "등록":"저장"}</Button>
-                    <Button type="button" skin="cancel" onClick={cancel}>취소</Button>
+                    <Button type="button" skin="cancel" onClick={cancel}>{watchYn ? "취소":"목록"}</Button>
+                    {type === 'edit' && <Button type="button" onClick={confirmToggleYN} className="ms-2" skin="del">{watchYn ? "숨기기":"게시하기"}</Button>}
                 </div>
             </form>
         </div>

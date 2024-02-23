@@ -46,25 +46,29 @@
     }
     .navigationItem {
         width: 100%;
-        .active {
-            color: #43B69A;
+        &.open {
+            .depth_0 {
+               background-color: #4d4d4d !important;
+            }
         }
         .depth {
             width: 80%;
             margin: 0 auto;
             color: #fff;
             display: flex;
+
             &_0 {
                 justify-content: flex-end;
                 align-items: center;
                 border-radius: 30px;
-                padding: 10px 12px;
+                padding: 8px 12px;
+                margin-bottom: 6px;
                 position: relative;
                 display: flex;
                 &:hover {
-                    background-color: #43B69A;
+                    background-color: #6d6d6d;
                 }
-                &:active {
+                &.active {
                     background-color: #43B69A;
                 }
                 
@@ -85,6 +89,7 @@
                     font-size: 16px;
                     letter-spacing: -.5px;
                     font-weight: 700;
+                    margin-right: 10%;
                 }
             }
 
@@ -97,6 +102,13 @@
                 margin-bottom: 15px;
                 p {
                     margin-right: 10%;
+                }
+                &.active {
+                    p {
+                        color: #43B69A !important;
+                        font-weight: 700;
+                        margin-right: 10%;
+                    }
                 }
     
             }

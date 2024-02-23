@@ -1,22 +1,14 @@
-import { atom, useSetRecoilState, useRecoilState, useResetRecoilState, selector } from 'recoil';
+import { atom } from 'recoil';
 
-export const sessionAtom = atom({
-    key: 'sessionAtom',
-    default: null,
+interface ISession {
+  id: string;
+  accessToken: string;
+  refreshToken: string;
+  username: string;
+  privillege: string;
+}
+
+export const sessionAtom = atom<ISession>({
+  key: 'sessionAtom',
+  default: { id: '', accessToken: '', refreshToken: '', username: '', privillege: '' },
 });
-  
-  export const logInLoadingAtom = atom({
-    key: 'logInLoading',
-    default: false,
-  });
-  
-  export const logInErrorAtom = atom<string | null>({
-    key: 'logInError',
-    default: null,
-  });
-  
-  export const resetLogInErrorAtom = atom<string | null>({
-    key: 'resetLogInError',
-    default: null,
-  });
-  

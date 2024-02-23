@@ -39,3 +39,12 @@
     width: 100%;
   }
 }
+.errorMsg {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(-10px, -50%);
+  color: red;
+  font-size: 12px;
+  text-align: center;
+}
