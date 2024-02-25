@@ -1,14 +1,14 @@
 .table {
-    margin-top: 20px;
-    background-color: #fff;
-    &.withSearchbar {
-        & > div {
-            padding: 0px 50px 30px;
-        }
-        & > div {
-            &:nth-child(2) {
-                padding: 0 50px 50px 50px;
-            }
-        }
+  margin-top: 20px;
+  background-color: #fff;
+  &.withSearchbar {
+    & > div {
+      padding: 50px 50px 30px;
     }
+    & > div {
+      &:nth-child(2) {
+        padding: 0 50px 50px 50px;
+      }
+    }
+  }
 }

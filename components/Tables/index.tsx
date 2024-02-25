@@ -282,7 +282,7 @@ export const Tables = ({ rowType }: TablesProps) => {
         currentPage: newPage,
       });
     } else {
-      const pageUrl = `./?${sort.sortField !== '' ? `sort=${sort.sortField}` : ''}${sort.sortType !== '' ? `&direction=${sort.sortType}` : ''}${sort.size !== 10 ? `&size=${sort.size}` : ''}`;
+      const pageUrl = `./${newPage}?${sort.sortField !== '' ? `sort=${sort.sortField}` : ''}${sort.sortType !== '' ? `&direction=${sort.sortType}` : ''}${sort.size !== 10 ? `&size=${sort.size}` : ''}`;
       router.push(pageUrl);
     }
   };
