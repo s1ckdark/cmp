@@ -22,22 +22,19 @@ async function refreshAccessToken(token: any) {
       throw refreshedTokens;
     }
 
-    cookies().set('accessToken', token.accessToken, {
-      maxAge: 60 * 60 * 2, // 2 hours
-      path: '/',
-      // httpOnly: true,
-    });
-    cookies().set('refreshToken', token.refreshToken, {
-      maxAge: 30 * 24 * 60 * 60, // 30 days
-      path: '/',
-      // httpOnly: true,
-    });
-    return {
+    const cookieData = {
       ...token,
       accessToken: refreshedTokens.data.accessToken,
       accessTokenExpires: Math.floor(Date.now() / 1000) + 60 * 60 * 2, // updated access token expires in 2 hours
       refreshToken: refreshedTokens.data.refreshToken, // if the refresh token was also refreshed
     };
+
+    cookies().set('auth', JSON.stringify(cookieData), {
+      maxAge: 2 * 24 * 60 * 60, // 30 days
+      path: '/',
+      // httpOnly: true,
+    });
+    return cookieData;
   } catch (error) {
     console.error('Error refreshing access token: ', error);
     return {

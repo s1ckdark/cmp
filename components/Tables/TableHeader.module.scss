@@ -1,194 +1,306 @@
 .container {
-    tr {
-        margin: 15px 0 10px;
-        min-height: 40px;
-        font-size: 14px;
-        th {
-            font-weight: 600;
-            text-align: center;
-            padding: 10px 0;
-            border: 1px solid #DEE1E7;
-            background: #F7F8FE;
-            min-width: 100px;
-            min-height: 20px;
-        }
+  tr {
+    margin: 15px 0 10px;
+    min-height: 40px;
+    font-size: 14px;
+    th {
+      font-weight: 600;
+      text-align: center;
+      padding: 10px 0;
+      border: 1px solid #dee1e7;
+      background: #f7f8fe;
+      min-width: 100px;
+      min-height: 20px;
     }
+  }
 }
 .invoice {
-    margin: 0 auto;
-    tr {
+  margin: 0 auto;
+  tr {
+    &:nth-child(1) {
+      th {
         &:nth-child(1) {
-            th {
-                &:nth-child(1) {
-                    width: 3%;
-                    min-width: 50px;
-                }
-                &:nth-child(2) {
-                    width: 8%;
-                    min-width: 100px;
-                }
-                &:nth-child(3) {
-                    width: 15%;
-                    min-width: 180px;
-                }
-                &:nth-child(4) {
-                    width: 5%;
-                    min-width: 100px;
-                }
-                &:nth-child(5) {
-                    width: 15%;
-                    min-width: 200px;
-                }
-                &:nth-child(6) {
-                    width: 5%;
-                    min-width: 80px;
-                }
-                &:nth-child(7) {
-                    width: 20%;
-                    min-width: 500px;
-                }
-                &:nth-child(8) {
-                    width: 20%;
-                    min-width: 500px;
-                }
-                &:nth-child(9) {
-                    width: 10%;
-                    min-width: 180px;
-                }
-                &:nth-child(10) {
-                    width: 10%;
-                    min-width: 180px;
-                }
-                &:nth-child(11) {
-                    width: 10%;
-                    min-width: 180px;
-                }
-            }
+          width: 3%;
+          min-width: 30px;
         }
+        &:nth-child(2) {
+          width: 8%;
+          min-width: 100px;
+        }
+        &:nth-child(3) {
+          width: 15%;
+          min-width: 180px;
+        }
+        &:nth-child(4) {
+          width: 5%;
+          min-width: 90px;
+        }
+        &:nth-child(5) {
+          width: 15%;
+          min-width: 170px;
+        }
+        &:nth-child(6) {
+          width: 5%;
+          min-width: 60px;
+        }
+        &:nth-child(7) {
+          width: 20%;
+          min-width: 240px;
+        }
+        &:nth-child(8) {
+          width: 20%;
+          min-width: 360px;
+        }
+        &:nth-child(9) {
+          width: 10%;
+          min-width: 100px;
+        }
+        &:nth-child(10) {
+          width: 10%;
+          min-width: 100px;
+        }
+        &:nth-child(11) {
+          width: 10%;
+          min-width: 100px;
+        }
+      }
     }
+    &:nth-child(2) {
+      th {
+        font-weight: 500;
+        text-align: center;
+        padding: 10px 0;
+        font-size: 14px;
+
+        &:nth-child(1) {
+          width: 5%;
+          min-width: 80px;
+        }
+
+        &:nth-child(2) {
+          width: 5%;
+          min-width: 80px;
+        }
+
+        &:nth-child(3) {
+          width: 5%;
+          min-width: 80px;
+        }
+
+        &:nth-child(4) {
+          width: 5%;
+          min-width: 90px;
+        }
+        &:nth-child(5) {
+          width: 5%;
+          min-width: 90px;
+        }
+        &:nth-child(6) {
+          width: 5%;
+          min-width: 90px;
+        }
+        &:nth-child(7) {
+          width: 5%;
+          min-width: 90px;
+        }
+      }
+    }
+  }
 }
 .productGd {
-    tr {
-        th {
-            &:nth-child(1) {
-                width: 5%;
-                min-width: 30px;
-            }
-            &:nth-child(2) {
-                width: 5%;
-            }
-            &:nth-child(3) {
-                width: 30%;
-            }
-            &:nth-child(4) {
-                width: 10%;
-                min-width: 80px;
-            }
-            &:nth-child(5) {
-                width: 15%;
-                min-width: 100px;
-            }
-            &:nth-child(6) {
-                width: 10%;
-                min-width: 50px;
-            }
-            &:nth-child(7) {
-                width: 10%;
-                min-width: 100px;
-            }
-            &:nth-child(8) {
-                width: 10%;
-            }
-        }
+  tr {
+    th {
+      &:nth-child(1) {
+        width: 5%;
+        min-width: 30px;
+      }
+      &:nth-child(2) {
+        width: 5%;
+      }
+      &:nth-child(3) {
+        width: 30%;
+      }
+      &:nth-child(4) {
+        width: 10%;
+        min-width: 80px;
+      }
+      &:nth-child(5) {
+        width: 15%;
+        min-width: 100px;
+      }
+      &:nth-child(6) {
+        width: 10%;
+        min-width: 50px;
+      }
+      &:nth-child(7) {
+        width: 10%;
+        min-width: 100px;
+      }
+      &:nth-child(8) {
+        width: 10%;
+      }
     }
+  }
 }
 .log {
-    tr {
+  tr {
+    &:nth-child(1) {
+      th {
         &:nth-child(1) {
-            th {
-                &:nth-child(1) {
-                    width: 220px;
-                }
-                &:nth-child(2) {
-                    width: 100px;
-                }
-                &:nth-child(3) {
-                    width: 100px;
-                }
-                &:nth-child(4) {
-                    width:980px;
-                }
-                &:nth-child(5) {
-                    width: 150px;
-                }
-  
-            }
+          width: 220px;
         }
+        &:nth-child(2) {
+          width: 100px;
+        }
+        &:nth-child(3) {
+          width: 100px;
+        }
+        &:nth-child(4) {
+          width: 980px;
+        }
+        &:nth-child(5) {
+          width: 150px;
+        }
+      }
     }
+  }
 }
 
 .productCategory {
-    tr {
-        th {
-            &:nth-child {
-                width: 25%;
-            }
-            &:nth-child {
-                width: 30%;
-            }
-            &:nth-child {
-                width: 30%;
-            }
-            &:nth-child {
-                width: 15%;
-            }
-        }
+  tr {
+    th {
+      &:nth-child {
+        width: 25%;
+      }
+      &:nth-child {
+        width: 30%;
+      }
+      &:nth-child {
+        width: 30%;
+      }
+      &:nth-child {
+        width: 15%;
+      }
     }
+  }
 }
 
 .billingProduct {
-    th {
-        &:nth-child(1) {
-                min-width: 30px;
-                width: 1%;
-            }
-            &:nth-child(2) {
-                width: 5%;
-            }
-            &:nth-child(3) {
-                width: 15%;
-            }
-            &:nth-child(4) {
-                width: 5%;
-            }
-            &:nth-child(5) {
-                width: 10%;
-            }
-            &:nth-child(6) {
-                width: 10%;
-            }
-            &:nth-child(7) {
-                width: 14%;
-            }
-            &:nth-child(8) {
-                width: 8%;
-            }
-            &:nth-child(9) {
-                width: 8%;
-            }
-            &:nth-child(10) {
-                width: 8%;
-            }
-            &:nth-child(11) {
-                width: 5%;
-            }
-            &:nth-child(12) {
-                width: 10%;
-            }
-        }
+  th {
+    &:nth-child(1) {
+      min-width: 30px;
+      width: 1%;
     }
-    
+    &:nth-child(2) {
+      width: 5%;
+    }
+    &:nth-child(3) {
+      width: 15%;
+    }
+    &:nth-child(4) {
+      width: 5%;
+    }
+    &:nth-child(5) {
+      width: 10%;
+    }
+    &:nth-child(6) {
+      width: 10%;
+    }
+    &:nth-child(7) {
+      width: 14%;
+    }
+    &:nth-child(8) {
+      width: 8%;
+    }
+    &:nth-child(9) {
+      width: 8%;
+    }
+    &:nth-child(10) {
+      width: 8%;
+    }
+    &:nth-child(11) {
+      width: 5%;
+    }
+    &:nth-child(12) {
+      width: 10%;
+    }
+  }
+}
+
+.notice {
+  th {
+    &:nth-child(1) {
+      width: 5%;
+    }
+    &:nth-child(2) {
+      width: 50%;
+    }
+    &:nth-child(3) {
+      width: 10%;
+    }
+    &:nth-child(4) {
+      width: 10%;
+    }
+    &:nth-child(5) {
+      width: 10%;
+    }
+  }
+}
+
+.support {
+  th {
+    &:nth-child(1) {
+      width: 5%;
+      min-width: 50px;
+    }
+
+    &:nth-child(2) {
+      width: 10%;
+      min-width: 100px;
+    }
+
+    &:nth-child(3) {
+      width: 10%;
+      min-width: 100px;
+    }
+
+    &:nth-child(4) {
+      width: 20%;
+      min-width: 200px;
+    }
+
+    &:nth-child(5) {
+      width: 8%;
+      min-width: 80px;
+    }
+
+    &:nth-child(6) {
+      width: 8%;
+      min-width: 80px;
+    }
+
+    &:nth-child(7) {
+      width: 8%;
+      min-width: 80px;
+    }
+
+    &:nth-child(8) {
+      width: 8%;
+      min-width: 80px;
+    }
+
+    &:nth-child(9) {
+      width: 10%;
+      min-width: 100px;
+    }
+
+    &:nth-child(10) {
+      width: 8%;
+      min-width: 80px;
+    }
+  }
+}
 .sortToggle {
-    font-size: 11px;
-    margin-left: 5px;
+  font-size: 11px;
+  margin-left: 5px;
 }

@@ -22,8 +22,8 @@ export const TableHeader = ({ rowType }:any) => {
         "top10": ['서비스명', '시작일자', '종료일자', '금액(KRW)'],
         "perMonth": ['월', '비용(KRW)'],
         "perWeek": ["요일", "비용(KRW)"],
-        "top10bycust": ["월","고객","고객명","금액(KRW)"],
-        "trendMonth": ["순위", "매출(KRW)", "전월대비 증감액(KRW)","증감율(%)"],
+        "top10bycust": ["순위","고객","고객명","금액(KRW)"],
+        "trendMonth": ["월", "매출(KRW)", "전월대비 증감액(KRW)","증감율(%)"],
         "notice": ['번호', '제목', '등록일자'],
         'support': ['번호', '제목', '고객사', '진행상태', '등록일자'],
     }

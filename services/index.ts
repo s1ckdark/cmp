@@ -145,13 +145,7 @@ apiBe.interceptors.response.use(
             },
           }),
         );
-        destroyCookie(null, 'accessToken', { path: '/' });
-        destroyCookie(null, 'refreshToken', { path: '/' });
-        destroyCookie(null, 'userId', { path: '/' });
-        destroyCookie(null, 'username', { path: '/' });
-        destroyCookie(null, 'next-auth.callback-url', { path: '/' });
-        destroyCookie(null, 'next-auth.csrf-token', { path: '/' });
-        destroyCookie(null, 'next-auth.session-token', { path: '/' });
+        destroyCookie(null, 'auth', { path: '/' });
         Toast('error', '토큰이 만료 되었습니다', () => (location.href = '/signin'));
 
         // return await regenerateTokens().then((token) => {

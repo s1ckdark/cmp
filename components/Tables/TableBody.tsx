@@ -1,5 +1,5 @@
 import Styles from './TableBody.module.scss';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { monthAtom, currentPageAtom } from '@/states';
 import { historyListAtom, historyToggleAtom, visualAtom } from '@/states/data';
 import { userInfoPerAtom } from '@/states/localStorage';
@@ -12,6 +12,7 @@ import { IconAttachment } from '@/public/svgs';
 import { confirmAtom } from '@/states/confirm';
 import { Checkbox } from './Checkbox';
 import _ from 'lodash';
+import { use } from 'react';
 interface TypesMap {
   [key: string]: string[];
 }
@@ -26,7 +27,7 @@ export const TableBody = ({ rowType, data }: any) => {
   const targetMonth = useRecoilValue(monthAtom);
   const [historyToggle, setHistoryToggle] = useRecoilState<boolean>(historyToggleAtom);
   const router = useRouter();
-
+  const pathname = usePathname();
   const display: TypesMap = {
     invoice: [
       'overview',
@@ -77,7 +78,7 @@ export const TableBody = ({ rowType, data }: any) => {
       'description',
     ],
     log: ['userId', 'userName', 'ipAddress', 'clientInfo', 'regDt'],
-    notice: ['select', 'idx', 'subject', 'noticeType', 'regName', 'regDt'],
+    notice: ['idx', 'subject', 'noticeType', 'regName', 'regDt'],
     support: ['idx', 'memberNo', 'memberName', 'subject', 'typeName', 'chargeName', 'salesName', 'regName', 'regDt', 'statusName'],
   };
 
@@ -129,11 +130,11 @@ export const TableBody = ({ rowType, data }: any) => {
         break;
     }
     const typeUrl: any = {
-      invoice: `/billing/invoice/view/${[props.memberNo]}/${targetMonth}`,
+      invoice: `/billing/invoice/view/${[props.memberNo]}/${props.targetMonth}`,
       customers: `/customers/view/${props.memberNo}`,
       user: `/admin/user/view/${props.id}`,
       productGd: `/products/product/view/${props.id}`,
-      billingProduct: `/billing/product/view/${targetMonth}/${props.memberNo}`,
+      billingProduct: `/billing/product/view/${props.target_month}/${props.memberNo}`,
       productCategory: `/products/category/view/${props.id}`,
       // role: `/admin/role/view/${props.id}`,
       notice: `/notice/view/${props.id}`,
@@ -174,23 +175,6 @@ export const TableBody = ({ rowType, data }: any) => {
   const historyView = (historyData: any[]) => {
     setHistory(historyData);
     setHistoryToggle(true);
-  };
-
-  const delHandleChange = (e: any) => {
-    e.preventDefault();
-    // const { value } = e.target; // Use object destructuring to extract the value from e.target
-    // let { data } = confirm;
-    // data.push(value);
-    // data = _.uniq(data);
-
-    // const tmp = {
-    //     confirmType: "delete",
-    //     message: "삭제하시겠습니까?",
-    //     data: data,
-    //     function: () => console.log("delete")
-    // }
-    // console.log(confirm, tmp);
-    // setConfirm(tmp);
   };
 
   const resetVisual = useResetRecoilState(visualAtom);
@@ -281,6 +265,15 @@ export const TableBody = ({ rowType, data }: any) => {
         content = (
           <td key={key + '-' + keyIndex} className="!text-left" onClick={() => view(item)}>
             {item.prodName}
+          </td>
+        );
+        break;
+      case 'statusName':
+        const status = item[key] === '진행' ? 'processing' : item[key] === '완료' ? 'complete' : 'waiting';
+        console.log(status);
+        content = (
+          <td key={key + '-' + keyIndex} onClick={() => view(item)}>
+            <span className={`${Styles.statusName} ${Styles[status]}`}>{item[key]}</span>
           </td>
         );
         break;

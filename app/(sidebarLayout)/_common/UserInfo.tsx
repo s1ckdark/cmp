@@ -15,16 +15,17 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
   const router = useRouter();
   const cookie = getCookies();
   const username = cookie && cookie.username ? cookie.username : session?.user.username;
-  if (username === undefined) router.push('/signin');
 
   const logout = async () => {
     destroyCookie(null, 'auth', { path: '/' });
     const response = await apiBePure.post('/auth/logout', { userId: session.user.id, accessToken: session.accessToken, refreshToken: session.refreshToken });
     if (response.status === 200) {
       router.push('/signin');
+
       Toast('success', '로그아웃하였습니다', () => signOut());
     }
   };
+  if (username === undefined) logout();
 
   return (
     <>
@@ -33,7 +34,6 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
           <div className={`${styles.user_name} flex text-right px-2`}>
             {username && (
               <Link href="/mypage" className="user ms-12">
-                {' '}
                 <p className="mb-6">{username}</p>
               </Link>
             )}
@@ -41,7 +41,6 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
 
           <div className={styles.linkArea}>
             <Link href="/landing" className="home ml-4">
-              {' '}
               <IconHome />
             </Link>
             <span onClick={logout} className="logout">

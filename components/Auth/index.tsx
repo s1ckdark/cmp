@@ -6,8 +6,10 @@ import styles from './index.module.scss';
 import { Toast } from '@/components/Toast';
 import { useRouter } from 'next/navigation';
 import { getIpAddr, getUserAgent } from '@/utils';
-
+import { sessionAtom } from '@/states/auth';
+import { useRecoilState } from 'recoil';
 const SignIn = () => {
+  const [session, setSession] = useRecoilState(sessionAtom);
   const {
     register,
     handleSubmit,

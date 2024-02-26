@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import { modalAtom } from '@/states';
 import { confirmAtom } from '@/states/confirm';
 import Confirm from '@/components/Confirm';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import Select from 'react-select';
 interface dataProps {
   data: any;
@@ -181,8 +181,6 @@ export const Tables = ({ rowType }: TablesProps) => {
   useEffect(() => {
     const pathArr = path.split('/');
     const targetMonth = pathArr.length === 6 ? pathArr[4] : null;
-    // const pageNumber: any = data.mode === 'search' ? data.currentPage : Number(lodash.last(path.split("/")));
-    // const pageNumber: any = resultData.mode === 'search' && resultData.currentPage === 1 ? 1 : Number(lodash.last(path.split("/")));
     const pageNumber: any = Number(_.last(path.split('/')));
 
     const endpoint: any = {
@@ -267,7 +265,9 @@ export const Tables = ({ rowType }: TablesProps) => {
   }, [path, rowType, data.currentPage, resultData, sort.sortField, sort.sortType, sort.size, confirm]);
 
   useEffect(() => {
-    console.log(path);
+    const pathArr = path.split('/');
+    const targetMonth = pathArr.length === 6 ? pathArr[4] : null;
+    if (resultData.mode === 'search') setResultData({ ...resultData, params: { ...resultData.params, target_month: targetMonth } });
     setData({ ...data, currentPage: 1 });
   }, []);
 

@@ -13,10 +13,11 @@ import Styles from './Navgiation.module.scss';
 const NavItem = ({ item, depthIndex }: any) => {
   const pathname = usePathname();
   const router = useRouter();
+  const [isActive, setIsActive] = useState<Boolean>(false);
   const [isDepthOpen, setIsDepthOpen] = useState(false);
   const [isOpen, setIsOpen] = useRecoilState(isOpenState);
   const hasChildren = item.children && item.children.length > 0;
-  const isActive = pathname === item.link;
+
   const resetState = useResetRecoilState(dataListAtom);
   const resetModalState = useResetRecoilState(modalAtom);
   const resetKeyword = useResetRecoilState(keywordAtom);
@@ -27,6 +28,7 @@ const NavItem = ({ item, depthIndex }: any) => {
     resetKeyword();
     resetState();
     resetModalState();
+
     if (item.link !== pathname) {
       router.push(item.link);
     }
@@ -38,6 +40,12 @@ const NavItem = ({ item, depthIndex }: any) => {
       setIsDepthOpen(false);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const pathArr = pathname.split('/');
+    const path = pathArr.length > 2 ? _.dropRight(pathArr).join('/') : pathname;
+    setIsActive(_.includes(item.link, path));
+  }, [pathname]);
 
   const toggle = (e: any) => {
     if (isOpen) setIsOpen(!isOpen);

@@ -1,11 +1,12 @@
-// import CustomersForm from "@/components/Form/CustomersForm";
-import Breadcrumb from "@/components/Breadcrumb";
+import { SupportForm } from '@/components/Form/SupportForm';
+import Breadcrumb from '@/components/Breadcrumb';
 
 const SupportWrite = () => {
-    return (
-        <>
-            <Breadcrumb />
-        </>
-    );
-}
+  return (
+    <>
+      <Breadcrumb />
+      <SupportForm pageType="write" />
+    </>
+  );
+};
 export default SupportWrite;

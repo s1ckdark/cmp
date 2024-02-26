@@ -13,58 +13,6 @@
   }
 }
 
-.support {
-  thead {
-    tr {
-      th {
-        &:first-child {
-          width: 5%;
-        }
-
-        &:nth-child(2) {
-          width: 5%;
-        }
-
-        &:nth-child(3) {
-          width: 10%;
-        }
-
-        &:nth-child(4) {
-          width: 10%;
-        }
-
-        &:nth-child(5) {
-          width: 10%;
-        }
-
-        &:nth-child(6) {
-          width: 10%;
-        }
-
-        &:nth-child(7) {
-          width: 10%;
-        }
-
-        &:nth-child(8) {
-          width: 10%;
-        }
-
-        &:nth-child(9) {
-          width: 10%;
-        }
-
-        &:nth-child(10) {
-          width: 10%;
-        }
-
-        &:nth-child(11) {
-          width: 10%;
-        }
-      }
-    }
-  }
-}
-
 .usage {
   .table {
     thead {
@@ -223,46 +171,6 @@ thead {
     }
   }
 
-  &.announce {
-    table {
-      tr {
-        th {
-          &:nth-child(1) {
-            width: 80px;
-          }
-          &:nth-child(2) {
-            width: 790px;
-          }
-          &:nth-child(3) {
-            width: 195px;
-          }
-        }
-      }
-    }
-  }
-  &.support {
-    table {
-      tr {
-        th {
-          &:nth-child(1) {
-            width: 80px;
-          }
-          &:nth-child(2) {
-            width: 400px;
-          }
-          &:nth-child(3) {
-            width: 210px;
-          }
-          &:nth-child(4) {
-            width: 98px;
-          }
-          &:nth-child(5) {
-            width: 195px;
-          }
-        }
-      }
-    }
-  }
   &.top10 {
     table {
       tr {
@@ -295,20 +203,6 @@ thead {
           }
           &:nth-child(2) {
             width: 504px;
-          }
-        }
-      }
-    }
-  }
-  &.log {
-    table {
-      tr {
-        td {
-          &:nth-child(4) {
-            text-align: left;
-          }
-          &:nth-child(5) {
-            font-size: 12px;
           }
         }
       }

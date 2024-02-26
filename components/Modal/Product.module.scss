@@ -1,58 +1,61 @@
 .product {
-    .searchInput {
-        input {
-            width: calc(100% - 110px);
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px 10px;
-            margin: 8px 10px 8px 0;
-            box-sizing: border-box;
-        }
+  .searchInput {
+    input {
+      width: calc(100% - 110px);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin: 8px 10px 8px 0;
+      box-sizing: border-box;
     }
-    .productList {
-        margin: 30px auto;
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border-spacing: 0;
+  }
+  .productList {
+    margin: 30px auto;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
 
-            thead {
-                background-color: #F5F6F7;
-                border : 1px solid #DEE1E7;
-                th {
-                    padding: 10px 15px;
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: 700;
-                    color: #2E322F;
-                    text-align: center;
-                    &:nth-child(1) {
-                        width: 20%;
-                    }
-                    &:nth-child(2) {
-                        width: 40%;
-                    }
-                    &:nth-child(3) {
-                        width: 40%;
-                    }
-                }
-            }
-            tbody {
-                tr {
-                    border : 1px solid #DEE1E7;
-                    &:hover {
-                        background-color: #F5F6F7;
-                    }
-                    td {
-                        padding: 10px 15px;
-                        font-size: 14px;
-                        font-style: normal;
-                        font-weight: 400;
-                        color: #2E322F;
-                        text-align: center;
-                    }
-                }
-            }
+      thead {
+        background-color: #f5f6f7;
+        border: 1px solid #dee1e7;
+        th {
+          padding: 10px 15px;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 700;
+          color: #2e322f;
+          text-align: center;
+          &:nth-child(1) {
+            width: 15%;
+          }
+          &:nth-child(2) {
+            width: 25%;
+          }
+          &:nth-child(3) {
+            width: 30%;
+          }
+          &:nth-child(4) {
+            width: 30%;
+          }
         }
+      }
+      tbody {
+        tr {
+          border: 1px solid #dee1e7;
+          &:hover {
+            background-color: #f5f6f7;
+          }
+          td {
+            padding: 10px 15px;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            color: #2e322f;
+            text-align: center;
+          }
+        }
+      }
     }
+  }
 }
