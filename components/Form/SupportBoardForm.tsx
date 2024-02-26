@@ -68,7 +68,9 @@ export const SupportBoardForm = ({ data, pageType }: ISupportFormProps) => {
   const editMode = () => {
     router.push(`/support/edit/${id}`);
   };
-
+  const goList = () => {
+    router.push('/support/list/1');
+  };
   useEffect(() => {
     setValue('clientSession', uuidv4());
   }, []);
