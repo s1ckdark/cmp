@@ -10,6 +10,7 @@ import { apiBe } from '@/services';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 
 interface IBillingProductForm {
   pageType: string;
@@ -66,6 +67,7 @@ interface IProdMSP {
 
 const BillingProductForm = ({ product, pageType }: IBillingProductForm) => {
   const [modal, setModal] = useRecoilState(modalAtom);
+  const tmp = _.cloneDeep(product);
   const { id, memberNo, memberType, target_start_date, target_end_date, target_month } = product || {};
   const {
     register,
@@ -137,23 +139,27 @@ const BillingProductForm = ({ product, pageType }: IBillingProductForm) => {
                   name="target_month"
                   control={control}
                   rules={{ required: true }}
-                  render={({ field: { onChange, value } }) => (
-                    <DatePicker
-                      selected={value ? new Date(value) : null}
-                      showMonthYearPicker
-                      disabled={isDisabled}
-                      readOnly={isDisabled}
-                      onChange={(date: any) => {
-                        onChange(date);
-                        setValue('target_month', dayjs(date).format('YYYY-MM'));
-                        setValue('target_start_date', dayjs(date).startOf('month').format('YYYY-MM-DD'));
-                        setValue('target_end_date', dayjs(date).endOf('month').format('YYYY-MM-DD'));
-                      }}
-                      dateFormat="yyyy/MM"
-                      isClearable
-                      popperProps={{ strategy: 'fixed' }}
-                    />
-                  )}
+                  render={({ field: { onChange, value } }) => {
+                    console.log(new Date(value), 'value');
+                    const convert = (value: any) => (value ? dayjs(value).toDate() : null);
+                    return (
+                      <DatePicker
+                        selected={convert(value)}
+                        showMonthYearPicker
+                        disabled={isDisabled}
+                        readOnly={isDisabled}
+                        onChange={(date) => {
+                          console.log(date);
+                          onChange(date); // Keep the full date format for internal use
+                          setValue('target_start_date', dayjs(date).startOf('month').format('YYYY-MM-DD'));
+                          setValue('target_end_date', dayjs(date).endOf('month').format('YYYY-MM-DD'));
+                        }}
+                        dateFormat="yyyyMM" // Confirm this is the correct format string for your library
+                        isClearable
+                        popperProps={{ strategy: 'fixed' }}
+                      />
+                    );
+                  }}
                 />
               </div>
               {errors.target_month && <span className={styles.errorMsg}>필수 입력 항목입니다</span>}

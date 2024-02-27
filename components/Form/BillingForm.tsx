@@ -119,7 +119,6 @@ const BillingForm = ({ pageType, product }: IBillingProductForm) => {
     Object.keys(tmp.billingMspList).forEach((key) => {
       tmp.billingMspList[key] = { ...tmp.billingMspList[key], ...dummy };
     });
-    console.log(tmp);
 
     const response: any = pageType === 'register' ? await apiBe.put(`/billing`, tmp) : await apiBe.post(`/billing`, tmp);
     if (response.status === 201 || response.status === 200) {
