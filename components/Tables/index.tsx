@@ -52,7 +52,7 @@ export const Tables = ({ rowType }: TablesProps) => {
   const sort = {
     sortField: searchParams.get('sort') || 'regDt',
     sortType: searchParams.get('direction') || 'desc',
-    size: searchParams.get('size') || 10,
+    size: searchParams.get('size') || 20,
   };
   let endpointUrl: any = {
     invoice: {
@@ -389,7 +389,6 @@ export const Tables = ({ rowType }: TablesProps) => {
       },
     }),
     option: (styles: any, { data, isDisabled, isFocused, isSelected }: any) => {
-      // const color = chroma(data.color);
       console.log({ data, isDisabled, isFocused, isSelected });
       return {
         ...styles,
@@ -405,7 +404,7 @@ export const Tables = ({ rowType }: TablesProps) => {
         <div className={styles.tableContainer}>
           <div className={styles.scroller}>
             <div className={styles.pageSize}>
-              <Select className={styles.selector} classNamePrefix="react-select" styles={customStyles} defaultValue={pageSize[0]} name="size" options={pageSize} onChange={onChangePageSize} />
+              <Select className={styles.selector} classNamePrefix="react-select" styles={customStyles} defaultValue={pageSize[1]} name="size" options={pageSize} onChange={onChangePageSize} />
             </div>
             <table className={styles[rowType]}>
               <TableHeader rowType={rowType} />
@@ -414,7 +413,7 @@ export const Tables = ({ rowType }: TablesProps) => {
               ) : (
                 <tbody>
                   <tr>
-                    <td colSpan={10} className="text-center text-xl p-10">
+                    <td colSpan={20} className="text-center text-xl p-10">
                       조회된 데이터가 없습니다.
                     </td>
                   </tr>

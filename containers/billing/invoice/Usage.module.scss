@@ -1,97 +1,94 @@
-
 .usage {
-    hgroup {
-        h1 {
-            margin: 50px 0 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
+  hgroup {
+    h1 {
+      margin: 50px 0 20px;
+      font-size: 24px;
+      font-weight: bold;
     }
+  }
 
-    table {
-        tr {
-            &:nth-child(2) {
-                th {
-                    width: 8%;
-                    min-width: 80px;
-                    font-size: 11px;
-                }
-            }
-            th {
-                font-weight: 600;
-                text-align: center;
-                padding: 10px 0;
-                border: 1px solid #DEE1E7;
-                background: #F7F8FE;
-            }
-
-            &:first-child {
-
-                th {
-                    font-size: 13px;
-                    &:first-child {
-                        width: 6%;
-                        min-width: 60px;
-                    }
-
-                    &:nth-child(2) {
-                        width: 10%;
-                        min-width: 80px;
-                    }
-
-                    &:nth-child(3) {
-                        width: 10%;
-                        min-width: 100px;
-                    }
-
-                    &:nth-child(4) {
-                        width: 6%;
-                        min-width: 60px;
-                    }
-
-                    &:nth-child(5) {
-                        width: 12%;
-                        min-width: 120px;
-                    }
-
-                    &:nth-child(6) {
-                        width: 6%;
-                        min-width: 60px;
-                    }
-
-                    &:nth-child(7) {
-                        width: 8%;
-                        min-width: 80px;
-                    }
-
-                    &:nth-child(8) {
-                        width: 30%;
-                        min-width: 300px;
-                    }
-
-                    &:nth-child(9) {
-                        width: 10%;
-                        min-width: 100px;
-                    }
-                    &:nth-child(10) {
-                        width: 10%;
-                        min-width: 100px;
-                    }
-                    &:nth-child(11) {
-                        width: 10%;
-                        min-width: 100px;
-                    }
-                }
-            }
-
-            td {
-                text-align: center;
-                font-size: 13px;
-                padding: 10px 0;
-                border: 1px solid #DEE1E7;
-                background-color: #fff;
-            }
+  table {
+    tr {
+      &:nth-child(2) {
+        th {
+          width: 8%;
+          min-width: 80px;
+          font-size: 12px;
         }
+      }
+      th {
+        font-weight: 600;
+        text-align: center;
+        padding: 10px 0;
+        border: 1px solid #dee1e7;
+        background: #f7f8fe;
+      }
+
+      &:first-child {
+        th {
+          font-size: 13px;
+          &:first-child {
+            width: 5%;
+            min-width: 50px;
+          }
+
+          &:nth-child(2) {
+            width: 8%;
+            min-width: 80px;
+          }
+
+          &:nth-child(3) {
+            width: 10%;
+            min-width: 100px;
+          }
+
+          &:nth-child(4) {
+            width: 5%;
+            min-width: 50px;
+          }
+
+          &:nth-child(5) {
+            width: 15%;
+            min-width: 150px;
+          }
+
+          &:nth-child(6) {
+            width: 5%;
+            min-width: 50px;
+          }
+
+          &:nth-child(7) {
+            width: 8%;
+            min-width: 80px;
+          }
+
+          &:nth-child(8) {
+            width: 20%;
+            min-width: 200px;
+          }
+
+          &:nth-child(9) {
+            width: 8%;
+            min-width: 80px;
+          }
+          &:nth-child(10) {
+            width: 8%;
+            min-width: 80px;
+          }
+          &:nth-child(11) {
+            width: 8%;
+            min-width: 80px;
+          }
+        }
+      }
+
+      td {
+        text-align: center;
+        font-size: 13px;
+        padding: 15px;
+        border: 1px solid #dee1e7;
+        background-color: #fff;
+      }
     }
+  }
 }
-

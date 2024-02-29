@@ -155,7 +155,15 @@ apiBe.interceptors.response.use(
       } else if (response.data.size > 0 && response.data.type === 'application/octet-stream') {
         return response.data;
       }
-      return Promise.reject(response);
+    } else if (response.data.status === 403) {
+      window.dispatchEvent(
+        new CustomEvent('axiosError', {
+          detail: {
+            message: '권한이 없습니다',
+          },
+        }),
+      );
+      return new Promise(() => {});
     }
   },
   async (error) => {

@@ -1,0 +1,133 @@
+.container {
+  width: 100%;
+  padding: 0;
+  margin: 30px auto;
+  background: #202124;
+  .user_name {
+    font-size: 16px;
+    color: #fff;
+  }
+  > ul {
+    margin: 15px 0 30px;
+  }
+  &.open {
+    margin: 0;
+    > ul {
+      a {
+        margin-left: 30px;
+        > span {
+          width: 20px;
+          height: 20px;
+          svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+    }
+  }
+  &.close {
+    margin: 0;
+    > ul {
+      a {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50%;
+        margin: 15px auto !important;
+        justify-content: center !important;
+        > span {
+          width: 20px;
+          height: 20px;
+          svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+      }
+    }
+  }
+  .navigationItem {
+    width: 100%;
+    &.open {
+      .depth_0 {
+        background-color: #4d4d4d !important;
+      }
+    }
+    .depth {
+      width: 80%;
+      margin: 0 auto;
+      color: #fff;
+      display: flex;
+
+      &_0 {
+        justify-content: flex-end;
+        align-items: center;
+        border-radius: 30px;
+        padding: 8px 12px;
+        margin-bottom: 6px;
+        position: relative;
+        display: flex;
+        &:hover {
+          background-color: #6d6d6d;
+        }
+        &.active {
+          background-color: #4d4d4d !important;
+        }
+
+        & > svg {
+          width: 20px;
+          height: 20px;
+        }
+
+        span {
+          width: 20px;
+          text-align: center;
+          position: relative;
+        }
+        p {
+          text-decoration: none;
+          border-radius: 30px;
+          color: #fff;
+          font-size: 16px;
+          letter-spacing: -0.5px;
+          font-weight: 700;
+          margin-right: 10%;
+        }
+      }
+
+      &_1 {
+        font-size: 14px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        p {
+          margin-right: 10%;
+        }
+        &.active {
+          p {
+            color: #43b69a !important;
+            font-weight: 700;
+            margin-right: 10%;
+          }
+        }
+      }
+      &_2 {
+        font-weight: 500;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        p {
+          margin-right: 10%;
+        }
+      }
+    }
+  }
+}

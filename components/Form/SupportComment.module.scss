@@ -1,0 +1,17 @@
+.comment {
+  width: 100%;
+  border: 1px solid #dee1e7;
+  padding: 50px;
+  label + textarea {
+    padding: 20px;
+    width: 100%;
+    min-height: 200px;
+  }
+}
+
+.btnArea {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

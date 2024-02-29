@@ -25,7 +25,10 @@ const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
       Toast('success', '로그아웃하였습니다', () => signOut());
     }
   };
-  if (username === undefined) logout();
+  if (username === undefined) {
+    destroyCookie(null, 'auth', { path: '/' });
+    router.push('/signin');
+  }
 
   return (
     <>

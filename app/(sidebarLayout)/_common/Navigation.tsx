@@ -8,13 +8,12 @@ import { IconNaviBot, IconNaviBill, IconNaviClient, IconNaviNotice, IconNaviProd
 import _ from 'lodash';
 import { usePathname, useRouter } from 'next/navigation';
 import dayjs from 'dayjs';
-import Styles from './Navgiation.module.scss';
+import Styles from './Navigation.module.scss';
 
-const NavItem = ({ item, depthIndex }: any) => {
+const NavItem = ({ item, depthIndex, isDepthOpen, toggle }: any) => {
   const pathname = usePathname();
   const router = useRouter();
   const [isActive, setIsActive] = useState<Boolean>(false);
-  const [isDepthOpen, setIsDepthOpen] = useState(false);
   const [isOpen, setIsOpen] = useRecoilState(isOpenState);
   const hasChildren = item.children && item.children.length > 0;
 
@@ -22,24 +21,19 @@ const NavItem = ({ item, depthIndex }: any) => {
   const resetModalState = useResetRecoilState(modalAtom);
   const resetKeyword = useResetRecoilState(keywordAtom);
 
-  const handleClick = (e: any) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent default link action
     if (isOpen) setIsOpen(!isOpen); // Close sidebar when clicking a link
     resetKeyword();
     resetState();
     resetModalState();
-
     if (item.link !== pathname) {
       router.push(item.link);
     }
-  };
-
-  useEffect(() => {
-    // Automatically set isDepthOpen to false when isOpen is false
-    if (isOpen) {
-      setIsDepthOpen(false);
+    if (depthIndex === 0) {
+      toggle();
     }
-  }, [isOpen]);
+  };
 
   useEffect(() => {
     const pathArr = pathname.split('/');
@@ -47,10 +41,10 @@ const NavItem = ({ item, depthIndex }: any) => {
     setIsActive(_.includes(item.link, path));
   }, [pathname]);
 
-  const toggle = (e: any) => {
-    if (isOpen) setIsOpen(!isOpen);
-    setIsDepthOpen(!isDepthOpen);
-  };
+  // const toggle = (e: any) => {
+  //   if (isOpen) setIsOpen(!isOpen);
+  //   setIsDepthOpen(!isDepthOpen);
+  // };
 
   const renderIcon = (icon: string) => {
     switch (icon) {
@@ -72,20 +66,20 @@ const NavItem = ({ item, depthIndex }: any) => {
         return <IconNaviNotice />;
     }
   };
+
   const depthClass = `depth_${depthIndex}`;
   const activeClass = isActive ? Styles.active : '';
 
   return (
     <li className={`${Styles.navigationItem} ${isDepthOpen ? Styles.open : ''} ${activeClass}`}>
-      <Link href={item.link} onClick={hasChildren ? (e: any) => toggle(e) : handleClick} className={`${Styles.depth} ${Styles[depthClass]} ${activeClass}`}>
+      <Link href={item.link} onClick={handleClick} className={`${Styles.depth} ${Styles[depthClass]} ${activeClass}`}>
         <p className="flex justify-end">{item.label}</p>
         {item.icon && <span>{renderIcon(item.icon)}</span>}
       </Link>
       {hasChildren && isDepthOpen && (
         <ul>
           {item.children.map((child: any, index: number) => (
-            // Pass the current depthIndex + 1 to maintain depth tracking
-            <NavItem key={index} item={child} depthIndex={depthIndex + 1} />
+            <NavItem key={index} item={child} depthIndex={depthIndex + 1} toggle={toggle} isDepthOpen={isDepthOpen} />
           ))}
         </ul>
       )}
@@ -96,6 +90,7 @@ const NavItem = ({ item, depthIndex }: any) => {
 const Navigation = () => {
   const isOpen = useRecoilValue(isOpenState);
   const currentMonth = dayjs().format('YYYYMM');
+  const [openItem, setOpenItem] = useState<number | null>(null);
   const navigationData = [
     {
       label: '어드민',
@@ -184,11 +179,15 @@ const Navigation = () => {
     },
   ];
 
+  const toggleItem = (index: number) => {
+    setOpenItem(openItem === index ? null : index);
+  };
+
   return (
     <nav className={!isOpen ? `${Styles.container} ${Styles.open}` : `${Styles.container} ${Styles.close}`}>
       <ul>
         {navigationData.map((item: any, index: number) => (
-          <NavItem key={index} item={item} depthIndex={0} />
+          <NavItem key={index} item={item} depthIndex={0} isDepthOpen={openItem === index} toggle={() => toggleItem(index)} />
         ))}
       </ul>
     </nav>

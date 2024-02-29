@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { recoilPersist } from "recoil-persist";
+import { recoilPersist } from 'recoil-persist';
 import { apiBe } from '@/services/index';
 
 // Define the shape of the user profile data
@@ -35,23 +35,22 @@ interface UserProfile {
 }
 
 // If using server-side rendering, check if window is defined
-const localStorage = typeof window !== "undefined" ? window.localStorage : undefined;
+const localStorage = typeof window !== 'undefined' ? window.localStorage : undefined;
 
 const { persistAtom } = recoilPersist({
-  key: 'cmp',
-  storage: localStorage
+  key: 'recoil-persist',
+  storage: localStorage,
 });
 
 // Apply the UserProfile interface to the atom
 export const userProfileAtom = atom({
   key: 'userProfile',
   default: null,
-  effects_UNSTABLE: [persistAtom]
+  effects_UNSTABLE: [persistAtom],
 });
-
 
 export const userInfoPerAtom = atom<any>({
   key: 'userInfoPer',
   default: null,
-  effects_UNSTABLE: [persistAtom]
+  effects_UNSTABLE: [persistAtom],
 });

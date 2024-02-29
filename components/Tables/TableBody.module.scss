@@ -92,18 +92,31 @@
   }
 }
 .support {
-  .statusName {
-    border-radius: 12px;
-    color: #fff;
-    padding: 5px 15px;
-    &.compelete {
-      background-color: #31b1aa;
-    }
-    &.processing {
-      background-color: #ee6161;
-    }
-    &.waiting {
-      background-color: #535a6a;
+  tr {
+    td {
+      p {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        svg {
+          margin-left: 8px;
+        }
+      }
+
+      .statusName {
+        border-radius: 12px;
+        color: #fff;
+        padding: 5px 15px;
+        &.complete {
+          background-color: #31b1aa;
+        }
+        &.processing {
+          background-color: #ee6161;
+        }
+        &.waiting {
+          background-color: #535a6a;
+        }
+      }
     }
   }
 }

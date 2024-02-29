@@ -28,8 +28,8 @@
           min-width: 100px;
         }
         &:nth-child(3) {
-          width: 15%;
-          min-width: 180px;
+          width: 16%;
+          min-width: 160px;
         }
         &:nth-child(4) {
           width: 5%;
@@ -187,27 +187,30 @@
 
 .billingProduct {
   th {
+    // &:nth-child(1) {
+    //   min-width: 30px;
+    //   width: 1%;
+    // }
     &:nth-child(1) {
-      min-width: 30px;
-      width: 1%;
+      width: 5%;
     }
     &:nth-child(2) {
-      width: 5%;
-    }
-    &:nth-child(3) {
       width: 15%;
     }
-    &:nth-child(4) {
+    &:nth-child(3) {
       width: 5%;
+    }
+    &:nth-child(4) {
+      width: 10%;
     }
     &:nth-child(5) {
       width: 10%;
     }
     &:nth-child(6) {
-      width: 10%;
+      width: 14%;
     }
     &:nth-child(7) {
-      width: 14%;
+      width: 8%;
     }
     &:nth-child(8) {
       width: 8%;
@@ -216,12 +219,9 @@
       width: 8%;
     }
     &:nth-child(10) {
-      width: 8%;
-    }
-    &:nth-child(11) {
       width: 5%;
     }
-    &:nth-child(12) {
+    &:nth-child(11) {
       width: 10%;
     }
   }

@@ -1,0 +1,28 @@
+.comment {
+  border: 1px solid #dee1e7;
+  padding: 30px 50px;
+  margin-bottom: 15px;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-start;
+  position: relative;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #dee1e7;
+  .regName {
+    margin-right: 10px;
+  }
+  .commentDelBtn {
+    font-size: 11px;
+    background-color: #ff5a5f;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 15px;
+  }
+}

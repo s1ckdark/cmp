@@ -1,0 +1,43 @@
+.inputGroup {
+  margin-bottom: 30px;
+  position: relative;
+  border: 1px solid #dee1e7;
+  label {
+    display: block;
+    width: 100%;
+    padding: 10px 15px 8px;
+    background-color: #f7f8fe;
+  }
+  label + p {
+    width: 100%;
+    padding: 10px;
+    border-top: 1px solid #dee1e7;
+    padding-left: 15px;
+  }
+}
+
+.inputGroupGrid {
+  margin-bottom: 30px;
+  .inputGroup {
+    border-bottom: 0;
+    margin-bottom: 0;
+    display: flex;
+    label {
+      width: 40%;
+      border-right: 1px solid #dee1e7;
+    }
+    p {
+      width: 60%;
+      border: 0 !important;
+    }
+    &:last-child {
+      border-bottom: 1px solid #dee1e7;
+    }
+  }
+}
+
+.btnArea {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}

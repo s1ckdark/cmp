@@ -69,7 +69,7 @@ export const TableBody = ({ rowType, data }: any) => {
       'regDt',
       // "lastLogDt",
     ],
-    billingProduct: ['select', 'memberNo', 'memberName', 'category', 'prodName', 'prodDetailType', 'prodDetailTypeStd', 'stdPrice', 'prod', 'discountRate', 'regName', 'regDt'],
+    billingProduct: ['memberNo', 'memberName', 'category', 'prodName', 'prodDetailType', 'prodDetailTypeStd', 'stdPrice', 'prod', 'discountRate', 'regName', 'regDt'],
     productCategory: ['prodType', 'prodDetailType', 'prodDetailTypeStd', 'regDt', 'regName'],
     menu: ['idx', 'menuName', 'parentMenuId', 'url', 'icon', 'redName', 'regDt', 'modName', 'modDt'],
     role: [
@@ -130,7 +130,7 @@ export const TableBody = ({ rowType, data }: any) => {
         break;
     }
     const typeUrl: any = {
-      invoice: `/billing/invoice/view/${[props.memberNo]}/${props.targetMonth}`,
+      invoice: `/billing/invoice/view/${[props.memberNo]}/${props.target_month}`,
       customers: `/customers/view/${props.memberNo}`,
       user: `/admin/user/view/${props.id}`,
       productGd: `/products/product/view/${props.id}`,
@@ -270,7 +270,6 @@ export const TableBody = ({ rowType, data }: any) => {
         break;
       case 'statusName':
         const status = item[key] === '진행' ? 'processing' : item[key] === '완료' ? 'complete' : 'waiting';
-        console.log(status);
         content = (
           <td key={key + '-' + keyIndex} onClick={() => view(item)}>
             <span className={`${Styles.statusName} ${Styles[status]}`}>{item[key]}</span>
