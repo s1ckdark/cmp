@@ -10,11 +10,9 @@ import { Toast } from '@/components/Toast';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { getCookies } from '@/utils/cookie';
 
-const UserInfo = ({ isOpen }: { isOpen: boolean }) => {
+const UserInfo = ({ isOpen, username }: { isOpen: boolean; username: string }) => {
   const { data: session }: any = useSession();
   const router = useRouter();
-  const cookie = getCookies();
-  const username = cookie && cookie.username ? cookie.username : session?.user.username;
 
   const logout = async () => {
     destroyCookie(null, 'auth', { path: '/' });

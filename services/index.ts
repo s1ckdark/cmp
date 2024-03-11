@@ -146,7 +146,7 @@ apiBe.interceptors.response.use(
           }),
         );
         destroyCookie(null, 'auth', { path: '/' });
-        Toast('error', '토큰이 만료 되었습니다', () => (location.href = '/signin'));
+        Toast('error', '권한이 없습니다', () => (location.href = '/signin'));
 
         // return await regenerateTokens().then((token) => {
         //     response.config.headers.Authorization = `Bearer ${token}`;

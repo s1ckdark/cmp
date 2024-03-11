@@ -19,7 +19,7 @@ import { modalAtom } from '@/states';
 import { confirmAtom } from '@/states/confirm';
 import Confirm from '@/components/Confirm';
 import _, { set } from 'lodash';
-import Select from 'react-select';
+import Select, { NonceProvider } from 'react-select';
 interface dataProps {
   data: any;
   totalPages: number;
@@ -372,7 +372,8 @@ export const Tables = ({ rowType }: TablesProps) => {
   const customStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: state.isSelected ? '#fff' : 'inherit',
+      boxShadow: 'none',
+      backgroundColor: state.isSelected ? '#fff' : '#fff',
       border: '1px solid #E5E5E5',
       '&:active': {
         border: '1px solid #43B69A',
@@ -394,6 +395,8 @@ export const Tables = ({ rowType }: TablesProps) => {
         ...styles,
         backgroundColor: isFocused ? '#fff' : null,
         color: '#000',
+        border: '0',
+        boxShaode: '0',
       };
     },
   };

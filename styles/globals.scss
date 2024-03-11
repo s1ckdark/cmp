@@ -154,8 +154,11 @@ a[class*='btn'] {
   border-radius: 20px;
   display: flex;
   text-align: center;
+  border-color: #fff;
+  box-shadow: 0;
   cursor: pointer;
 }
+
 .react-select__single-value {
   color: #ffffff; /* 텍스트 색상 지정 */
   font-size: 14px;
@@ -181,4 +184,46 @@ a[class*='btn'] {
 .react-select__placeholder {
   color: white;
 }
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard-dynamic-subset.css');
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 300;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-Light.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-Regular.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 500;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-Medium.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 600;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-SemiBold.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 700;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-Bold.woff2') format('woff2');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 800;
+  font-style: normal;
+  src: url('../public/fonts/Pretendard-ExtraBold.woff2') format('woff2');
+  font-display: swap;
+}

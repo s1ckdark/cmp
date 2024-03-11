@@ -2,7 +2,7 @@ import Styles from './TableBody.module.scss';
 import { useRouter, usePathname } from 'next/navigation';
 import { monthAtom, currentPageAtom } from '@/states';
 import { historyListAtom, historyToggleAtom, visualAtom } from '@/states/data';
-import { userInfoPerAtom } from '@/states/localStorage';
+// import { userInfoPerAtom } from '@/states/localStorage';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { History, IconOverview } from '@/public/svgs';
 import { addComma } from '@/utils/data';
@@ -19,7 +19,7 @@ interface TypesMap {
 
 export const TableBody = ({ rowType, data }: any) => {
   // const [viewData, setViewData] = useRecoilState(dataViewAtom) || null;
-  const [userInfo, setUserInfo] = useRecoilState(userInfoPerAtom);
+  // const [userInfo, setUserInfo] = useRecoilState(userInfoPerAtom);
   const pageNumber = useRecoilValue(currentPageAtom);
   const [history, setHistory] = useRecoilState(historyListAtom || null);
   const [confirm, setConfirm] = useRecoilState(confirmAtom);
@@ -69,7 +69,7 @@ export const TableBody = ({ rowType, data }: any) => {
       'regDt',
       // "lastLogDt",
     ],
-    billingProduct: ['memberNo', 'memberName', 'category', 'prodName', 'prodDetailType', 'prodDetailTypeStd', 'stdPrice', 'prod', 'discountRate', 'regName', 'regDt'],
+    billingProduct: ['memberNo', 'memberName', 'category', 'prodName', 'prodDetailType', 'prodDetailTypeStd', 'stdPrice', 'expPrice', 'discountRate', 'regName', 'regDt'],
     productCategory: ['prodType', 'prodDetailType', 'prodDetailTypeStd', 'regDt', 'regName'],
     menu: ['idx', 'menuName', 'parentMenuId', 'url', 'icon', 'redName', 'regDt', 'modName', 'modDt'],
     role: [
@@ -122,13 +122,13 @@ export const TableBody = ({ rowType, data }: any) => {
   };
 
   const view = (props?: any) => {
-    switch (rowType) {
-      case 'user':
-        setUserInfo(props);
-        break;
-      default:
-        break;
-    }
+    // switch (rowType) {
+    //   case 'user':
+    //     setUserInfo(props);
+    //     break;
+    //   default:
+    //     break;
+    // }
     const typeUrl: any = {
       invoice: `/billing/invoice/view/${[props.memberNo]}/${props.target_month}`,
       customers: `/customers/view/${props.memberNo}`,
@@ -235,7 +235,7 @@ export const TableBody = ({ rowType, data }: any) => {
         content = (
           <td key={key + '-' + keyIndex} className="!text-left" onClick={() => view(item)}>
             <p>
-              {item.subject} {item.uploadedFiles && item.uploadedFiles.length > 0 ? <IconAttachment /> : null}
+              {item.subject} {item.uploadedFiles && item.uploadedFiles.length > 0 ? <IconAttachment /> : null} {item.comments && item.comments.length > 0 ? <span>({item.comments.length})</span> : null}
             </p>
           </td>
         );

@@ -87,38 +87,38 @@ const NavItem = ({ item, depthIndex, isDepthOpen, toggle }: any) => {
   );
 };
 
-const Navigation = () => {
+const Navigation = ({ isAdmin }: any) => {
   const isOpen = useRecoilValue(isOpenState);
   const currentMonth = dayjs().format('YYYYMM');
   const [openItem, setOpenItem] = useState<number | null>(null);
+  const adminData = {
+    label: '어드민',
+    icon: 'IconSetting',
+    link: '#',
+    children: [
+      {
+        label: '회원 관리',
+        children: [],
+        link: '/admin/user/list/1',
+      },
+      {
+        label: '접속 이력',
+        children: [],
+        link: '/admin/log/list/1',
+      },
+      // {
+      //     "label": "메뉴 관리",
+      //     "children": [],
+      //     "link": "/admin/menu/list/1"
+      // },
+      {
+        label: '롤 관리',
+        children: [],
+        link: '/admin/role/list/1',
+      },
+    ],
+  };
   const navigationData = [
-    {
-      label: '어드민',
-      icon: 'IconSetting',
-      link: '#',
-      children: [
-        {
-          label: '회원 관리',
-          children: [],
-          link: '/admin/user/list/1',
-        },
-        {
-          label: '접속 이력',
-          children: [],
-          link: '/admin/log/list/1',
-        },
-        // {
-        //     "label": "메뉴 관리",
-        //     "children": [],
-        //     "link": "/admin/menu/list/1"
-        // },
-        {
-          label: '롤 관리',
-          children: [],
-          link: '/admin/role/list/1',
-        },
-      ],
-    },
     {
       label: '공지사항',
       icon: 'IconNaviNotice',
@@ -182,6 +182,10 @@ const Navigation = () => {
   const toggleItem = (index: number) => {
     setOpenItem(openItem === index ? null : index);
   };
+
+  if (isAdmin) {
+    navigationData.unshift(adminData); // Add the admin section at the beginning of the array
+  }
 
   return (
     <nav className={!isOpen ? `${Styles.container} ${Styles.open}` : `${Styles.container} ${Styles.close}`}>

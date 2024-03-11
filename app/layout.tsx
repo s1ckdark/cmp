@@ -1,5 +1,5 @@
 import '@/styles/globals.scss';
-import RecoilRootProvider from "@/utils/recoilRootProvider";
+import RecoilRootProvider from '@/utils/recoilRootProvider';
 import React, { Suspense, ReactNode } from 'react';
 import Toastify from '@/components/Toast';
 import AuthProvider from './AuthProvider';
@@ -12,11 +12,10 @@ interface Props {
 }
 
 const RootLayout = async ({ children }: Props) => {
-
   return (
     <html lang="kr">
       <body>
-      <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading />}>
           <RecoilRootProvider>
             <AuthProvider>
               <Toastify />
@@ -27,8 +26,8 @@ const RootLayout = async ({ children }: Props) => {
           </RecoilRootProvider>
         </Suspense>
       </body>
-    </html >
+    </html>
   );
-}
+};
 
-export default RootLayout
+export default RootLayout;

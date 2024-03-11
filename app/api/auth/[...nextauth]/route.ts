@@ -90,20 +90,27 @@ const authOptions: NextAuthOptions = {
           const cookieData = {
             id: profile.data.id,
             username: profile.data.userFullName,
+            isAdmin: profile.data.admin,
+            privileges: profile.data.privileges,
             email: profile.data.email,
             accessToken: user.data.accessToken,
             refreshToken: user.data.refreshToken,
           };
           cookies().set('auth', JSON.stringify(cookieData), {
-            maxAge: 2 * 24 * 60 * 60, // 30 days
+            maxAge: 2 * 60 * 60, // 30 days
             path: '/',
             // httpOnly: true,
           });
-          //   cookies().set('refreshToken', user.data.refreshToken, {
-          //     maxAge: 2 * 24 * 60 * 60, // 30 days
-          //     path: '/',
-          //     // httpOnly: true,
-          //   });
+          cookies().set('permission', profile.data.admin, {
+            maxAge: 2 * 60 * 60, //
+            path: '/',
+            httpOnly: true,
+          });
+          cookies().set('refreshToken', user.data.refreshToken, {
+            maxAge: 30 * 24 * 60 * 60, // 30 days
+            path: '/',
+            // httpOnly: true,
+          });
           // Construct and return the user object
           return cookieData;
         } catch (error) {

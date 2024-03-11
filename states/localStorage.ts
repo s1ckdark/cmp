@@ -43,14 +43,14 @@ const { persistAtom } = recoilPersist({
 });
 
 // Apply the UserProfile interface to the atom
-export const userProfileAtom = atom({
-  key: 'userProfile',
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
+// export const userProfileAtom = atom({
+//   key: 'userProfile',
+//   default: null,
+//   effects_UNSTABLE: [persistAtom],
+// });
 
-export const userInfoPerAtom = atom<any>({
-  key: 'userInfoPer',
-  default: null,
-  effects_UNSTABLE: [persistAtom],
-});
+// export const userInfoPerAtom = atom<any>({
+//   key: 'userInfoPer',
+//   default: null,
+//   effects_UNSTABLE: [persistAtom],
+// });

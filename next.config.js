@@ -1,4 +1,10 @@
-const path = require('path')
+const path = require('path');
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
+});
+
 const id = Math.random().toString(32).slice(2);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,8 +15,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/apibe/:path*",
-        destination: process.env.NEXT_BACKEND_URL+"/api/:path*",
+        source: '/apibe/:path*',
+        destination: process.env.NEXT_BACKEND_URL + '/api/:path*',
       },
     ];
   },
@@ -100,6 +106,6 @@ const nextConfig = {
     });
     return config;
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = withBundleAnalyzer(nextConfig);
